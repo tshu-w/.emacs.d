@@ -53,5 +53,11 @@
 (require 'editor-shell)
 (require 'editor-misc)
 
+(require 'lang-org)
+(require 'lang-latex)
+(require 'lang-python)
+(require 'lang-emacs-lisp)
+(require 'lang-misc)
+
 (defun display-startup-echo-area-message ()
   (message (concat "Startup time: " (emacs-init-time))))
