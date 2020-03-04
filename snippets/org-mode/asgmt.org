@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: assignment
+# key: asgmt
+# --
+
+#+title: $1
+#+author: `user-full-name` <`user-mail-address`>
+#+date: `(format-time-string "%Y-%m-%d")`
+#+LATEX_HEADER: \usepackage{ctex}
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+#+mathspec: true
+
+
+$2

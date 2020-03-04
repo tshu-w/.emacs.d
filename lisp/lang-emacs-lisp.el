@@ -1,0 +1,132 @@
+;;; lang-emacs-lisp.el -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2020  Tianshu Wang
+
+;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
+(defun eval-current-form ()
+  "Find and evaluate the current def* or set* command.
+Unlike `eval-defun', this does not go to topmost function."
+  (interactive)
+  (save-excursion
+    (search-backward-regexp "(def\\|(set")
+    (forward-list)
+    (call-interactively 'eval-last-sexp)))
+
+(defun nav-find-elisp-thing-at-point-other-window ()
+  "Find thing under point and go to it another window."
+  (interactive)
+  (let ((symb (variable-at-point)))
+    (if (and symb
+             (not (equal symb 0))
+             (not (fboundp symb)))
+        (find-variable-other-window symb)
+      (find-function-at-point))))
+
+(defun find-ert-test-buffer (ert-test)
+  "Return the buffer where ERT-TEST is defined."
+  (save-excursion
+    (car (find-definition-noselect (ert-test-name ert-test) 'ert-deftest))))
+
+(defun ert-run-tests-buffer ()
+  "Run all the tests in the current buffer."
+  (interactive)
+  (save-buffer)
+  (load-file (buffer-file-name))
+  (let ((cbuf (current-buffer)))
+    (ert '(satisfies (lambda (test)
+                       (eq cbuf (find-ert-test-buffer test)))))))
+
+(despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+  ","  'lisp-state-toggle-lisp-state
+  "c"  '(:ignore t :which-key "compile")
+  "cc" 'emacs-lisp-byte-compile
+  "e"  '(:ignore t :which-key "eval")
+  "e$" 'lisp-state-eval-sexp-end-of-line
+  "eb" 'eval-buffer
+  "eC" 'eval-current-form
+  "ee" 'eval-last-sexp
+  "er" 'eval-region
+  "ef" 'eval-defun
+  "el" 'lisp-state-eval-sexp-end-of-line
+  "g"  '(:ignore t :which-key "find-symbol")
+  "gb" 'xref-pop-marker-stack
+  "gG" 'nav-find-elisp-thing-at-point-other-window
+  "t"  '(:ignore t :which-key "tests")
+  "tb" 'ert-run-tests-buffer
+  "tq" 'ert)
+
+(use-package ielm
+  :ensure nil
+  :general
+  (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+    "'" 'ielm))
+
+(use-package debug
+  :ensure nil
+  :config
+  (defun elisp-toggle-debug-expr-and-eval-func ()
+    "Insert or remove debug expression, evaluate function and save buffer."
+    (interactive)
+    (let ((trace "(debug)")
+          (line (thing-at-point 'line)))
+      (if (and line (string-match trace line))
+          (kill-whole-line)
+        (progn
+          (back-to-indentation)
+          (insert trace)
+          (newline-and-indent))))
+    (eval-defun nil)
+    (save-buffer))
+
+  (evilified-state-evilify-map debugger-mode-map :mode debugger-mode)
+  :general
+  (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+    "d"  '(:ignore t :which-key "debug")
+    "dt" 'elisp-toggle-debug-expr-and-eval-func))
+
+(use-package edebug
+  :ensure nil
+  :config
+  (defun edebug-instrument-defun-on ()
+    "Toggle on instrumentalisation for the function under `defun'."
+    (interactive)
+    (eval-defun 'edebugit))
+
+  (defun edebug-instrument-defun-off ()
+    "Toggle off instrumentalisation for the function under `defun'."
+    (interactive)
+    (eval-defun nil))
+
+  ;; since we evilify `edebug-mode-map' we don't need to intercept it to
+  ;; make it work with evil
+  (evil-set-custom-state-maps
+   'evil-intercept-maps
+   'evil-pending-intercept-maps
+   'intercept-state
+   'evil-make-intercept-map
+   (delq (assq 'edebug-mode-map evil-intercept-maps)
+         evil-intercept-maps))
+  (evilified-state-evilify-map edebug-mode-map
+                               :eval-after-load edebug
+                               :bindings
+                               "a" 'edebug-stop
+                               "c" 'edebug-go-mode
+                               "s" 'edebug-step-mode
+                               "S" 'edebug-next-mode)
+  (evilified-state-evilify-map edebug-eval-mode-map
+                               :eval-after-load edebug
+                               :bindings
+                               "a" 'edebug-stop
+                               "c" 'edebug-go-mode
+                               "s" 'edebug-step-mode
+                               "S" 'edebug-next-mode)
+  :general
+  (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
+    "d"  '(:ignore t :which-key "debug")
+    "df" 'edebug-instrument-defun-on
+    "dF" 'edebug-instrument-defun-off))
+
+
+(provide 'lang-emacs-lisp)
