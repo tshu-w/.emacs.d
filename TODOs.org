@@ -1,5 +1,5 @@
 * .emacs.d
-** TODO Markdown
+** TODO Org-ref (bibtex layer)
 ** TODO Spacemacs checkers
 *** [[https://github.com/jcs-elpa/grammarly][jcs-elpa/grammarly: Grammarly API interface.]]
 *** [[https://github.com/jcs-elpa/flycheck-grammarly][jcs-elpa/flycheck-grammarly: Grammarly support for Flycheck.]]
