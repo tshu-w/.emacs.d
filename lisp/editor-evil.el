@@ -6,7 +6,9 @@
 
 (use-package evil
   :hook (prog-mode . hs-minor-mode)
-  :init (evil-mode)
+  :init
+  (setq evil-want-keybinding nil)
+  (evil-mode)
   :config
   (setq evil-want-C-i-jump t
         evil-shift-width 2)
@@ -22,11 +24,6 @@
         evil-lisp-state-cursor         '("HotPink1" box)
         evil-iedit-state-cursor        '("firebrick1" box)
         evil-iedit-insert-state-cursor '("firebrick1" (bar . 2)))
-
-  (evil-set-initial-state 'debugger-mode 'motion)
-
-  ;; turn off evil in corelv buffers
-  (add-to-list 'evil-buffer-regexps '("\\*LV\\*"))
 
   (add-to-list 'default-jump-handlers 'evil-goto-definition)
   ;; Set the `:jump' property manually instead of just using `evil-define-motion'
@@ -208,98 +205,12 @@ to `evil-lookup'"
                                    minibuffer-local-completion-map
                                    minibuffer-local-must-match-map
                                    minibuffer-local-isearch-map)
-                      "<escape>" 'abort-recursive-edit)
-
-  (general-define-key :keymaps   'help-mode-map
-                      :states    'normal
-                      "<escape>" 'quit-window
-                      "<tab>"    'forward-button
-                      "S-<tab>"  'backward-button
-                      "]"        'help-go-forward
-                      "["        'help-go-back
-                      "gf"       'help-go-forward
-                      "gb"       'help-go-back
-                      "gh"       'help-follow-symbol
-                      "N"        'evil-search-previous)
-
-  (general-define-key :keymaps   'dired-mode-map
-                      :states    'normal
-                      "n"        'evil-search-next
-                      "N"        'evil-search-previous)
-
-  (general-define-key :keymaps   'calendar-mode-map
-                      :states    'motion
-                      "h"        'calendar-backward-day
-                      "j"        'calendar-forward-week
-                      "k"        'calendar-backward-week
-                      "l"        'calendar-forward-day
-                      "^"        'calendar-beginning-of-week
-                      "$"        'calendar-end-of-week
-                      "<"        'calendar-backward-year
-                      ">"        'calendar-forward-year
-                      "("        'calendar-beginning-of-month
-                      ")"        'calendar-end-of-month
-                      "["        'calendar-scroll-right
-                      "]"        'calendar-scroll-left
-                      "{"        'calendar-backward-month
-                      "}"        'calendar-forward-month
-                      "m"        'calendar-set-mark))
+                      "<escape>" 'abort-recursive-edit))
 
 (use-package evil-evilified-state
   :ensure nil
   :after evil
-  :commands (evilified-state-evilify evilified-state-evilify-map)
-  :config
-  (evilified-state-evilify package-menu-mode package-menu-mode-map)
-  (evilified-state-evilify process-menu-mode process-menu-mode-map)
-
-  (evilified-state-evilify-map undo-tree-visualizer-mode-map
-                               :mode undo-tree-visualizer-mode
-                               :bindings
-                               (kbd "j") 'undo-tree-visualize-redo
-                               (kbd "k") 'undo-tree-visualize-undo
-                               (kbd "h") 'undo-tree-visualize-switch-branch-left
-                               (kbd "l") 'undo-tree-visualize-switch-branch-right)
-
-  (defun doc-view-search-new-query ()
-    "Initiate a new query."
-    (interactive)
-    (doc-view-search 'newquery))
-
-  (defun doc-view-search-new-query-backward ()
-    "Initiate a new query."
-    (interactive)
-    (doc-view-search 'newquery t))
-
-  (defun !doc-view-goto-page (&optional count)
-    (interactive (list
-                  (when current-prefix-arg
-                    (prefix-numeric-value current-prefix-arg))))
-    (if (null count)
-        (doc-view-last-page)
-      (doc-view-goto-page count)))
-
-  (evilified-state-evilify doc-view-mode doc-view-mode-map
-                           "/"  'doc-view-search-new-query
-                           "?"  'doc-view-search-new-query-backward
-                           "gg" 'doc-view-first-page
-                           "G"  '!doc-view-goto-page
-                           "gt" 'doc-view-goto-page
-                           "h"  'doc-view-previous-page
-                           "j"  'doc-view-next-line-or-next-page
-                           "k"  'doc-view-previous-line-or-previous-page
-                           "K"  'doc-view-kill-proc-and-buffer
-                           "l"  'doc-view-next-page
-                           "n"  'doc-view-search
-                           "N"  'doc-view-search-backward
-                           (kbd "C-d") 'doc-view-scroll-up-or-next-page
-                           (kbd "C-k") 'doc-view-kill-proc
-                           (kbd "C-u") 'doc-view-scroll-down-or-previous-page))
-
-(use-package hybrid-mode
-  :ensure nil
-  :after evil-evilified-state
-  :config (hybrid-mode))
+  :commands (evilified-state-evilify-map))
 
 (use-package evil-args
   :after evil
@@ -308,12 +219,15 @@ to `evil-lookup'"
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
+(use-package evil-collection
+  :after evil
+  :init
+  (setq evil-collection-company-use-tng nil)
+  (evil-collection-init))
+
 (use-package evil-commentary
   :after evil
   :init (evil-commentary-mode))
-
-(use-package evil-ediff
-  :after ediff evil)
 
 (use-package evil-indent-plus
   :after evil
@@ -343,8 +257,6 @@ to `evil-lookup'"
 
 (use-package evil-visualstar
   :after evil
-  :commands (evil-visualstar/begin-search-forward
-             evil-visualstar/begin-search-backward)
   :general
   (general-define-key :keymaps 'evil-visual-state-map
                       "*" 'evil-visualstar/begin-search-forward
@@ -355,14 +267,6 @@ to `evil-lookup'"
   :commands linum-relative-toggle
   :config (setq linum-relative-current-symbol "")
   :general (tyrant-def "tr" 'linum-relative-toggle))
-
-(use-package compile
-  :ensure nil
-  :config (define-key compilation-mode-map "h" nil))
-
-(use-package grep
-  :ensure nil
-  :config (define-key grep-mode-map "h" nil))
 
 
 (provide 'editor-evil)

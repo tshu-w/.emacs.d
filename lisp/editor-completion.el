@@ -38,10 +38,6 @@
     (run-with-idle-timer 0 nil 'ivy-wgrep-change-to-wgrep-mode)
     (ivy-occur))
 
-  ;; Occur
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
-    (evil-make-overriding-map ivy-occur-mode-map 'normal))
   :general
   (tyrant-def
     "bb" 'ivy-switch-buffer
@@ -200,11 +196,7 @@ around point as the initial input."
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
-  (global-company-mode)
-  :general
-  (general-define-key :keymaps '(company-active-map company-active-map)
-                      "C-p"  'company-select-previous
-                      "C-n"  'company-select-next))
+  (global-company-mode))
 
 (use-package company-box
   :hook (company-mode . company-box-mode)
