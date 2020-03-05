@@ -79,8 +79,6 @@ Unlike `eval-defun', this does not go to topmost function."
           (newline-and-indent))))
     (eval-defun nil)
     (save-buffer))
-
-  (evilified-state-evilify-map debugger-mode-map :mode debugger-mode)
   :general
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "d"  '(:ignore t :which-key "debug")
@@ -98,30 +96,6 @@ Unlike `eval-defun', this does not go to topmost function."
     "Toggle off instrumentalisation for the function under `defun'."
     (interactive)
     (eval-defun nil))
-
-  ;; since we evilify `edebug-mode-map' we don't need to intercept it to
-  ;; make it work with evil
-  (evil-set-custom-state-maps
-   'evil-intercept-maps
-   'evil-pending-intercept-maps
-   'intercept-state
-   'evil-make-intercept-map
-   (delq (assq 'edebug-mode-map evil-intercept-maps)
-         evil-intercept-maps))
-  (evilified-state-evilify-map edebug-mode-map
-                               :eval-after-load edebug
-                               :bindings
-                               "a" 'edebug-stop
-                               "c" 'edebug-go-mode
-                               "s" 'edebug-step-mode
-                               "S" 'edebug-next-mode)
-  (evilified-state-evilify-map edebug-eval-mode-map
-                               :eval-after-load edebug
-                               :bindings
-                               "a" 'edebug-stop
-                               "c" 'edebug-go-mode
-                               "s" 'edebug-step-mode
-                               "S" 'edebug-next-mode)
   :general
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "d"  '(:ignore t :which-key "debug")

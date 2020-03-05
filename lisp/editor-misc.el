@@ -143,10 +143,6 @@
     "xgt" 'google-translate-at-point))
 
 (use-package helpful
-  :config
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'helpful-mode 'normal))
-  (evil-define-key 'normal helpful-mode-map (kbd "q") 'quit-window)
   :general
   (tyrant-def
     "hk" 'helpful-key
@@ -189,69 +185,6 @@
   (add-hook 'pdf-view-mode-hook (lambda () (pdf-view-midnight-minor-mode)))
   (pdf-tools-install :no-query)
   (setq pdf-view-use-scaling t)
-
-  (evilified-state-evilify pdf-view-mode pdf-view-mode-map
-                           ;; Navigation
-                           "0"               'image-bol
-                           "$"               'image-eol
-                           "j"               'pdf-view-next-line-or-next-page
-                           "k"               'pdf-view-previous-line-or-previous-page
-                           "l"               'image-forward-hscroll
-                           "h"               'image-backward-hscroll
-                           "J"               'pdf-view-next-page
-                           "K"               'pdf-view-previous-page
-                           "gg"              'pdf-view-first-page
-                           "G"               'pdf-view-last-page
-                           "gt"              'pdf-view-goto-page
-                           "gl"              'pdf-view-goto-label
-                           "u"               'pdf-view-scroll-down-or-previous-page
-                           "d"               'pdf-view-scroll-up-or-next-page
-                           (kbd "C-u")       'pdf-view-scroll-down-or-previous-page
-                           (kbd "C-d")       'pdf-view-scroll-up-or-next-page
-                           (kbd "``")        'pdf-history-backward
-                           ;; Search
-                           "/"               'isearch-forward
-                           "?"               'isearch-backward
-                           ;; Actions
-                           "r"               'pdf-view-revert-buffer
-                           "o"               'pdf-links-action-perform
-                           "O"               'pdf-outline
-                           "zr"              'pdf-view-scale-reset)
-
-  (evilified-state-evilify pdf-outline-buffer-mode pdf-outline-buffer-mode-map
-                           "-"               'negative-argument
-                           "j"               'next-line
-                           "k"               'previous-line
-                           "gk"              'outline-backward-same-level
-                           "gj"              'outline-forward-same-level
-                           (kbd "<backtab>") 'show-all
-                           "gh"              'pdf-outline-up-heading
-                           "gg"              'beginning-of-buffer
-                           "G"               'pdf-outline-end-of-buffer
-                           "TAB"             'outline-toggle-children
-                           "RET"             'pdf-outline-follow-link
-                           (kbd "M-RET")     'pdf-outline-follow-link-and-quit
-                           "f"               'pdf-outline-display-link
-                           [mouse-1]         'pdf-outline-mouse-display-link
-                           "o"               'pdf-outline-select-pdf-window
-                           "``"              'pdf-outline-move-to-current-page
-                           "                 ''" 'pdf-outline-move-to-current-page
-                           "Q"               'pdf-outline-quit-and-kill
-                           "q"               'quit-window
-                           "F"               'pdf-outline-follow-mode)
-
-  (evilified-state-evilify pdf-annot-list-mode pdf-annot-list-mode-map
-                           "f"               'pdf-annot-list-display-annotation-from-id
-                           "d"               'tablist-flag-forward
-                           "x"               'tablist-do-flagged-delete
-                           "u"               'tablist-unmark-forward
-                           "q"               'tablist-quit)
-
-  (evilified-state-evilify pdf-occur-buffer-mode pdf-occur-buffer-mode-map
-                           "q"               'tablist-quit
-                           "g"               'pdf-occur-revert-buffer-with-args
-                           "r"               'pdf-occur-revert-buffer-with-args
-                           "?"               'evil-search-backward)
 
   (despot-def pdf-view-mode-map
     ;; Annotations
