@@ -39,6 +39,10 @@
         org-track-ordered-property-with-tag t)
 
   (add-hook 'org-mode-hook '(lambda () (setq truncate-lines nil)))
+  ;; disable <> auto pairing in electric-pair-mode for org-mode
+  (add-hook 'org-mode-hook '(lambda () (setq-local electric-pair-inhibit-predicate
+                                              `(lambda (c)
+                                                 (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
 
   (defun find-org-default-notes-file ()
     "Edit the `org-default-notes-file', in the current window."
