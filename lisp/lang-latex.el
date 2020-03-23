@@ -63,7 +63,7 @@
   (defun font-oblique () (interactive) (TeX-font nil ?\C-s))
   (defun font-upright () (interactive) (TeX-font nil ?\C-u))
 
-  (general-define-key :keymaps 'TeX-mode-map "<H-S-mouse-1>" 'TeX-view)
+  (general-def TeX-mode-map "<H-S-mouse-1>" 'TeX-view)
   (despot-def :keymaps '(tex-mode-map TeX-mode-map latex-mode-map LaTeX-mode-map)
     ","             'TeX-command-master
     "\\"            'TeX-insert-macro                            ;; C-c C-m

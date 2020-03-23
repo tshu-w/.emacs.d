@@ -19,11 +19,10 @@
                            :local))))
 
   (evil-set-initial-state 'vterm-mode 'emacs)
-  (general-define-key :states    'emacs
-                      :keymaps   'vterm-mode-map
-                      "C-y"      'vterm-yank
-                      "C-c C-d"  'vterm-send-C-d
-                      "C-c C-z"  'vterm-send-C-z))
+  (general-def 'emacs vterm-mode-map
+    "C-y"      'vterm-yank
+    "C-c C-d"  'vterm-send-C-d
+    "C-c C-z"  'vterm-send-C-z))
 
 (use-package shell-pop
   :init

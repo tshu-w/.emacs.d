@@ -85,20 +85,18 @@
     "xP"    'markdown-pre-region)
 
   ;; Header navigation in normal state movements
-  (general-define-key :keymaps '(markdown-mode-map)
-                      :states 'normal
-                      "gj" 'outline-forward-same-level
-                      "gk" 'outline-backward-same-level
-                      "gh" 'outline-up-heading
-                      ;; next visible heading is not exactly what we want but close enough
-                      "gl" 'outline-next-visible-heading)
+  (general-def 'normal markdown-mode-map
+    "gj"       'outline-forward-same-level
+    "gk"       'outline-backward-same-level
+    "gh"       'outline-up-heading
+    ;; next visible heading is not exactly what we want but close enough
+    "gl"       'outline-next-visible-heading)
 
-  (general-define-key :keymaps '(markdown-mode-map)
-                      :states '(normal insert)
-                      "M-h" 'markdown-promote
-                      "M-j" 'markdown-move-down
-                      "M-k" 'markdown-move-up
-                      "M-l" 'markdown-demote))
+  (general-def '(normal insert) markdown-mode-map
+    "M-h"      'markdown-promote
+    "M-j"      'markdown-move-down
+    "M-k"      'markdown-move-up
+    "M-l"      'markdown-demote))
 
 (use-package markdown-toc
   :general

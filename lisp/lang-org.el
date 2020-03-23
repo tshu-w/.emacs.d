@@ -206,11 +206,10 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       "s"  '(:ignore t :which-key "trees/subtrees")
       "sr" 'org-agenda-refile)
 
-    (general-define-key :states  'motion
-                        :keymaps 'org-agenda-mode-map
-                        "C-h"     nil
-                        "M-SPC"   'org-agenda/body
-                        "s-M-SPC" 'org-agenda/body))
+    (general-def 'motion org-agenda-mode-map
+      "C-h"      nil
+      "M-SPC"    'org-agenda/body
+      "s-M-SPC"  'org-agenda/body))
 
   ;; Org Attach
   (setq org-attach-auto-tag "ATTACH"
@@ -489,9 +488,8 @@ Org Babel Transient state
           (delete-window)
           (message "export successfully")))))
   :general
-  (general-define-key :states  'normal
-                      :keymaps 'org-mode-map
-                      "RET"    'org-open-at-point)
+  (general-def 'normal org-mode-map
+    "RET"      'org-open-at-point)
 
   (despot-def org-mode-map
     "'"     'org-edit-special
@@ -823,12 +821,11 @@ and some custom text on a newly created journal file."
   (despot-def :keymaps '(LaTeX-mode-map org-mode-map)
     "ic"       'org-ref-insert-link)
 
-  (general-define-key :keymaps '(bibtex-mode-map)
-                      :states  '(normal)
-                      "C-j"    'org-ref-bibtex-next-entry
-                      "C-k"    'org-ref-bibtex-previous-entry
-                      "gj"     'org-ref-bibtex-next-entry
-                      "gk"     'org-ref-bibtex-previous-entry)
+  (general-def 'normal bibtex-mode-map
+    "C-j"      'org-ref-bibtex-next-entry
+    "C-k"      'org-ref-bibtex-previous-entry
+    "gj"       'org-ref-bibtex-next-entry
+    "gk"       'org-ref-bibtex-previous-entry)
 
   (despot-def bibtex-mode-map
     ;; Navigation

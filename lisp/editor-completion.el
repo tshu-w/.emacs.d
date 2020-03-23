@@ -45,17 +45,17 @@
   (despot-def ivy-occur-grep-mode-map
     "w" 'ivy-wgrep-change-to-wgrep-mode
     "s" 'wgrep-save-all-buffers)
-  (general-define-key :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
-                      "<escape>" 'abort-recursive-edit
-                      "<tab>"    'ivy-tab
-                      "C-h"      'ivy-c-h
-                      "C-S-h"    'help-map
-                      "C-c C-e"  'ivy-edit))
+  (general-def :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
+    "<escape>" 'abort-recursive-edit
+    "<tab>"    'ivy-tab
+    "C-h"      'ivy-c-h
+    "C-S-h"    'help-map
+    "C-c C-e"  'ivy-edit))
 
 (use-package ivy-hydra
   :general
-  (general-define-key :keymaps 'hydra-ivy/keymap
-                      "<escape>" 'hydra-ivy/keyboard-escape-quit-and-exit))
+  (general-def hydra-ivy/keymap
+    "<escape>" 'hydra-ivy/keyboard-escape-quit-and-exit))
 
 (use-package ivy-rich
   ;; if `counsel' loads after `ivy-rich', it overrides some of `ivy-rich''s
@@ -114,8 +114,8 @@
     "fL" 'counsel-locate
     "sf" 'counsel-rg
     "sF" 'counsel-rg-region-or-symbol)
-  (general-define-key :keymaps 'read-expression-map
-                      "C-r" 'counsel-minibuffer-history))
+  (general-def read-expression-map
+    "C-r" 'counsel-minibuffer-history))
 
 (use-package swiper
   :config
@@ -265,9 +265,8 @@ around point as the initial input."
   (setq yas-minor-mode-map (make-sparse-keymap))
   :general
   (tyrant-def "ty" 'yas-minor-mode)
-  (general-define-key :keymaps 'yas-minor-mode-map
-                      :states  'insert
-                      "\t"     'yas-maybe-expand))
+  (general-def 'insert yas-minor-mode-map
+    "\t"       'yas-maybe-expand))
 
 (use-package yasnippet-snippets
   :after yasnippet
@@ -277,8 +276,8 @@ around point as the initial input."
 
 (use-package ivy-yasnippet
   :general
-  (general-define-key :states  '(insert normal)
-                      "M-/"    'ivy-yasnippet))
+  (general-def '(insert normal)
+    "M-/"      'ivy-yasnippet))
 
 (use-package yatemplate
   :defer 2

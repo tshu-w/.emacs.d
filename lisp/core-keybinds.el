@@ -18,25 +18,23 @@
 
 (use-package general
   :config
-  (general-override-mode)
-
   (general-create-definer tyrant-def
-    :states '(normal visual insert motion emacs evilified)
+    :states '(normal insert visual motion emacs evilified)
     :keymaps 'override
     :prefix "SPC"
     :non-normal-prefix "M-SPC")
   (tyrant-def "" nil)
 
   (general-create-definer despot-def
-    :states '(normal visual insert motion emacs evilified)
+    :states '(normal insert visual motion emacs evilified)
     :keymaps 'override
     :major-modes t
     :prefix ","
     :non-normal-prefix "M-,")
   (despot-def "" nil)
 
-  (define-key universal-argument-map
-    (kbd "SPC u") 'universal-argument-more)
+  (general-def universal-argument-map
+    "SPC u" 'universal-argument-more)
 
   (tyrant-def
     "SPC"     '(execute-extended-command :which-key "M-x")
@@ -213,25 +211,23 @@
     "wU"      'winner-redo
     "wv"      'split-window-horizontally
     "wV"      'split-window-horizontally-and-focus
-    "ww"      'other-window))
+    "ww"      'other-window)
 
-(when (memq window-system '(mac ns))
-  (global-set-key (kbd "H-q") 'save-buffers-kill-terminal)
-  (global-set-key (kbd "H-v") 'yank)
-  (global-set-key (kbd "H-c") 'evil-yank)
-  (global-set-key (kbd "H-a") 'mark-whole-buffer)
-  (global-set-key (kbd "H-x") 'kill-region)
-  (global-set-key (kbd "H-w") 'delete-window)
-  (global-set-key (kbd "H-W") 'delete-frame)
-  (global-set-key (kbd "H-n") 'make-frame)
-  (global-set-key (kbd "H-`") 'other-frame)
-  (global-set-key (kbd "H-z") 'undo-tree-undo)
-  (global-set-key (kbd "H-Z") 'undo-tree-redo)
-  (global-set-key (kbd "H-s") (lambda () (interactive)
-                                (call-interactively (key-binding "\C-x\C-s"))))
-  (global-set-key (kbd "H-<backspace>") (lambda () (interactive)
-                                          (kill-line 0)
-                                          (indent-according-to-mode))))
+  (when (memq window-system '(mac ns))
+    (general-def
+      "H-q" 'save-buffers-kill-terminal
+      "H-v" 'yank
+      "H-c" 'evil-yank
+      "H-a" 'mark-whole-buffer
+      "H-x" 'kill-region
+      "H-w" 'delete-window
+      "H-W" 'delete-frame
+      "H-n" 'make-frame
+      "H-`" 'other-frame
+      "H-z" 'undo-tree-undo
+      "H-Z" 'undo-tree-redo
+      "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
+      "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode)))))
 
 (use-package hydra)
 

@@ -35,9 +35,8 @@ For example: To unfold from a magit diff buffer, evaluate the following:
     ("b" magit-blame-addition)
     ("q" magit-blame-quit :exit (bound-and-true-p magit-blame-mode)))
 
-  (general-define-key :keymaps '(magit-blame-read-only-mode-map)
-                      :states  '(normal)
-                      "RET"    'magit-show-commit)
+  (general-def 'normal magit-blame-read-only-mode-map
+    "RET"    'magit-show-commit)
 
   (despot-def with-editor-mode-map
     ","      'with-editor-finish
@@ -72,12 +71,12 @@ For example: To unfold from a magit diff buffer, evaluate the following:
 (use-package magit-gitflow
   :disabled t
   :hook (magit-mode . turn-on-magit-gitflow)
-  :config (define-key magit-mode-map "%" 'magit-gitflow-popup))
+  :config (general-def magit-mode-map "%" 'magit-gitflow-popup))
 
 (use-package magit-svn
   :disabled t
   :hook (magit-mode . turn-on-magit-svn)
-  :config (define-key magit-mode-map "~" 'magit-svn))
+  :config (general-def magit-mode-map "~" 'magit-svn))
 
 (use-package forge
   :after magit
@@ -109,9 +108,9 @@ For example: To unfold from a magit diff buffer, evaluate the following:
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   :general
   (tyrant-def "g=" 'diff-hl-diff-goto-hunk)
-  (general-define-key :states 'normal
-                      "[ h" 'diff-hl-previous-hunk
-                      "] h" 'diff-hl-next-hunk))
+  (general-def 'normal
+    "[ h" 'diff-hl-previous-hunk
+    "] h" 'diff-hl-next-hunk))
 
 (use-package git-timemachine
   :config
