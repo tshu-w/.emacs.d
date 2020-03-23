@@ -43,35 +43,6 @@
         (TeX-save-document (TeX-master-file)))
       (TeX-command latex-build-command 'TeX-master-file -1)))
 
-  (defun latex//autofill ()
-    "Check whether the pointer is currently inside one of the
-environments described in `latex-nofill-env' and if so, inhibits
-the automatic filling of the current paragraph."
-    (defvar latex-nofill-env '("equation"
-                               "equation*"
-                               "align"
-                               "align*"
-                               "tabular"
-                               "tikzpicture")
-      "List of environment names in which `auto-fill-mode' will be inhibited.")
-
-    (let ((do-auto-fill t)
-          (current-environment "")
-          (level 0))
-      (while (and do-auto-fill (not (string= current-environment "document")))
-        (setq level (1+ level)
-              current-environment (LaTeX-current-environment level)
-              do-auto-fill (not (member current-environment latex-nofill-env))))
-      (when do-auto-fill
-        (do-auto-fill))))
-
-  (defun latex/auto-fill-mode ()
-    "Toggle auto-fill-mode using the custom auto-fill function."
-    (interactive)
-    (auto-fill-mode)
-    (setq auto-fill-function 'latex//autofill))
-
-  (add-hook 'LaTeX-mode-hook 'latex/auto-fill-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
@@ -220,15 +191,6 @@ the automatic filling of the current paragraph."
   :hook (reftex-mode . (lambda ()
                          (add-to-list (make-local-variable 'company-backends)
                                       '(company-reftex-labels company-reftex-citations)))))
-
-(use-package magic-latex-buffer
-  :hook (TeX-update-style . magic-latex-buffer)
-  :config
-  (setq magic-latex-enable-block-highlight t
-        magic-latex-enable-suscript t
-        magic-latex-enable-pretty-symbols t
-        magic-latex-enable-block-align nil
-        magic-latex-enable-inline-image nil))
 
 
 (provide 'lang-latex)
