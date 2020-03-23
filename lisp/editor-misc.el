@@ -6,13 +6,14 @@
 
 (use-package ace-link
   :general
-  (general-define-key :keymaps '(Info-mode-map
-                                 help-mode-map
-                                 helpful-mode-map
-                                 eww-mode-map
-                                 eww-link-keymap)
-                      :states  'normal
-                      "o" 'ace-link))
+  (general-def
+    :keymaps '(Info-mode-map
+               help-mode-map
+               helpful-mode-map
+               eww-mode-map
+               eww-link-keymap)
+    :states  'normal
+    "o" 'ace-link))
 
 (use-package ace-pinyin
   :init
@@ -214,9 +215,8 @@
     "O"               'pdf-outline
     "n"               'pdf-view-midnight-minor-mode)
 
-  (general-define-key :keymaps 'pdf-view-mode-map
-                      :states  'visual
-                      "y"      'pdf-view-kill-ring-save))
+  (general-def 'visual pdf-view-mode-map
+    "y"        'pdf-view-kill-ring-save))
 
 (use-package request
   :config
