@@ -362,7 +362,8 @@ Org Babel Transient state
                        :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O"))))
 
   ;; Org mac grab
-  (setq org-mac-grab-Outlook-app-p nil
+  (setq org-mac-grab-Mail-app-p nil
+        org-mac-grab-Outlook-app-p nil
         org-mac-grab-Firefox-app-p nil
         org-mac-grab-Evernote-app-p nil
         org-mac-grab-Brave-app-p nil
@@ -753,8 +754,7 @@ and some custom text on a newly created journal file."
 (use-package org-mime
   :general
   (despot-def message-mode-map
-    "e"  '(:ignore t :which-key "export")
-    "em" 'org-mime-htmlize)
+    "e"  'org-mime-htmlize)
   (despot-def org-mode-map
     "em" 'org-mime-org-buffer-htmlize
     "es" 'org-mime-org-subtree-htmlize))
