@@ -51,6 +51,7 @@
 (require 'editor-layouts)
 (require 'editor-vsc)
 (require 'editor-shell)
+(require 'editor-mail)
 (require 'editor-misc)
 
 (require 'lang-org)

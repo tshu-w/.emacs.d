@@ -213,6 +213,10 @@
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
+(use-package epa
+  :init
+  (epa-file-enable))
+
 (use-package ffap
   :ensure nil
   :init
