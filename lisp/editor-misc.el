@@ -144,6 +144,13 @@
     "xgt" 'google-translate-at-point))
 
 (use-package helpful
+  :config
+  (defun helpful-reuse-window (buf)
+    (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
+        (select-window window)
+      (pop-to-buffer buf)))
+
+  (setq helpful-switch-buffer-function #'helpful-reuse-window)
   :general
   (tyrant-def
     "hk" 'helpful-key
