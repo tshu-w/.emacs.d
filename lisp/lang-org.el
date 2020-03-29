@@ -322,7 +322,8 @@ Org Babel Transient state
       "a" 'org-capture-kill
       "c" 'org-capture-finalize
       "k" 'org-capture-kill
-      "r" 'org-capture-refile))
+      "r" 'org-capture-refile)
+    (add-hook 'org-capture-mode-hook 'evil-normal-state))
 
   ;; Org Clock
   (org-clock-persistence-insinuate)
