@@ -58,13 +58,11 @@ Unlike `eval-defun', this does not go to topmost function."
   "tq" 'ert)
 
 (use-package ielm
-  :ensure nil
   :general
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "'" 'ielm))
 
 (use-package debug
-  :ensure nil
   :config
   (defun elisp-toggle-debug-expr-and-eval-func ()
     "Insert or remove debug expression, evaluate function and save buffer."
@@ -85,7 +83,6 @@ Unlike `eval-defun', this does not go to topmost function."
     "dt" 'elisp-toggle-debug-expr-and-eval-func))
 
 (use-package edebug
-  :ensure nil
   :config
   (defun edebug-instrument-defun-on ()
     "Toggle on instrumentalisation for the function under `defun'."

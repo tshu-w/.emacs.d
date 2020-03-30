@@ -5,6 +5,7 @@
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
 (use-package markdown-mode
+  :ensure t
   :mode
   (("\\.m[k]d" . markdown-mode)
    ("\\.mdk"   . markdown-mode)
@@ -99,11 +100,13 @@
     "M-l"      'markdown-demote))
 
 (use-package markdown-toc
+  :ensure t
   :general
   (despot-def markdown-mode-map
     "it" 'markdown-toc-generate-toc))
 
 (use-package mmm-mode
+  :ensure t
   :commands mmm-mode
   :hook (markdown-mode . mmm-mode)
   :config
