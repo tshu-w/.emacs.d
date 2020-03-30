@@ -6,6 +6,7 @@
 
 
 (use-package which-key
+  :ensure t
   :hook (after-init . which-key-mode)
   :config
   (setq echo-keystrokes 0.02)
@@ -17,6 +18,7 @@
         which-key-allow-evil-operators t))
 
 (use-package general
+  :ensure t
   :config
   (general-create-definer tyrant-def
     :states '(normal insert visual motion emacs evilified)
@@ -229,10 +231,11 @@
       "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
       "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode)))))
 
-(use-package hydra)
+(use-package hydra :ensure t)
 
 
 (use-package evil
+  :ensure t
   :hook (prog-mode . hs-minor-mode)
   :init
   (setq evil-want-keybinding nil)
@@ -434,11 +437,11 @@ to `evil-lookup'"
     "<escape>" 'abort-recursive-edit))
 
 (use-package evil-evilified-state
-  :ensure nil
   :after evil
   :commands (evilified-state-evilify-map))
 
 (use-package evil-args
+  :ensure t
   :after evil
   :init
   ;; bind evil-args text objects
@@ -446,24 +449,29 @@ to `evil-lookup'"
   (general-def evil-outer-text-objects-map "a" 'evil-outer-arg))
 
 (use-package evil-collection
+  :ensure t
   :after evil
   :init
   (setq evil-collection-company-use-tng nil)
   (evil-collection-init))
 
 (use-package evil-commentary
+  :ensure t
   :after evil
   :init (evil-commentary-mode))
 
 (use-package evil-indent-plus
+  :ensure t
   :after evil
   :init (evil-indent-plus-default-bindings))
 
 (use-package evil-lion
+  :ensure t
   :after evil
   :init (evil-lion-mode))
 
 (use-package evil-numbers
+  :ensure t
   :after evil
   :init
   (general-def evil-normal-state-map
@@ -473,10 +481,12 @@ to `evil-lookup'"
     "C-c C--" 'evil-numbers/dec-at-pt-incremental))
 
 (use-package evil-matchit
+  :ensure t
   :after evil
   :hook ((prog-mode LaTeX-mode) . turn-on-evil-matchit-mode))
 
 (use-package evil-surround
+  :ensure t
   :after evil
   :init (global-evil-surround-mode)
   :config
@@ -490,6 +500,7 @@ to `evil-lookup'"
     "S" 'evil-substitute))
 
 (use-package evil-visualstar
+  :ensure t
   :after evil
   :general
   (general-def evil-visual-state-map
@@ -497,6 +508,7 @@ to `evil-lookup'"
     "#" 'evil-visualstar/begin-search-backward))
 
 (use-package linum-relative
+  :ensure t
   :after evil
   :commands linum-relative-toggle
   :config (setq linum-relative-current-symbol "")

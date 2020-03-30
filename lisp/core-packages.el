@@ -21,8 +21,7 @@
   (package-install 'use-package))
 
 (eval-when-compile
-  (setq use-package-always-ensure t
-        use-package-always-defer  t
+  (setq use-package-always-defer  t
         use-package-expand-minimally t)
   (if init-file-debug
       (setq use-package-verbose t
@@ -40,6 +39,7 @@
 
 ;; auto update packages
 (use-package auto-package-update
+  :ensure t
   :commands auto-package-update-now
   :init
   (defalias 'packages-upgrade #'auto-package-update-now)
@@ -50,6 +50,7 @@
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
+  :ensure t
   :init
   (setq exec-path-from-shell-arguments '("-l")
         exec-path-from-shell-variables '("PATH" "MANPATH"))
@@ -57,11 +58,13 @@
 
 (use-package benchmark-init
   :disabled t
+  :ensure t
   :init (benchmark-init/activate)
   ;; To disable collection of benchmark data after init is done.
   :hook (after-init . benchmark-init/deactivate))
 
 (use-package restart-emacs
+  :ensure t
   :commands (restart-emacs restart-emacs-debug-init)
   :config
   (defun restart-emacs-debug-init (&optional args)
@@ -70,7 +73,6 @@
     (restart-emacs (cons "--debug-init" args))))
 
 (use-package help-fns+
-  :ensure nil
   :commands describe-keymap)
 
 

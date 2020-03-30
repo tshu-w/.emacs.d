@@ -11,7 +11,6 @@
 (add-to-list 'load-path "/usr/local/Cellar/mu/")
 
 (use-package mu4e
-  :ensure nil
   :commands (mu4e-update-mail-and-index)
   :init
   (setq mu4e-maildir "~/.mail"
@@ -176,7 +175,6 @@
     "a M" 'mu4e-compose-new))
 
 (use-package org-mu4e
-  :ensure nil
   ;; :hook (mu4e-compose-mode . org-mu4e-compose-org-mode)
   :config
   (evil-set-initial-state 'mu4e-compose-mode 'normal)
@@ -184,6 +182,7 @@
         org-mu4e-convert-to-html t))
 
 (use-package mu4e-alert
+  :ensure t
   :defer 5
   :config (mu4e-alert-enable-mode-line-display))
 

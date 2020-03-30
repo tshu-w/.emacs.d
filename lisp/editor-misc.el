@@ -5,6 +5,7 @@
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
 (use-package ace-link
+  :ensure t
   :general
   (general-def
     :keymaps '(Info-mode-map
@@ -16,11 +17,13 @@
     "o" 'ace-link))
 
 (use-package ace-pinyin
+  :ensure t
   :init
   (setq ace-pinyin-use-avy t)
   (ace-pinyin-global-mode))
 
 (use-package aggressive-indent
+  :ensure t
   :hook (emacs-lisp-mode . aggressive-indent-mode)
   :config
   (add-hook 'diff-auto-refine-mode-hook (lambda () (aggressive-indent-mode -1)))
@@ -30,6 +33,7 @@
     "t C-a" 'global-aggressive-indent-mode))
 
 (use-package avy
+  :ensure t
   :config
   (setq avy-all-windows 'all-frames
         avy-background t)
@@ -41,6 +45,7 @@
     "jw" '(avy-goto-word-or-subword-1 :which-key "avy word")))
 
 (use-package cal-china-x
+  :ensure t
   :after calendar
   :config
   (cal-china-x-setup)
@@ -68,6 +73,7 @@
 
 (use-package dash-at-point
   :if (memq window-system '(mac ns))
+  :ensure t
   :general
   (tyrant-def
     "d" '(:ignore t :which-key "docs")
@@ -75,11 +81,13 @@
     "dD" 'dash-at-point-with-docset))
 
 (use-package devdocs
+  :ensure t
   :general (tyrant-def "db" 'devdocs-search))
 
-(use-package dotenv-mode)
+(use-package dotenv-mode :ensure t)
 
 (use-package dumb-jump
+  :ensure t
   :init
   (setq dumb-jump-selector 'ivy)
   ;; Since it's dumb, we add it to the end of the default jump handlers. At
@@ -90,12 +98,14 @@
 
 (use-package editorconfig
   :disabled t
+  :ensure t
   :int (editorconfig-mode))
 
-(use-package edit-indirect)
+(use-package edit-indirect :ensure t)
 
 (use-package expand-region
   :disabled t
+  :ensure t
   :config
   (setq expand-region-contract-fast-key "V"
         expand-region-reset-fast-key "r")
@@ -103,11 +113,14 @@
   (tyrant-def "v" '(er/expand-region :which-key "expand region")))
 
 (use-package fcitx
+  :ensure t
+  :after exec-path-from-shell
   :init
   (fcitx-aggressive-setup)
   (fcitx-prefix-keys-turn-off))
 
 (use-package google-translate
+  :ensure t
   :init
   (setq google-translate-enable-ido-completion t
         google-translate-show-phonetic t
@@ -144,6 +157,7 @@
     "xgt" 'google-translate-at-point))
 
 (use-package helpful
+  :ensure t
   :config
   (defun helpful-reuse-window (buf)
     (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
@@ -158,11 +172,11 @@
     "hv" 'helpful-variable))
 
 (use-package insert-translated-name
-  :ensure nil
   :commands insert-translated-name-insert
   :bind ("H-t" . insert-translated-name-insert))
 
 (use-package link-hint
+  :ensure t
   :general
   (tyrant-def
     "xo" 'link-hint-open-link
@@ -170,11 +184,13 @@
     "xy" 'link-hint-copy-link))
 
 (use-package nov
+  :ensure t
   :mode ("\\.epub\\'" . nov-mode)
   :init
   (setq nov-save-place-file (concat cache-dir "nov-places")))
 
 (use-package pandoc-mode
+  :ensure t
   :config
   (defun run-pandoc ()
     "Start pandoc for the buffer and open the menu"
@@ -188,6 +204,7 @@
   (tyrant-def "a C-P" 'run-pandoc))
 
 (use-package pdf-tools
+  :ensure t
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
   (add-hook 'pdf-view-mode-hook (lambda () (pdf-view-midnight-minor-mode)))
@@ -226,14 +243,17 @@
     "y"        'pdf-view-kill-ring-save))
 
 (use-package request
+  :ensure t
   :config
   (setq request-storage-directory (concat cache-dir "request/")))
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
+  :ensure t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
 
 (use-package string-inflection
+  :ensure t
   :general
   (tyrant-def
     "xi"  '(:ignore t :which-key "inflection")
@@ -246,6 +266,7 @@
     "xiU" 'string-inflection-upcase))
 
 (use-package wakatime-mode
+  :ensure t
   :hook (prog-mode . wakatime-mode)
   :init
   (setq wakatime-cli-path (executable-find "wakatime")

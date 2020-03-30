@@ -6,6 +6,7 @@
 
 
 (use-package magit
+  :ensure t
   :config
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1
@@ -66,19 +67,23 @@ For example: To unfold from a magit diff buffer, evaluate the following:
     "gU"  'magit-unstage-file))
 
 (use-package evil-magit
+  :ensure t
   :hook (magit-mode . evil-magit-init))
 
 (use-package magit-gitflow
   :disabled t
+  :ensure t
   :hook (magit-mode . turn-on-magit-gitflow)
   :config (general-def magit-mode-map "%" 'magit-gitflow-popup))
 
 (use-package magit-svn
   :disabled t
+  :ensure t
   :hook (magit-mode . turn-on-magit-svn)
   :config (general-def magit-mode-map "~" 'magit-svn))
 
 (use-package forge
+  :ensure t
   :after magit
   :config
   (setq forge-database-file (concat cache-dir "forge-database.sqlite"))
@@ -92,6 +97,7 @@ For example: To unfold from a magit diff buffer, evaluate the following:
     "a" 'forge-post-cancel))
 
 (use-package transient
+  :ensure t
   :config
   (setq transient-levels-file (expand-file-name "transient/levels.el" cache-dir)
         transient-values-file (expand-file-name "transient/values.el" cache-dir)
@@ -99,9 +105,11 @@ For example: To unfold from a magit diff buffer, evaluate the following:
   (transient-bind-q-to-quit))
 
 (use-package browse-at-remote
+  :ensure t
   :general (tyrant-def "go" 'browse-at-remote))
 
 (use-package diff-hl
+  :ensure t
   :init
   (setq diff-hl-side 'right)
   (global-diff-hl-mode)
@@ -113,6 +121,7 @@ For example: To unfold from a magit diff buffer, evaluate the following:
     "] h" 'diff-hl-next-hunk))
 
 (use-package git-timemachine
+  :ensure t
   :config
   (defhydra git-timemachine-menu (
                                   :pre (unless (bound-and-true-p git-timemachine-mode)
@@ -134,6 +143,7 @@ Git Timemachine Transient State
   (tyrant-def "gt" 'git-timemachine-menu/body))
 
 (use-package git-link
+  :ensure t
   :config
   (setq git-link-open-in-browser t)
 
@@ -158,21 +168,24 @@ Git Timemachine Transient State
     "glh" 'git-link-homepage))
 
 (use-package git-messenger
+  :ensure t
   :general (tyrant-def "gM" 'git-messenger:popup-message))
 
 (use-package gitignore-templates
+  :ensure t
   :general
   (tyrant-def "gI" 'gitignore-templates-new-file)
   (despot-def gitignore-mode-map
     "i" 'gitignore-templates-insert))
 
-(use-package gitattributes-mode)
+(use-package gitattributes-mode :ensure t)
 
-(use-package gitconfig-mode)
+(use-package gitconfig-mode :ensure t)
 
-(use-package gitignore-mode)
+(use-package gitignore-mode :ensure t)
 
 (use-package gist
+  :ensure t
   :config
   (evilified-state-evilify-map gist-list-menu-mode-map
                                :mode gist-list-mode
@@ -193,14 +206,15 @@ Git Timemachine Transient State
     "ggr" 'gist-region
     "ggR" 'gist-region-private))
 
-(use-package helm)
+(use-package helm :ensure t)
 
 (use-package helm-github-stars
+  :ensure t
   :commands (helm-github-stars)
   :config
   (setq helm-github-stars-username "tshu-w"))
 
-(use-package orgit)
+(use-package orgit :ensure t)
 
 
 (provide 'editor-vsc)

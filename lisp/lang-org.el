@@ -51,7 +51,6 @@
 
   ;; Org Agenda
   (use-package org-agenda
-    :ensure nil
     :init
     (setq org-agenda-files '("~/Documents/Org"))
     (add-to-list 'org-modules 'org-habit t)
@@ -219,7 +218,6 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
   ;; Org Babel
   (use-package ob
-    :ensure nil
     :config
     (defun ob-fix-inline-images ()
       "Fix redisplay of inline images after a code block evaluation."
@@ -248,16 +246,13 @@ Org Babel Transient state
       ("'" org-edit-special :exit t))
 
     (use-package ob-python
-      :ensure nil
       :commands (org-babel-execute:python))
     (use-package ob-emacs-lisp
-      :ensure nil
       :commands (org-babel-execute:elisp
                  org-babel-expand-body:elisp
                  org-babel-execute:emacs-lisp
                  org-babel-expand-body:emacs_lisp))
     (use-package ob-latex
-      :ensure nil
       :commands (org-babel-execute:latex
                  org-babel-expand-body:latex
                  org-babel-prep-session:latex))
@@ -268,7 +263,6 @@ Org Babel Transient state
                  org-babel-execute:bash
                  org-babel-expand-body:bash))
     (use-package ob-C
-      :ensure nil
       :commands (org-babel-execute:C
                  org-babel-expand-body:C
                  org-babel-execute:C++
@@ -279,7 +273,6 @@ Org Babel Transient state
 
   ;; Org Capture
   (use-package org-capture
-    :ensure nil
     :config
     (defun org-capture-goto-link ()
       (org-capture-put :target (list 'file+headline
@@ -666,6 +659,7 @@ Org Babel Transient state
     "ot"     'org-todo-list))
 
 (use-package evil-org
+  :ensure t
   :after (evil org)
   :hook (org-mode . evil-org-mode)
   :config
@@ -687,9 +681,11 @@ Org Babel Transient state
     (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
 (use-package org-bullets
+  :ensure t
   :hook (org-mode . org-bullets-mode))
 
 (use-package org-download
+  :ensure t
   :hook ((org-mode dired-mode) . org-download-enable)
   :config
   (defun my-org-download-method (link)
@@ -706,9 +702,11 @@ Org Babel Transient state
     "iDs" 'org-download-screenshot))
 
 (use-package org-edit-latex
+  :ensure t
   :hook (org-mode . org-edit-latex-mode))
 
 (use-package org-journal
+  :ensure t
   :init
   (defun org-journal-find-location (&optional days)
     (let ((date (time-add (current-time) (days-to-time (or days 0)))))
@@ -753,6 +751,7 @@ and some custom text on a newly created journal file."
     "y"   'org-journal-search-calendar-year))
 
 (use-package org-mime
+  :ensure t
   :general
   (despot-def message-mode-map
     "e"  'org-mime-htmlize)
@@ -761,6 +760,7 @@ and some custom text on a newly created journal file."
     "es" 'org-mime-org-subtree-htmlize))
 
 (use-package org-projectile
+  :ensure t
   :after (projectile)
   :commands (org-projectile-todo-files)
   :init
@@ -789,6 +789,7 @@ and some custom text on a newly created journal file."
     "po" 'org-projectile-goto-todos))
 
 (use-package org-ref
+  :ensure t
   :config
   (setq reftex-default-bibliography '("~/Documents/Zotero/references.bib")
 
@@ -849,6 +850,7 @@ and some custom text on a newly created journal file."
     "lp" 'pubmed-insert-bibtex-from-pmid))
 
 (use-package toc-org
+  :ensure t
   :hook (org-mode . toc-org-enable)
   :config (setq toc-org-max-depth 10))
 

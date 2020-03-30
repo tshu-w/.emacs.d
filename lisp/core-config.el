@@ -145,7 +145,6 @@
       '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 
 (use-package autorevert
-  :ensure nil
   :init
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil)
@@ -153,13 +152,11 @@
   (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode))
 
 (use-package bookmark
-  :ensure nil
   :config
   (setq bookmark-default-file (concat cache-dir "bookmarks")
         bookmark-save-flag 1))
 
 (use-package calendar
-  :ensure nil
   :init
   (setq calendar-location-name "Beijing"
         calendar-latitude 39.90
@@ -181,18 +178,15 @@
   (add-to-list 'desktop-path cache-dir))
 
 (use-package dired
-  :ensure nil
   :commands (dired dired-jump dired-jump-other-window)
   :config (setq dired-dwim-target t))
 
 (use-package electric
-  :ensure nil
   :config
   (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
   (electric-pair-mode))
 
 (use-package ediff
-  :ensure nil
   :hook (ediff-quit . winner-undo)
   :config
   ;; first we set some sane defaults
@@ -218,12 +212,10 @@
   (epa-file-enable))
 
 (use-package ffap
-  :ensure nil
   :init
   (setq ffap-machine-p-known 'reject))
 
 (use-package files
-  :ensure nil
   :config
   (setq make-backup-files nil ;; don't create backup~ files
         revert-without-query '(".*") ;; disable revert query
@@ -233,17 +225,14 @@
                                          (".*" ,(concat cache-dir "auto-save/") t))))
 
 (use-package help
-  :ensure nil
   :config
   ;; keep focus while navigating help buffers
   (setq help-window-select 't))
 
 (use-package imenu
-  :ensure nil
   :commands imenu)
 
 (use-package recentf
-  :ensure nil
   :commands recentf-save-list
   :hook (after-init . recentf-mode)
   :config
@@ -255,7 +244,6 @@
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))
 
 (use-package savehist
-  :ensure nil
   :hook (after-init . savehist-mode)
   :config
   ;; minibuffer history
@@ -271,18 +259,15 @@
         savehist-autosave-interval 60))
 
 (use-package saveplace
-  :ensure nil
   :hook (after-init . save-place-mode)
   :config
   ;; Save point position between sessions
   (setq save-place-file (concat cache-dir "places")))
 
 (use-package server
-  :ensure nil
   :hook (after-init . (lambda () (ignore-errors (server-mode)))))
 
 (use-package simple
-  :ensure nil
   :config
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
@@ -292,16 +277,15 @@
         eval-expression-print-level nil))
 
 (use-package subword
-  :ensure nil
   :hook (prog-mode . subword-mode))
 
 (use-package time
-  :ensure nil
   :config
   (setq display-time-24hr-format t
         display-time-default-load-average nil))
 
 (use-package undo-tree
+  :ensure t
   :init
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t
@@ -325,7 +309,6 @@
   (setq url-configuration-directory (concat cache-dir "url/")))
 
 (use-package whitespace
-  :ensure nil
   :init
   (defun show-trailing-whitespace ()
     (set-face-attribute 'trailing-whitespace nil
@@ -362,7 +345,6 @@
                       :background nil))
 
 (use-package winner
-  :ensure nil
   :commands (winner-undo winner-redo)
   :hook (after-init . winner-mode)
   :config

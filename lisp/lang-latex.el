@@ -145,7 +145,6 @@
     "xo"            'font-oblique))
 
 (use-package reftex
-  :ensure nil
   :hook (TeX-mode . turn-on-reftex)
   :config
   (setq reftex-plug-into-AUCTeX '(nil nil t t t)
@@ -168,6 +167,7 @@
     "rv"    'reftex-view-crossref))
 
 (use-package cdlatex
+  :ensure t
   :hook ((LaTeX-mode . turn-on-cdlatex)
          (org-mode   . turn-on-org-cdlatex))
   :config
@@ -179,14 +179,17 @@
           ("sref" "Insert \\ref" "\\ref{sec?}" cdlatex-position-cursor nil t nil))))
 
 (use-package auctex-latexmk
+  :ensure t
   :hook (LaTeX-mode . auctex-latexmk-setup)
   :config (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (use-package company-auctex
+  :ensure t
   :after (auctex company)
   :config (company-auctex-init))
 
 (use-package company-reftex
+  :ensure t
   :after company
   :hook (reftex-mode . (lambda ()
                          (add-to-list (make-local-variable 'company-backends)

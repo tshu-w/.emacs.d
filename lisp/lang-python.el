@@ -8,7 +8,6 @@
 (define-jump-handlers cython-mode anaconda-mode-goto)
 
 (use-package python
-  :ensure nil
   :mode (("SConstruct\\'" . python-mode) ("SConscript\\'" . python-mode))
   :init
   (add-hook 'python-mode-hook
@@ -170,6 +169,7 @@
     "v"     '(:ignore t :which-key "virtualenv")))
 
 (use-package anaconda-mode
+  :ensure t
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode))
   :init
@@ -186,6 +186,7 @@
     "gu" 'anaconda-mode-find-references))
 
 (use-package company-anaconda
+  :ensure t
   :after (anaconda-mode company)
   :init
   (add-hook 'anaconda-mode-hook
@@ -194,29 +195,34 @@
                             '(company-anaconda :with company-capf)))))
 
 (use-package blacken
+  :ensure t
   :config
   (setq blacken-fast-unsafe t)
   :general
   (despot-def python-mode-map "=" 'blacken-buffer))
 
 (use-package cython-mode
+  :ensure t
   :config
   (despot-def cython-mode-map
     "hh" 'anaconda-mode-show-doc
     "gu" 'anaconda-mode-find-references))
 
-(use-package pip-requirements)
+(use-package pip-requirements :ensure t)
 
 (use-package importmagic
+  :ensure t
   :hook (python-mode . importmagic-mode)
   :config
   (despot-def python-mode-map "rf" 'importmagic-fix-symbol-at-point))
 
 (use-package py-isort
+  :ensure t
   :general
   (despot-def python-mode-map "rI" 'py-isort-buffer))
 
 (use-package conda
+  :ensure t
   :hook (python-mode . conda-env-autoactivate-mode)
   :init
   (when (memq window-system '(mac ns))
@@ -231,6 +237,7 @@
 
 (use-package pytest
   :disabled t
+  :ensure t
   :config
   (add-to-list 'pytest-project-root-files "setup.cfg")
   (despot-def python-mode-map

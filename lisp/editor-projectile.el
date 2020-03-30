@@ -5,6 +5,7 @@
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
 (use-package projectile
+  :ensure t
   :init
   (setq projectile-sort-order 'recentf
         projectile-completion-system 'ivy
@@ -36,6 +37,7 @@
     "pv" 'projectile-vc))
 
 (use-package counsel-projectile
+  :ensure t
   :config
   (defun counsel-projectile-rg-region-or-symbol ()
     "Use `counsel-projectile-rg' to search for

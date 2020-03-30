@@ -7,6 +7,7 @@
 (defconst default-persp-name "Default")
 
 (use-package persp-mode
+  :ensure t
   :init
   (setq layouts-restrict-spc-tab t)
 
@@ -253,6 +254,7 @@
 
 ;; use eyebrowse to save window config
 (use-package eyebrowse
+  :ensure t
   :after persp-mode
   :init
   (when (bound-and-true-p persp-mode)

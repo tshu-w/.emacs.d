@@ -6,6 +6,7 @@
 
 
 (use-package ivy
+  :ensure t
   :hook (after-init . ivy-mode)
   :init
   (setq ivy-height 15
@@ -53,11 +54,13 @@
     "C-c C-e"  'ivy-edit))
 
 (use-package ivy-hydra
+  :ensure t
   :general
   (general-def hydra-ivy/keymap
     "<escape>" 'hydra-ivy/keyboard-escape-quit-and-exit))
 
 (use-package ivy-rich
+  :ensure t
   ;; if `counsel' loads after `ivy-rich', it overrides some of `ivy-rich''s
   ;; transformers
   :after counsel
@@ -67,6 +70,7 @@
         ivy-virtual-abbreviate 'full))
 
 (use-package ivy-posframe
+  :ensure t
   :hook (ivy-mode . ivy-posframe-mode)
   :init
   (setq ivy-posframe-parameters '((left-fringe . 8)
@@ -76,6 +80,7 @@
                                                (t . ivy-posframe-display-at-frame-center))))
 
 (use-package ivy-xref
+  :ensure t
   :init
   (setq xref-prompt-for-identifier '(not xref-find-definitions
                                          xref-find-definitions-other-window
@@ -87,6 +92,7 @@
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package counsel
+  :ensure t
   :hook (ivy-mode . counsel-mode)
   :config
   ;; Enable better auto completion of counsel-find-file
@@ -118,6 +124,7 @@
     "C-r" 'counsel-minibuffer-history))
 
 (use-package swiper
+  :ensure t
   :config
   (defun counsel-current-region-or-symbol ()
     "Return contents of the region or symbol at point.
@@ -151,6 +158,7 @@ around point as the initial input."
     "sB"  'swiper-all-region-or-symbol))
 
 (use-package pyim
+  :ensure t
   :after ivy
   :commands pyim-cregexp-build
   :init
@@ -172,6 +180,7 @@ around point as the initial input."
         pyim-dcache-directory (concat cache-dir "pyim/dcache/")))
 
 (use-package wgrep
+  :ensure t
   :general
   (despot-def wgrep-mode-map
     "," 'wgrep-finish-edit
@@ -180,12 +189,14 @@ around point as the initial input."
     "k" 'wgrep-abort-changes))
 
 (use-package smex
+  :ensure t
   :after ivy
   :config
   (setq smex-history-length 32
         smex-save-file (concat cache-dir ".smex-items")))
 
 (use-package company
+  :ensure t
   :init
   (setq company-idle-delay 0
         company-minimum-prefix-length 1
@@ -222,6 +233,7 @@ around point as the initial input."
       (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline))))
 
 (use-package company-box
+  :ensure t
   :hook (company-mode . company-box-mode)
   :config
   (setq company-box-backends-colors nil
@@ -266,12 +278,14 @@ around point as the initial input."
           company-box-icons-alist 'company-box-icons-all-the-icons)))
 
 (use-package company-statistics
+  :ensure t
   :defer 2
   :config
   (setq company-statistics-file (concat cache-dir "company-statistics-cache.el"))
   (company-statistics-mode))
 
 (use-package yasnippet
+  :ensure t
   :defer 2
   :init
   (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
@@ -290,12 +304,14 @@ around point as the initial input."
     "\t"       'yas-maybe-expand))
 
 (use-package yasnippet-snippets
+  :ensure t
   :after yasnippet
   :config
   (yasnippet-snippets-initialize)
   (yas-reload-all))
 
 (use-package yatemplate
+  :ensure t
   :defer 2
   :config
   (yatemplate-fill-alist)
