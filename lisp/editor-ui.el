@@ -5,6 +5,7 @@
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
 (use-package doom-themes
+  :ensure t
   :init
   (load-theme 'doom-nord-light t)
   (load-theme 'doom-nord t t)
@@ -15,6 +16,7 @@
                     '(diff-hl-insert ((t (:background nil))))))
 
 (use-package doom-modeline
+  :ensure t
   :init
   (doom-modeline-mode)
   :config
@@ -23,12 +25,14 @@
         doom-modeline-project-detection 'project))
 
 (use-package theme-changer
+  :ensure t
   :commands change-theme
   :hook (emacs-startup . (lambda () (change-theme 'doom-nord-light 'doom-nord))))
 
-(use-package all-the-icons)
+(use-package all-the-icons :ensure t)
 
 (use-package writeroom-mode
+  :ensure t
   :hook (after-init . global-writeroom-mode)
   :config
   (setq writeroom-width 128
@@ -45,6 +49,7 @@
     "wC" 'global-writeroom-mode))
 
 (use-package popwin
+  :ensure t
   :config
   (popwin-mode)
   ;; don't use default value but manage it ourselves
@@ -84,6 +89,7 @@
     "wp" 'popwin:close-popup-window))
 
 (use-package golden-ratio
+  :ensure t
   :config
   (defun toggle-golden-ratio ()
     (interactive)
@@ -170,11 +176,13 @@
   :general (tyrant-def "tg" 'toggle-golden-ratio))
 
 (use-package hl-todo
+  :ensure t
   ;; global hook activates hl-todo-mode for prog-mode, text-mode
   ;; mode can be explicitly defined using hl-todo-activate-in-modes variable
   :hook (after-init . global-hl-todo-mode))
 
 (use-package highlight-parentheses
+  :ensure t
   :hook (prog-mode . highlight-parentheses-mode)
   :config
   (setq hl-paren-delay 0.2
@@ -186,6 +194,7 @@
   :general (tyrant-def "tp" 'highlight-parentheses-mode))
 
 (use-package indent-guide
+  :ensure t
   :config
   (setq indent-guide-delay 0.3)
   :general
@@ -194,19 +203,24 @@
     "tI" 'indent-guide-global-mode))
 
 (use-package rainbow-delimiters
+  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package highlight-numbers
+  :ensure t
   :hook (prog-mode . highlight-numbers-mode))
 
 (use-package clean-aindent-mode
+  :ensure t
   :hook (prog-mode . clean-aindent-mode))
 
 (use-package eval-sexp-fu
+  :ensure t
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
 
 (use-package volatile-highlights
   :disabled t
+  :ensure t
   :defer 2
   :config
   (require 'volatile-highlights)
@@ -230,11 +244,11 @@
   (volatile-highlights-mode))
 
 (use-package hide-comnt
-  :ensure nil
   :commands hide/show-comments-toggle
   :general (tyrant-def "t c" '(hide/show-comments-toggle :which-key "toggle-comments")))
 
 (use-package centered-cursor-mode
+  :ensure t
   :config
   (setq ccm-recenter-at-end-of-file t
         ccm-ignored-commands '(mouse-drag-region
