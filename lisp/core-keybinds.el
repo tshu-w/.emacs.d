@@ -4,7 +4,6 @@
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
-
 (use-package which-key
   :ensure t
   :hook (after-init . which-key-mode)
@@ -231,8 +230,6 @@
       "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
       "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode)))))
 
-(use-package hydra :ensure t)
-
 
 (use-package evil
   :ensure t
@@ -402,7 +399,7 @@ to `evil-lookup'"
     (eldoc-add-command #'evil-cp-insert-at-end-of-form)
     (eldoc-add-command #'evil-cp-insert-at-beginning-of-form)
     (eldoc-add-command #'evil-cp-append))
-  :general
+
   (tyrant-def
     "bN"  'evil-buffer-new
     "fS"  'evil-write-all
@@ -437,7 +434,6 @@ to `evil-lookup'"
     "<escape>" 'abort-recursive-edit))
 
 (use-package evil-evilified-state
-  :after evil
   :commands (evilified-state-evilify-map))
 
 (use-package evil-args
@@ -493,7 +489,7 @@ to `evil-lookup'"
   ;; TODO: make this work
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (push '(?` . ("`" . "'")) evil-surround-pairs-alist)))
-  :general
+
   ;; `s' for surround instead of `substitute'
   (general-def 'visual evil-surround-mode-map
     "s" 'evil-surround-region
@@ -502,7 +498,7 @@ to `evil-lookup'"
 (use-package evil-visualstar
   :ensure t
   :after evil
-  :general
+  :init
   (general-def evil-visual-state-map
     "*" 'evil-visualstar/begin-search-forward
     "#" 'evil-visualstar/begin-search-backward))
@@ -510,7 +506,6 @@ to `evil-lookup'"
 (use-package linum-relative
   :ensure t
   :after evil
-  :commands linum-relative-toggle
   :config (setq linum-relative-current-symbol "")
   :general (tyrant-def "tr" 'linum-relative-toggle))
 
