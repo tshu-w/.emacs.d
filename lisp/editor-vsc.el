@@ -14,27 +14,16 @@
 
   (defun org-reveal-advice (&rest _args)
     "Unfold the org headings for a target line.
-This can be used to advice functions that might open .org files.
+    This can be used to advice functions that might open .org files.
 
-For example: To unfold from a magit diff buffer, evaluate the following:
-(advice-add 'magit-diff-visit-file :after #'org-reveal-advice)"
-         (when (derived-mode-p 'org-mode)
-           (org-reveal)))
+    For example: To unfold from a magit diff buffer, evaluate the following:
+    (advice-add 'magit-diff-visit-file :after #'org-reveal-advice)"
+    (when (derived-mode-p 'org-mode)
+      (org-reveal)))
 
   (advice-add 'magit-blame-addition           :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-file          :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-worktree-file :after #'org-reveal-advice)
-
-  (defhydra git-blame-menu (
-                            :pre (unless (bound-and-true-p magit-blame-mode)
-                                   (call-interactively 'magit-blame-addition))
-                            :foreign-keys run
-                            :hint nil)
-    "
-  Git Blame Transient State
-  Press [_b_] again to blame further in the history, [_q_] to go up or quit."
-    ("b" magit-blame-addition)
-    ("q" magit-blame-quit :exit (bound-and-true-p magit-blame-mode)))
 
   (general-def 'normal magit-blame-read-only-mode-map
     "RET"    'magit-show-commit)
@@ -54,7 +43,7 @@ For example: To unfold from a magit diff buffer, evaluate the following:
     "g"   '(:ignore t :which-key "git")
     "gs"  'magit-status
     "gf"  '(:ignore t :which-key "file")
-    "gb"  'git-blame-menu/body
+    "gb"  'magit-blame
     "gc"  'magit-clone
     "gfF" 'magit-find-file
     "gfl" 'magit-log-buffer-file
