@@ -187,22 +187,45 @@ around point as the initial input."
 
 (use-package company
   :init
-  (setq company-idle-delay 0.2
-        company-minimum-prefix-length 2
+  (setq company-idle-delay 0
+        company-minimum-prefix-length 1
         company-require-match nil
         company-selection-wrap-around t
+        company-show-numbers t
         company-tooltip-align-annotations t
         company-transformers '(company-sort-by-occurrence)
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
-  (global-company-mode))
+  (global-company-mode)
+  :config
+  ;; `yasnippet' integration
+  (with-no-warnings
+    (with-eval-after-load 'yasnippet
+      (defun company-backend-with-yas (backend)
+        "Add `yasnippet' to company backend."
+        (if (and (listp backend) (member 'company-yasnippet backend))
+            backend
+          (append (if (consp backend) backend (list backend))
+                  '(:with company-yasnippet))))
+
+      (setq company-backends (mapcar #'company-backend-with-yas company-backends))
+
+      (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
+        "Enable yasnippet but disable it inline."
+        (if (eq command 'prefix)
+            (when-let ((prefix (funcall fun 'prefix)))
+              (unless (memq (char-before (- (point) (length prefix))) '(?. ?> ?\())
+                prefix))
+          (funcall fun command arg)))
+
+      (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline))))
 
 (use-package company-box
   :hook (company-mode . company-box-mode)
   :config
-  (setq company-box-enable-icon nil
-        company-box-show-single-candidate t
+  (setq company-box-backends-colors nil
+        company-box-enable-icon nil
         company-box-max-candidates 50
         company-box-doc-enable nil)
 
@@ -248,8 +271,6 @@ around point as the initial input."
   (setq company-statistics-file (concat cache-dir "company-statistics-cache.el"))
   (company-statistics-mode))
 
-(use-package fuzzy)
-
 (use-package yasnippet
   :defer 2
   :init
@@ -273,11 +294,6 @@ around point as the initial input."
   :config
   (yasnippet-snippets-initialize)
   (yas-reload-all))
-
-(use-package ivy-yasnippet
-  :general
-  (general-def '(insert normal)
-    "M-/"      'ivy-yasnippet))
 
 (use-package yatemplate
   :defer 2
