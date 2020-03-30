@@ -214,7 +214,5 @@ Git Timemachine Transient State
   :config
   (setq helm-github-stars-username "tshu-w"))
 
-(use-package orgit :ensure t)
-
 
 (provide 'editor-vsc)

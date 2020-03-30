@@ -761,7 +761,7 @@ and some custom text on a newly created journal file."
 
 (use-package org-projectile
   :ensure t
-  :after (projectile)
+  :after projectile
   :commands (org-projectile-todo-files)
   :init
   (org-projectile-per-project)

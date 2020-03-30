@@ -4,7 +4,6 @@
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
-
 (use-package ivy
   :ensure t
   :hook (after-init . ivy-mode)
@@ -39,23 +38,24 @@
     (run-with-idle-timer 0 nil 'ivy-wgrep-change-to-wgrep-mode)
     (ivy-occur))
 
-  :general
-  (tyrant-def
-    "bb" 'ivy-switch-buffer
-    "rl" 'ivy-resume)
   (despot-def ivy-occur-grep-mode-map
     "w" 'ivy-wgrep-change-to-wgrep-mode
     "s" 'wgrep-save-all-buffers)
+
   (general-def :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
     "<escape>" 'abort-recursive-edit
     "<tab>"    'ivy-tab
     "C-h"      'ivy-c-h
     "C-S-h"    'help-map
-    "C-c C-e"  'ivy-edit))
+    "C-c C-e"  'ivy-edit)
+  :general
+  (tyrant-def
+    "bb" 'ivy-switch-buffer
+    "rl" 'ivy-resume))
 
 (use-package ivy-hydra
   :ensure t
-  :general
+  :config
   (general-def hydra-ivy/keymap
     "<escape>" 'hydra-ivy/keyboard-escape-quit-and-exit))
 
@@ -114,14 +114,15 @@
                                             (recentf-cleanup)
                                             (counsel-recentf))
                                       "refresh list")))
+
+  (general-def read-expression-map
+    "C-r" 'counsel-minibuffer-history)
   :general
   (tyrant-def
     "fr" 'counsel-recentf
     "fL" 'counsel-locate
     "sf" 'counsel-rg
-    "sF" 'counsel-rg-region-or-symbol)
-  (general-def read-expression-map
-    "C-r" 'counsel-minibuffer-history))
+    "sF" 'counsel-rg-region-or-symbol))
 
 (use-package swiper
   :ensure t
@@ -181,7 +182,7 @@ around point as the initial input."
 
 (use-package wgrep
   :ensure t
-  :general
+  :config
   (despot-def wgrep-mode-map
     "," 'wgrep-finish-edit
     "c" 'wgrep-finish-edit
@@ -197,6 +198,7 @@ around point as the initial input."
 
 (use-package company
   :ensure t
+  :hook (after-init . global-company-mode)
   :init
   (setq company-idle-delay 0
         company-minimum-prefix-length 1
@@ -208,7 +210,6 @@ around point as the initial input."
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
-  (global-company-mode)
   :config
   ;; `yasnippet' integration
   (with-no-warnings
@@ -287,14 +288,17 @@ around point as the initial input."
 (use-package yasnippet
   :ensure t
   :defer 2
-  :init
-  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
   :config
+  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
   (setq yas-triggers-in-field t
         yas-wrap-around-region t
         yas-snippet-dirs (list (concat user-emacs-directory "snippets")))
-  (yas-global-mode)
 
+  (use-package yasnippet-snippets
+    :ensure t
+    :init (yasnippet-snippets-initialize))
+
+  (yas-global-mode)
   ;; disable yas minor mode map
   ;; use hippie-expand instead
   (setq yas-minor-mode-map (make-sparse-keymap))
@@ -302,13 +306,6 @@ around point as the initial input."
   (tyrant-def "ty" 'yas-minor-mode)
   (general-def 'insert yas-minor-mode-map
     "\t"       'yas-maybe-expand))
-
-(use-package yasnippet-snippets
-  :ensure t
-  :after yasnippet
-  :config
-  (yasnippet-snippets-initialize)
-  (yas-reload-all))
 
 (use-package yatemplate
   :ensure t

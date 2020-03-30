@@ -17,8 +17,7 @@
 
 (use-package doom-modeline
   :ensure t
-  :init
-  (doom-modeline-mode)
+  :hook (after-init . doom-modeline-mode)
   :config
   (setq inhibit-compacting-font-caches t
         doom-modeline-buffer-file-name-style 'auto
@@ -50,8 +49,8 @@
 
 (use-package popwin
   :ensure t
+  :hook (after-init . popwin-mode)
   :config
-  (popwin-mode)
   ;; don't use default value but manage it ourselves
   (setq popwin:special-display-config nil)
 

@@ -40,9 +40,8 @@
 ;; auto update packages
 (use-package auto-package-update
   :ensure t
-  :commands auto-package-update-now
   :init
-  (defalias 'packages-upgrade #'auto-package-update-now)
+  (defalias 'package-upgrade #'auto-package-update-now)
   :config
   (setq auto-package-update-delete-old-versions t
         auto-package-update-hide-results t
