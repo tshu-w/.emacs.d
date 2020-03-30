@@ -218,31 +218,6 @@
   :ensure t
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
 
-(use-package volatile-highlights
-  :disabled t
-  :ensure t
-  :defer 2
-  :config
-  (require 'volatile-highlights)
-  ;; additional extensions
-  ;; evil
-  (vhl/define-extension 'evil
-                        'evil-move
-                        'evil-paste-after
-                        'evil-paste-before
-                        'evil-paste-pop)
-  (with-eval-after-load 'evil
-    (vhl/install-extension 'evil)
-    (vhl/load-extension 'evil))
-  ;; undo-tree
-  (vhl/define-extension 'undo-tree
-                        'undo-tree-move
-                        'undo-tree-yank)
-  (with-eval-after-load 'undo-tree
-    (vhl/install-extension 'undo-tree)
-    (vhl/load-extension 'undo-tree))
-  (volatile-highlights-mode))
-
 (use-package hide-comnt
   :commands hide/show-comments-toggle
   :general (tyrant-def "t c" '(hide/show-comments-toggle :which-key "toggle-comments")))
