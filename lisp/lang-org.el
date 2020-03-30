@@ -284,17 +284,17 @@ Org Babel Transient state
     (defun org-capture-goto-link ()
       (org-capture-put :target (list 'file+headline
                                      (nth 1 (org-capture-get :target))
-                                     (org-capture-get :annotation)))
+                                     (plist-get org-store-link-plist :description)))
       (org-capture-put-target-region-and-position)
       (widen)
-      (let ((hd (org-capture-get :annotation)))
+      (let ((hd (plist-get org-store-link-plist :description)))
         (goto-char (point-min))
         (if (re-search-forward
              (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
             (org-end-of-subtree)
           (goto-char (point-max))
           (or (bolp) (insert "\n"))
-          (insert "* " (nth 2 (org-capture-get :target)) "\n"))))
+          (insert "* " hd "\n" "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
 
     (setq org-gtd-file (expand-file-name "gtd.org" org-directory))
 
