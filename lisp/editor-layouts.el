@@ -19,8 +19,7 @@
         persp-auto-resume-time -1
         persp-is-ibc-as-f-supported nil
         persp-nil-name default-persp-name
-        persp-set-last-persp-for-new-frames nil
-        persp-save-dir (concat cache-dir "layouts/"))
+        persp-set-last-persp-for-new-frames nil)
 
   (when (member "--persp-r" command-line-args)
     (setq persp-auto-resume-time 1)

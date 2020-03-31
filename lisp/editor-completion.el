@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-(require 'core-const)
-
 (use-package ivy
   :ensure t
   :hook (after-init . ivy-mode)
@@ -183,8 +181,7 @@ around point as the initial input."
                   x)
         (pyim-cregexp-build x))))
 
-  (setq ivy-re-builders-alist '((t . eh-ivy-cregexp))
-        pyim-dcache-directory (concat cache-dir "pyim/dcache/")))
+  (setq ivy-re-builders-alist '((t . eh-ivy-cregexp))))
 
 (use-package wgrep
   :ensure t
@@ -199,8 +196,7 @@ around point as the initial input."
   :ensure t
   :after ivy
   :config
-  (setq smex-history-length 32
-        smex-save-file (concat cache-dir ".smex-items")))
+  (setq smex-history-length 32))
 
 (use-package company
   :ensure t
@@ -288,7 +284,6 @@ around point as the initial input."
   :ensure t
   :defer 2
   :config
-  (setq company-statistics-file (concat cache-dir "company-statistics-cache.el"))
   (company-statistics-mode))
 
 (use-package yasnippet
@@ -297,8 +292,7 @@ around point as the initial input."
   :config
   (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
   (setq yas-triggers-in-field t
-        yas-wrap-around-region t
-        yas-snippet-dirs (list (concat user-emacs-directory "snippets")))
+        yas-wrap-around-region t)
 
   (use-package yasnippet-snippets
     :ensure t
@@ -317,6 +311,7 @@ around point as the initial input."
   :ensure t
   :defer 2
   :config
+  (setq yatemplate-dir (no-littering-expand-etc-file-name "templates/"))
   (yatemplate-fill-alist)
   (auto-insert-mode))
 

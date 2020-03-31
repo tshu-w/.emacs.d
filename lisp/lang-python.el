@@ -8,7 +8,6 @@
 
 ;;; Code:
 
-(require 'core-const)
 (require 'core-funcs)
 
 (define-jump-handlers python-mode)
@@ -178,9 +177,6 @@
   :ensure t
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode))
-  :init
-  (setq anaconda-mode-installation-directory
-        (concat cache-dir "anaconda-mode"))
   :config
   (add-to-list 'jump-handlers-python-mode
                '(anaconda-mode-find-definitions :async t))

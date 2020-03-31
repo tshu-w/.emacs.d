@@ -10,8 +10,6 @@
 
 ;;; Code:
 
-(require 'core-const)
-
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org"   . "https://orgmode.org/elpa/")
                          ("gnu"   . "https://elpa.gnu.org/packages/")))
@@ -50,8 +48,7 @@
   (defalias 'package-upgrade #'auto-package-update-now)
   :config
   (setq auto-package-update-delete-old-versions t
-        auto-package-update-hide-results t
-        auto-package-update-last-update-day-path (concat cache-dir "last-package-update-day")))
+        auto-package-update-hide-results t))
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -67,6 +64,14 @@
   :init (benchmark-init/activate)
   ;; To disable collection of benchmark data after init is done.
   :hook (after-init . benchmark-init/deactivate))
+
+(use-package no-littering
+  :ensure t
+  :init (require 'no-littering)
+  :config
+  (with-eval-after-load 'recentf
+    (add-to-list 'recentf-exclude no-littering-var-directory)
+    (add-to-list 'recentf-exclude no-littering-etc-directory)))
 
 (use-package restart-emacs
   :ensure t

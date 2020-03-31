@@ -8,11 +8,6 @@
 
 ;;; Code:
 
-(require 'core-const)
-
-(unless (file-exists-p cache-dir)
-  (make-directory cache-dir))
-
 (set-language-environment 'utf-8)
 (set-default-coding-systems 'utf-8)
 
@@ -158,8 +153,7 @@
 
 (use-package bookmark
   :config
-  (setq bookmark-default-file (concat cache-dir "bookmarks")
-        bookmark-save-flag 1))
+  (setq bookmark-save-flag 1))
 
 (use-package calendar
   :init
@@ -177,9 +171,7 @@
         (desktop-save desktop-dirname)))
   (add-hook 'auto-save-hook 'my-desktop-save)
 
-  (setq desktop-lazy-verbose nil
-        desktop-dirname cache-dir)
-  (add-to-list 'desktop-path cache-dir))
+  (setq desktop-lazy-verbose nil))
 
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
@@ -224,9 +216,8 @@
   (setq make-backup-files nil ;; don't create backup~ files
         revert-without-query '(".*") ;; disable revert query
         auto-save-default t
-        auto-save-list-file-prefix (concat cache-dir "auto-save/")
-        auto-save-file-name-transforms `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,(concat cache-dir "auto-save/") t)
-                                         (".*" ,(concat cache-dir "auto-save/") t))))
+        auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
 (use-package help
   :config
@@ -240,10 +231,9 @@
   :commands recentf-save-list
   :hook (after-init . recentf-mode)
   :config
-  (setq recentf-save-file (concat cache-dir "recentf")
-        recentf-max-saved-items 100
+  (setq recentf-max-saved-items 100
         recentf-auto-cleanup 'never)
-  (add-to-list 'recentf-exclude (recentf-expand-file-name cache-dir))
+
   (add-to-list 'recentf-exclude (recentf-expand-file-name package-user-dir))
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))
 
@@ -251,8 +241,7 @@
   :hook (after-init . savehist-mode)
   :config
   ;; minibuffer history
-  (setq savehist-file (concat cache-dir "savehist")
-        enable-recursive-minibuffers t ; allow commands in minibuffers
+  (setq enable-recursive-minibuffers t ; allow commands in minibuffers
         history-length 100
         savehist-additional-variables '(evil-jumps-history
                                         mark-ring
@@ -263,10 +252,7 @@
         savehist-autosave-interval 60))
 
 (use-package saveplace
-  :hook (after-init . save-place-mode)
-  :config
-  ;; Save point position between sessions
-  (setq save-place-file (concat cache-dir "places")))
+  :hook (after-init . save-place-mode))
 
 (use-package server
   :hook (after-init . (lambda () (ignore-errors (server-mode)))))
@@ -299,8 +285,7 @@
         undo-strong-limit 12000000
         undo-outer-limit 120000000)
 
-  (setq undo-tree-auto-save-history t
-        undo-tree-history-directory-alist `((".*" . ,(concat cache-dir "undo-tree/"))))
+  (setq undo-tree-auto-save-history t)
   :config
   ;; TODO fix upstream
   (defun undo-tree-restore-default ()
@@ -308,10 +293,6 @@
     (setq undo-tree-visualizer-diff t))
   (advice-add #'undo-tree-visualizer-quit :after #'undo-tree-restore-default))
 
-(use-package url
-  :config
-  ;; gravatars from magit use this to store their cache
-  (setq url-configuration-directory (concat cache-dir "url/")))
 
 (use-package whitespace
   :init
@@ -365,7 +346,7 @@
                                 "*esh command on file*")))
 
 
-(setq-default custom-file (expand-file-name ".custom.el" cache-dir))
+(setq-default custom-file (no-littering-expand-var-file-name "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
 
