@@ -44,7 +44,6 @@
 
 (update-load-path)
 
-(require 'core-const)
 (require 'core-packages)
 (require 'core-config)
 (require 'core-funcs)

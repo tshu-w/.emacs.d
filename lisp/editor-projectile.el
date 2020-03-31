@@ -8,15 +8,11 @@
 
 ;;; Code:
 
-(require 'core-const)
-
 (use-package projectile
   :ensure t
   :init
   (setq projectile-sort-order 'recentf
-        projectile-completion-system 'ivy
-        projectile-cache-file (concat cache-dir "projectile.cache")
-        projectile-known-projects-file (concat cache-dir "projectile-bookmarks.eld"))
+        projectile-completion-system 'ivy)
   (projectile-mode)
   :general
   (tyrant-def

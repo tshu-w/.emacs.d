@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-(require 'core-const)
-
 (use-package magit
   :ensure t
   :config
@@ -80,7 +78,6 @@
   :ensure t
   :after magit
   :config
-  (setq forge-database-file (concat cache-dir "forge-database.sqlite"))
   (despot-def forge-topic-mode-map
     "c" 'forge-create-post
     "e" 'forge-edit-post)
@@ -92,11 +89,7 @@
 
 (use-package transient
   :ensure t
-  :config
-  (setq transient-levels-file (expand-file-name "transient/levels.el" cache-dir)
-        transient-values-file (expand-file-name "transient/values.el" cache-dir)
-        transient-history-file (expand-file-name "transient/history.el" cache-dir))
-  (transient-bind-q-to-quit))
+  :config (transient-bind-q-to-quit))
 
 (use-package browse-at-remote
   :ensure t
