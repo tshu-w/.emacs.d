@@ -1,8 +1,12 @@
-;;; editor-layouts.el -*- lexical-binding: t; -*-
+;;; editor-layouts.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 (defconst default-persp-name "Default")
 
@@ -383,3 +387,4 @@ containing the buffer."
 
 
 (provide 'editor-layouts)
+;;; editor-layouts.el end here

@@ -1,8 +1,14 @@
-;;; core-keybinds.el -*- lexical-binding: t; -*-
+;;; core-keybinds.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-funcs)
 
 (use-package which-key
   :ensure t
@@ -18,6 +24,7 @@
 
 (use-package general
   :ensure t
+  :defer nil
   :config
   (general-create-definer tyrant-def
     :states '(normal insert visual motion emacs evilified)
@@ -164,11 +171,11 @@
     ;; "tF"      'display-fill-column-indicator-mode
     ;; "t C-f"   'global-display-fill-column-indicator-mode
     "th"      'global-hl-line-mode
+    "tH"      'font-lock-mode
     "tk"      'which-key-mode
     "tl"      'toggle-truncate-lines
     "tn"      'linum-mode
     "tm"      'hidden-mode-line-mode
-    "ts"      'font-lock-mode
     "tt"      'load-theme
     "tw"      'whitespace-mode
     "tW"      'toggle-word-wrap
@@ -247,14 +254,10 @@
   (setq evil-normal-state-cursor       '("DarkGoldenrod2" box)
         evil-insert-state-cursor       '("chartreuse3" (bar . 2))
         evil-emacs-state-cursor        '("SkyBlue2" box)
-        evil-hybrid-state-cursor       '("SkyBlue2" (bar . 2))
         evil-replace-state-cursor      '("chocolate" (hbar . 2))
         evil-evilified-state-cursor    '("LightGoldenrod3" box)
         evil-visual-state-cursor       '("gray" (hbar . 2))
-        evil-motion-state-cursor       '("plum3" box)
-        evil-lisp-state-cursor         '("HotPink1" box)
-        evil-iedit-state-cursor        '("firebrick1" box)
-        evil-iedit-insert-state-cursor '("firebrick1" (bar . 2)))
+        evil-motion-state-cursor       '("plum3" box))
 
   (add-to-list 'default-jump-handlers 'evil-goto-definition)
   (evil-set-command-property 'jump-to-definition :jump t)
@@ -294,13 +297,13 @@
       (web-mode . web-mode-markup-indent-offset)
       (yaml-mode . yaml-indent-offset))
     "An alist where each key is either a symbol corresponding
-to a major mode, a list of such symbols, or the symbol t,
-acting as default. The values are either integers, symbols
-or lists of these.")
+  to a major mode, a list of such symbols, or the symbol t,
+  acting as default. The values are either integers, symbols
+  or lists of these.")
 
   (defun set-evil-shift-width ()
     "Set the value of `evil-shift-width' based on the indentation settings of the
-current major mode."
+  current major mode."
     (let ((shift-width
            (catch 'break
              (dolist (test evil-indent-variable-alist)
@@ -327,7 +330,7 @@ current major mode."
 
   (defmacro define-text-object-regexp (key name start-regexp end-regexp)
     "Define a text object.
-START-REGEXP and END-REGEXP are the boundaries of the text object."
+  START-REGEXP and END-REGEXP are the boundaries of the text object."
     (let ((inner-name (make-symbol (concat "evil-inner-" name)))
           (outer-name (make-symbol (concat "evil-outer-" name))))
       `(progn
@@ -340,8 +343,8 @@ START-REGEXP and END-REGEXP are the boundaries of the text object."
 
   (defmacro define-text-object (key name start end)
     "Define a text object and a surround pair.
-START and END are strings (not regular expressions) that define
-the boundaries of the text object."
+  START and END are strings (not regular expressions) that define
+  the boundaries of the text object."
     `(progn
        (define-text-object-regexp ,key ,name
          ,(regexp-quote start)
@@ -381,8 +384,8 @@ the boundaries of the text object."
 
   (defun evil-smart-doc-lookup ()
     "Run documentation lookup command specific to the major mode.
-Use command bound to `SPC m h h` if defined, otherwise fall back
-to `evil-lookup'"
+  Use command bound to `SPC m h h` if defined, otherwise fall back
+  to `evil-lookup'"
     (interactive)
     (let ((binding (key-binding (kbd ",hh"))))
       (if (commandp binding)
@@ -511,3 +514,4 @@ to `evil-lookup'"
 
 
 (provide 'core-keybinds)
+;;; core-keybinds.el ends here

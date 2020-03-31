@@ -1,10 +1,15 @@
-;;; core-config.el -*- lexical-binding: t; -*-
+;;; core-config.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
-(defconst cache-dir (expand-file-name (concat user-emacs-directory ".cache/")))
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
+
 (unless (file-exists-p cache-dir)
   (make-directory cache-dir))
 
@@ -23,8 +28,8 @@
   (setq insert-directory-program "/usr/local/bin/gls"
         dired-listing-switches "-aBhl --group-directories-first"))
 
-;; Set the monospaced font size when mixed Chinese and English words
 (defun set-monospaced-font (english chinese english-size chinese-size)
+  "Set the monospaced font size when mixed CHINESE and ENGLISH words."
   (set-face-attribute 'default nil :font
                       (format   "%s:pixelsize=%d"  english english-size))
   (dolist (charset '(kana han cjk-misc bopomofo))
@@ -58,7 +63,7 @@
 (setq window-combination-resize t)
 
 ;; scroll compilation to first error or end
-(setq compilation-scroll-output 'first-error)
+;; (setq compilation-scroll-output 'first-error)
 
 ;; Use system trash for file deletion.
 ;; This should work on Windows and Linux distros.
@@ -93,8 +98,8 @@
 ;; When emacs asks for "yes" or "no", let "y" or "n" suffice
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; remove prompt if the file is opened in other clients
 (defun server-remove-kill-buffer-hook ()
+  "Remove prompt if the file is opened in other clients."
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
 (add-hook 'server-visit-hook 'server-remove-kill-buffer-hook)
 
@@ -110,8 +115,8 @@
         (keyboard-quit)))))
 (add-to-list 'find-file-not-found-functions 'make-directory-maybe nil #'eq)
 
-;; check when opening large files - literal file open
 (defun check-large-file ()
+  "Check when opening large files - literal file open."
   (let* ((filename (buffer-file-name))
          (size (nth 7 (file-attributes filename))))
     (when (and
@@ -163,7 +168,6 @@
         calendar-longitude 116.40))
 
 (use-package desktop
-  :disabled t
   :init (desktop-save-mode t)
   :config
   (defun my-desktop-save ()
@@ -183,7 +187,7 @@
 
 (use-package electric
   :config
-  (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+  ;; (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
   (electric-pair-mode))
 
 (use-package ediff
@@ -298,8 +302,9 @@
   (setq undo-tree-auto-save-history t
         undo-tree-history-directory-alist `((".*" . ,(concat cache-dir "undo-tree/"))))
   :config
-  ;; restore diff window after quit.  TODO fix upstream
+  ;; TODO fix upstream
   (defun undo-tree-restore-default ()
+    "Restore diff window after quit."
     (setq undo-tree-visualizer-diff t))
   (advice-add #'undo-tree-visualizer-quit :after #'undo-tree-restore-default))
 
@@ -360,10 +365,10 @@
                                 "*esh command on file*")))
 
 
-(eval-when-compile
-  (setq-default custom-file (expand-file-name ".custom.el" cache-dir))
-  (when (file-exists-p custom-file)
-    (load custom-file)))
+(setq-default custom-file (expand-file-name ".custom.el" cache-dir))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 
 (provide 'core-config)
+;;; core-config.el ends here

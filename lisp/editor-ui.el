@@ -1,8 +1,12 @@
-;;; editor-ui.el -*- lexical-binding: t; -*-
+;;; editor-ui.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package doom-themes
   :ensure t
@@ -33,6 +37,7 @@
 (use-package writeroom-mode
   :ensure t
   :hook (after-init . global-writeroom-mode)
+  :init
   :config
   (setq writeroom-width 128
         writeroom-bottom-divider-width 0
@@ -237,3 +242,4 @@
 
 
 (provide 'editor-ui)
+;;; editor-ui.el ends here

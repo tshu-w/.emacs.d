@@ -1,9 +1,14 @@
-;;; editor-vsc.el -*- lexical-binding: t; -*-
+;;; editor-vsc.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
 
 (use-package magit
   :ensure t
@@ -205,3 +210,4 @@ Git Timemachine Transient State
 
 
 (provide 'editor-vsc)
+;;; editor-vsc.el ends here

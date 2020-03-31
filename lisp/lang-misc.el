@@ -1,8 +1,12 @@
-;;; lang-misc.el -*- lexical-binding: t; -*-
+;;; lang-misc.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package json-mode
   :ensure t
@@ -18,3 +22,4 @@
 
 
 (provide 'lang-misc)
+;;; lang-misc.el ends here

@@ -4,6 +4,10 @@
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
+;;; Commentary:
+
+;;; Code:
+
 (setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
 (defvar default-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
@@ -40,6 +44,7 @@
 
 (update-load-path)
 
+(require 'core-const)
 (require 'core-packages)
 (require 'core-config)
 (require 'core-funcs)
@@ -62,4 +67,7 @@
 (require 'lang-misc)
 
 (defun display-startup-echo-area-message ()
+  "Display startup message."
   (message (concat "Startup time: " (emacs-init-time))))
+
+;;; init.el ends here

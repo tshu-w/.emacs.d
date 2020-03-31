@@ -1,10 +1,17 @@
-;;; core-packages.el -*- lexical-binding: t; -*-
+;;; core-packages.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
 
 ;; initialize package
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
+
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org"   . "https://orgmode.org/elpa/")
                          ("gnu"   . "https://elpa.gnu.org/packages/")))
@@ -37,7 +44,6 @@
 ;; (use-package diminish)
 ;; (use-package bind-key)
 
-;; auto update packages
 (use-package auto-package-update
   :ensure t
   :init
@@ -76,3 +82,4 @@
 
 
 (provide 'core-packages)
+;;; core-packages.el ends here

@@ -1,8 +1,15 @@
-;;; lang-python.el -*- lexical-binding: t; -*-
+;;; lang-python.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
+(require 'core-funcs)
 
 (define-jump-handlers python-mode)
 (define-jump-handlers cython-mode anaconda-mode-goto)
@@ -118,12 +125,11 @@
     (interactive "P")
     (+python-execute-file arg)
     (switch-to-buffer-other-window "*compilation*")
-    (end-of-buffer))
+    (goto-char (point-max)))
 
   ;; from https://www.snip2code.com/Snippet/127022/Emacs-auto-remove-unused-import-statemen
   (defun +python-remove-unused-imports()
-    "Use Autoflake to remove unused function"
-    "autoflake --remove-all-unused-imports -i unused_imports.py"
+    "Use Autoflake to remove unused function."
     (interactive)
     (if (executable-find "autoflake")
         (progn
@@ -253,3 +259,4 @@
 
 
 (provide 'lang-python)
+;;; lang-python.el ends here

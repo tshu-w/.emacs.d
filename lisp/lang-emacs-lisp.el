@@ -1,8 +1,12 @@
-;;; lang-emacs-lisp.el -*- lexical-binding: t; -*-
+;;; lang-emacs-lisp.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
 (defun eval-current-form ()
@@ -34,9 +38,8 @@ Unlike `eval-defun', this does not go to topmost function."
   (interactive)
   (save-buffer)
   (load-file (buffer-file-name))
-  (let ((cbuf (current-buffer)))
-    (ert '(satisfies (lambda (test)
-                       (eq cbuf (find-ert-test-buffer test)))))))
+  (ert '(satisfies (lambda (test)
+                     (eq (current-buffer) (find-ert-test-buffer test))))))
 
 (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
   ","  'lisp-state-toggle-lisp-state
@@ -101,3 +104,4 @@ Unlike `eval-defun', this does not go to topmost function."
 
 
 (provide 'lang-emacs-lisp)
+;;; lang-emacs-lisp.el ends here
