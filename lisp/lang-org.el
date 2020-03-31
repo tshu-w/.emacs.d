@@ -1,8 +1,14 @@
-;;; lang-org.el -*- lexical-binding: t; -*-
+;;; lang-org.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
 
 (use-package org
   :ensure org-plus-contrib
@@ -856,3 +862,4 @@ and some custom text on a newly created journal file."
 
 
 (provide 'lang-org)
+;;; lang-org.el ends here

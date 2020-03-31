@@ -1,8 +1,12 @@
-;;; core-funcs.el -*- lexical-binding: t; -*-
+;;; core-funcs.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 ;; (eval-when-compile (require 'cl-lib))
 
@@ -103,7 +107,7 @@ initialized with the current directory instead of filename."
                 ((memq key '(?\a ?\e)) (keyboard-quit))))))))
 
 (defun delete-current-buffer-file ()
-  "Removes file connected to current buffer and kills buffer."
+  "Remove file connected to current buffer and kill buffer."
   (interactive)
   (let ((filename (buffer-file-name))
         (buffer (current-buffer))
@@ -122,6 +126,7 @@ initialized with the current directory instead of filename."
         (message "Canceled: File deletion")))))
 
 (defun sudo-edit (&optional arg)
+  "Edit file with administrator privileges."
   (interactive "P")
   (require 'tramp)
   (let ((fname (if (or arg (not buffer-file-name))
@@ -160,7 +165,7 @@ initialized with the current directory instead of filename."
            new-fname))))))
 
 (defun open-file-in-external-app (file-path)
-  "Open `file-path' in external application."
+  "Open FILE-PATH in external application."
   (cond
    ((eq system-type 'windows-nt)
     (w32-shell-execute "open" (replace-regexp-in-string "/" "\\\\" file-path)))
@@ -193,13 +198,13 @@ a split-side entry, its value must be usable as the SIDE argument for
     window))
 
 (defun find-file-vsplit (file)
-  "find file in vertical split"
+  "Find FILE in vertical split."
   (interactive "FFind file (vsplit): ")
   (let ((buffer (find-file-noselect file)))
     (pop-to-buffer buffer '(display-in-split (split-side . right)))))
 
 (defun find-file-split (file)
-  "find file in horizontal split"
+  "Find FILE in horizontal split."
   (interactive "FFind file (split): ")
   (let ((buffer (find-file-noselect file)))
     (pop-to-buffer buffer '(display-in-split (split-side . below)))))
@@ -239,7 +244,7 @@ FILENAME is deleted using `delete-file' function.."
 
 ;; from https://gist.github.com/3402786
 (defun toggle-maximize-buffer ()
-  "Maximize buffer"
+  "Maximize buffer."
   (interactive)
   (save-excursion
     (if (and (= 1 (length (window-list)))
@@ -289,10 +294,9 @@ FILENAME is deleted using `delete-file' function.."
   "Switch to the `*scratch*' buffer, creating it first if needed.
 if prefix argument ARG is given, switch to it in an other, possibly new window."
   (interactive "P")
-  (let ((exists (get-buffer "*scratch*")))
-    (if arg
-        (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
-      (switch-to-buffer (get-buffer-create "*scratch*")))))
+  (if arg
+      (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
+    (switch-to-buffer (get-buffer-create "*scratch*"))))
 
 (defun switch-to-messages-buffer (&optional arg)
   "Switch to the `*Messages*' buffer.
@@ -305,7 +309,7 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
       (switch-to-buffer (current-buffer)))))
 
 (defun switch-to-minibuffer-window ()
-  "switch to minibuffer window (if active)"
+  "Switch to minibuffer window (if active)."
   (interactive)
   (when (active-minibuffer-window)
     (select-window (active-minibuffer-window))))
@@ -398,7 +402,7 @@ Returns a message with the count of killed buffers."
   "Switch back and forth between current and last buffer in the
 current window.
 
-If `layouts-restrict-spc-tab' is `t' then this only switches between
+If `layouts-restrict-spc-tab' is t then this only switches between
 the current layouts buffers."
   (interactive)
   (cl-destructuring-bind (buf start pos)
@@ -441,7 +445,7 @@ the current layouts buffers."
         ;; `window-state-put' also re-selects the window if needed, so we don't
         ;; need to call `select-window'
         (window-state-put second-window-state (funcall splitter)))
-    (error "Can't toggle window layout when the number of windows isn't two.")))
+    (error "Can't toggle window layout when the number of windows isn't two")))
 
 ;; originally from magnars and modified by ffevotte for dedicated windows
 ;; support, it has quite diverged by now
@@ -506,7 +510,7 @@ current frame."
   (let (;; switch to first window previously shown in this frame
         (prev-window (get-mru-window nil t t)))
     ;; Check window was not found successfully
-    (unless prev-window (user-error "Last window not found."))
+    (unless prev-window (user-error "Last window not found"))
     (select-window prev-window)))
 
 
@@ -515,7 +519,7 @@ current frame."
 ;; ---------------------------------------------------------------------------
 
 (defun kill-frame ()
-  "Kill server buffer and hide the main Emacs window"
+  "Kill server buffer and hide the main Emacs window."
   (interactive)
   (condition-case nil
       (delete-frame nil 1)
@@ -534,6 +538,7 @@ current frame."
     (apply 'message msg args)))
 
 (defun osx-switch-back-to-previous-application ()
+  "Switch back to previous application on macOS."
   (interactive)
   (do-applescript
    (mapconcat
@@ -587,7 +592,7 @@ Compare them on count first,and in case of tie sort them alphabetically."
              (name (car word))
              (count (cdr word)))
         (setq formatted (concat formatted (format "[%s: %d], " name count)))))
-    (when (interactive-p)
+    (when (call-interactively-p)
       (if (> (length formatted) 2)
           (message (format "%s\nWord count: %s"
                            overview
@@ -741,3 +746,4 @@ sets `reference-handlers' in buffers of that mode."
 
 
 (provide 'core-funcs)
+;;; core-funcs.el ends here

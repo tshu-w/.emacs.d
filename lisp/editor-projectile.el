@@ -1,8 +1,14 @@
-;;; editor-projectile.el -*- lexical-binding: t; -*-
+;;; editor-projectile.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
 
 (use-package projectile
   :ensure t
@@ -72,3 +78,4 @@
 
 
 (provide 'editor-projectile)
+;;; editor-projectile.el ends here

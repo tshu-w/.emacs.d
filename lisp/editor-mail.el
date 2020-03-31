@@ -1,4 +1,4 @@
-;;; editor-mail.el -*- lexical-binding: t; -*-
+;;; editor-mail.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
@@ -188,3 +188,4 @@
 
 
 (provide 'editor-mail)
+;;; editor-mail.el ends here

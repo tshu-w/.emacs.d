@@ -1,8 +1,12 @@
-;;; lang-markdown.el -*- lexical-binding: t; -*-
+;;; lang-markdown.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package markdown-mode
   :ensure t
@@ -149,3 +153,4 @@
 
 
 (provide 'lang-markdown)
+;;; lang-markdown.el ends here
