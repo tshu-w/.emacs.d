@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-(require 'core-const)
-
 (use-package org
   :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
@@ -28,7 +26,6 @@
   (setq org-columns-default-format "%50ITEM %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM"
         org-directory "~/Documents/Org/"
         org-default-notes-file (expand-file-name "gtd.org" org-directory)
-        org-id-locations-file (concat cache-dir ".org-id-locations")
         org-image-actual-width 500
         org-imenu-depth 8
         org-global-properties '(("STYLE_ALL" . "habit"))
@@ -36,7 +33,6 @@
         org-latex-prefer-user-labels t
         org-log-done t
         org-log-into-drawer t
-        org-publish-timestamp-directory (concat cache-dir ".org-timestamps/")
         org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-startup-indented t
@@ -331,7 +327,6 @@ Org Babel Transient state
         org-clock-idle-time 10
         org-clock-in-resume t
         org-clock-persist t
-        org-clock-persist-file (concat cache-dir "org-clock-save.el")
         org-clock-persist-query-resume nil
         org-clock-out-remove-zero-time-clocks t
         org-clock-out-when-done t
@@ -732,7 +727,6 @@ and some custom text on a newly created journal file."
     (concat org-journal-date-prefix (format-time-string "%A, %B %d %Y" time)))
 
   (setq org-journal-dir          "~/Documents/Org/Journals/"
-        org-journal-cache-file   (concat cache-dir "org-journal.cache")
         org-journal-date-format #'org-journal-date-format-func
         org-journal-file-type    'weekly)
   :general

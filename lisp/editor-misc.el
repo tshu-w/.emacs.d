@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-(require 'core-const)
-
 (use-package ace-link
   :ensure t
   :general
@@ -190,9 +188,7 @@
 
 (use-package nov
   :ensure t
-  :mode ("\\.epub\\'" . nov-mode)
-  :init
-  (setq nov-save-place-file (concat cache-dir "nov-places")))
+  :mode ("\\.epub\\'" . nov-mode))
 
 (use-package pandoc-mode
   :ensure t
@@ -247,10 +243,7 @@
   (general-def 'visual pdf-view-mode-map
     "y"        'pdf-view-kill-ring-save))
 
-(use-package request
-  :ensure t
-  :config
-  (setq request-storage-directory (concat cache-dir "request/")))
+(use-package request :ensure t)
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
