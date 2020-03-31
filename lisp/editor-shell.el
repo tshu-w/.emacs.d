@@ -1,8 +1,12 @@
-;;; editor-shell.el -*- lexical-binding: t; -*-
+;;; editor-shell.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
 
 (use-package vterm
   :ensure t
@@ -48,3 +52,4 @@
 
 
 (provide 'editor-shell)
+;;; editor-shell.el ends here

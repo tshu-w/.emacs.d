@@ -1,8 +1,14 @@
-;;; editor-completion.el -*- lexical-binding: t; -*-
+;;; editor-completion.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
 
 (use-package ivy
   :ensure t
@@ -316,3 +322,4 @@ around point as the initial input."
 
 
 (provide 'editor-completion)
+;;; editor-completion.el ends here

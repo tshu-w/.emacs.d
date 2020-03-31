@@ -1,8 +1,14 @@
-;;; editor-misc.el -*- lexical-binding: t; -*-
+;;; editor-misc.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-const)
 
 (use-package ace-link
   :ensure t
@@ -172,8 +178,7 @@
     "hv" 'helpful-variable))
 
 (use-package insert-translated-name
-  :commands insert-translated-name-insert
-  :bind ("H-t" . insert-translated-name-insert))
+  :general ("H-t" 'insert-translated-name-insert))
 
 (use-package link-hint
   :ensure t
@@ -231,7 +236,7 @@
     "s"              '(:ignore t :which-key "slice/search")
     ;; Slicing image
     "sm"              'pdf-view-set-slice-using-mouse
-    "sb"              'pdf-view-set-slice-from-bounding-box
+    "sb"              'pdf-view-set-slice-froquelpam-bounding-box
     "sr"              'pdf-view-reset-slice
     ;; Other
     "ss"              'pdf-occur
@@ -280,3 +285,4 @@
 
 
 (provide 'editor-misc)
+;;; editor-misc.el ends here

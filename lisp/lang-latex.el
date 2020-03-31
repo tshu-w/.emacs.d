@@ -1,8 +1,14 @@
-;;; lang-latex.el -*- lexical-binding: t; -*-
+;;; lang-latex.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020  Tianshu Wang
 
 ;; Author: Tianshu Wang <volekingsg@gmail.com>
+
+;;; Commentary:
+
+;;; Code:
+
+(require 'core-funcs)
 
 (define-jump-handlers latex-mode)
 
@@ -38,10 +44,9 @@
 
   (defun latex/build ()
     (interactive)
-    (progn
-      (let ((TeX-save-query nil))
-        (TeX-save-document (TeX-master-file)))
-      (TeX-command latex-build-command 'TeX-master-file -1)))
+    (let ((TeX-save-query nil))
+      (TeX-save-document (TeX-master-file)))
+    (TeX-command latex-build-command 'TeX-master-file -1))
 
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
@@ -197,3 +202,4 @@
 
 
 (provide 'lang-latex)
+;;; lang-latex.el ends here
