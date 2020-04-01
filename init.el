@@ -53,6 +53,7 @@
 (require 'editor-completion)
 (require 'editor-projectile)
 (require 'editor-layouts)
+(require 'editor-checker)
 (require 'editor-vsc)
 (require 'editor-shell)
 (require 'editor-mail)
