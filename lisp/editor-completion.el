@@ -168,7 +168,7 @@ around point as the initial input."
   :commands pyim-cregexp-build
   :init
   (defun eh-ivy-cregexp (str)
-    (let ((x (ivy--regex-plus str))
+    (let ((x (ivy--regex-ignore-order str))
           (case-fold-search nil))
       (if (listp x)
           (mapcar (lambda (y)
@@ -200,6 +200,7 @@ around point as the initial input."
 
 (use-package company
   :ensure t
+  :custom-face (company-tooltip-mouse ((t (:background nil))))
   :hook (after-init . global-company-mode)
   :init
   (setq company-idle-delay 0
@@ -211,6 +212,7 @@ around point as the initial input."
         company-transformers '(company-sort-by-occurrence)
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
+        company-dabbrev-char-regexp "[A-Za-z-_\\.'/]"
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
   :config
   ;; `yasnippet' integration
@@ -235,7 +237,20 @@ around point as the initial input."
 
       (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline))))
 
+(use-package company-quickhelp
+  :ensure t
+  :commands company-quickhelp-manual-begin
+  :hook (company-mode . company-quickhelp-mode)
+  :init
+  (setq company-quickhelp-delay nil
+        company-quickhelp-use-propertized-text t)
+  :config
+  (with-eval-after-load 'company
+    (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))
+    (general-def company-active-map "M-h" #'company-quickhelp-manual-begin)))
+
 (use-package company-box
+  :disabled t
   :ensure t
   :hook (company-mode . company-box-mode)
   :config
@@ -280,11 +295,13 @@ around point as the initial input."
             (Template . ,(all-the-icons-material "format_align_left" :height 0.85 :v-adjust -0.2)))
           company-box-icons-alist 'company-box-icons-all-the-icons)))
 
-(use-package company-statistics
+(use-package prescient
   :ensure t
-  :defer 2
-  :config
-  (company-statistics-mode))
+  :hook (after-init . prescient-persist-mode))
+
+(use-package company-prescient
+  :ensure t
+  :hook (company-mode . company-prescient-mode))
 
 (use-package yasnippet
   :ensure t
