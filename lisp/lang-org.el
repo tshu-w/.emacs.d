@@ -275,25 +275,9 @@ Org Babel Transient state
 
   ;; Org Capture
   (use-package org-capture
-    :config
-    (defun org-capture-goto-link ()
-      (org-capture-put :target (list 'file+headline
-                                     (nth 1 (org-capture-get :target))
-                                     (plist-get org-store-link-plist :description)))
-      (org-capture-put-target-region-and-position)
-      (widen)
-      (let ((hd (plist-get org-store-link-plist :description)))
-        (goto-char (point-min))
-        (if (re-search-forward
-             (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
-            (org-end-of-subtree)
-          (goto-char (point-max))
-          (or (bolp) (insert "\n"))
-          (insert "* " hd "\n" "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
-
-    (setq org-gtd-file (expand-file-name "gtd.org" org-directory))
-
-    (setq org-capture-templates
+    :init
+    (setq org-gtd-file (expand-file-name "gtd.org" org-directory)
+          org-capture-templates
           '(("i" "Inbox" entry (file org-gtd-file)
              "* %?\n  %i\n")
             ("j" "Journal" plain (function org-journal-find-location)
@@ -311,6 +295,21 @@ Org Babel Transient state
              "** Daily Review\n%?\n%i")
             ("Rw" "Weekly Review" plain (function org-journal-find-location)
              "* Weekly Review\n%?\n%i")))
+    :config
+    (defun org-capture-goto-link ()
+      (org-capture-put :target (list 'file+headline
+                                     (nth 1 (org-capture-get :target))
+                                     (plist-get org-store-link-plist :description)))
+      (org-capture-put-target-region-and-position)
+      (widen)
+      (let ((hd (plist-get org-store-link-plist :description)))
+        (goto-char (point-min))
+        (if (re-search-forward
+             (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
+            (org-end-of-subtree)
+          (goto-char (point-max))
+          (or (bolp) (insert "\n"))
+          (insert "* " hd "\n" "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
 
     (despot-def org-capture-mode-map
       "," 'org-capture-finalize
@@ -762,18 +761,14 @@ and some custom text on a newly created journal file."
 (use-package org-projectile
   :ensure t
   :after projectile
-  :commands (org-projectile-todo-files)
   :init
-  (org-projectile-per-project)
-  (setq org-projectile-per-project-filepath "TODOs.org")
-
-  (defun append-org-agenda-files (file)
-    "append to org-agenda-files if file exists"
-    (when (file-exists-p file)
-      (push file org-agenda-files)))
-
-  (mapcar 'append-org-agenda-files (org-projectile-todo-files))
+  (with-eval-after-load 'org-capture
+    (require 'org-projectile))
   :config
+  (setq org-projectile-projects-file "~/Documents/Org/projects.org")
+  (add-to-list 'org-capture-templates
+               (org-projectile-project-todo-entry) t)
+
   (defun org-projectile-capture (&optional arg)
     (interactive "P")
     (if arg
