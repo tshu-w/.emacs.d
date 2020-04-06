@@ -707,7 +707,12 @@ Org Babel Transient state
 
 (use-package org-journal
   :ensure t
+  :commands (org-journal-update-auto-mode-alist)
   :init
+  (setq org-journal-dir          "~/Documents/Org/Journals/"
+        org-journal-date-format #'org-journal-date-format-func
+        org-journal-file-type    'weekly)
+  :config
   (defun org-journal-find-location (&optional days)
     (let ((date (time-add (current-time) (days-to-time (or days 0)))))
       (org-journal-new-entry t date)
@@ -724,10 +729,6 @@ and some custom text on a newly created journal file."
          (`monthly "#+TITLE: Monthly Journal\n\n")
          (`yearly  "#+TITLE: Yearly Journal\n\n"))))
     (concat org-journal-date-prefix (format-time-string "%A, %B %d %Y" time)))
-
-  (setq org-journal-dir          "~/Documents/Org/Journals/"
-        org-journal-date-format #'org-journal-date-format-func
-        org-journal-file-type    'weekly)
   :general
   (tyrant-def
     "oj"  '(:ignore t :which-key "org-journal")
