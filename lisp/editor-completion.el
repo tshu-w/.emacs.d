@@ -181,7 +181,8 @@ around point as the initial input."
                   x)
         (pyim-cregexp-build x))))
 
-  (setq ivy-re-builders-alist '((t . eh-ivy-cregexp))))
+  (setq pyim-default-scheme 'xiaohe-shuangpin
+        ivy-re-builders-alist '((t . eh-ivy-cregexp))))
 
 (use-package wgrep
   :ensure t
