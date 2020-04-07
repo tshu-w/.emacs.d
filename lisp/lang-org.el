@@ -779,10 +779,16 @@ and some custom text on a newly created journal file."
   (defun org-projectile-goto-todos ()
     (interactive)
     (org-projectile-goto-location-for-project (projectile-project-name)))
+
+  (defun +org-projectile-goto-todos ()
+    (interactive)
+    (if (projectile-project-p)
+        (org-projectile-goto-todos)
+      (find-file org-projectile-projects-file)))
   :general
   (tyrant-def
     "op" 'org-projectile-capture
-    "po" 'org-projectile-goto-todos))
+    "po" '+org-projectile-goto-todos))
 
 (use-package org-ref
   :ensure t
