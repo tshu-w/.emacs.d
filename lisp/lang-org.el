@@ -680,9 +680,11 @@ Org Babel Transient state
     (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
     (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
-(use-package org-bullets
+(use-package org-superstar
   :ensure t
-  :hook (org-mode . org-bullets-mode))
+  :hook (org-mode . org-superstar-mode)
+  :config
+  (org-superstar-configure-like-org-bullets))
 
 (use-package org-download
   :ensure t
