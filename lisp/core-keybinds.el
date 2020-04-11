@@ -403,6 +403,22 @@
     (eldoc-add-command #'evil-cp-insert-at-beginning-of-form)
     (eldoc-add-command #'evil-cp-append))
 
+  (defun evil-org-insert-state-in-edit-buffer (fun &rest args)
+    "Bind `evil-default-state' to `insert' before calling FUN with ARGS."
+    (let ((evil-default-state 'insert)
+          ;; Force insert state
+          evil-emacs-state-modes
+          evil-normal-state-modes
+          evil-motion-state-modes
+          evil-visual-state-modes
+          evil-operator-state-modes
+          evil-replace-state-modes)
+      (apply fun args)
+      (evil-refresh-cursor)))
+
+  (advice-add 'org-babel-do-key-sequence-in-edit-buffer
+              :around #'evil-org-insert-state-in-edit-buffer)
+
   (tyrant-def
     "bN"  'evil-buffer-new
     "fS"  'evil-write-all
