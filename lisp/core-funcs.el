@@ -399,26 +399,12 @@ Returns a message with the count of killed buffers."
            (rudekill-matching-buffers regexp internal-too))))
 
 (defun alternate-buffer (&optional window)
-  "Switch back and forth between current and last buffer in the
-current window.
-
-If `layouts-restrict-spc-tab' is t then this only switches between
-the current layouts buffers."
+  "Switch back and forth between current and last buffer in the current WINDOW."
   (interactive)
   (cl-destructuring-bind (buf start pos)
-      (if (bound-and-true-p layouts-restrict-spc-tab)
-          (let ((buffer-list (persp-buffer-list))
-                (my-buffer (window-buffer window)))
-            ;; find buffer of the same persp in window
-            (seq-find (lambda (it) ;; predicate
-                        (and (not (eq (car it) my-buffer))
-                             (member (car it) buffer-list)))
-                      (window-prev-buffers)
-                      ;; default if found none
-                      (list nil nil nil)))
-        (or (cl-find (window-buffer window) (window-prev-buffers)
-                     :key #'car :test-not #'eq)
-            (list (other-buffer) nil nil)))
+      (or (cl-find (window-buffer window) (window-prev-buffers)
+                   :key #'car :test-not #'eq)
+          (list (other-buffer) nil nil))
     (if (not buf)
         (message "Last buffer not found.")
       (set-window-buffer-start-and-point window buf start pos))))
@@ -504,8 +490,7 @@ a dedicated window."
     (golden-ratio)))
 
 (defun alternate-window ()
-  "Switch back and forth between current and last window in the
-current frame."
+  "Switch back and forth between current and last window in the current frame."
   (interactive)
   (let (;; switch to first window previously shown in this frame
         (prev-window (get-mru-window nil t t)))

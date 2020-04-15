@@ -154,6 +154,7 @@
     "qd"      'restart-emacs-debug-init
     "qf"      'kill-frame
     "qr"      'restart-emacs
+    "qR"      'restart-emacs-restore-desktop
     "qq"      'save-buffers-kill-terminal
     "qQ"      'kill-emacs
 
