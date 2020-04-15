@@ -162,16 +162,27 @@
         calendar-longitude 116.40))
 
 (use-package desktop
-  :init (desktop-save-mode t)
-  :config
-  (defun my-desktop-save ()
-    (interactive)
-    ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-    (if (eq (desktop-owner) (emacs-pid))
-        (desktop-save desktop-dirname)))
-  (add-hook 'auto-save-hook 'my-desktop-save)
+  :init
+  (when (member "--restore-desktop" command-line-args)
+    (add-hook 'after-init-hook 'desktop-read)
+    (delete "--restore-desktop" command-line-args))
 
-  (setq desktop-lazy-verbose nil))
+  (defun restart-emacs-restore-desktop (&optional args)
+    "Restart emacs and restore desktop."
+    (interactive)
+    (restart-emacs (cons "--restore-desktop" args)))
+  :config
+  (setq desktop-save t
+        desktop-load-locked-desktop t)
+
+  (defun desktop-save-without-prompts ()
+    "Save desktop without annoying prompts."
+    (interactive)
+    (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
+    (desktop-save-in-desktop-dir))
+
+  (add-hook 'auto-save-hook 'desktop-save-without-prompts)
+  (add-hook 'kill-emacs-hook 'desktop-save-without-prompts))
 
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
