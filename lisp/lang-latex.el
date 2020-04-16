@@ -200,6 +200,31 @@
                          (add-to-list (make-local-variable 'company-backends)
                                       '(company-reftex-labels company-reftex-citations)))))
 
+(use-package ebib
+  :ensure t
+  :init
+  (setq bibtex-dialect 'biblatex
+        ebib-default-directory "~/Documents/Zotero"
+        ebib-bib-search-dirs '("~/Documents/Zotero")
+        ebib-preload-bib-files '("references.bib")
+        ebib-notes-file "~/Documents/Zotero/notes.org"
+        ebib-reading-list-file "~/Documents/Org/reading_list.org"
+        ebib-bibtex-dialect 'biblatex
+        ebib-index-columns '(("Entry Key" 20 t)
+                             ("Author/Editor" 40 t)
+                             ("Year" 6 t)
+                             ("Title" 50 t))
+        ebib-index-default-sort '("timestamp" . descend)
+        ebib-file-associations '(("pdf" . "open"))
+        ebib-filename-separator ";"
+        ebib-uniquify-keys t
+        ebib-use-timestamp t)
+  (with-eval-after-load 'org (require 'org-ebib))
+  :config
+  (general-def ebib-index-mode-map "/" 'ebib-jump-to-entry)
+  :general
+  (tyrant-def "ae" 'ebib))
+
 
 (provide 'lang-latex)
 ;;; lang-latex.el ends here
