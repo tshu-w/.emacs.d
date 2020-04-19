@@ -761,6 +761,16 @@ and some custom text on a newly created journal file."
     "em" 'org-mime-org-buffer-htmlize
     "es" 'org-mime-org-subtree-htmlize))
 
+(use-package org-mru-clock
+  :ensure t
+  :config
+  (setq org-mru-clock-keep-formatting t
+        org-mru-clock-files #'org-agenda-files)
+  :general
+  (tyrant-def
+    "oCi"    'org-mru-clock-in
+    "oC SPC" 'org-mru-clock-select-recent-task))
+
 (use-package org-projectile
   :ensure t
   :after projectile
@@ -791,6 +801,19 @@ and some custom text on a newly created journal file."
   (tyrant-def
     "op" 'org-projectile-capture
     "po" '+org-projectile-goto-todos))
+
+(use-package org-randomnote
+  :ensure t
+  :config
+  (load-library "find-lisp")
+  (setq org-randomnote-candidates
+        (find-lisp-find-files "~/Documents/Org/" "\.org$"))
+  :general (tyrant-def "or" 'org-randomnote))
+
+(use-package org-random-todo
+  :ensure t
+  :after org
+  :general (tyrant-def "oR" 'org-random-todo-goto-new))
 
 (use-package org-ref
   :ensure t
