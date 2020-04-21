@@ -102,6 +102,30 @@ Unlike `eval-defun', this does not go to topmost function."
     "df" 'edebug-instrument-defun-on
     "dF" 'edebug-instrument-defun-off))
 
+(use-package emr
+  :ensure t
+  :general
+  (despot-def :keymaps 'emacs-lisp-mode-map
+    "ew"  'emr-el-eval-and-replace
+    "r"   '(:ignore t :which-key "refactor")
+    "rd"  '(:ignore t :which-key "delete")
+    "rdl" 'emr-el-delete-let-binding-form
+    "rdd" 'emr-el-delete-unused-definition
+    "re"  '(:ignore t :which-key "extract/expand")
+    "ref" 'emr-el-extract-function
+    "rev" 'emr-el-extract-variable
+    "rel" 'emr-el-extract-to-let
+    "rec" 'emr-el-extract-constant
+    "rea" 'emr-el-extract-autoload
+    "rf"  '(:ignore t :which-key "find/function")
+    "rfe" 'emr-el-implement-function
+    "rfd" 'emr-el-find-unused-definitions
+    "ri"  '(:ignore t :which-key "insert/inline")
+    "riv" 'emr-el-inline-variable
+    "ris" 'emr-el-inline-let-variable
+    "rif" 'emr-el-inline-function
+    "ria" 'emr-el-insert-autoload-directive))
+
 
 (provide 'lang-emacs-lisp)
 ;;; lang-emacs-lisp.el ends here
