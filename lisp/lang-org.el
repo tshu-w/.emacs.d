@@ -364,7 +364,7 @@ Org Babel Transient state
         org-mac-grab-Acrobat-app-p nil)
 
   ;; Org Refile
-  (setq org-note-files (directory-files-recursively "~/Documents/Org/Notes" "^.*\\.org$")
+  (setq org-note-files (directory-files-recursively "~/Documents/Org/notes" "^.*\\.org$")
         org-outline-path-complete-in-steps nil
         org-refile-allow-creating-parent-nodes 'confirm
         org-refile-use-outline-path 'file
@@ -711,7 +711,7 @@ Org Babel Transient state
   :ensure t
   :commands (org-journal-update-auto-mode-alist)
   :init
-  (setq org-journal-dir          "~/Documents/Org/Journals/"
+  (setq org-journal-dir          "~/Documents/Org/journals/"
         org-journal-date-format #'org-journal-date-format-func
         org-journal-file-type    'weekly)
   :config
