@@ -16,6 +16,7 @@
   (setq mu4e-maildir "~/.mail"
         mu4e-attachment-dir "~/Downloads"
         mu4e-get-mail-command "mbsync -a"
+        mu4e-main-buffer-hide-personal-addresses t
         mu4e-update-interval (* 6 60 60)
         mu4e-update-timer (run-at-time
                            t mu4e-update-interval
@@ -27,11 +28,6 @@
         message-kill-buffer-on-exit t
         message-sendmail-envelope-from 'header
         smtpmail-smtp-service 587
-
-        mu4e-sent-folder "/gmail/sent"
-        mu4e-drafts-folder "/gmail/drafts"
-        mu4e-trash-folder "/gmail/trash"
-        mu4e-refile-folder "/gmail/archive"
 
         mu4e-change-filenames-when-moving t
         mu4e-completing-read-function 'completing-read
@@ -174,11 +170,11 @@
     "a m" 'mu4e
     "a M" 'mu4e-compose-new))
 
-(use-package org-mu4e
+(use-package mu4e-org
   ;; :hook (mu4e-compose-mode . org-mu4e-compose-org-mode)
   :config
   (evil-set-initial-state 'mu4e-compose-mode 'normal)
-  (setq org-mu4e-link-query-in-headers-mode nil
+  (setq mu4e-org-link-query-in-headers-mode nil
         org-mu4e-convert-to-html t))
 
 (use-package mu4e-alert
