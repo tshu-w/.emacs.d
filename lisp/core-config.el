@@ -164,7 +164,7 @@
 (use-package desktop
   :init
   (when (member "--restore-desktop" command-line-args)
-    (add-hook 'after-init-hook 'desktop-read)
+    (add-hook 'emacs-startup-hook 'desktop-read)
     (delete "--restore-desktop" command-line-args))
 
   (defun restart-emacs-restore-desktop (&optional args)
