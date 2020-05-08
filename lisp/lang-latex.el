@@ -14,6 +14,8 @@
 
 (use-package tex
   :ensure auctex
+  :custom-face
+  (preview-reference-face ((t (:foreground "black"))))
   :config
   (setq-default TeX-engine 'xetex)
   (setq latex-build-command "LatexMk"
@@ -39,8 +41,6 @@
           (output-html "open")))
 
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-
-  (custom-set-faces '(preview-reference-face ((t (:foreground "black")))))
 
   (defun latex/build ()
     (interactive)
