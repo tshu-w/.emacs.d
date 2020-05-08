@@ -14,10 +14,11 @@
   (load-theme 'doom-nord-light t)
   (load-theme 'doom-nord t t)
   :config
+  :custom-face
   ;; fix doom-theme diff-hl face
-  (custom-set-faces '(diff-hl-change ((t (:background nil))))
-                    '(diff-hl-delete ((t (:background nil))))
-                    '(diff-hl-insert ((t (:background nil))))))
+  (diff-hl-change ((t (:background nil))))
+  (diff-hl-delete ((t (:background nil))))
+  (diff-hl-insert ((t (:background nil)))))
 
 (use-package doom-modeline
   :ensure t
