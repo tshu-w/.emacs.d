@@ -21,7 +21,7 @@
 
 (use-package doom-modeline
   :ensure t
-  :hook (after-init . doom-modeline-mode)
+  :hook (emacs-startup . doom-modeline-mode)
   :config
   (setq inhibit-compacting-font-caches t
         doom-modeline-buffer-file-name-style 'auto
