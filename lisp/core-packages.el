@@ -73,6 +73,19 @@
     (add-to-list 'recentf-exclude no-littering-var-directory)
     (add-to-list 'recentf-exclude no-littering-etc-directory)))
 
+(use-package quelpa
+  :ensure t
+  :init
+  (setq quelpa-upgrade-p nil
+        quelpa-update-melpa-p nil
+        quelpa-cache nil))
+
+(use-package quelpa-use-package
+  :ensure t
+  :init
+  (setq quelpa-use-package-inhibit-loading-quelpa t)
+  (require 'quelpa-use-package))
+
 (use-package restart-emacs
   :ensure t
   :commands (restart-emacs restart-emacs-debug-init)
