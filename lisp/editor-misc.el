@@ -176,6 +176,7 @@
     "hv" 'helpful-variable))
 
 (use-package insert-translated-name
+  :quelpa (insert-translated-name :fetcher github :repo "manateelazycat/insert-translated-name")
   :general ("H-t" 'insert-translated-name-insert))
 
 (use-package link-hint

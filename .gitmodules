@@ -1,3 +1,0 @@
-[submodule "insert-translated-name"]
-	path = site-lisp/insert-translated-name
-	url = https://github.com/manateelazycat/insert-translated-name.git
