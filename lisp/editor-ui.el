@@ -24,8 +24,26 @@
   :ensure t
   :hook (emacs-startup . doom-modeline-mode)
   :config
+  (defun smaller-modeline ()
+    "Make doom-modeline smaller."
+    (when window-system
+      (create-fontset-from-ascii-font "Source Code Pro:medium" nil "modeline")
+      (set-face-attribute 'mode-line nil :height 120 :fontset "fontset-modeline")
+      (set-face-attribute 'mode-line-inactive nil :height 120 :fontset "fontset-modeline")))
+  (smaller-modeline)
+
+  (defvar after-load-theme-hook nil
+    "Hook run after a color theme is loaded using `load-theme'.")
+  (defun load-theme@after (&rest r)
+    "Run `after-load-theme-hook'."
+    (run-hooks 'after-load-theme-hook))
+  (advice-add #'load-theme :after #'load-theme@after)
+  (add-hook 'after-load-theme-hook 'smaller-modeline)
+
   (setq inhibit-compacting-font-caches t
+        doom-modeline-height 1
         doom-modeline-buffer-file-name-style 'auto
+        doom-modeline-icon nil
         doom-modeline-project-detection 'project))
 
 (use-package theme-changer
