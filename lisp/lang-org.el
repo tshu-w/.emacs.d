@@ -237,9 +237,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       "s-M-SPC"  'org-agenda/body))
 
   ;; Org Attach
-  (setq org-attach-auto-tag "ATTACH"
-        org-attach-archive-delete 'query
-        org-attach-directory "attach/"
+  (setq org-attach-archive-delete 'query
+        org-attach-id-dir (concat org-directory "attach/")
         org-attach-method 'mv)
 
   ;; Org Babel
