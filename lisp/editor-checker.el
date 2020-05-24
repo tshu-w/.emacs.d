@@ -94,6 +94,8 @@ SCOPE can be:
         flycheck-display-errors-delay 0.25
         flycheck-emacs-lisp-load-path 'inherit)
 
+  (setq flycheck-flake8rc "~/.config/flake8")
+
   ;; Custom fringe indicator
   (when (fboundp 'define-fringe-bitmap)
     (define-fringe-bitmap 'my-flycheck-fringe-indicator
