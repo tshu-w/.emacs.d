@@ -16,16 +16,15 @@
 
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "DONE(d)")
-          (sequence "PROJ(p)" "WAITING(w@/!)" "|" "SOMEDAY(s)" "CANCELED(c)"))
+          (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "CANCELED(c)"))
         org-todo-keyword-faces
         '(("CANCELED" . org-upcoming-distant-deadline)
-          ("PROJ" . (:foreground "RosyBrown4" :weight bold))
           ("WAITING" . (:foreground "light coral" :weight bold))
           ("SOMEDAY" . (:foreground "plum" :weight bold))))
 
   (setq org-columns-default-format "%50ITEM %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM"
         org-directory "~/Documents/Org/"
-        org-default-notes-file (expand-file-name "gtd.org" org-directory)
+        org-default-notes-file (expand-file-name "inbox.org" org-directory)
         org-image-actual-width 500
         org-imenu-depth 8
         org-global-properties '(("STYLE_ALL" . "habit"))
@@ -33,11 +32,8 @@
         org-latex-prefer-user-labels t
         org-log-done t
         org-log-into-drawer t
-        org-src-fontify-natively t
-        org-src-tab-acts-natively t
         org-startup-indented t
         org-startup-with-inline-images t
-        org-tags-match-list-sublevels 'intented
         org-track-ordered-property-with-tag t)
 
   (add-hook 'org-mode-hook '(lambda () (setq truncate-lines nil)))
@@ -61,6 +57,7 @@
           '(:maxlevel 3 :scope agenda-with-archives :fileskip0 t :stepskip0 t
                       :emphasize t :link t :narrow 80! :tcolumns 1 :formula %)
           org-agenda-columns-add-appointments-to-effort-sum t
+          org-agenda-compact-blocks t
           org-agenda-dim-blocked-tasks t
           org-agenda-persistent-filter t
           org-agenda-restore-windows-after-quit t
@@ -70,6 +67,10 @@
           org-agenda-skip-deadline-if-done t
           org-agenda-skip-timestamp-if-done t
           org-agenda-skip-scheduled-if-deadline-is-shown t
+          org-agenda-sorting-strategy '((agenda time-up priority-down)
+                                        (todo priority-down category-keep)
+                                        (tags priority-down category-keep)
+                                        (search category-keep))
           org-agenda-span 'day
           org-agenda-start-on-weekday nil
           org-agenda-todo-ignore-scheduled 'all
@@ -79,33 +80,56 @@
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
           org-habit-graph-column 75
-          org-stuck-projects '("/PROJ" ("TODO") nil ""))
+          org-stuck-projects '("+PROJ/-WAITING-SOMEDAY-DONE-CANCELED" ("TODO") nil ""))
+
+    ;; (defun org-agenda-skip-all-siblings-but-first ()
+    ;;   "Skip all but the first non-done entry."
+    ;;   (let (should-skip-entry)
+    ;;     (unless (string= "TODO" (org-get-todo-state))
+    ;;       (setq should-skip-entry t))
+    ;;     (save-excursion
+    ;;       (while (and (not should-skip-entry) (org-goto-sibling t))
+    ;;         (when (org-current-is-todo)
+    ;;           (setq should-skip-entry t))))
+    ;;     (when should-skip-entry
+    ;;       (or (outline-next-heading)
+    ;;           (goto-char (point-max))))))
 
     (setq org-agenda-custom-commands
-          '(;; ("c" "Custom agenda view"
-            ;;  ((agenda "" ((org-agenda-overriding-header "Today's tasks:")
-            ;;               (org-agenda-span 1)))
-            ;;   (todo "TODO" ((org-agenda-overriding-header "All TODO items without scheduled or deadline")
-            ;;                 (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
-            ;;                                                (org-agenda-skip-subtree-if 'regexp "habit"))))))
-            ;;  ((org-agenda-compact-blocks t)
-            ;;   (org-agenda-dim-blocked-tasks 'invisible)))
-            ("O" . "Overview")
-            ("Od" "Daily Review"
+          '(("r" . "Review")
+            ("ry" "Yesterday"
              ((agenda "" ((org-agenda-span 1))))
-             ((org-agenda-compact-blocks t)
+             ((org-agenda-start-day "-1d")
               (org-agenda-start-with-log-mode '(closed clock state))
               (org-agenda-start-with-clockreport-mode t)
               (org-agenda-archives-mode t)))
-            ("Ow" "Weekly Review"
+            ("rt" "Today"
+             ((agenda "" ((org-agenda-span 1))))
+             ((org-agenda-start-with-log-mode '(closed clock state))
+              (org-agenda-start-with-clockreport-mode t)
+              (org-agenda-archives-mode t)))
+            ("rw" "Last Week"
              ((agenda "" ((org-agenda-span 7)
                           (org-agenda-start-on-weekday 1)))
+              (todo "TODO" ((org-agenda-overriding-header "All TODO items without scheduled or deadline")
+                            (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
+                                                           (org-agenda-skip-subtree-if 'regexp "habit")))))
               (stuck "")
-              (todo "PROJ")
               (todo "WAITING")
               (todo "SOMEDAY"))
-             ((org-agenda-compact-blocks t)
+             ((org-agenda-start-day "-1w")
               (org-agenda-start-with-clockreport-mode t)
+              (org-agenda-archives-mode t)))
+            ("rW" "This Week"
+             ((agenda "" ((org-agenda-span 7)
+                          (org-agenda-start-on-weekday 1)))
+              (todo "TODO" ((org-agenda-overriding-header "All TODO items without scheduled or deadline")
+                            (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
+                                                           (org-agenda-skip-subtree-if 'regexp "habit")))))
+              (stuck "")
+              (todo "WAITING")
+              (todo "SOMEDAY"))
+             ((org-agenda-start-with-clockreport-mode t)
               (org-agenda-archives-mode t)))
             ("d" "Upcoming deadlines" agenda ""
              ((org-agenda-entry-types '(:deadline))
@@ -276,25 +300,25 @@ Org Babel Transient state
   ;; Org Capture
   (use-package org-capture
     :init
-    (setq org-gtd-file (expand-file-name "gtd.org" org-directory)
+    (setq org-inbox-file org-default-notes-file
           org-capture-templates
-          '(("i" "Inbox" entry (file org-gtd-file)
+          '(("i" "Inbox" entry (file org-inbox-file)
              "* %?\n  %i\n")
+            ("t" "Todo" entry (file org-inbox-file)
+             "* TODO %?\n  %i\n")
             ("j" "Journal" plain (function org-journal-find-location)
              "** %(format-time-string org-journal-time-format)%?")
-            ("t" "Todo" entry (file org-gtd-file)
-             "* TODO %?\n  %i\n")
-            ("l" "Link" plain (file+function org-gtd-file org-capture-goto-link)
+            ("l" "Link" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
-            ("r" "Record" entry (file org-gtd-file)
-             "* %?\n  %i\n" :clock-in t :clock-keep t)
-            ("R" "Review")
-            ("Ry" "Yesterday" plain (function (lambda () (org-journal-find-location -1)))
-             "** Daily Review\n%?\n%i")
-            ("Rd" "Daily Review" plain (function org-journal-find-location)
-             "** Daily Review\n%?\n%i")
-            ("Rw" "Weekly Review" plain (function org-journal-find-location)
-             "* Weekly Review\n%?\n%i")))
+            ("r" "Review")
+            ("ry" "Yesterday" plain (function (lambda () (org-journal-find-location -1)))
+             "** Daily Review\n%?\n")
+            ("rd" "Today" plain (function org-journal-find-location)
+             "** Daily Review\n%?\n")
+            ("rw" "Last Week" plain (function (lambda () (org-journal-find-location -7)))
+             "* Weekly Review\n%?\n")
+            ("rW" "This Week" plain (function org-journal-find-location)
+             "* Weekly Review\n%?\n")))
     :config
     (defun org-capture-goto-link ()
       (org-capture-put :target (list 'file+headline
@@ -356,12 +380,13 @@ Org Babel Transient state
                        :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O"))))
 
   ;; Org mac grab
-  (setq org-mac-grab-Mail-app-p nil
-        org-mac-grab-Outlook-app-p nil
-        org-mac-grab-Firefox-app-p nil
-        org-mac-grab-Evernote-app-p nil
+  (setq org-mac-grab-devonthink-app-p nil
+        org-mac-grab-Acrobat-app-p nil
         org-mac-grab-Brave-app-p nil
-        org-mac-grab-Acrobat-app-p nil)
+        org-mac-grab-Evernote-app-p nil
+        org-mac-grab-Firefox-app-p nil
+        org-mac-grab-Mail-app-p nil
+        org-mac-grab-Outlook-app-p nil)
 
   ;; Org Refile
   (setq org-note-files (directory-files-recursively "~/Documents/Org/notes" "^.*\\.org$")
@@ -373,21 +398,33 @@ Org Babel Transient state
                              (org-agenda-files :maxlevel . 4)))
 
   ;; Org Tag
-  (setq org-fast-tag-selection-single-key 'expert
+  (setq org-fast-tag-selection-single-key t
         org-tags-column 0
-        org-tag-alist (quote ((:startgroup)
-                              ("@office" . ?o)
-                              ("@home" . ?h)
-                              ("@computer" .?c)
-                              ("@phone" . ?p)
-                              (:endgroup)
-                              ("PERSONAL" . ?p)
-                              ("WORK" . ?w)
-                              ("NOTE" . ?n)
-                              ("errants" . ?e)
-                              ("Action" . ?a)
-                              ("Focused" . ?f)
-                              ("Dessert" . ?d))))
+        org-tags-match-list-sublevels 'intented
+        org-tags-exclude-from-inheritance '("PROJ")
+        org-tag-alist '((:startgroup)
+                        ("@office"  . ?o)
+                        ("@home"    . ?h)
+                        (:endgroup)
+                        (:startgroup)
+                        ("@computer")
+                        ("@phone")
+                        ("@pad")
+                        (:endgroup)
+                        (:startgroup)
+                        ("daily"    . ?d)
+                        ("weekly"   . ?w)
+                        ("monthly"  . ?m)
+                        ("annually" . ?A)
+                        (:endgroup)
+                        ("PROJ"     . ?p)
+                        ("NOTE"     . ?n)
+                        (:newline)
+                        ("trivia"   . ?t)
+                        ("errand"   . ?e)
+                        ("action"   . ?a)
+                        ("focused"  . ?f)
+                        ("interest" . ?i)))
 
   ;; System interaction function
   (defun supress-frame-splitting (&rest r)
@@ -662,13 +699,15 @@ Org Babel Transient state
   :ensure t
   :after (evil org)
   :hook (org-mode . evil-org-mode)
+  :init
+  (with-eval-after-load 'org-agenda
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
   :config
   (add-hook 'evil-org-mode-hook
             (lambda ()
               (evil-org-set-key-theme
                '(textobjects insert navigation additional shift todo heading))))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys)
 
   (defun surround-drawer ()
     (let ((dname (read-from-minibuffer "" "")))
@@ -690,9 +729,9 @@ Org Babel Transient state
   :ensure t
   :hook ((org-mode dired-mode) . org-download-enable)
   :config
-  (defun my-org-download-method (link)
+  (defun +org-download-method (link)
     (org-download--fullname (org-link-unescape link)))
-  (setq org-download-method 'my-org-download-method)
+  (setq org-download-method '+org-download-method)
 
   (setq org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"
@@ -705,7 +744,9 @@ Org Babel Transient state
 
 (use-package org-edit-latex
   :ensure t
-  :hook (org-mode . org-edit-latex-mode))
+  :hook (org-mode . org-edit-latex-mode)
+  :init
+  (setq org-edit-latex-create-master nil))
 
 (use-package org-journal
   :ensure t
@@ -775,10 +816,11 @@ and some custom text on a newly created journal file."
   :ensure t
   :after projectile
   :init
-  (with-eval-after-load 'org-capture
-    (require 'org-projectile))
+  (setq org-link-elisp-confirm-function nil)
+  (with-eval-after-load 'org-capture (require 'org-projectile))
   :config
   (setq org-projectile-projects-file "~/Documents/Org/projects.org")
+
   (add-to-list 'org-capture-templates
                (org-projectile-project-todo-entry) t)
 
@@ -790,17 +832,13 @@ and some custom text on a newly created journal file."
 
   (defun org-projectile-goto-todos ()
     (interactive)
-    (org-projectile-goto-location-for-project (projectile-project-name)))
-
-  (defun +org-projectile-goto-todos ()
-    (interactive)
     (if (projectile-project-p)
-        (org-projectile-goto-todos)
+        (org-projectile-goto-location-for-project (projectile-project-name))
       (find-file org-projectile-projects-file)))
   :general
   (tyrant-def
     "op" 'org-projectile-capture
-    "po" '+org-projectile-goto-todos))
+    "po" 'org-projectile-goto-todos))
 
 (use-package org-randomnote
   :ensure t
