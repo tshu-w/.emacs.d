@@ -302,13 +302,18 @@ Org Babel Transient state
     (setq org-inbox-file org-default-notes-file
           org-capture-templates
           '(("i" "Inbox" entry (file org-inbox-file)
-             "* %?\n  %i\n")
+             "* %?\n%i\n")
             ("t" "Todo" entry (file org-inbox-file)
-             "* TODO %?\n  %i\n")
+             "* TODO %?\n%i\n")
             ("j" "Journal" plain (function org-journal-find-location)
              "** %(format-time-string org-journal-time-format)%?")
-            ("l" "Link" plain (file+function org-inbox-file org-capture-goto-link)
+            ("l" "Link")
+            ("ll" "Link" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
+            ("li" "Inbox with link" entry (file org-inbox-file)
+             "* %?\n%a\n%i\n")
+            ("lt" "Todo with link" entry (file org-inbox-file)
+             "* TODO %?\n%a\n%i\n")
             ("r" "Review")
             ("ry" "Yesterday" plain (function (lambda () (org-journal-find-location -1)))
              "** Daily Review\n%?\n")
@@ -822,6 +827,11 @@ and some custom text on a newly created journal file."
 
   (add-to-list 'org-capture-templates
                (org-projectile-project-todo-entry) t)
+  (add-to-list 'org-capture-templates
+               (org-projectile-project-todo-entry
+                :capture-character "lp"
+                :capture-heading "Project Todo with link"
+                :capture-template "* TODO %?\n%a\n") t)
 
   (defun org-projectile-capture (&optional arg)
     (interactive "P")
