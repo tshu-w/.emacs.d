@@ -12,13 +12,17 @@
   :ensure t
   :general
   (general-def
-    :keymaps '(Info-mode-map
+    :keymaps '(compilation-mode-map
+               custom-mode-map
+               eww-link-keymap
+               eww-mode-map
                help-mode-map
                helpful-mode-map
-               eww-mode-map
-               eww-link-keymap)
+               Info-mode-map
+               xref--xref-buffer-mode-map
+               woman-mode-map)
     :states  'normal
-    "o" 'ace-link))
+    "o"      'ace-link))
 
 (use-package ace-pinyin
   :ensure t
