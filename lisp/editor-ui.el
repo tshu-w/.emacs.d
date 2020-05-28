@@ -10,10 +10,6 @@
 
 (use-package doom-themes
   :ensure t
-  :init
-  (load-theme 'doom-nord-light t)
-  (load-theme 'doom-nord t t)
-  :config
   :custom-face
   ;; fix doom-theme diff-hl face
   (diff-hl-change ((t (:background nil))))
@@ -39,6 +35,8 @@
     (run-hooks 'after-load-theme-hook))
   (advice-add #'load-theme :after #'load-theme@after)
   (add-hook 'after-load-theme-hook 'smaller-modeline)
+  (add-hook 'after-load-theme-hook
+            '(lambda () (set-face-attribute 'fringe nil :background nil)))
 
   (setq inhibit-compacting-font-caches t
         doom-modeline-height 1
@@ -46,10 +44,52 @@
         doom-modeline-icon nil
         doom-modeline-project-detection 'project))
 
+(use-package lab-themes :ensure t)
+
+(use-package flucui-themes :ensure t)
+
+(use-package spacemacs-theme
+  :ensure t
+  :init
+  (setq spacemacs-theme-org-height nil
+        spacemacs-theme-comment-bg nil))
+
 (use-package theme-changer
   :ensure t
   :commands change-theme
-  :hook (emacs-startup . (lambda () (change-theme 'doom-nord-light 'doom-nord))))
+  :hook (emacs-startup . (lambda () (change-theme '(doom-acario-light
+                                               doom-nord-light
+                                               doom-one-light
+                                               doom-opera-light
+                                               doom-solarized-light
+                                               doom-tomorrow-day
+                                               spacemacs-light
+                                               flucui-light
+                                               lab-light
+                                               tsdh-light)
+                                             '(doom-acario-dark
+                                               doom-nord
+                                               doom-one
+                                               doom-opera
+                                               doom-solarized-dark
+                                               doom-tomorrow-night
+                                               doom-dark+
+                                               doom-ephemeral
+                                               doom-Iosvkem
+                                               doom-material
+                                               doom-moonlight
+                                               doom-nova
+                                               doom-oceanic-next
+                                               doom-palenight
+                                               doom-peacock
+                                               doom-rouge
+                                               doom-sourcerer
+                                               doom-spacegrey
+                                               doom-wilmersdorf
+                                               doom-vibrant
+                                               spacemacs-dark
+                                               flucui-dark
+                                               lab-dark)))))
 
 (use-package all-the-icons :ensure t)
 
