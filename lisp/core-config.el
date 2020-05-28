@@ -285,6 +285,13 @@
   (setq display-time-24hr-format t
         display-time-default-load-average nil))
 
+(use-package tramp
+  :init
+  (setq remote-file-name-inhibit-cache nil
+        tramp-default-method "ssh"
+        tramp-verbose 1
+        tramp-ssh-controlmaster-options ""))
+
 (use-package undo-tree
   :ensure t
   :init

@@ -175,8 +175,8 @@
 
 (use-package anaconda-mode
   :ensure t
-  :hook ((python-mode . anaconda-mode)
-         (python-mode . anaconda-eldoc-mode))
+  :hook ((python-mode . (lambda () (unless (file-remote-p default-directory) anaconda-mode)))
+         (python-mode . (lambda () (unless (file-remote-p default-directory) anaconda-eldoc-mode))))
   :config
   (add-to-list 'jump-handlers-python-mode
                '(anaconda-mode-find-definitions :async t))
@@ -225,7 +225,7 @@
 
 (use-package conda
   :ensure t
-  :hook (python-mode . conda-env-autoactivate-mode)
+  :hook (python-mode . (lambda () (unless (file-remote-p default-directory) conda-env-autoactivate-mode)))
   :init
   (when (memq window-system '(mac ns))
     (setq conda-anaconda-home "/usr/local/anaconda3/"))
