@@ -79,7 +79,7 @@
   :init
   (setq ivy-posframe-parameters '((left-fringe . 8)
                                   (right-fringe . 8))
-        ivy-posframe-display-functions-alist '((swiper . nil)
+        ivy-posframe-display-functions-alist '((swiper . ivy-display-function-fallback)
                                                (complete-symbol . ivy-posframe-display-at-point)
                                                (t . ivy-posframe-display-at-frame-center))))
 
