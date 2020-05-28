@@ -263,6 +263,50 @@
   :ensure t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
 
+(use-package rime
+  :ensure t
+  :custom-face
+  (rime-preedit-face ((t nil)))
+  :hook ((after-init . (lambda ()
+                         (when (fboundp 'rime-lib-sync-user-data)
+                           (ignore-errors (rime-sync)))))
+         (kill-emacs . (lambda ()
+                         (when (fboundp 'rime-lib-sync-user-data)
+                           (ignore-errors (rime-sync))))))
+  :init
+  (setq default-input-method "rime"
+        rime-librime-root "~/.emacs.d/var/librime/dist"
+        rime-user-data-dir "~/.emacs.d/etc/rime/"
+        rime-show-candidate 'posframe
+        rime-show-preedit 'inline
+        rime-posframe-properties (list :internal-border-width 2)
+        rime-disable-predicates '(rime-predicate-evil-mode-p
+                                  ;; rime-predicate-after-alphabet-char-p
+                                  rime-predicate-after-ascii-char-p
+                                  +rime-predicate-prog-in-code-p
+                                  rime-predicate-punctuation-after-space-cc-p
+                                  rime-predicate-punctuation-line-begin-p
+                                  rime-predicate-auto-english-p
+                                  rime-predicate-space-after-cc-p
+                                  rime-predicate-org-latex-mode-p
+                                  rime-predicate-org-in-src-block-p))
+  :config
+  (defun +rime-predicate-prog-in-code-p ()
+    "If cursor is in code.
+Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
+    (and (derived-mode-p 'prog-mode 'conf-mode)
+         ;; (not (or (nth 3 (syntax-ppss))
+         ;;          (nth 4 (syntax-ppss))))
+         ;; insert-translated-name
+         (not (and (boundp 'insert-translated-name-active-overlay)
+                   insert-translated-name-active-overlay))))
+  :general
+  (general-def rime-mode-map
+    "M-j"   'rime-force-enable
+    "C-`"   'rime-send-keybinding
+    "C-~"   'rime-send-keybinding
+    "C-S-`" 'rime-send-keybinding))
+
 (use-package string-inflection
   :ensure t
   :general
