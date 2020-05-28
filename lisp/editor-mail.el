@@ -165,6 +165,10 @@
     "a" 'message-kill-buffer
     "s" 'message-dont-send         ; saves as draft
     "f" 'mml-attach-file)
+
+  (general-def 'normal mu4e-view-mode-map
+    "o"        'ace-link
+    "C-o"      'mu4e-view-open-attachment)
   :general
   (tyrant-def
     "a m" 'mu4e
