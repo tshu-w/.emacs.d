@@ -276,6 +276,10 @@
     "xiu" 'string-inflection-underscore
     "xiU" 'string-inflection-upcase))
 
+(use-package vlf
+  :ensure t
+  :init (require 'vlf-setup))
+
 (use-package wakatime-mode
   :ensure t
   :hook (prog-mode . wakatime-mode)
