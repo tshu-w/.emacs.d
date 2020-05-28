@@ -864,19 +864,15 @@ and some custom text on a newly created journal file."
 
 (use-package org-ref
   :ensure t
+  :init
+  (setq org-ref-completion-library 'org-ref-ivy-cite)
   :config
   (setq reftex-default-bibliography '("~/Documents/Zotero/references.bib")
 
         org-ref-default-bibliography '("~/Documents/Zotero/references.bib")
-        org-ref-bibliography-notes "~/Documents/Zotero/notes.org"
-        org-ref-pdf-directory "~/Documents/Zotero/storage/"
-        org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-
-        bibtex-completion-bibliography '("~/Documents/Zotero/references.bib")
-        bibtex-completion-notes-path "~/Documents/Zotero/notes.org"
-        bibtex-completion-library-path '("~/Documents/Zotero/storage/")
-        bibtex-completion-find-additional-pdfs t
-        bibtex-completion-pdf-field "file")
+        org-ref-bibliography-notes "~/Documents/Org/ref_notes.org"
+        org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+        org-ref-pdf-directory "~/Documents/Zotero/storage/")
 
   (defun +org-ref-open-pdf-at-point ()
     "Open the pdf for bibtex key under point if it exists."

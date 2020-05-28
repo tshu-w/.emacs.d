@@ -225,6 +225,21 @@
   :general
   (tyrant-def "ae" 'ebib))
 
+(use-package ivy-bibtex
+  :ensure t
+  :init
+  (setq biblio-crossref-user-email-address user-mail-address
+        bibtex-autokey-year-length 4
+        bibtex-completion-additional-search-fields '(keywords)
+        bibtex-completion-bibliography '("~/Documents/Zotero/references.bib")
+        bibtex-completion-library-path '("~/Documents/Zotero/storage/")
+        bibtex-completion-notes-path "~/Documents/Org/ref_notes.org"
+        bibtex-completion-notes-template-one-file "\n* TODO ${author-or-editor} (${year}): ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :END:\n\n"
+        bibtex-completion-pdf-field "file"
+        bibtex-dialect 'biblatex)
+  :general
+  (tyrant-def "sr" 'ivy-bibtex))
+
 
 (provide 'lang-latex)
 ;;; lang-latex.el ends here
