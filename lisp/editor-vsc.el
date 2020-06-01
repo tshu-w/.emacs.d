@@ -174,16 +174,12 @@ Git Timemachine Transient State
 (use-package gist
   :ensure t
   :config
-  (evilified-state-evilify-map gist-list-menu-mode-map
-                               :mode gist-list-mode
-                               :bindings
-                               "f" 'gist-fetch-current
-                               "K" 'gist-kill-current
-                               "o" 'gist-browse-current-url)
-  (evilified-state-evilify-map gist-list-mode-map
-                               :mode gist-list-mode
-                               :bindings
-                               (kbd "gr") 'gist-list-reload)
+  (evil-set-initial-state 'gist-list-mode 'motion)
+  (general-def 'motion 'gist-list-menu-mode-map
+    "K" 'gist-kill-current
+    "o" 'gist-browse-current-url
+    "gr" 'gist-list-reload
+    "RET" 'gist-fetch-current)
   :general
   (tyrant-def
     "gg"  '(:ignore t :which-key "github gist")

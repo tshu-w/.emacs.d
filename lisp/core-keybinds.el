@@ -27,14 +27,14 @@
   :defer nil
   :config
   (general-create-definer tyrant-def
-    :states '(normal insert visual motion emacs evilified)
+    :states '(normal insert visual motion emacs)
     :keymaps 'override
     :prefix "SPC"
     :non-normal-prefix "M-SPC")
   (tyrant-def "" nil)
 
   (general-create-definer despot-def
-    :states '(normal insert visual motion emacs evilified)
+    :states '(normal insert visual motion emacs)
     :keymaps 'override
     :major-modes t
     :prefix ","
@@ -256,7 +256,6 @@
         evil-insert-state-cursor       '("chartreuse3" (bar . 2))
         evil-emacs-state-cursor        '("SkyBlue2" box)
         evil-replace-state-cursor      '("chocolate" (hbar . 2))
-        evil-evilified-state-cursor    '("LightGoldenrod3" box)
         evil-visual-state-cursor       '("gray" (hbar . 2))
         evil-motion-state-cursor       '("plum3" box))
 
@@ -452,9 +451,6 @@
                           minibuffer-local-must-match-map
                           minibuffer-local-isearch-map)
     "<escape>" 'abort-recursive-edit))
-
-(use-package evil-evilified-state
-  :commands evilified-state-evilify-map)
 
 (use-package evil-args
   :ensure t
