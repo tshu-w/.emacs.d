@@ -14,7 +14,14 @@
   (add-hook 'json-mode-hook
             (lambda ()
               (make-local-variable 'js-indent-level)
-              (setq js-indent-level 2))))
+              (setq js-indent-level 2)))
+  :general
+  (despot-def json-mode-map
+    "=" 'json-mode-beautify
+    "p" 'json-mode-show-path
+    "P" 'json-mode-kill-path
+    "t" 'json-toggle-boolean
+    "n" 'json-nullify-sexp))
 
 (use-package web-mode :ensure t)
 
