@@ -197,7 +197,7 @@ Git Timemachine Transient State
 
 (use-package helm-github-stars
   :ensure t
-  :commands (helm-github-stars)
+  :commands helm-github-stars
   :config
   (setq helm-github-stars-username "tshu-w"))
 

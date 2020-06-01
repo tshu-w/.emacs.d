@@ -754,7 +754,7 @@ Org Babel Transient state
 
 (use-package org-journal
   :ensure t
-  :commands (org-journal-update-auto-mode-alist)
+  :commands org-journal-update-auto-mode-alist
   :init
   (setq org-journal-dir          "~/Documents/Org/journals/"
         org-journal-date-format #'org-journal-date-format-func
