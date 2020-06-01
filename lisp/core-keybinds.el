@@ -454,7 +454,7 @@
     "<escape>" 'abort-recursive-edit))
 
 (use-package evil-evilified-state
-  :commands (evilified-state-evilify-map))
+  :commands evilified-state-evilify-map)
 
 (use-package evil-args
   :ensure t

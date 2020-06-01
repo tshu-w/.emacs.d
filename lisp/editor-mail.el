@@ -11,7 +11,7 @@
 (add-to-list 'load-path "/usr/local/Cellar/mu/")
 
 (use-package mu4e
-  :commands (mu4e-update-mail-and-index)
+  :commands mu4e-update-mail-and-index
   :init
   (setq mu4e-maildir "~/.mail"
         mu4e-attachment-dir "~/Downloads"
