@@ -99,10 +99,6 @@
   :ensure t
   :hook (ivy-mode . counsel-mode)
   :config
-  ;; Enable better auto completion of counsel-find-file
-  ;; by recognizing file at point.
-  (setq counsel-find-file-at-point t)
-
   (defun counsel-rg-region-or-symbol ()
     "Use `counsel-rg' to search for
     the selected region or the symbol around point in the current
