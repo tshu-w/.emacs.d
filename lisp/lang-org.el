@@ -234,6 +234,23 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       "M-SPC"    'org-agenda/body
       "s-M-SPC"  'org-agenda/body))
 
+  ;; Org Alert
+  (defun appt-disp-window-and-notification (min-to-appt current-time appt-msg)
+    (when (memq window-system '(mac ns))
+      (osx-notify
+       (format "Appointment in %s minutes" min-to-appt)
+       (format "%s" appt-msg)))
+    (appt-disp-window min-to-appt current-time appt-msg))
+
+  (setq appt-display-interval 5
+        appt-message-warning-time 15
+        appt-disp-window-function 'appt-disp-window-and-notification)
+
+  (add-hook 'org-capture-after-finalize-hook 'org-agenda-to-appt)
+  (run-at-time nil 600 'org-agenda-to-appt)
+
+  (appt-activate 1)
+
   ;; Org Attach
   (setq org-attach-archive-delete 'query
         org-attach-id-dir (concat org-directory "attach/")
