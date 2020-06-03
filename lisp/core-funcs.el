@@ -522,6 +522,16 @@ a dedicated window."
   (let ((message-log-max nil))
     (apply 'message msg args)))
 
+(defun osx-notify (title message)
+  "Send notifications with TITLE and MESSAGE on macOS."
+  (call-process "terminal-notifier"
+                nil 0 nil
+                "-group" "Emacs"
+                "-title" title
+                "-sender" "org.gnu.Emacs"
+                "-message" message
+                "-activate" "org.gnu.Emacs"))
+
 (defun osx-switch-back-to-previous-application ()
   "Switch back to previous application on macOS."
   (interactive)
