@@ -22,12 +22,14 @@
           ("WAITING" . (:foreground "light coral" :weight bold))
           ("SOMEDAY" . (:foreground "plum" :weight bold))))
 
-  (setq org-columns-default-format "%50ITEM %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM"
+  (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
+        org-clocktable-defaults '(:maxlevel 2 :lang "en" :scope file :block nil :wstart 1 :mstart 1 :tstart nil :tend nil :step nil :stepskip0 nil :fileskip0 t :tags nil :match nil :emphasize nil :link t :narrow 40! :indent t :hidefiles nil :formula % :timestamp nil :level nil :tcolumns 1 :formatter nil :properties ("Effort"))
         org-directory "~/Documents/Org/"
         org-default-notes-file (expand-file-name "inbox.org" org-directory)
         org-image-actual-width 500
         org-imenu-depth 8
-        org-global-properties '(("STYLE_ALL" . "habit"))
+        org-global-properties '(("STYLE_ALL" . "habit")
+                                ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
         org-latex-prefer-user-labels t
         org-log-done t
@@ -54,8 +56,7 @@
     (add-to-list 'org-modules 'org-habit t)
     :config
     (setq org-agenda-clockreport-parameter-plist
-          '(:maxlevel 3 :scope agenda-with-archives :fileskip0 t :stepskip0 t
-                      :emphasize t :link t :narrow 80! :tcolumns 1 :formula %)
+          '(:maxlevel 3 :scope agenda-with-archives)
           org-agenda-columns-add-appointments-to-effort-sum t
           org-agenda-compact-blocks t
           org-agenda-dim-blocked-tasks t
@@ -216,10 +217,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
     (despot-def org-agenda-mode-map
       "a"  'org-agenda
-      "C"  '(:ignore t :which-key "clocks")
-      "Cc" 'org-agenda-clock-cancel
-      "Ci" 'org-agenda-clock-in
-      "Co" 'org-agenda-clock-out
+      "c"  'org-agenda-columns
       "d"  '(:ignore t :which-key "dates")
       "dd" 'org-agenda-deadline
       "ds" 'org-agenda-schedule
