@@ -10,10 +10,12 @@
 
 (use-package vterm
   :ensure t
+  :hook (vterm-mode . (lambda () (setq-local global-hl-line-mode nil)))
   :commands (vterm vterm-other-window)
-  :init (setq vterm-shell shell-file-name)
   :config
-  (add-hook 'vterm-mode-hook '(lambda () (setq-local global-hl-line-mode nil)))
+  (setq vterm-buffer-name-string "vterm %s"
+        vterm-clear-scrollback-when-clearing t
+        vterm-kill-buffer-on-exit t)
 
   (with-eval-after-load 'centered-cursor-mode
     (add-hook 'vterm-mode-hook
