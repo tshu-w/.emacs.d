@@ -939,6 +939,12 @@ and some custom text on a newly created journal file."
   :hook (org-mode . toc-org-enable)
   :config (setq toc-org-max-depth 10))
 
+(use-package verb
+  :ensure t
+  :init
+  (use-package ob-verb
+    :commands (org-babel-execute:verb)))
+
 
 (provide 'lang-org)
 ;;; lang-org.el ends here
