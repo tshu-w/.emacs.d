@@ -320,6 +320,15 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
     "C-~"   'rime-send-keybinding
     "C-S-`" 'rime-send-keybinding))
 
+(use-package smart-input-source
+	:ensure t
+  :hook (text-mode . smart-input-source-mode)
+  :config
+  (setq smart-input-source-english-input-source
+        "com.apple.keylayout.US")
+  (setq smart-input-source-other-input-source
+        "im.rime.inputmethod.Squirrel.Rime"))
+
 (use-package string-inflection
   :ensure t
   :general
