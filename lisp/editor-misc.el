@@ -52,6 +52,19 @@
     "jl" '(avy-goto-line :which-key "avy line")
     "jw" '(avy-goto-word-or-subword-1 :which-key "avy word")))
 
+(use-package calibredb
+  :ensure t
+  :config
+  (setq calibredb-root-dir "~/Documents/Calibre"
+        calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir)
+        calibredb-library-alist '(("~/Documents/Calibre")))
+  (evil-set-initial-state 'calibredb-search-mode 'motion)
+  (general-def 'motion calibredb-search-mode-map "/" 'calibredb-search-live-filter)
+  :general
+  (tyrant-def
+    "aC" 'calibredb
+    "sc" 'calibredb-find-counsel))
+
 (use-package cal-china-x
   :ensure t
   :after calendar
