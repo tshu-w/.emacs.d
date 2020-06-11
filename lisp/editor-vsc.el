@@ -74,6 +74,10 @@
   :hook (magit-mode . turn-on-magit-svn)
   :config (general-def magit-mode-map "~" 'magit-svn))
 
+(use-package magit-delta
+  :ensure t
+  :hook (magit-mode . magit-delta-mode))
+
 (use-package forge
   :ensure t
   :after magit
