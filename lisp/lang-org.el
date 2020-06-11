@@ -812,6 +812,11 @@ and some custom text on a newly created journal file."
     "m"   'org-journal-search-calendar-month
     "y"   'org-journal-search-calendar-year))
 
+(use-package org-latex-instant-preview
+  :quelpa (org-latex-instant-preview :fetcher github :repo "yangsheng6810/org-latex-instant-preview")
+  :hook (org-mode . org-latex-instant-preview-mode)
+  :init (setq org-latex-instant-preview-tex2svg-bin "/usr/local/bin/tex2svg"))
+
 (use-package org-mime
   :ensure t
   :general
