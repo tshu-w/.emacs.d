@@ -309,7 +309,15 @@ Org Babel Transient state
                  org-babel-expand-body:C++)
       :config
       (setq org-babel-C-compiler "gcc -std=c++17"
-            org-babel-C++-compiler "g++ -std=c++17")))
+            org-babel-C++-compiler "g++ -std=c++17"))
+
+    (use-package verb
+      :ensure t
+      :init (use-package ob-verb
+              :commands (org-babel-execute:verb)))
+    (use-package ob-mermaid
+      :ensure t
+      :commands (org-babel-execute:mermaid)))
 
   ;; Org Capture
   (use-package org-capture
@@ -738,12 +746,6 @@ Org Babel Transient state
     (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
     (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
-(use-package org-superstar
-  :ensure t
-  :hook (org-mode . org-superstar-mode)
-  :config
-  (org-superstar-configure-like-org-bullets))
-
 (use-package org-download
   :ensure t
   :hook ((org-mode dired-mode) . org-download-enable)
@@ -766,6 +768,10 @@ Org Babel Transient state
   :hook (org-mode . org-edit-latex-mode)
   :init
   (setq org-edit-latex-create-master nil))
+
+(use-package org-fragtog
+  :ensure t
+  :hook (org-mode . org-fragtog-mode))
 
 (use-package org-journal
   :ensure t
@@ -939,16 +945,16 @@ and some custom text on a newly created journal file."
     "li" 'isbn-to-bibtex
     "lp" 'pubmed-insert-bibtex-from-pmid))
 
+(use-package org-superstar
+  :ensure t
+  :hook (org-mode . org-superstar-mode)
+  :config
+  (org-superstar-configure-like-org-bullets))
+
 (use-package toc-org
   :ensure t
   :hook (org-mode . toc-org-enable)
   :config (setq toc-org-max-depth 10))
-
-(use-package verb
-  :ensure t
-  :init
-  (use-package ob-verb
-    :commands (org-babel-execute:verb)))
 
 
 (provide 'lang-org)
