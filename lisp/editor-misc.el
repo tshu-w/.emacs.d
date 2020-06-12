@@ -113,6 +113,10 @@
   :ensure t
   :general (tyrant-def "db" 'devdocs-search))
 
+(use-package direnv
+  :ensure t
+  :hook (after-init . direnv-mode))
+
 (use-package dotenv-mode :ensure t)
 
 (use-package dumb-jump
