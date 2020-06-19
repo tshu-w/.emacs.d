@@ -8,17 +8,11 @@
 
 ;;; Code:
 
-(require 'core-funcs)
-
-(define-jump-handlers python-mode)
-(define-jump-handlers cython-mode anaconda-mode-goto)
-
 (use-package python
-  :mode (("SConstruct\\'" . python-mode) ("SConscript\\'" . python-mode))
+  :mode ("\\.py[iw]?\\'" . python-mode)
+  :hook (python-mode . (lambda ()
+                         (set (make-local-variable 'comment-inline-offset) 2)))
   :init
-  (add-hook 'python-mode-hook
-            (lambda () (set (make-local-variable 'comment-inline-offset) 2)))
-
   (setq-default python-indent-guess-indent-offset nil)
   (setq python-fill-column 88)
   :config
@@ -40,7 +34,7 @@
   ;; Vim users can use this key since they have other key
   (define-key inferior-python-mode-map (kbd "C-l") 'comint-clear-buffer)
 
-  ;; inferior-python-mode needs these variables to be defined.  The python
+  ;; inferior-python-mode needs these variables to be defined. The python
   ;; package declares them but does not initialize them.
   (defvar python-shell--interpreter nil)
   (defvar python-shell--interpreter-args nil)
@@ -110,8 +104,10 @@
     ;; set compile command to buffer-file-name
     ;; universal argument put compile buffer in comint mode
     (let ((universal-argument t)
-          (compile-command (format "%s %s" python-shell-interpreter
-                                   (shell-quote-argument (file-name-nondirectory buffer-file-name)))))
+          (compile-command
+           (format "%s %s" python-shell-interpreter
+                   (shell-quote-argument
+                    (file-name-nondirectory buffer-file-name)))))
       (if arg
           (call-interactively 'compile)
         (compile compile-command t)
@@ -173,44 +169,23 @@
     "sr"    '+python-shell-send-region
     "v"     '(:ignore t :which-key "virtualenv")))
 
-(use-package anaconda-mode
-  :ensure t
-  :hook ((python-mode . (lambda () (unless (file-remote-p default-directory) anaconda-mode)))
-         (python-mode . (lambda () (unless (file-remote-p default-directory) anaconda-eldoc-mode))))
-  :config
-  (add-to-list 'jump-handlers-python-mode
-               '(anaconda-mode-find-definitions :async t))
-
-  (despot-def python-mode-map
-    "hh" 'anaconda-mode-show-doc
-    "ga" 'anaconda-mode-find-assignments
-    "gb" 'xref-pop-marker-stack
-    "gu" 'anaconda-mode-find-references))
-
-(use-package company-anaconda
-  :ensure t
-  :after (anaconda-mode company)
-  :init
-  (add-hook 'anaconda-mode-hook
-            '(lambda ()
-               (add-to-list (make-local-variable 'company-backends)
-                            '(company-anaconda :with company-capf)))))
-
 (use-package blacken
   :ensure t
-  :config
-  (setq blacken-fast-unsafe t)
+  :config (setq blacken-fast-unsafe t)
   :general
   (despot-def python-mode-map "=" 'blacken-buffer))
 
 (use-package cython-mode
   :ensure t
-  :config
-  (despot-def cython-mode-map
-    "hh" 'anaconda-mode-show-doc
-    "gu" 'anaconda-mode-find-references))
+  :mode (("\\.pxi\\'" . cython-mode)
+         ("\\.pxd\\'" . cython-mode)
+         ("\\.pyx\\'" . cython-mode)))
 
-(use-package pip-requirements :ensure t)
+(use-package pip-requirements
+  :ensure t
+  :mode (("requirements\\.in" . pip-requirements-mode)
+         ("requirements[^z-a]*\\.txt\\'" . pip-requirements-mode)
+         ("\\.pip\\'" . pip-requirements-mode)))
 
 (use-package importmagic
   :ensure t
@@ -225,7 +200,10 @@
 
 (use-package conda
   :ensure t
-  :hook (python-mode . (lambda () (unless (file-remote-p default-directory) conda-env-autoactivate-mode)))
+  :hook (python-mode . (lambda ()
+                         (unless
+                             (file-remote-p default-directory)
+                           conda-env-autoactivate-mode)))
   :init
   (when (memq window-system '(mac ns))
     (setq conda-anaconda-home "/usr/local/anaconda3/"))
@@ -238,20 +216,26 @@
     "vb" 'conda-env-activate-for-buffer))
 
 (use-package pytest
-  :disabled t
   :ensure t
   :config
   (add-to-list 'pytest-project-root-files "setup.cfg")
+  :general
   (despot-def python-mode-map
     "t" '(:ignore t :which-key "test")
     "ta" 'pytest-all
     "tA" 'pytest-pdb-all
     "td" 'pytest-directory
+    "tf" 'pytest-last-failed
+    "tF" 'pytest-pdb-last-failed
     "tl" 'pytest-again
     "tm" 'pytest-module
     "tM" 'pytest-pdb-module
     "to" 'pytest-one
     "tO" 'pytest-pdb-one))
+
+;; (use-package lsp-python-ms
+;;   :ensure t
+;;   :hook (python-mode . (lambda () (require 'lsp-python-ms))))
 
 
 (provide 'lang-python)

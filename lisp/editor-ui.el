@@ -8,6 +8,17 @@
 
 ;;; Code:
 
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+
+(defun load-theme@after (&rest r)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+(advice-add #'load-theme :after #'load-theme@after)
+
+(add-hook 'after-load-theme-hook
+          (lambda () (set-face-attribute 'fringe nil :background nil)))
+
 (use-package doom-themes
   :ensure t
   :custom-face
@@ -16,87 +27,89 @@
   (diff-hl-delete ((t (:background nil))))
   (diff-hl-insert ((t (:background nil)))))
 
-(use-package doom-modeline
-  :ensure t
-  :hook (emacs-startup . doom-modeline-mode)
-  :config
-  (defun smaller-modeline ()
-    "Make doom-modeline smaller."
-    (when window-system
-      (create-fontset-from-ascii-font "Source Code Pro:medium" nil "modeline")
-      (set-face-attribute 'mode-line nil :height 120 :fontset "fontset-modeline")
-      (set-face-attribute 'mode-line-inactive nil :height 120 :fontset "fontset-modeline")))
-  (smaller-modeline)
-
-  (defvar after-load-theme-hook nil
-    "Hook run after a color theme is loaded using `load-theme'.")
-  (defun load-theme@after (&rest r)
-    "Run `after-load-theme-hook'."
-    (run-hooks 'after-load-theme-hook))
-  (advice-add #'load-theme :after #'load-theme@after)
-  (add-hook 'after-load-theme-hook 'smaller-modeline)
-  (add-hook 'after-load-theme-hook
-            '(lambda () (set-face-attribute 'fringe nil :background nil)))
-
-  (setq inhibit-compacting-font-caches t
-        doom-modeline-height 1
-        doom-modeline-buffer-file-name-style 'auto
-        doom-modeline-icon nil
-        doom-modeline-project-detection 'project))
-
 (use-package lab-themes :ensure t)
 
 (use-package flucui-themes :ensure t)
 
-(use-package spacemacs-theme
-  :ensure t
+(use-package spacemacs-common
+  :ensure spacemacs-theme
   :init
   (setq spacemacs-theme-org-height nil
         spacemacs-theme-comment-bg nil))
 
-(use-package theme-changer
-  :ensure t
-  :commands change-theme
-  :hook (emacs-startup . (lambda () (change-theme '(doom-acario-light
-                                               doom-nord-light
-                                               doom-one-light
-                                               doom-opera-light
-                                               doom-solarized-light
-                                               doom-tomorrow-day
-                                               spacemacs-light
-                                               flucui-light
-                                               lab-light
-                                               tsdh-light)
-                                             '(doom-acario-dark
-                                               doom-nord
-                                               doom-one
-                                               doom-opera
-                                               doom-solarized-dark
-                                               doom-tomorrow-night
-                                               doom-dark+
-                                               doom-ephemeral
-                                               doom-Iosvkem
-                                               doom-material
-                                               doom-moonlight
-                                               doom-nova
-                                               doom-oceanic-next
-                                               doom-palenight
-                                               doom-peacock
-                                               doom-rouge
-                                               doom-sourcerer
-                                               doom-spacegrey
-                                               doom-wilmersdorf
-                                               doom-vibrant
-                                               spacemacs-dark
-                                               flucui-dark
-                                               lab-dark)))))
+(defvar light-themes '(doom-acario-light
+                       doom-nord-light
+                       doom-one-light
+                       doom-opera-light
+                       doom-solarized-light
+                       doom-tomorrow-day
+                       spacemacs-light
+                       flucui-light
+                       lab-light
+                       tsdh-light)
+  "Light themes to switch.")
 
-(use-package all-the-icons :ensure t)
+(defvar dark-themes '(doom-acario-dark
+                      doom-nord
+                      doom-one
+                      doom-opera
+                      doom-solarized-dark
+                      doom-tomorrow-night
+                      doom-dark+
+                      doom-ephemeral
+                      doom-Iosvkem
+                      doom-material
+                      doom-moonlight
+                      doom-nova
+                      doom-oceanic-next
+                      doom-palenight
+                      doom-peacock
+                      doom-rouge
+                      doom-sourcerer
+                      doom-spacegrey
+                      doom-wilmersdorf
+                      doom-vibrant
+                      spacemacs-dark
+                      flucui-dark
+                      lab-dark)
+  "Dark themes to switch.")
+
+(add-hook 'ns-system-appearance-change-functions
+          #'(lambda (appearance)
+              (mapc #'disable-theme custom-enabled-themes)
+              (pcase appearance
+                ('light (load-theme (seq-random-elt light-themes) t))
+                ('dark (load-theme (seq-random-elt dark-themes) t)))))
+
+(use-package doom-modeline
+  :ensure t
+  :hook (emacs-startup . doom-modeline-mode)
+  :config
+  (setq inhibit-compacting-font-caches t
+        doom-modeline-height 1
+        doom-modeline-buffer-file-name-style 'auto
+        doom-modeline-icon nil
+        doom-modeline-project-detection 'project)
+
+  (defun smaller-modeline ()
+    "Make doom-modeline smaller."
+    (when window-system
+      (create-fontset-from-ascii-font "Source Code Pro:medium" nil "modeline")
+      (set-face-attribute 'mode-line nil
+                          :height 120 :fontset "fontset-modeline")
+      (set-face-attribute 'mode-line-inactive nil
+                          :height 120 :fontset "fontset-modeline")))
+  (smaller-modeline)
+  (add-hook 'after-load-theme-hook 'smaller-modeline))
+
+(use-package hide-mode-line
+  :ensure t
+  :general
+  (tyrant-def "tm" 'hide-mode-line-mode))
 
 (use-package writeroom-mode
   :ensure t
-  :hook (after-init . global-writeroom-mode)
-  :init
+  :hook (emacs-startup . global-writeroom-mode)
   :config
   (setq writeroom-width 128
         writeroom-bottom-divider-width 0
@@ -132,10 +145,6 @@
           :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("*Async Shell Command*"
           :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("*undo-tree*"
-          :dedicated t :position right  :stick t :noselect nil :width   60) popwin:special-display-config)
-  (push '("*undo-tree Diff*"
-          :dedicated t :position bottom :stick t :noselect nil :height 0.3) popwin:special-display-config)
   (push '("*ert*"
           :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("*grep*"
@@ -143,8 +152,12 @@
   (push '("*nosetests*"
           :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("^\*WoMan.+\*$"
-          :regexp t :position bottom                                      ) popwin:special-display-config)
+          :regexp t    :position bottom                                   ) popwin:special-display-config)
   (push '("*Google Translate*"
+          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("^\\*Flycheck.+\\*$"
+          :dedicated t :position bottom :stick t :noselect t   :regexp t  ) popwin:special-display-config)
+  (push '("*lsp-help*"
           :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   :general
   (tyrant-def
@@ -262,9 +275,7 @@
   :config
   (setq indent-guide-delay 0.3)
   :general
-  (tyrant-def
-    "ti" 'indent-guide-mode
-    "tI" 'indent-guide-global-mode))
+  (tyrant-def "ti" 'indent-guide-mode))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -283,22 +294,14 @@
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
 
 (use-package hide-comnt
-  :commands hide/show-comments-toggle
-  :general (tyrant-def "t c" '(hide/show-comments-toggle :which-key "toggle-comments")))
+  :general
+  (tyrant-def "t c" '(hide/show-comments-toggle :which-key "toggle-comments")))
 
 (use-package centered-cursor-mode
   :ensure t
   :config
-  (setq ccm-recenter-at-end-of-file t
-        ccm-ignored-commands '(mouse-drag-region
-                               mouse-set-point
-                               mouse-set-region
-                               widget-button-click
-                               scroll-bar-toolkit-scroll
-                               evil-mouse-drag-region))
-  :general (tyrant-def
-             "t-"    'centered-cursor-mode
-             "t C--" 'global-centered-cursor-mode))
+  (setq ccm-recenter-at-end-of-file t)
+  :general (tyrant-def "t-" 'centered-cursor-mode))
 
 
 (provide 'editor-ui)

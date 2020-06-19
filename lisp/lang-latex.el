@@ -8,14 +8,10 @@
 
 ;;; Code:
 
-(require 'core-funcs)
-
-(define-jump-handlers latex-mode)
-
 (use-package tex
   :ensure auctex
-  :custom-face
-  (preview-reference-face ((t (:foreground "black"))))
+  :defer t
+  :custom-face (preview-reference-face ((t (:foreground "black"))))
   :config
   (setq-default TeX-engine 'xetex)
   (setq latex-build-command "LatexMk"
@@ -24,7 +20,6 @@
         TeX-master t
         TeX-parse-self t
         TeX-save-query nil
-        TeX-syntactic-comment t
         TeX-source-correlate-start-server t
         TeX-source-correlate-mode t
         ;; Don't insert line-break at inline math
@@ -39,8 +34,6 @@
         '((output-dvi "open")
           (output-pdf "displayline")
           (output-html "open")))
-
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
   (defun latex/build ()
     (interactive)
@@ -71,22 +64,22 @@
   (general-def TeX-mode-map "<H-S-mouse-1>" 'TeX-view)
   (despot-def :keymaps '(tex-mode-map TeX-mode-map latex-mode-map LaTeX-mode-map)
     ","             'TeX-command-master
-    "\\"            'TeX-insert-macro                            ;; C-c C-m
-    "-"             'TeX-recenter-output-buffer                  ;; C-c C-l
-    "%"             'TeX-comment-or-uncomment-paragraph          ;; C-c %
-    ";"             'comment-or-uncomment-region                 ;; C-c ; or C-c :
+    "\\"            'TeX-insert-macro                          ;; C-c C-m
+    "-"             'TeX-recenter-output-buffer                ;; C-c C-l
+    "%"             'TeX-comment-or-uncomment-paragraph        ;; C-c %
+    ";"             'comment-or-uncomment-region               ;; C-c ; or C-c :
     ;; TeX-command-run-all runs compile and open the viewer
-    "a"             'TeX-command-run-all                         ;; C-c C-a
+    "a"             'TeX-command-run-all                       ;; C-c C-a
     "b"             'latex/build
     ;; TeX-doc is a very slow function
     "h"             '(:ignore t :which-key "help")
     "hd"            'TeX-doc
-    "k"             'TeX-kill-job                                ;; C-c C-k
-    "l"             'TeX-recenter-output-buffer                  ;; C-c C-l
-    "m"             'TeX-insert-macro                            ;; C-c C-m
-    "n"             'TeX-next-error                              ;; C-c `
-    "N"             'TeX-previous-error                          ;; M-g p
-    "v"             'TeX-view                                    ;; C-c C-v
+    "k"             'TeX-kill-job                              ;; C-c C-k
+    "l"             'TeX-recenter-output-buffer                ;; C-c C-l
+    "m"             'TeX-insert-macro                          ;; C-c C-m
+    "n"             'TeX-next-error                            ;; C-c `
+    "N"             'TeX-previous-error                        ;; M-g p
+    "v"             'TeX-view                                  ;; C-c C-v
     "x"             '(:ignore t :which-key "text/fonts")
     "xb"            'font-bold
     "xc"            'font-code
@@ -112,45 +105,45 @@
     "zz"            'TeX-fold-dwim)
 
   (despot-def :keymaps '(latex-mode-map LaTeX-mode-map)
-    "*"             'LaTeX-mark-section                  ;; C-c *
-    "."             'LaTeX-mark-environment              ;; C-c .
-    "c"             'LaTeX-close-environment             ;; C-c ]
-    "e"             'LaTeX-environment                   ;; C-c C-e
-    "f"             '(:ignore t :which-key "fill")
-    "fe"            'LaTeX-fill-environment              ;; C-c C-q C-e
-    "fp"            'LaTeX-fill-paragraph                ;; C-c C-q C-p
-    "fr"            'LaTeX-fill-region                   ;; C-c C-q C-r
-    "fs"            'LaTeX-fill-section                  ;; C-c C-q C-s
-    "i"             '(:ignore t :which-key "insert")
-    "ii"            'LaTeX-insert-item                   ;; C-c C-j
-    "p"             '(:ignore t :which-key "preview")
-    "pb"            'preview-buffer
-    "pc"            'preview-clearout
-    "pd"            'preview-document
-    "pe"            'preview-environment
-    "pf"            'preview-cache-preamble
-    "pp"            'preview-at-point
-    "pr"            'preview-region
-    "ps"            'preview-section
-    "s"             'LaTeX-section                       ;; C-c C-s
-    "x"             '(:ignore t :which-key "text/fonts")
-    "xb"            'font-bold
-    "xB"            'font-medium
-    "xc"            'font-code
-    "xe"            'font-emphasis
-    "xf"            '(:ignore t :which-key "fonts")
-    "xfa"           'font-calligraphic
-    "xfc"           'font-small-caps
-    "xff"           'font-sans-serif
-    "xfn"           'font-normal
-    "xfr"           'font-serif
-    "xfu"           'font-upright
-    "xi"            'font-italic
-    "xr"            'font-clear
-    "xo"            'font-oblique))
+    "*"                'LaTeX-mark-section                  ;; C-c *
+    "."                'LaTeX-mark-environment              ;; C-c .
+    "c"                'LaTeX-close-environment             ;; C-c ]
+    "e"                'LaTeX-environment                   ;; C-c C-e
+    "f"                '(:ignore t :which-key "fill")
+    "fe"               'LaTeX-fill-environment              ;; C-c C-q C-e
+    "fp"               'LaTeX-fill-paragraph                ;; C-c C-q C-p
+    "fr"               'LaTeX-fill-region                   ;; C-c C-q C-r
+    "fs"               'LaTeX-fill-section                  ;; C-c C-q C-s
+    "i"                '(:ignore t :which-key "insert")
+    "ii"               'LaTeX-insert-item                   ;; C-c C-j
+    "p"                '(:ignore t :which-key "preview")
+    "pb"               'preview-buffer
+    "pc"               'preview-clearout
+    "pd"               'preview-document
+    "pe"               'preview-environment
+    "pf"               'preview-cache-preamble
+    "pp"               'preview-at-point
+    "pr"               'preview-region
+    "ps"               'preview-section
+    "s"                'LaTeX-section                       ;; C-c C-s
+    "x"                '(:ignore t :which-key "text/fonts")
+    "xb"               'font-bold
+    "xB"               'font-medium
+    "xc"               'font-code
+    "xe"               'font-emphasis
+    "xf"               '(:ignore t :which-key "fonts")
+    "xfa"              'font-calligraphic
+    "xfc"              'font-small-caps
+    "xff"              'font-sans-serif
+    "xfn"              'font-normal
+    "xfr"              'font-serif
+    "xfu"              'font-upright
+    "xi"               'font-italic
+    "xr"               'font-clear
+    "xo"               'font-oblique))
 
 (use-package reftex
-  :hook (TeX-mode . turn-on-reftex)
+  :hook (TeX-mode . reftex-mode)
   :config
   (setq reftex-plug-into-AUCTeX '(nil nil t t t)
         reftex-use-fonts t)
@@ -190,24 +183,27 @@
 
 (use-package company-auctex
   :ensure t
-  :after (auctex company)
+  :after auctex
   :config (company-auctex-init))
 
 (use-package company-reftex
   :ensure t
-  :after company
-  :hook (reftex-mode . (lambda ()
-                         (add-to-list (make-local-variable 'company-backends)
-                                      '(company-reftex-labels company-reftex-citations)))))
+  :after reftex
+  :hook (TeX-mode . (lambda ()
+                      (add-to-list
+                       (make-local-variable 'company-backends)
+                       '(company-reftex-labels company-reftex-citations)))))
 
 (use-package ebib
+  :disabled t
   :ensure t
-  :init
+  :config
   (setq bibtex-dialect 'biblatex
         ebib-default-directory "~/Documents/Zotero"
         ebib-bib-search-dirs '("~/Documents/Zotero")
         ebib-preload-bib-files '("references.bib")
-        ebib-notes-file "~/Documents/Zotero/notes.org"
+        ebib-notes-directory "~/Documents/Org/notes/papers/"
+        ebib-notes-template "#+TITLE: %T\n#+roam_key: %C\n\n"
         ebib-reading-list-file "~/Documents/Org/reading_list.org"
         ebib-bibtex-dialect 'biblatex
         ebib-index-columns '(("Entry Key" 20 t)
@@ -219,26 +215,19 @@
         ebib-filename-separator ";"
         ebib-uniquify-keys t
         ebib-use-timestamp t)
-  (with-eval-after-load 'org (require 'org-ebib))
-  :config
+
   (general-def ebib-index-mode-map "/" 'ebib-jump-to-entry)
   :general
   (tyrant-def "ae" 'ebib))
 
 (use-package ivy-bibtex
   :ensure t
-  :init
-  (setq biblio-crossref-user-email-address user-mail-address
-        bibtex-autokey-year-length 4
-        bibtex-completion-additional-search-fields '(keywords)
-        bibtex-completion-bibliography '("~/Documents/Zotero/references.bib")
-        bibtex-completion-library-path '("~/Documents/Zotero/storage/")
-        bibtex-completion-notes-path "~/Documents/Org/ref_notes.org"
-        bibtex-completion-notes-template-one-file "\n* TODO ${author-or-editor} (${year}): ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :END:\n\n"
-        bibtex-completion-pdf-field "file"
-        bibtex-dialect 'biblatex)
+  :config
+  (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-ignore-order))
   :general
-  (tyrant-def "sr" 'ivy-bibtex))
+  (tyrant-def
+    "sr" 'ivy-bibtex
+    "sR" 'ivy-bibtex-with-notes))
 
 
 (provide 'lang-latex)

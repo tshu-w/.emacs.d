@@ -11,12 +11,12 @@
 (use-package ivy
   :ensure t
   :hook (after-init . ivy-mode)
-  :init
+  :config
   (setq ivy-height 15
         ivy-use-virtual-buffers t
         ivy-initial-inputs-alist nil ;; it will change after counsel load
         ivy-use-selectable-prompt t)
-  :config
+
   (defun ivy-tab ()
     (interactive)
     (let ((dir ivy--directory))
@@ -59,7 +59,7 @@
 
 (use-package ivy-hydra
   :ensure t
-  :config
+  :general
   (general-def hydra-ivy/keymap
     "<escape>" 'hydra-ivy/keyboard-escape-quit-and-exit))
 
@@ -67,7 +67,6 @@
   :ensure t
   ;; if `counsel' loads after `ivy-rich', it overrides some of `ivy-rich''s
   ;; transformers
-  :after counsel
   :hook (counsel-mode . ivy-rich-mode)
   :config
   (setq ivy-rich-path-style 'abbrev
@@ -76,28 +75,32 @@
 (use-package ivy-posframe
   :ensure t
   :hook (ivy-mode . ivy-posframe-mode)
-  :init
+  :config
   (setq ivy-posframe-parameters '((left-fringe . 8)
                                   (right-fringe . 8))
-        ivy-posframe-display-functions-alist '((swiper . ivy-display-function-fallback)
-                                               (complete-symbol . ivy-posframe-display-at-point)
-                                               (t . ivy-posframe-display-at-frame-center))))
+        ivy-posframe-display-functions-alist
+        '((swiper . ivy-display-function-fallback)
+          (complete-symbol . ivy-posframe-display-at-point)
+          (t . ivy-posframe-display-at-frame-center))))
 
 (use-package ivy-xref
   :ensure t
+  :defer t
   :init
   (setq xref-prompt-for-identifier '(not xref-find-definitions
                                          xref-find-definitions-other-window
                                          xref-find-definitions-other-frame
                                          xref-find-references
                                          jump-to-definition
-                                         jump-to-reference))
+                                         jump-to-definition-other-window
+                                         jump-to-reference
+                                         jump-to-reference-other-window))
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package counsel
   :ensure t
-  :hook (ivy-mode . counsel-mode)
+  :hook (after-init . counsel-mode)
   :config
   (defun counsel-rg-region-or-symbol ()
     "Use `counsel-rg' to search for
@@ -110,10 +113,11 @@
                   (thing-at-point 'symbol t))))
 
   ;; append ivy actions
-  (ivy-add-actions 'counsel-recentf'(("r" (lambda (arg) (interactive)
-                                            (recentf-cleanup)
-                                            (counsel-recentf))
-                                      "refresh list")))
+  (ivy-add-actions 'counsel-recentf '(("r"
+                                       (lambda (arg) (interactive)
+                                         (recentf-cleanup)
+                                         (counsel-recentf))
+                                       "refresh list")))
 
   (general-def read-expression-map
     "C-r" 'counsel-minibuffer-history)
@@ -161,8 +165,11 @@ around point as the initial input."
 (use-package pyim
   :ensure t
   :after ivy
-  :commands pyim-cregexp-build
+  :commands eh-ivy-cregexp
   :init
+  (setq pyim-default-scheme   'xiaohe-shuangpin
+        ivy-re-builders-alist '((t . eh-ivy-cregexp)))
+  :config
   (defun eh-ivy-cregexp (str)
     (let ((x (ivy--regex-ignore-order str))
           (case-fold-search nil))
@@ -175,14 +182,11 @@ around point as the initial input."
                               (cdr y))
                       (list (pyim-cregexp-build (car y)))))
                   x)
-        (pyim-cregexp-build x))))
-
-  (setq pyim-default-scheme 'xiaohe-shuangpin
-        ivy-re-builders-alist '((t . eh-ivy-cregexp))))
+        (pyim-cregexp-build x)))))
 
 (use-package wgrep
   :ensure t
-  :config
+  :general
   (despot-def wgrep-mode-map
     "," 'wgrep-finish-edit
     "c" 'wgrep-finish-edit
@@ -191,9 +195,8 @@ around point as the initial input."
 
 (use-package smex
   :ensure t
-  :after ivy
-  :config
-  (setq smex-history-length 32))
+  :defer t
+  :init (setq smex-history-length 32))
 
 (use-package company
   :ensure t
@@ -222,7 +225,13 @@ around point as the initial input."
           (append (if (consp backend) backend (list backend))
                   '(:with company-yasnippet))))
 
-      (setq company-backends (mapcar #'company-backend-with-yas company-backends))
+      (defun company-enable-yas (&rest _)
+        "Enable `yasnippet' in `company'."
+        (setq company-backends
+              (mapcar #'company-backend-with-yas company-backends)))
+
+      (company-enable-yas)
+      (advice-add #'lsp--auto-configure :after #'company-enable-yas)
 
       (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
         "Enable yasnippet but disable it inline."
@@ -236,69 +245,87 @@ around point as the initial input."
 
 (use-package company-quickhelp
   :ensure t
-  :commands company-quickhelp-manual-begin
   :hook (company-mode . company-quickhelp-mode)
-  :init
+  :config
   (setq company-quickhelp-delay nil
         company-quickhelp-use-propertized-text t)
-  :config
-  (with-eval-after-load 'company
-    (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))
-    (general-def company-active-map "M-h" #'company-quickhelp-manual-begin)))
 
-(use-package company-box
-  :disabled t
-  :ensure t
-  :hook (company-mode . company-box-mode)
-  :config
-  (setq company-box-backends-colors nil
-        company-box-enable-icon nil
-        company-box-max-candidates 50
-        company-box-doc-enable nil)
-
-  ;; https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-company.el#L76
-  (when (require 'all-the-icons nil 'noerror)
-    (declare-function all-the-icons-faicon 'all-the-icons)
-    (declare-function all-the-icons-material 'all-the-icons)
-    (declare-function all-the-icons-octicon 'all-the-icons)
-    (setq company-box-enable-icon t
-          company-box-icons-all-the-icons
-          `((Unknown . ,(all-the-icons-material "find_in_page" :height 0.85 :v-adjust -0.2))
-            (Text . ,(all-the-icons-faicon "text-width" :height 0.8 :v-adjust -0.05))
-            (Method . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.05 :face 'all-the-icons-purple))
-            (Function . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.05 :face 'all-the-icons-purple))
-            (Constructor . ,(all-the-icons-faicon "cube" :height 0.8 :v-adjust -0.05 :face 'all-the-icons-purple))
-            (Field . ,(all-the-icons-octicon "tag" :height 0.8 :v-adjust 0 :face 'all-the-icons-lblue))
-            (Variable . ,(all-the-icons-octicon "tag" :height 0.8 :v-adjust 0 :face 'all-the-icons-lblue))
-            (Class . ,(all-the-icons-material "settings_input_component" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-orange))
-            (Interface . ,(all-the-icons-material "share" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Module . ,(all-the-icons-material "view_module" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Property . ,(all-the-icons-faicon "wrench" :height 0.8 :v-adjust -0.05))
-            (Unit . ,(all-the-icons-material "settings_system_daydream" :height 0.85 :v-adjust -0.2))
-            (Value . ,(all-the-icons-material "format_align_right" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Enum . ,(all-the-icons-material "storage" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-orange))
-            (Keyword . ,(all-the-icons-material "filter_center_focus" :height 0.85 :v-adjust -0.2))
-            (Snippet . ,(all-the-icons-material "format_align_center" :height 0.85 :v-adjust -0.2))
-            (Color . ,(all-the-icons-material "palette" :height 0.85 :v-adjust -0.2))
-            (File . ,(all-the-icons-faicon "file-o" :height 0.85 :v-adjust -0.05))
-            (Reference . ,(all-the-icons-material "collections_bookmark" :height 0.85 :v-adjust -0.2))
-            (Folder . ,(all-the-icons-faicon "folder-open" :height 0.85 :v-adjust -0.05))
-            (EnumMember . ,(all-the-icons-material "format_align_right" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Constant . ,(all-the-icons-faicon "square-o" :height 0.85 :v-adjust -0.1))
-            (Struct . ,(all-the-icons-material "settings_input_component" :height 0.85 :v-adjust -0.2 :face 'all-the-icons-orange))
-            (Event . ,(all-the-icons-octicon "zap" :height 0.8 :v-adjust 0 :face 'all-the-icons-orange))
-            (Operator . ,(all-the-icons-material "control_point" :height 0.85 :v-adjust -0.2))
-            (TypeParameter . ,(all-the-icons-faicon "arrows" :height 0.8 :v-adjust -0.05))
-            (Template . ,(all-the-icons-material "format_align_left" :height 0.85 :v-adjust -0.2)))
-          company-box-icons-alist 'company-box-icons-all-the-icons)))
-
-(use-package prescient
-  :ensure t
-  :hook (after-init . prescient-persist-mode))
+  (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))
+  :general
+  (general-def company-active-map "M-h" #'company-quickhelp-manual-begin))
 
 (use-package company-prescient
   :ensure t
   :hook (company-mode . company-prescient-mode))
+
+(use-package company-try-hard
+  :ensure t
+  :general
+  (general-def "C-'" 'company-try-hard)
+  (general-def company-active-map "C-'" 'company-try-hard))
+
+(use-package lsp-mode
+  :ensure t
+  :hook ((prog-mode . (lambda ()
+                        (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
+                          (lsp-deferred))))
+         (lsp-mode . lsp-enable-which-key-integration))
+  :init
+  (setq read-process-output-max (* 1024 1024))
+  :config
+  (setq lsp-auto-guess-root t
+        lsp-enable-dap-auto-configure nil
+        lsp-enable-file-watchers nil
+        lsp-enable-folding nil
+        lsp-enable-indentation nil
+        lsp-enable-links nil
+        lsp-enable-on-type-formatting nil
+        lsp-enable-symbol-highlighting nil
+        lsp-enable-semantic-highlighting nil
+        lsp-enable-text-document-color t
+        lsp-keep-workspace-alive nil
+        lsp-modeline-diagnostics-enable nil
+        lsp-modeline-code-actions-enable nil
+        lsp-prefer-capf t
+        lsp-signature-auto-activate t
+        lsp-signature-function 'lsp--eldoc-message
+        lsp-signature-render-documentation nil)
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
+                    :major-modes '(python-mode)
+                    :remote? t
+                    :server-id 'pyls-remote))
+  :general
+  (tyrant-def
+    :keymaps 'lsp-mode-map
+    "l" (general-simulate-key "s-l" :which-key "lsp-mode")))
+
+(use-package lsp-ui
+  :disabled t
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode)
+  :init
+  (setq lsp-ui-doc-delay 0.5
+        lsp-ui-doc-include-signature t
+        lsp-ui-sideline-ignore-duplicate t
+        lsp-ui-doc-border (face-foreground 'default)
+        lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
+                              ,(face-foreground 'font-lock-string-face)
+                              ,(face-foreground 'font-lock-constant-face)
+                              ,(face-foreground 'font-lock-variable-name-face)))
+  :config
+  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+              (setq lsp-ui-doc-border (face-foreground 'default))
+              (set-face-background 'lsp-ui-doc-background
+                                   (face-background 'tooltip)))))
+
+(use-package lsp-ivy
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
+
 
 (use-package yasnippet
   :ensure t
@@ -317,7 +344,6 @@ around point as the initial input."
   ;; use hippie-expand instead
   (setq yas-minor-mode-map (make-sparse-keymap))
   :general
-  (tyrant-def "ty" 'yas-minor-mode)
   (general-def 'insert yas-minor-mode-map
     "\t"       'yas-maybe-expand))
 

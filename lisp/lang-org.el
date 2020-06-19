@@ -13,12 +13,13 @@
   :mode ("\\.org\\'" . org-mode)
   :config
   (add-to-list 'org-modules 'org-tempo t)
+  (add-to-list 'org-modules 'org-protocol t)
 
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "DONE(d)")
           (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "CANCELED(c)"))
         org-todo-keyword-faces
-        '(("CANCELED" . org-upcoming-distant-deadline)
+        '(("CANCELED" . org-done)
           ("WAITING" . (:foreground "light coral" :weight bold))
           ("SOMEDAY" . (:foreground "plum" :weight bold))))
 
@@ -27,11 +28,10 @@
         org-directory "~/Documents/Org/"
         org-default-notes-file (expand-file-name "inbox.org" org-directory)
         org-image-actual-width 500
-        org-imenu-depth 8
+        org-imenu-depth 5
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
-        org-latex-prefer-user-labels t
         org-log-done t
         org-log-into-drawer t
         org-startup-indented t
@@ -40,9 +40,12 @@
 
   (add-hook 'org-mode-hook '(lambda () (setq truncate-lines nil)))
   ;; disable <> auto pairing in electric-pair-mode for org-mode
-  (add-hook 'org-mode-hook '(lambda () (setq-local electric-pair-inhibit-predicate
-                                              `(lambda (c)
-                                                 (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               (setq-local electric-pair-inhibit-predicate
+                           `(lambda (c)
+                              (if (char-equal c ?<) t
+                                (,electric-pair-inhibit-predicate c))))))
 
   (defun find-org-default-notes-file ()
     "Edit the `org-default-notes-file', in the current window."
@@ -51,10 +54,11 @@
 
   ;; Org Agenda
   (use-package org-agenda
+    :defer t
     :init
     (setq org-agenda-files '("~/Documents/Org"))
-    (add-to-list 'org-modules 'org-habit t)
     :config
+    (add-to-list 'org-modules 'org-habit t)
     (setq org-agenda-clockreport-parameter-plist
           '(:maxlevel 3 :scope agenda-with-archives)
           org-agenda-columns-add-appointments-to-effort-sum t
@@ -81,20 +85,8 @@
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
           org-habit-graph-column 75
-          org-stuck-projects '("+PROJ/-WAITING-SOMEDAY-DONE-CANCELED" ("TODO") nil ""))
-
-    ;; (defun org-agenda-skip-all-siblings-but-first ()
-    ;;   "Skip all but the first non-done entry."
-    ;;   (let (should-skip-entry)
-    ;;     (unless (string= "TODO" (org-get-todo-state))
-    ;;       (setq should-skip-entry t))
-    ;;     (save-excursion
-    ;;       (while (and (not should-skip-entry) (org-goto-sibling t))
-    ;;         (when (org-current-is-todo)
-    ;;           (setq should-skip-entry t))))
-    ;;     (when should-skip-entry
-    ;;       (or (outline-next-heading)
-    ;;           (goto-char (point-max))))))
+          org-stuck-projects
+          '("+PROJ/-WAITING-SOMEDAY-DONE-CANCELED" ("TODO") nil ""))
 
     (setq org-agenda-custom-commands
           '(("r" . "Review")
@@ -235,21 +227,24 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       "s-M-SPC"  'org-agenda/body))
 
   ;; Org Alert
-  (defun appt-disp-window-and-notification (min-to-appt current-time appt-msg)
-    (when (memq window-system '(mac ns))
-      (osx-notify
-       (format "Appointment in %s minutes" min-to-appt)
-       (format "%s" appt-msg)))
-    (appt-disp-window min-to-appt current-time appt-msg))
+  (use-package appt
+    :defer 10
+    :config
+    (setq appt-display-interval 5
+          appt-message-warning-time 15
+          appt-disp-window-function 'appt-disp-window-and-notification)
 
-  (setq appt-display-interval 5
-        appt-message-warning-time 15
-        appt-disp-window-function 'appt-disp-window-and-notification)
+    (defun appt-disp-window-and-notification (min-to-appt current-time appt-msg)
+      (when (memq window-system '(mac ns))
+        (macos-notify
+         (format "Appointment in %s minutes" min-to-appt)
+         (format "%s" appt-msg)))
+      (appt-disp-window min-to-appt current-time appt-msg))
 
-  (add-hook 'org-capture-after-finalize-hook 'org-agenda-to-appt)
-  (run-at-time nil 600 'org-agenda-to-appt)
+    (add-hook 'org-capture-after-finalize-hook 'org-agenda-to-appt)
+    (run-at-time nil 600 'org-agenda-to-appt)
 
-  (appt-activate 1)
+    (appt-activate 1))
 
   ;; Org Attach
   (setq org-attach-archive-delete 'query
@@ -258,32 +253,13 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
   ;; Org Babel
   (use-package ob
-    :config
-    (defun ob-fix-inline-images ()
-      "Fix redisplay of inline images after a code block evaluation."
-      (when org-inline-image-overlays
-        (org-redisplay-inline-images)))
-    (add-hook 'org-babel-after-execute-hook 'ob-fix-inline-images)
-
+    :commands org-babel/body
+    :init
     (setq org-confirm-babel-evaluate nil
           org-edit-src-content-indentation 0
           org-src-fontify-natively t
           org-src-preserve-indentation t
-          org-src-tab-acts-natively t)
-
-    (defhydra org-babel (:hint nil)
-      "
-Org Babel Transient state
-[_j_/_k_] navigate src blocks         [_e_] execute src block
-[_g_]^^   goto named block            [_'_] edit src block
-[_z_]^^   recenter screen             [_q_] quit"
-      ("q" nil :exit t)
-      ("j" org-babel-next-src-block)
-      ("k" org-babel-previous-src-block)
-      ("g" org-babel-goto-named-src-block)
-      ("z" recenter-top-bottom)
-      ("e" org-babel-execute-maybe)
-      ("'" org-edit-special :exit t))
+          org-src-tab-acts-natively nil)
 
     (use-package ob-python
       :commands (org-babel-execute:python))
@@ -313,14 +289,37 @@ Org Babel Transient state
 
     (use-package verb
       :ensure t
-      :init (use-package ob-verb
-              :commands (org-babel-execute:verb)))
+      :defer t
+      :init
+      (use-package ob-verb
+        :commands (org-babel-execute:verb)))
     (use-package ob-mermaid
       :ensure t
-      :commands (org-babel-execute:mermaid)))
+      :commands (org-babel-execute:mermaid))
+    :config
+    (defun ob-fix-inline-images ()
+      "Fix redisplay of inline images after a code block evaluation."
+      (when org-inline-image-overlays
+        (org-redisplay-inline-images)))
+    (add-hook 'org-babel-after-execute-hook 'ob-fix-inline-images)
+
+    (defhydra org-babel (:hint nil)
+      "
+  Org Babel Transient state
+  [_j_/_k_] navigate src blocks         [_e_] execute src block
+  [_g_]^^   goto named block            [_'_] edit src block
+  [_z_]^^   recenter screen             [_q_] quit"
+      ("q" nil :exit t)
+      ("j" org-babel-next-src-block)
+      ("k" org-babel-previous-src-block)
+      ("g" org-babel-goto-named-src-block)
+      ("z" recenter-top-bottom)
+      ("e" org-babel-execute-maybe)
+      ("'" org-edit-special :exit t)))
 
   ;; Org Capture
   (use-package org-capture
+    :defer t
     :init
     (setq org-inbox-file org-default-notes-file
           org-capture-templates
@@ -348,9 +347,10 @@ Org Babel Transient state
              "* Weekly Review\n%?\n")))
     :config
     (defun org-capture-goto-link ()
-      (org-capture-put :target (list 'file+headline
-                                     (nth 1 (org-capture-get :target))
-                                     (plist-get org-store-link-plist :description)))
+      (org-capture-put :target
+                       (list 'file+headline
+                             (nth 1 (org-capture-get :target))
+                             (plist-get org-store-link-plist :description)))
       (org-capture-put-target-region-and-position)
       (widen)
       (let ((hd (plist-get org-store-link-plist :description)))
@@ -360,47 +360,51 @@ Org Babel Transient state
             (org-end-of-subtree)
           (goto-char (point-max))
           (or (bolp) (insert "\n"))
-          (insert "* " hd "\n" "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
+          (insert "* " hd "\n"
+                  "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
 
+    (evil-set-initial-state 'calibredb-search-mode 'normal)
     (despot-def org-capture-mode-map
       "," 'org-capture-finalize
       "a" 'org-capture-kill
       "c" 'org-capture-finalize
       "k" 'org-capture-kill
-      "r" 'org-capture-refile)
-    (add-hook 'org-capture-mode-hook 'evil-normal-state))
+      "r" 'org-capture-refile))
 
   ;; Org Clock
-  (org-clock-persistence-insinuate)
-  (setq org-clock-auto-clock-resolution 'when-no-clock-is-running
-        org-clock-history-length 10
-        org-clock-idle-time 10
-        org-clock-in-resume t
-        org-clock-persist t
-        org-clock-persist-query-resume nil
-        org-clock-out-remove-zero-time-clocks t
-        org-clock-out-when-done t
-        org-clock-report-include-clocking-task t)
+  (use-package org-clock
+    :defer 2
+    :config
+    (org-clock-persistence-insinuate)
+    (setq org-clock-auto-clock-resolution 'when-no-clock-is-running
+          org-clock-history-length 10
+          org-clock-idle-time 10
+          org-clock-in-resume t
+          org-clock-persist t
+          org-clock-persist-query-resume nil
+          org-clock-out-remove-zero-time-clocks t
+          org-clock-out-when-done t
+          org-clock-report-include-clocking-task t))
 
   ;; Org Latex
   (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "xelatex"))
         org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
 
   (setq org-latex-compiler "xelatex"
-        org-latex-packages-alist '(("" "mathspec" t)
-                                   ("fontset=macnew,UTF8" "ctex" t))
-        org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -f %f"
+        org-latex-packages-alist '(("" "mathspec" t))
+        org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -bibtex -f %f"
                                 "rm -fr %b.out %b.log %b.tex auto")
+        org-latex-prefer-user-labels t
         org-preview-latex-default-process 'dvisvgm
         org-preview-latex-process-alist
         '((dvisvgm :programs ("xelatex" "dvisvgm")
-                   :description "xdv > svg" :use-xcolor t
+                   :description "xdv > svg"
                    :message "you need to install the programs: xelatex and dvisvgm."
                    :image-input-type "xdv" :image-output-type "svg" :image-size-adjust (1.7 . 1.5)
                    :latex-compiler ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
                    :image-converter ("dvisvgm %f -n -b min -c %S -o %O"))
           (imagemagick :programs ("xelatex" "convert")
-                       :description "pdf > png" :use-xcolor t
+                       :description "pdf > png"
                        :message "you need to install the programs: xelatex and imagemagick."
                        :image-input-type "pdf" :image-output-type "png" :image-size-adjust (1.0 . 1.0)
                        :latex-compiler ("xelatex -interaction nonstopmode -output-directory %o %f")
@@ -416,7 +420,8 @@ Org Babel Transient state
         org-mac-grab-Outlook-app-p nil)
 
   ;; Org Refile
-  (setq org-note-files (directory-files-recursively "~/Documents/Org/notes" "^.*\\.org$")
+  (setq org-note-files (directory-files-recursively
+                        "~/Documents/Org/notes" "^.*\\.org$")
         org-outline-path-complete-in-steps nil
         org-refile-allow-creating-parent-nodes 'confirm
         org-refile-use-outline-path 'file
@@ -508,10 +513,6 @@ Org Babel Transient state
   (+org-emphasize org-underline ?_)
   (+org-emphasize org-verbatim ?=)
 
-  (defun org-clock-recents ()
-    (interactive)
-    (org-clock-in '(4)))
-
   ;; Export Org to Apple Note
   ;; https://emacs-china.org/t/org-apple-note/10706
   ;; https://vxlabs.com/2018/10/29/importing-orgmode-notes-into-apple-notes/
@@ -546,9 +547,6 @@ Org Babel Transient state
           (kill-buffer)
           (delete-window)
           (message "export successfully")))))
-  :general
-  (general-def 'normal org-mode-map
-    "RET"      'org-open-at-point)
 
   (despot-def org-mode-map
     "'"     'org-edit-special
@@ -696,6 +694,9 @@ Org Babel Transient state
     "C-S-j" 'org-shiftcontroldown
     "C-S-k" 'org-shiftcontrolup)
 
+  (general-def 'normal org-mode-map
+    "RET"      'org-open-at-point)
+  :general
   (tyrant-def
     "o"      '(:ignore t :which-key "org")
     "o#"     'org-agenda-list-stuck-projects
@@ -708,7 +709,6 @@ Org Babel Transient state
     "oCi"    'org-clock-in-last
     "oCj"    'org-clock-jump-to-current-clock
     "oCo"    'org-clock-out
-    "oC SPC" 'org-clock-recents
     "oCr"    'org-resolve-clocks
     "od"     '(find-org-default-notes-file :which-key "default-org-file")
     "oe"     'org-store-agenda-views
@@ -724,7 +724,6 @@ Org Babel Transient state
 
 (use-package evil-org
   :ensure t
-  :after (evil org)
   :hook (org-mode . evil-org-mode)
   :init
   (with-eval-after-load 'org-agenda
@@ -734,7 +733,7 @@ Org Babel Transient state
   (add-hook 'evil-org-mode-hook
             (lambda ()
               (evil-org-set-key-theme
-               '(textobjects insert navigation additional shift todo heading))))
+               '(navigation insert textobjects additional shift todo heading))))
 
   (defun surround-drawer ()
     (let ((dname (read-from-minibuffer "" "")))
@@ -757,7 +756,7 @@ Org Babel Transient state
   (setq org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"
         org-download-image-attr-list '("#+ATTR_HTML: :width 80% :align center"))
-  :general
+
   (despot-def org-mode-map
     "iD" '(:ignore nil :which-key "download")
     "iDy" 'org-download-yank
@@ -766,37 +765,36 @@ Org Babel Transient state
 (use-package org-edit-latex
   :ensure t
   :hook (org-mode . org-edit-latex-mode)
-  :init
-  (setq org-edit-latex-create-master nil))
+  :init (setq org-edit-latex-create-master nil))
 
 (use-package org-fragtog
   :ensure t
-  :hook (org-mode . org-fragtog-mode))
+  :general
+  (despot-def org-mode-map
+    "Tf" 'org-fragtog-mode))
 
 (use-package org-journal
   :ensure t
-  :commands org-journal-update-auto-mode-alist
+  :commands (org-journal-find-location)
   :init
   (setq org-journal-dir          "~/Documents/Org/journals/"
-        org-journal-date-format #'org-journal-date-format-func
-        org-journal-file-type    'weekly)
+        org-journal-date-format  "%A, %B %d %Y"
+        org-journal-file-header #'org-journal-file-header-func
+        org-journal-file-type    'monthly)
   :config
   (defun org-journal-find-location (&optional days)
     (let ((date (time-add (current-time) (days-to-time (or days 0)))))
       (org-journal-new-entry t date)
       (goto-char (point-max))))
 
-  (defun org-journal-date-format-func (time)
-    "Custom function to insert journal date header,
-and some custom text on a newly created journal file."
-    (when (= (buffer-size) 0)
-      (insert
-       (pcase org-journal-file-type
-         (`daily   "#+TITLE: Daily Journal\n\n")
-         (`weekly  "#+TITLE: Weekly Journal\n\n")
-         (`monthly "#+TITLE: Monthly Journal\n\n")
-         (`yearly  "#+TITLE: Yearly Journal\n\n"))))
-    (concat org-journal-date-prefix (format-time-string "%A, %B %d %Y" time)))
+  (defun org-journal-file-header-func (time)
+    "Custom function to create journal header."
+    (concat
+     (pcase org-journal-file-type
+       (`daily "#+TITLE: Daily Journal\n#+STARTUP: showeverything\n\n")
+       (`weekly "#+TITLE: Weekly Journal\n#+STARTUP: folded\n\n")
+       (`monthly "#+TITLE: Monthly Journal\n#+STARTUP: folded\n\n")
+       (`yearly "#+TITLE: Yearly Journal\n#+STARTUP: folded\n\n"))))
   :general
   (tyrant-def
     "oj"  '(:ignore t :which-key "org-journal")
@@ -806,8 +804,8 @@ and some custom text on a newly created journal file."
     "ojv" 'org-journal-schedule-view)
   (despot-def org-journal-mode-map
     "j"   'org-journal-new-entry
-    "n"   'org-journal-open-next-entry
-    "p"   'org-journal-open-previous-entry)
+    "n"   'org-journal-next-entry
+    "p"   'org-journal-previous-entry)
   (despot-def calendar-mode-map
     "r"   'org-journal-read-entry
     "i"   'org-journal-new-date-entry
@@ -818,12 +816,8 @@ and some custom text on a newly created journal file."
     "m"   'org-journal-search-calendar-month
     "y"   'org-journal-search-calendar-year))
 
-(use-package org-latex-instant-preview
-  :quelpa (org-latex-instant-preview :fetcher github :repo "yangsheng6810/org-latex-instant-preview")
-  :hook (org-mode . org-latex-instant-preview-mode)
-  :init (setq org-latex-instant-preview-tex2svg-bin "/usr/local/bin/tex2svg"))
-
 (use-package org-mime
+  :disabled t
   :ensure t
   :general
   (despot-def message-mode-map
@@ -835,8 +829,7 @@ and some custom text on a newly created journal file."
 (use-package org-mru-clock
   :ensure t
   :config
-  (setq org-mru-clock-keep-formatting t
-        org-mru-clock-files #'org-agenda-files)
+  (setq org-mru-clock-files #'org-agenda-files)
   :general
   (tyrant-def
     "oCi"    'org-mru-clock-in
@@ -844,7 +837,6 @@ and some custom text on a newly created journal file."
 
 (use-package org-projectile
   :ensure t
-  :after projectile
   :init
   (setq org-link-elisp-confirm-function nil)
   (with-eval-after-load 'org-capture (require 'org-projectile))
@@ -877,37 +869,49 @@ and some custom text on a newly created journal file."
 
 (use-package org-randomnote
   :ensure t
-  :config
-  (load-library "find-lisp")
-  (setq org-randomnote-candidates
-        (find-lisp-find-files "~/Documents/Org/" "\.org$"))
   :general (tyrant-def "or" 'org-randomnote))
 
 (use-package org-random-todo
   :ensure t
-  :after org
   :general (tyrant-def "oR" 'org-random-todo-goto-new))
 
 (use-package org-ref
   :ensure t
+  :hook (org-mode . (lambda () (require 'org-ref)))
   :init
   (setq org-ref-completion-library 'org-ref-ivy-cite)
   :config
   (setq reftex-default-bibliography '("~/Documents/Zotero/references.bib")
 
         org-ref-default-bibliography '("~/Documents/Zotero/references.bib")
-        org-ref-bibliography-notes "~/Documents/Org/ref_notes.org"
-        org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
-        org-ref-pdf-directory "~/Documents/Zotero/storage/")
+        org-ref-bibliography-notes "~/Documents/Org/notes/papers/")
+
+  (use-package bibtex-completion
+    :commands (bibtex-completion-edit-notes bibtex-completion-find-pdf)
+    :init
+    (setq bibtex-autokey-year-length 4
+          bibtex-completion-additional-search-fields '(keywords)
+          bibtex-completion-bibliography '("~/Documents/Zotero/references.bib")
+          bibtex-completion-library-path '("~/Documents/Zotero/storage/")
+          bibtex-completion-notes-path "~/Documents/Org/notes/papers/"
+          bibtex-completion-notes-template-multiple-files
+          "#+TITLE: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n\n"
+          bibtex-completion-pdf-field "file"
+          bibtex-dialect 'biblatex))
+
+  ;; Tell org-ref to let bibtex-completion find notes for it
+  (setq org-ref-notes-function
+        (lambda (citekey)
+	        (let ((bibtex-completion-bibliography (org-ref-find-bibliography)))
+	          (bibtex-completion-edit-notes
+	           (list (car (org-ref-get-bibtex-key-and-file citekey)))))))
 
   (defun +org-ref-open-pdf-at-point ()
     "Open the pdf for bibtex key under point if it exists."
     (interactive)
-    (message "Empty Function")
     (let* ((results (org-ref-get-bibtex-key-and-file))
            (key (car results))
            (pdf-file (car (bibtex-completion-find-pdf key))))
-      (print pdf-file)
       (if (file-exists-p pdf-file)
           (org-open-file pdf-file)
         (message "No PDF found for %s" key))))
@@ -927,16 +931,16 @@ and some custom text on a newly created journal file."
 
   (despot-def bibtex-mode-map
     ;; Navigation
-    "j" 'org-ref-bibtex-next-entry
-    "k" 'org-ref-bibtex-previous-entry
+    "j"  'org-ref-bibtex-next-entry
+    "k"  'org-ref-bibtex-previous-entry
     ;; Open
-    "b" 'org-ref-open-in-browser
-    "n" 'org-ref-open-bibtex-notes
-    "p" 'org-ref-open-bibtex-pdf
+    "b"  'org-ref-open-in-browser
+    "n"  'org-ref-open-bibtex-notes
+    "p"  'org-ref-open-bibtex-pdf
     ;; Misc
-    "h" 'org-ref-bibtex-hydra/body
-    "i" 'org-ref-bibtex-hydra/org-ref-bibtex-new-entry/body-and-exit
-    "s" 'org-ref-sort-bibtex-entry
+    "h"  'org-ref-bibtex-hydra/body
+    "i"  'org-ref-bibtex-hydra/org-ref-bibtex-new-entry/body-and-exit
+    "s"  'org-ref-sort-bibtex-entry
     ;; Lookup utilities
     "l"  '(:ignore t :which-key "lookup")
     "la" 'arxiv-add-bibtex-entry
@@ -952,6 +956,7 @@ and some custom text on a newly created journal file."
   (org-superstar-configure-like-org-bullets))
 
 (use-package toc-org
+  :disabled t
   :ensure t
   :hook (org-mode . toc-org-enable)
   :config (setq toc-org-max-depth 10))
