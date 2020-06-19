@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-;; (eval-when-compile (require 'cl-lib))
-
 ;; ---------------------------------------------------------------------------
 ;; File
 ;; ---------------------------------------------------------------------------
@@ -233,7 +231,7 @@ removal."
 (defun delete-file-confirm (filename)
   "Remove specified file or directory after users approval.
 
-FILENAME is deleted using `delete-file' function.."
+FILENAME is deleted using `-delete-file' function.."
   (interactive "f")
   (funcall-interactively #'-delete-file filename t))
 
@@ -509,7 +507,7 @@ a dedicated window."
   (condition-case nil
       (delete-frame nil 1)
     (error
-     (make-frame-invisible nil 1))))
+     (iconify-frame))))
 
 
 ;; ---------------------------------------------------------------------------
@@ -522,7 +520,7 @@ a dedicated window."
   (let ((message-log-max nil))
     (apply 'message msg args)))
 
-(defun osx-notify (title message)
+(defun macos-notify (title message)
   "Send notifications with TITLE and MESSAGE on macOS."
   (call-process "terminal-notifier"
                 nil 0 nil
@@ -532,7 +530,7 @@ a dedicated window."
                 "-message" message
                 "-activate" "org.gnu.Emacs"))
 
-(defun osx-switch-back-to-previous-application ()
+(defun macos-switch-back-to-previous-application ()
   "Switch back to previous application on macOS."
   (interactive)
   (do-applescript
@@ -554,90 +552,21 @@ a dedicated window."
                     (logior (file-modes buffer-file-name) #o100))
     (message (concat "Made " buffer-file-name " executable"))))
 
-;; from http://www.emacswiki.org/emacs/WordCount
-(defun count-words-analysis (start end)
-  "Count how many times each word is used in the region.
- Punctuation is ignored."
-  (interactive "r")
-  (let (words
-        alist_words_compare
-        (formatted "")
-        (overview (call-interactively 'count-words)))
-    (save-excursion
-      (goto-char start)
-      (while (re-search-forward "\\w+" end t)
-        (let* ((word (intern (match-string 0)))
-               (cell (assq word words)))
-          (if cell
-              (setcdr cell (1+ (cdr cell)))
-            (setq words (cons (cons word 1) words))))))
-    (defun alist_words_compare (a b)
-      "Compare elements from an associative list of words count.
-Compare them on count first,and in case of tie sort them alphabetically."
-      (let ((a_key (car a))
-            (a_val (cdr a))
-            (b_key (car b))
-            (b_val (cdr b)))
-        (if (eq a_val b_val)
-            (string-lessp a_key b_key)
-          (> a_val b_val))))
-    (setq words (cl-sort words 'alist_words_compare))
-    (while words
-      (let* ((word (pop words))
-             (name (car word))
-             (count (cdr word)))
-        (setq formatted (concat formatted (format "[%s: %d], " name count)))))
-    (when (call-interactively-p)
-      (if (> (length formatted) 2)
-          (message (format "%s\nWord count: %s"
-                           overview
-                           (substring formatted 0 -2)))
-        (message "No words.")))
-    words))
-
-
-;;; hide mode line
-;; from http://bzg.fr/emacs-hide-mode-line.html
-(defvar-local hidden-mode-line-mode nil)
-(defvar-local hide-mode-line nil)
-(define-minor-mode hidden-mode-line-mode
-  "Minor mode to hide the mode-line in the current buffer."
-  :init-value nil
-  :global t
-  :variable hidden-mode-line-mode
-  :group 'editing-basics
-  (if hidden-mode-line-mode
-      (setq hide-mode-line mode-line-format
-            mode-line-format nil)
-    (setq mode-line-format hide-mode-line
-          hide-mode-line nil))
-  (force-mode-line-update)
-  ;; Apparently force-mode-line-update is not always enough to
-  ;; redisplay the mode-line
-  (redraw-display)
-  (when (and (called-interactively-p 'interactive)
-             hidden-mode-line-mode)
-    (run-with-idle-timer
-     0 nil 'message
-     (concat "Hidden Mode Line Mode enabled.  "
-             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
-
-
 ;;; jump-handlers
-(defvar default-jump-handlers '()
+(defvar default-jump-handlers '(xref-find-definitions)
   "List of jump handlers available in every mode.")
 
 (defvar-local jump-handlers '()
   "List of jump handlers local to this buffer.")
 
-(defvar default-reference-handlers '()
+(defvar default-reference-handlers '(xref-find-references)
   "List of reference handlers available in every mode.")
 
 (defvar-local reference-handlers '()
   "List of reference handlers local to this buffer.")
 
 (defmacro define-jump-handlers (mode &rest handlers)
-  "Defines jump handlers for the given MODE.
+  "Defines jump HANDLERS for the given MODE.
 This defines a variable `jump-handlers-MODE' to which
 handlers can be added, and a function added to MODE-hook which
 sets `jump-handlers' in buffers of that mode."
@@ -657,7 +586,7 @@ sets `jump-handlers' in buffers of that mode."
        (add-hook ',mode-hook ',func))))
 
 (defmacro define-reference-handlers (mode &rest handlers)
-  "Defines reference handlers for the given MODE.
+  "Defines reference HANDLERS for the given MODE.
 This defines a variable `reference-handlers-MODE' to which
 handlers can be added, and a function added to MODE-hook which
 sets `reference-handlers' in buffers of that mode."
@@ -679,12 +608,10 @@ sets `reference-handlers' in buffers of that mode."
 (defun jump-to-definition ()
   "Jump to definition around point using the best tool for this action."
   (interactive)
-  (unless jump-handlers
-    (setq jump-handlers default-jump-handlers))
   (catch 'done
     (let ((old-buffer (current-buffer))
           (old-point (point)))
-      (dolist (-handler jump-handlers)
+      (dolist (-handler (or jump-handlers default-jump-handlers))
         (let ((handler (if (listp -handler) (car -handler) -handler))
               (async (when (listp -handler)
                        (plist-get (cdr -handler) :async))))
@@ -710,13 +637,11 @@ sets `reference-handlers' in buffers of that mode."
 (defun jump-to-reference ()
   "Jump to reference around point using the best tool for this action."
   (interactive)
-  (unless reference-handlers
-    (setq reference-handlers default-reference-handlers))
   (catch 'done
     (let ((old-window (selected-window))
           (old-buffer (current-buffer))
           (old-point (point)))
-      (dolist (-handler reference-handlers)
+      (dolist (-handler (or reference-handlers default-reference-handlers))
         (let ((handler (if (listp -handler) (car -handler) -handler))
               (async (when (listp -handler)
                        (plist-get (cdr -handler) :async))))

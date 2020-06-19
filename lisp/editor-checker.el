@@ -9,8 +9,109 @@
 
 ;;; Code:
 
+(use-package flycheck
+  :ensure t
+  :hook (prog-mode . flycheck-mode)
+  :config
+  (setq flycheck-check-syntax-automatically '(save mode-enabled)
+        flycheck-display-errors-delay 0.25
+        flycheck-emacs-lisp-load-path 'inherit)
+
+  (setq flycheck-flake8rc "~/.config/flake8")
+
+  ;; Custom fringe indicator
+  (when (fboundp 'define-fringe-bitmap)
+    (define-fringe-bitmap 'my-flycheck-fringe-indicator
+      (vector #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00011100
+              #b00111110
+              #b00111110
+              #b00111110
+              #b00011100
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000)))
+  (let ((bitmap 'my-flycheck-fringe-indicator))
+    (flycheck-define-error-level 'error
+      :severity 2
+      :overlay-category 'flycheck-error-overlay
+      :fringe-bitmap bitmap
+      :error-list-face 'flycheck-error-list-error
+      :fringe-face 'flycheck-fringe-error)
+    (flycheck-define-error-level 'warning
+      :severity 1
+      :overlay-category 'flycheck-warning-overlay
+      :fringe-bitmap bitmap
+      :error-list-face 'flycheck-error-list-warning
+      :fringe-face 'flycheck-fringe-warning)
+    (flycheck-define-error-level 'info
+      :severity 0
+      :overlay-category 'flycheck-info-overlay
+      :fringe-bitmap bitmap
+      :error-list-face 'flycheck-error-list-info
+      :fringe-face 'flycheck-fringe-info))
+
+  (defun toggle-flycheck-error-list ()
+    "Toggle flycheck's error list window.
+If the error list is visible, hide it.  Otherwise, show it."
+    (interactive)
+    (-if-let (window (flycheck-get-error-list-window))
+        (quit-window nil window)
+      (flycheck-list-errors)))
+
+  (defun goto-flycheck-error-list ()
+    "Open and go to the error list buffer."
+    (interactive)
+    (if (flycheck-get-error-list-window)
+        (switch-to-buffer flycheck-error-list-buffer)
+      (progn
+        (flycheck-list-errors)
+        (switch-to-buffer-other-window flycheck-error-list-buffer))))
+  :general
+  (tyrant-def
+    "eb" 'flycheck-buffer
+    "ec" 'flycheck-clear
+    "eh" 'flycheck-describe-checker
+    "el" 'toggle-flycheck-error-list
+    "eL" 'goto-flycheck-error-list
+    "es" 'flycheck-select-checker
+    "eS" 'flycheck-set-checker-executable
+    "ev" 'flycheck-verify-setup
+    "ey" 'flycheck-copy-errors-as-kill
+    "ex" 'flycheck-explain-error-at-point
+    "ts" 'flycheck-mode))
+
+(use-package flycheck-posframe
+  :ensure t
+  :custom-face (flycheck-posframe-border-face ((t (:inherit default))))
+  :hook (flycheck-mode . flycheck-posframe-mode)
+  :config
+  (setq flycheck-posframe-border-width 1
+        flycheck-posframe-warning-prefix "⚠ "
+        flycheck-posframe-info-prefix "··· "
+        flycheck-posframe-error-prefix "✕ ")
+
+  (with-eval-after-load 'company
+    ;; Don't display popups if company is open
+    (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p))
+  (with-eval-after-load 'evil
+    ;; Don't display popups while in insert or replace mode, as it can affect
+    ;; the cursor's position or cause disruptive input delays.
+    (add-hook 'flycheck-posframe-inhibit-functions
+              #'evil-insert-state-p)
+    (add-hook 'flycheck-posframe-inhibit-functions
+              #'evil-replace-state-p)))
+
+
 (use-package flyspell
-  :hook (text-mode . flyspell-mode)
   :init
   (setq flyspell-issue-message-flag nil
         flyspell-issue-welcome-flag nil)
@@ -76,6 +177,7 @@ SCOPE can be:
     "Sas" 'add-word-to-dict-session
     "Sb"  'flyspell-buffer
     "Sn"  'flyspell-goto-next-error
+    "Sr"  'flyspell-region
     "tS"  'flyspell-mode))
 
 (use-package flyspell-correct
@@ -84,128 +186,6 @@ SCOPE can be:
   (tyrant-def
     "Sc" 'flyspell-correct-wrapper
     "Ss" 'flyspell-correct-at-point))
-
-
-(use-package flycheck
-  :ensure t
-  :hook (prog-mode . flycheck-mode)
-  :config
-  (setq flycheck-check-syntax-automatically '(save mode-enabled)
-        flycheck-display-errors-delay 0.25
-        flycheck-emacs-lisp-load-path 'inherit)
-
-  (setq flycheck-flake8rc "~/.config/flake8")
-
-  ;; Custom fringe indicator
-  (when (fboundp 'define-fringe-bitmap)
-    (define-fringe-bitmap 'my-flycheck-fringe-indicator
-      (vector #b00000000
-              #b00000000
-              #b00000000
-              #b00000000
-              #b00000000
-              #b00000000
-              #b00000000
-              #b00011100
-              #b00111110
-              #b00111110
-              #b00111110
-              #b00011100
-              #b00000000
-              #b00000000
-              #b00000000
-              #b00000000
-              #b00000000)))
-  (let ((bitmap 'my-flycheck-fringe-indicator))
-    (flycheck-define-error-level 'error
-      :severity 2
-      :overlay-category 'flycheck-error-overlay
-      :fringe-bitmap bitmap
-      :error-list-face 'flycheck-error-list-error
-      :fringe-face 'flycheck-fringe-error)
-    (flycheck-define-error-level 'warning
-      :severity 1
-      :overlay-category 'flycheck-warning-overlay
-      :fringe-bitmap bitmap
-      :error-list-face 'flycheck-error-list-warning
-      :fringe-face 'flycheck-fringe-warning)
-    (flycheck-define-error-level 'info
-      :severity 0
-      :overlay-category 'flycheck-info-overlay
-      :fringe-bitmap bitmap
-      :error-list-face 'flycheck-error-list-info
-      :fringe-face 'flycheck-fringe-info))
-
-  (with-eval-after-load 'popwin
-    (push '("^\\*Flycheck.+\\*$"
-            :regexp t
-            :dedicated t
-            :position bottom
-            :stick t
-            :noselect t)
-          popwin:special-display-config))
-
-  (defun toggle-flycheck-error-list ()
-    "Toggle flycheck's error list window.
-If the error list is visible, hide it.  Otherwise, show it."
-    (interactive)
-    (-if-let (window (flycheck-get-error-list-window))
-        (quit-window nil window)
-      (flycheck-list-errors)))
-
-  (defun goto-flycheck-error-list ()
-    "Open and go to the error list buffer."
-    (interactive)
-    (if (flycheck-get-error-list-window)
-        (switch-to-buffer flycheck-error-list-buffer)
-      (progn
-        (flycheck-list-errors)
-        (switch-to-buffer-other-window flycheck-error-list-buffer))))
-
-  (flycheck-define-checker proselint
-    "A linter for prose."
-    :command ("proselint" source-inplace)
-    :error-patterns
-    ((warning line-start (file-name) ":" line ":" column ": "
-              (id (one-or-more (not (any " "))))
-              (message) line-end))
-    :modes (text-mode org-mode markdown-mode))
-
-  (add-to-list 'flycheck-checkers 'proselint)
-  :general
-  (tyrant-def
-    "eb" 'flycheck-buffer
-    "ec" 'flycheck-clear
-    "eh" 'flycheck-describe-checker
-    "el" 'toggle-flycheck-error-list
-    "eL" 'goto-flycheck-error-list
-    "es" 'flycheck-select-checker
-    "eS" 'flycheck-set-checker-executable
-    "ev" 'flycheck-verify-setup
-    "ey" 'flycheck-copy-errors-as-kill
-    "ex" 'flycheck-explain-error-at-point
-    "ts" 'flycheck-mode))
-
-(use-package flycheck-posframe
-  :ensure t
-  :custom-face (flycheck-posframe-border-face ((t (:inherit default))))
-  :hook (flycheck-mode . flycheck-posframe-mode)
-  :config
-  (setq flycheck-posframe-border-width 1
-        flycheck-posframe-warning-prefix "⚠ "
-        flycheck-posframe-info-prefix "··· "
-        flycheck-posframe-error-prefix "✕ ")
-
-  (with-eval-after-load 'company
-    ;; Don't display popups if company is open
-    (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p))
-  (with-eval-after-load 'evil
-    ;; Don't display popups while in insert or replace mode, as it can affect
-    ;; the cursor's position or cause disruptive input delays.
-    (add-hook 'flycheck-posframe-inhibit-functions
-              #'evil-insert-state-p)
-    (add-hook 'flycheck-posframe-inhibit-functions
-              #'evil-replace-state-p)))
 
 
 (provide 'editor-checker)

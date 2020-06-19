@@ -10,10 +10,11 @@
 
 (use-package dockerfile-mode
   :ensure t
-  :mode ("Dockerfile\\'" . dockerfile-mode))
+  :mode ("Dockerfile\\(?:\\..*\\)?\\'" . dockerfile-mode))
 
 (use-package json-mode
   :ensure t
+  :mode ("\\.json\\'" . json-mode)
   :config
   (add-hook 'json-mode-hook
             (lambda ()
@@ -27,9 +28,13 @@
     "t" 'json-toggle-boolean
     "n" 'json-nullify-sexp))
 
-(use-package web-mode :ensure t)
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'"))
 
-(use-package yaml-mode :ensure t)
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.\\(e?ya?\\|ra\\)ml\\'" . yaml-mode))
 
 
 (provide 'lang-misc)

@@ -10,10 +10,7 @@
 
 (use-package markdown-mode
   :ensure t
-  :mode
-  (("\\.m[k]d" . markdown-mode)
-   ("\\.mdk"   . markdown-mode)
-   ("\\.mdx"   . markdown-mode))
+  :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode)
   :config
   (despot-def markdown-mode-map
     "RET"   'markdown-do
@@ -105,18 +102,17 @@
 
 (use-package markdown-toc
   :ensure t
-  :general
+  :after markdown-mode
+  :config
   (despot-def markdown-mode-map
     "it" 'markdown-toc-generate-toc))
 
 (use-package mmm-mode
   :ensure t
-  :commands mmm-mode
   :hook (markdown-mode . mmm-mode)
   :config
   (defvar markdown-mmm-auto-modes
-    '(
-      ;; in alphabetical order, symbols first then lists
+    '(;; in alphabetical order, symbols first then lists
       "c"
       "c++"
       "css"

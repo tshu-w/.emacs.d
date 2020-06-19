@@ -24,21 +24,13 @@
     :states  'normal
     "o"      'ace-link))
 
-(use-package ace-pinyin
-  :ensure t
-  :init
-  (setq ace-pinyin-use-avy t)
-  (ace-pinyin-global-mode))
-
 (use-package aggressive-indent
   :ensure t
   :hook (emacs-lisp-mode . aggressive-indent-mode)
   :config
   (add-hook 'diff-auto-refine-mode-hook (lambda () (aggressive-indent-mode -1)))
   :general
-  (tyrant-def
-    "tA" 'aggressive-indent-mode
-    "t C-a" 'global-aggressive-indent-mode))
+  (tyrant-def "tA" 'aggressive-indent-mode))
 
 (use-package avy
   :ensure t
@@ -68,8 +60,9 @@
 (use-package cal-china-x
   :ensure t
   :after calendar
+  :commands (cal-china-x-setup)
+  :init (cal-china-x-setup)
   :config
-  (cal-china-x-setup)
   (setq calendar-mark-holidays-flag nil)
   (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
   (setq cal-china-x-general-holidays
@@ -95,13 +88,14 @@
 (use-package counsel-dash
   :ensure t
   :init
-  (add-hook 'python-mode-hook     '(lambda () (setq-local dash-docs-docsets '("Python 3" "SciPy" "NumPy" "Pandas" "Matplotlib"))))
-  (add-hook 'LaTeX-mode-hook      '(lambda () (setq-local dash-docs-docsets '("LaTeX"))))
-  (add-hook 'sh-mode-hook         '(lambda () (setq-local dash-docs-docsets '("Bash"))))
+  (add-hook 'python-mode-hook (lambda () (setq-local dash-docs-docsets '("Python 3" "SciPy" "NumPy" "Pandas" "Matplotlib"))))
+  (add-hook 'LaTeX-mode-hook  (lambda () (setq-local dash-docs-docsets '("LaTeX"))))
+  (add-hook 'sh-mode-hook     (lambda () (setq-local dash-docs-docsets '("Bash"))))
+  (add-hook 'c++-mode-hook    (lambda () (setq-local dash-docs-docsets '("C++"))))
+  :config
   (setq dash-docs-browser-func 'eww)
-  (with-eval-after-load 'ivy
-    (add-to-list 'ivy-re-builders-alist '(counsel-dash-at-point . ivy--regex-ignore-order))
-    (add-to-list 'ivy-re-builders-alist '(counsel-dash . ivy--regex-ignore-order)))
+  (add-to-list 'ivy-re-builders-alist '(counsel-dash-at-point . ivy--regex-ignore-order))
+  (add-to-list 'ivy-re-builders-alist '(counsel-dash . ivy--regex-ignore-order))
   :general
   (tyrant-def
     "d"  '(:ignore t :which-key "docs")
@@ -117,15 +111,15 @@
   :ensure t
   :hook (after-init . direnv-mode))
 
-(use-package dotenv-mode :ensure t)
+(use-package dotenv-mode
+  :ensure t
+  :mode (("\\.env\\.example\\'" . dotenv-mode)
+         ("\\.env\\'" . dotenv-mode)))
 
 (use-package dumb-jump
   :ensure t
   :init
   (setq dumb-jump-selector 'ivy)
-  ;; Since it's dumb, we add it to the end of the default jump handlers. At
-  ;; the time of writing it is the only default jump handler. (gtags remains
-  ;; mode-local)
   (add-to-list 'default-jump-handlers 'dumb-jump-go 'append)
   :general (tyrant-def "jq" 'dumb-jump-quick-look))
 
@@ -134,31 +128,46 @@
   :ensure t
   :int (editorconfig-mode))
 
-(use-package edit-indirect :ensure t)
-
-(use-package expand-region
-  :disabled t
+(use-package smart-input-source
   :ensure t
-  :config
-  (setq expand-region-contract-fast-key "V"
-        expand-region-reset-fast-key "r")
-  :general
-  (tyrant-def "v" '(er/expand-region :which-key "expand region")))
-
-(use-package fcitx
-  :ensure t
-  :after exec-path-from-shell
+  :hook ((after-init . smart-input-source-global-respect-mode)
+         (org-mode . smart-input-source-follow-context-mode)
+         (org-mode . smart-input-source-inline-mode))
   :init
-  (fcitx-aggressive-setup)
-  (fcitx-prefix-keys-turn-off))
+  (setq-default smart-input-source-other "im.rime.inputmethod.Squirrel.Rime")
+  :config
+  (setq-default smart-input-source-inline-tighten-head-rule 0
+                smart-input-source-inline-tighten-tail-rule 0)
+  ;; use fcitx
+  (setq smart-input-source-english "1")
+  (setq-default smart-input-source-other "2")
+  (setq smart-input-source-do-get
+        (lambda () (string-trim (shell-command-to-string "fcitx-remote"))))
+  (setq smart-input-source-do-set
+        (lambda (source)
+          (pcase source
+            ("1" (string-trim (shell-command-to-string "fcitx-remote -c")))
+            ("2" (string-trim (shell-command-to-string "fcitx-remote -o")))))))
 
 (use-package google-translate
+  :disabled t
   :ensure t
   :init
   (setq google-translate-enable-ido-completion t
         google-translate-show-phonetic t
         google-translate-default-source-language "en"
         google-translate-default-target-language "zh-CN")
+
+  ;; https://github.com/atykhonov/google-translate/issues/98#issuecomment-562870854
+  (defun google-translate-json-suggestion@override (json)
+    "Retrieve from JSON (which returns by the `google-translate-request'
+     function) suggestion. This function does matter when translating misspelled
+     word. So instead of translation it is possible to get suggestion."
+    (let ((info (aref json 7)))
+      (if (and info (> (length info) 0))
+          (aref info 1) nil)))
+  (advice-add #'google-translate-json-suggestion :override #'google-translate-json-suggestion@override)
+  :config
   (defun set-google-translate-languages (source target)
     "Set source language for google translate.
      For instance pass En as source for English."
@@ -170,16 +179,6 @@
              source target))
     (setq google-translate-default-source-language (downcase source))
     (setq google-translate-default-target-language (downcase target)))
-
-  ;; https://github.com/atykhonov/google-translate/issues/98#issuecomment-562870854
-  (defun google-translate-json-suggestion@override (json)
-    "Retrieve from JSON (which returns by the `google-translate-request'
-     function) suggestion. This function does matter when translating misspelled
-     word. So instead of translation it is possible to get suggestion."
-    (let ((info (aref json 7)))
-      (if (and info (> (length info) 0))
-          (aref info 1) nil)))
-  (advice-add #'google-translate-json-suggestion :override #'google-translate-json-suggestion@override)
   :general
   (tyrant-def
     "xg"  '(:ignore t :which-key "google-translate")
@@ -218,10 +217,18 @@
 
 (use-package nov
   :ensure t
-  :mode ("\\.epub\\'" . nov-mode))
+  :commands (nov-org-link-follow nov-org-link-store)
+  :mode ("\\.epub\\'" . nov-mode)
+  :init
+  (with-eval-after-load 'org
+    (org-link-set-parameters
+     "nov"
+     :follow 'nov-org-link-follow
+     :store 'nov-org-link-store)))
 
 (use-package pandoc-mode
   :ensure t
+  :hook (pandoc-mode . pandoc-load-default-settings)
   :config
   (defun run-pandoc ()
     "Start pandoc for the buffer and open the menu"
@@ -229,10 +236,14 @@
     ;; only run pandoc-mode if not active, as it resets pandoc--local-settings
     (if (not (bound-and-true-p pandoc-mode)) (pandoc-mode))
     (pandoc-main-hydra/body))
-
-  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
   :general
   (tyrant-def "a C-P" 'run-pandoc))
+
+(use-package pangu-spacing
+  :ensure t
+  :hook (org-mode . pangu-spacing-mode)
+  :config
+  (setq pangu-spacing-real-insert-separtor t))
 
 (use-package pdf-tools
   :ensure t
@@ -273,65 +284,10 @@
   (general-def 'visual pdf-view-mode-map
     "y"        'pdf-view-kill-ring-save))
 
-(use-package request :ensure t)
-
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
   :ensure t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
-
-(use-package rime
-  :ensure t
-  :custom-face
-  (rime-preedit-face ((t nil)))
-  :hook ((after-init . (lambda ()
-                         (when (fboundp 'rime-lib-sync-user-data)
-                           (ignore-errors (rime-sync)))))
-         (kill-emacs . (lambda ()
-                         (when (fboundp 'rime-lib-sync-user-data)
-                           (ignore-errors (rime-sync))))))
-  :init
-  (setq default-input-method "rime"
-        rime-librime-root "~/.emacs.d/var/librime/dist"
-        rime-user-data-dir "~/.emacs.d/etc/rime/"
-        rime-show-candidate 'posframe
-        rime-show-preedit 'inline
-        rime-posframe-properties (list :internal-border-width 2)
-        rime-disable-predicates '(rime-predicate-evil-mode-p
-                                  ;; rime-predicate-after-alphabet-char-p
-                                  rime-predicate-after-ascii-char-p
-                                  +rime-predicate-prog-in-code-p
-                                  rime-predicate-punctuation-after-space-cc-p
-                                  rime-predicate-punctuation-line-begin-p
-                                  rime-predicate-auto-english-p
-                                  rime-predicate-space-after-cc-p
-                                  rime-predicate-org-latex-mode-p
-                                  rime-predicate-org-in-src-block-p))
-  :config
-  (defun +rime-predicate-prog-in-code-p ()
-    "If cursor is in code.
-Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
-    (and (derived-mode-p 'prog-mode 'conf-mode)
-         ;; (not (or (nth 3 (syntax-ppss))
-         ;;          (nth 4 (syntax-ppss))))
-         ;; insert-translated-name
-         (not (and (boundp 'insert-translated-name-active-overlay)
-                   insert-translated-name-active-overlay))))
-  :general
-  (general-def rime-mode-map
-    "M-j"   'rime-force-enable
-    "C-`"   'rime-send-keybinding
-    "C-~"   'rime-send-keybinding
-    "C-S-`" 'rime-send-keybinding))
-
-(use-package smart-input-source
-	:ensure t
-  :hook (text-mode . smart-input-source-mode)
-  :config
-  (setq smart-input-source-english-input-source
-        "com.apple.keylayout.US")
-  (setq smart-input-source-other-input-source
-        "im.rime.inputmethod.Squirrel.Rime"))
 
 (use-package string-inflection
   :ensure t
@@ -346,17 +302,12 @@ Can be used in `rime-disable-predicates' and `rime-inline-predicates'."
     "xiu" 'string-inflection-underscore
     "xiU" 'string-inflection-upcase))
 
-(use-package vlf
-  :ensure t
-  :init (require 'vlf-setup))
-
 (use-package wakatime-mode
   :ensure t
   :hook (prog-mode . wakatime-mode)
-  :init
+  :config
   (setq wakatime-cli-path (executable-find "wakatime")
         wakatime-api-key "3fd63845-ecde-47ea-bd1a-7042221d1046")
-  :config
   (defun wakatime-dashboard ()
     (interactive)
     (browse-url "https://wakatime.com/dashboard"))
