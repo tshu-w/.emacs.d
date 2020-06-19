@@ -29,7 +29,7 @@
   (advice-add 'magit-diff-visit-worktree-file :after #'org-reveal-advice)
 
   (general-def 'normal magit-blame-read-only-mode-map
-    "RET"    'magit-show-commit)
+    "RET"      'magit-show-commit)
 
   (despot-def with-editor-mode-map
     ","      'with-editor-finish
@@ -44,10 +44,9 @@
   :general
   (tyrant-def
     "g"   '(:ignore t :which-key "git")
-    "gs"  'magit-status
-    "gf"  '(:ignore t :which-key "file")
     "gb"  'magit-blame
     "gc"  'magit-clone
+    "gf"  '(:ignore t :which-key "file")
     "gfF" 'magit-find-file
     "gfl" 'magit-log-buffer-file
     "gfd" 'magit-diff
@@ -93,6 +92,7 @@
 
 (use-package transient
   :ensure t
+  :after magit
   :config (transient-bind-q-to-quit))
 
 (use-package browse-at-remote
@@ -101,10 +101,10 @@
 
 (use-package diff-hl
   :ensure t
-  :init
+  :hook ((after-init . global-diff-hl-mode)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config
   (setq diff-hl-side 'right)
-  (global-diff-hl-mode)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   :general
   (tyrant-def "g=" 'diff-hl-diff-goto-hunk)
   (general-def 'normal
@@ -117,8 +117,6 @@
   (defhydra git-timemachine-menu (
                                   :pre (unless (bound-and-true-p git-timemachine-mode)
                                          (call-interactively 'git-timemachine))
-                                  :post (when (bound-and-true-p git-timemachine-mode)
-                                          (git-timemachine-quit))
                                   :hint nil)
     "
 Git Timemachine Transient State
@@ -164,16 +162,33 @@ Git Timemachine Transient State
 
 (use-package gitignore-templates
   :ensure t
-  :general
-  (tyrant-def "gI" 'gitignore-templates-new-file)
+  :config
   (despot-def gitignore-mode-map
-    "i" 'gitignore-templates-insert))
+    "i" 'gitignore-templates-insert)
+  :general
+  (tyrant-def
+    "gI"  '(:ignore t :which-key "gitignore")
+    "gIn" 'gitignore-templates-new-file
+    "gIi" 'gitignore-templates-insert))
 
-(use-package gitattributes-mode :ensure t)
+(use-package gitattributes-mode
+  :ensure t
+  :mode (("/git/attributes\\'" . gitattributes-mode)
+         ("/info/attributes\\'" . gitattributes-mode)
+         ("/\\.gitattributes\\'" . gitattributes-mode)))
 
-(use-package gitconfig-mode :ensure t)
+(use-package gitconfig-mode :ensure t
+  :mode (("/etc/gitconfig\\'" . gitconfig-mode)
+         ("/\\.gitmodules\\'" . gitconfig-mode)
+         ("/git/config\\'" . gitconfig-mode)
+         ("/modules/.*/config\\'" . gitconfig-mode)
+         ("/\\.git/config\\'" . gitconfig-mode)
+         ("/\\.gitconfig\\'" . gitconfig-mode)))
 
-(use-package gitignore-mode :ensure t)
+(use-package gitignore-mode :ensure t
+  :mode (("/git/ignore\\'" . gitignore-mode)
+         ("/info/exclude\\'" . gitignore-mode)
+         ("/\\.gitignore\\'" . gitignore-mode)))
 
 (use-package gist
   :ensure t
@@ -193,13 +208,10 @@ Git Timemachine Transient State
     "ggr" 'gist-region
     "ggR" 'gist-region-private))
 
-(use-package helm :ensure t)
-
-(use-package helm-github-stars
+(use-package github-stars
   :ensure t
-  :commands helm-github-stars
-  :config
-  (setq helm-github-stars-username "tshu-w"))
+  :general
+  (tyrant-def "sg" 'github-stars-browse-url))
 
 
 (provide 'editor-vsc)

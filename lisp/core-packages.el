@@ -17,6 +17,7 @@
 ;; initialize packages
 (unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
   (setq package-enable-at-startup nil)          ; To prevent initializing twice
+  (setq package-check-signature nil)
   (package-initialize))
 
 ;; setup `use-package'
@@ -26,8 +27,7 @@
   (package-install 'use-package))
 
 (eval-when-compile
-  (setq use-package-always-defer  t
-        use-package-expand-minimally t)
+  (setq use-package-expand-minimally t)
   (if init-file-debug
       (setq use-package-verbose t
             use-package-minimum-reported-time 0
@@ -38,14 +38,12 @@
 
   (require 'use-package))
 
-;; required by `use-package'
-;; (use-package diminish)
-;; (use-package bind-key)
-
 (use-package auto-package-update
   :ensure t
+  :commands auto-package-update-now
   :init
-  (defalias 'package-upgrade #'auto-package-update-now)
+  (defalias #'package-upgrade #'auto-package-update-now
+    "Update installed Emacs packages.")
   :config
   (setq auto-package-update-delete-old-versions t
         auto-package-update-hide-results t))
@@ -53,21 +51,22 @@
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :ensure t
+  :defer t
   :init
-  (setq exec-path-from-shell-arguments '("-l")
+  (setq exec-path-from-shell-check-startup-files nil
+        exec-path-from-shell-arguments '("-l")
         exec-path-from-shell-variables '("PATH" "MANPATH"))
   (exec-path-from-shell-initialize))
 
 (use-package benchmark-init
-  :disabled t
   :ensure t
+  :disabled t
   :init (benchmark-init/activate)
   ;; To disable collection of benchmark data after init is done.
   :hook (after-init . benchmark-init/deactivate))
 
 (use-package no-littering
   :ensure t
-  :init (require 'no-littering)
   :config
   (with-eval-after-load 'recentf
     (add-to-list 'recentf-exclude no-littering-var-directory)
@@ -75,6 +74,7 @@
 
 (use-package quelpa
   :ensure t
+  :defer t
   :init
   (setq quelpa-upgrade-p nil
         quelpa-update-melpa-p nil
@@ -83,8 +83,7 @@
 (use-package quelpa-use-package
   :ensure t
   :init
-  (setq quelpa-use-package-inhibit-loading-quelpa t)
-  (require 'quelpa-use-package))
+  (setq quelpa-use-package-inhibit-loading-quelpa t))
 
 (use-package restart-emacs
   :ensure t

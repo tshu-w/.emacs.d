@@ -8,7 +8,7 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "/usr/local/Cellar/mu/")
+(push "/usr/local/Cellar/mu/" load-path)
 
 (use-package mu4e
   :commands mu4e-update-mail-and-index
@@ -32,7 +32,7 @@
         mu4e-change-filenames-when-moving t
         mu4e-completing-read-function 'completing-read
         mu4e-compose-dont-reply-to-self t
-        mu4e-compose-format-flowed t
+        mu4e-compose-format-flowed nil
         mu4e-confirm-quit nil
         mu4e-headers-fields '((:account . 10)
                               ;; (:recipnum . 10)
@@ -170,12 +170,10 @@
     "o"        'ace-link
     "C-o"      'mu4e-view-open-attachment)
   :general
-  (tyrant-def
-    "a m" 'mu4e
-    "a M" 'mu4e-compose-new))
+  (tyrant-def "a m" 'mu4e))
 
 (use-package mu4e-org
-  ;; :hook (mu4e-compose-mode . org-mu4e-compose-org-mode)
+  :commands (org-mu4e-compose-org-mode)
   :config
   (evil-set-initial-state 'mu4e-compose-mode 'normal)
   (setq mu4e-org-link-query-in-headers-mode nil
@@ -183,7 +181,7 @@
 
 (use-package mu4e-alert
   :ensure t
-  :defer 5
+  :defer 10
   :config (mu4e-alert-enable-mode-line-display))
 
 

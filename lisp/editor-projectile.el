@@ -10,10 +10,10 @@
 
 (use-package projectile
   :ensure t
-  :init
+  :hook (after-init . projectile-mode)
+  :config
   (setq projectile-sort-order 'recentf
         projectile-completion-system 'ivy)
-  (projectile-mode)
   :general
   (tyrant-def
     "p"  '(:ignore t :which-key "projects")
@@ -58,7 +58,8 @@
                             (interactive)
                             (call-interactively
                              #'projectile-invalidate-cache)
-                            (ivy-resume)) "refresh list")))
+                            (ivy-resume))
+                      "refresh list")))
   :general
   (tyrant-def
     "/"     '(counsel-projectile-rg :which-key "search project")
