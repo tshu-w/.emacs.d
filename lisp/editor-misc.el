@@ -128,27 +128,6 @@
   :ensure t
   :int (editorconfig-mode))
 
-(use-package smart-input-source
-  :ensure t
-  :hook ((after-init . smart-input-source-global-respect-mode)
-         (org-mode . smart-input-source-follow-context-mode)
-         (org-mode . smart-input-source-inline-mode))
-  :init
-  (setq-default smart-input-source-other "im.rime.inputmethod.Squirrel.Rime")
-  :config
-  (setq-default smart-input-source-inline-tighten-head-rule 0
-                smart-input-source-inline-tighten-tail-rule 0)
-  ;; use fcitx
-  (setq smart-input-source-english "1")
-  (setq-default smart-input-source-other "2")
-  (setq smart-input-source-do-get
-        (lambda () (string-trim (shell-command-to-string "fcitx-remote"))))
-  (setq smart-input-source-do-set
-        (lambda (source)
-          (pcase source
-            ("1" (string-trim (shell-command-to-string "fcitx-remote -c")))
-            ("2" (string-trim (shell-command-to-string "fcitx-remote -o")))))))
-
 (use-package google-translate
   :disabled t
   :ensure t
@@ -288,6 +267,41 @@
   :if (memq window-system '(mac ns))
   :ensure t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
+
+(use-package rime
+  :ensure t
+  :custom-face (rime-preedit-face ((t nil)))
+  :hook ((kill-emacs . (lambda ()
+                         (when (fboundp 'rime-lib-sync-user-data)
+                           (ignore-errors (rime-sync))))))
+  :init
+  (setq default-input-method "rime"
+        rime-librime-root "~/.emacs.d/var/librime/dist"
+        rime-user-data-dir "~/.emacs.d/etc/rime/"
+        rime-show-candidate 'posframe
+        rime-show-preedit 'inline
+        rime-posframe-properties (list :internal-border-width 2))
+  :general
+  (general-def rime-mode-map
+    "M-j"   'rime-force-enable
+    "C-`"   'rime-send-keybinding
+    "C-~"   'rime-send-keybinding
+    "C-S-`" 'rime-send-keybinding))
+
+(use-package smart-input-source
+  :quelpa (smart-input-source :fetcher github :repo "laishulu/emacs-smart-input-source")
+  :hook ((after-init . smart-input-source-global-respect-mode)
+         (text-mode . smart-input-source-follow-context-mode)
+         (text-mode . smart-input-source-inline-mode))
+  :config
+  (setq-default smart-input-source-inline-tighten-head-rule 0
+                smart-input-source-inline-tighten-tail-rule 1)
+  (setq-default smart-input-source-english nil
+                smart-input-source-other default-input-method)
+  (setq smart-input-source-do-get (lambda () current-input-method)
+        smart-input-source-do-set (lambda (source)
+                                    (unless (equal source current-input-method)
+                                      (toggle-input-method)))))
 
 (use-package string-inflection
   :ensure t
