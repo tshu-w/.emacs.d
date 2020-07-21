@@ -21,18 +21,31 @@
 
 (use-package doom-themes
   :ensure t
+  :defer t
   :custom-face
   ;; fix doom-theme diff-hl face
   (diff-hl-change ((t (:background nil))))
   (diff-hl-delete ((t (:background nil))))
   (diff-hl-insert ((t (:background nil)))))
 
-(use-package lab-themes :ensure t)
+(use-package flucui-themes :ensure t :defer t)
 
-(use-package flucui-themes :ensure t)
+(use-package gruvbox-theme :ensure t :defer t)
+
+(use-package kaolin-themes
+  :ensure t
+  :defer t
+  :config
+  (setq kaolin-themes-org-scale-headings nil
+        kaolin-themes-modeline-border nil))
+
+(use-package lab-themes :ensure t :defer t)
+
+(use-package modus-operandi-theme :ensure t :defer t)
 
 (use-package spacemacs-common
   :ensure spacemacs-theme
+  :defer t
   :init
   (setq spacemacs-theme-org-height nil
         spacemacs-theme-comment-bg nil))
@@ -43,9 +56,16 @@
                        doom-opera-light
                        doom-solarized-light
                        doom-tomorrow-day
-                       spacemacs-light
                        flucui-light
+                       gruvbox-light-medium
+                       gruvbox-light-soft
+                       kaolin-breeze
+                       kaolin-light
+                       kaolin-mono-light
+                       kaolin-valley-light
                        lab-light
+                       modus-operandi
+                       spacemacs-light
                        tsdh-light)
   "Light themes to switch.")
 
@@ -69,9 +89,23 @@
                       doom-spacegrey
                       doom-wilmersdorf
                       doom-vibrant
-                      spacemacs-dark
+                      doom-zenburn
                       flucui-dark
-                      lab-dark)
+                      gruvbox-dark-hard
+                      gruvbox-dark-medium
+                      gruvbox-dark-soft
+                      kaolin-aurora
+                      kaolin-blossom
+                      kaolin-bubblegum
+                      kaolin-dark
+                      kaolin-eclipse
+                      kaolin-galaxy
+                      kaolin-mono-dark
+                      kaolin-ocean
+                      kaolin-temple
+                      kaolin-valley-dark
+                      lab-dark
+                      spacemacs-dark)
   "Dark themes to switch.")
 
 (add-hook 'ns-system-appearance-change-functions
