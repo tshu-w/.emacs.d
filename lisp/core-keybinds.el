@@ -52,6 +52,7 @@
       "ad"      'dired
       "ap"      'list-processes
       "aP"      'proced
+      "au"      'undo-tree-visualize
 
       "b"       '(:ignore t :which-key "buffers")
       "bb"      'mode-line-other-buffer
@@ -237,8 +238,8 @@
         "H-x"   'kill-region
         "H-w"   'delete-window
         "H-W"   'delete-frame
-        "H-z"   'undo-fu-only-undo
-        "H-Z"   'undo-fu-only-redo
+        "H-z"   'undo-tree-undo
+        "H-Z"   'undo-tree-redo
         "H-C-F" 'toggle-frame-fullscreen
         "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
         "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode))))))
@@ -447,20 +448,24 @@
                           minibuffer-local-isearch-map)
     "<escape>" 'abort-recursive-edit))
 
-(use-package undo-fu
+(use-package undo-tree
   :ensure t
-  :hook (evil-mode . (lambda ()
-                       (global-undo-tree-mode -1)
-                       (general-def 'normal
-                         "u"    'undo-fu-only-undo
-                         "C-r"  'undo-fu-only-redo))))
+  :init
+  (setq undo-tree-visualizer-timestamps t
+        undo-tree-visualizer-diff t
+        ;; 10X bump of the undo limits to avoid issues with premature
+        ;; Emacs GC which truncages the undo history very aggresively
+        undo-limit 800000
+        undo-strong-limit 12000000
+        undo-outer-limit 120000000)
 
-(use-package undo-fu-session
-  :ensure t
-  :hook (after-init . global-undo-fu-session-mode)
+  (setq undo-tree-auto-save-history t)
   :config
-  (setq undo-fu-session-incompatible-files
-        '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
+  ;; TODO fix upstream
+  (defun undo-tree-restore-default ()
+    "Restore diff window after quit."
+    (setq undo-tree-visualizer-diff t))
+  (advice-add #'undo-tree-visualizer-quit :after #'undo-tree-restore-default))
 
 (use-package evil-textobj-syntax
   :ensure t
