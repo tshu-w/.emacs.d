@@ -233,9 +233,11 @@
     "to" 'pytest-one
     "tO" 'pytest-pdb-one))
 
-;; (use-package lsp-python-ms
-;;   :ensure t
-;;   :hook (python-mode . (lambda () (require 'lsp-python-ms))))
+(use-package lsp-pyright
+  :quelpa (lsp-pyright :fetcher github :repo "emacs-lsp/lsp-pyright")
+  :defer t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright))))
 
 
 (provide 'lang-python)
