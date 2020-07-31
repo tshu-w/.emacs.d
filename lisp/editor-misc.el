@@ -136,16 +136,6 @@
         google-translate-show-phonetic t
         google-translate-default-source-language "en"
         google-translate-default-target-language "zh-CN")
-
-  ;; https://github.com/atykhonov/google-translate/issues/98#issuecomment-562870854
-  (defun google-translate-json-suggestion@override (json)
-    "Retrieve from JSON (which returns by the `google-translate-request'
-     function) suggestion. This function does matter when translating misspelled
-     word. So instead of translation it is possible to get suggestion."
-    (let ((info (aref json 7)))
-      (if (and info (> (length info) 0))
-          (aref info 1) nil)))
-  (advice-add #'google-translate-json-suggestion :override #'google-translate-json-suggestion@override)
   :config
   (defun set-google-translate-languages (source target)
     "Set source language for google translate.
