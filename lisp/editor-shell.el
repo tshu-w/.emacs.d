@@ -17,6 +17,9 @@
         vterm-clear-scrollback-when-clearing t
         vterm-kill-buffer-on-exit t)
 
+  (with-eval-after-load 'writeroom-mode
+    (add-to-list 'writeroom-major-modes-exceptions 'vterm-mode))
+
   (with-eval-after-load 'centered-cursor-mode
     (add-hook 'vterm-mode-hook
               '(lambda ()
