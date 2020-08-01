@@ -278,20 +278,18 @@
     "C-~"   'rime-send-keybinding
     "C-S-`" 'rime-send-keybinding))
 
-(use-package smart-input-source
-  :quelpa (smart-input-source :fetcher github :repo "laishulu/emacs-smart-input-source")
-  :hook ((after-init . smart-input-source-global-respect-mode)
-         (text-mode . smart-input-source-follow-context-mode)
-         (text-mode . smart-input-source-inline-mode))
+(use-package sis
+  :ensure t
+  :hook ((after-init . sis-global-respect-mode)
+         (text-mode . sis-follow-context-mode)
+         (text-mode . sis-inline-mode))
   :config
-  (setq-default smart-input-source-inline-tighten-head-rule 0
-                smart-input-source-inline-tighten-tail-rule 1)
-  (setq-default smart-input-source-english nil
-                smart-input-source-other default-input-method)
-  (setq smart-input-source-do-get (lambda () current-input-method)
-        smart-input-source-do-set (lambda (source)
-                                    (unless (equal source current-input-method)
-                                      (toggle-input-method)))))
+  (sis-ism-lazyman-config nil "rime" 'native)
+
+  (setq sis-prefix-override-keys '("C-c" "C-x" "C-h" "M-SPC"))
+
+  (setq-default sis-inline-tighten-head-rule 0
+                sis-inline-tighten-tail-rule 1))
 
 (use-package string-inflection
   :ensure t
