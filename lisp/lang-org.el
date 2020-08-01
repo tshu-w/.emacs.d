@@ -11,6 +11,9 @@
 (use-package org
   :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
+  :init
+  (setq org-directory "~/Documents/Org/"
+        org-default-notes-file (expand-file-name "inbox.org" org-directory))
   :config
   (add-to-list 'org-modules 'org-tempo t)
   (add-to-list 'org-modules 'org-protocol t)
@@ -25,8 +28,6 @@
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
         org-clocktable-defaults '(:maxlevel 2 :lang "en" :scope file :block nil :wstart 1 :mstart 1 :tstart nil :tend nil :step nil :stepskip0 nil :fileskip0 t :tags nil :match nil :emphasize nil :link t :narrow 40! :indent t :hidefiles nil :formula % :timestamp nil :level nil :tcolumns 1 :formatter nil :properties ("Effort"))
-        org-directory "~/Documents/Org/"
-        org-default-notes-file (expand-file-name "inbox.org" org-directory)
         org-image-actual-width 500
         org-imenu-depth 5
         org-global-properties '(("STYLE_ALL" . "habit")
@@ -791,10 +792,10 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     "Custom function to create journal header."
     (concat
      (pcase org-journal-file-type
-       (`daily "#+TITLE: Daily Journal\n#+STARTUP: showeverything\n\n")
-       (`weekly "#+TITLE: Weekly Journal\n#+STARTUP: folded\n\n")
-       (`monthly "#+TITLE: Monthly Journal\n#+STARTUP: folded\n\n")
-       (`yearly "#+TITLE: Yearly Journal\n#+STARTUP: folded\n\n"))))
+       (`daily "#+title: Daily Journal\n#+STARTUP: showeverything\n\n")
+       (`weekly "#+title: Weekly Journal\n#+STARTUP: folded\n\n")
+       (`monthly "#+title: Monthly Journal\n#+STARTUP: folded\n\n")
+       (`yearly "#+title: Yearly Journal\n#+STARTUP: folded\n\n"))))
   :general
   (tyrant-def
     "oj"  '(:ignore t :which-key "org-journal")
@@ -869,11 +870,58 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
 (use-package org-randomnote
   :ensure t
-  :general (tyrant-def "or" 'org-randomnote))
+  :general (tyrant-def
+             "oR"  '(:ignore t :which-key "random")
+             "oRn" 'org-randomnote))
 
 (use-package org-random-todo
   :ensure t
-  :general (tyrant-def "oR" 'org-random-todo-goto-new))
+  :general (tyrant-def "oRt" 'org-random-todo-goto-new))
+
+(use-package org-roam
+  :ensure t
+  :defer 5
+  :init
+  (setq org-roam-capture-templates
+        '(("d" "default" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "%<%Y%m%d>-${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t))
+        org-roam-capture-ref-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "notes/${slug}"
+           :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+           :unnarrowed t)
+          ("a" "annotation" plain (function org-roam-capture--get-point)
+           "${body}\n"
+           :file-name "${slug}"
+           :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+           :immediate-finish t
+           :unnarrowed t
+           :empty-lines 1))
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-roam-directory org-directory
+        org-roam-tag-sources '(prop all-directories))
+  :config
+  (org-roam-mode)
+  (require 'org-roam-protocol)
+  :general
+  (despot-def org-mode-map
+    "ir" 'org-roam-insert-immediate
+    "iR" 'org-roam-insert)
+  (tyrant-def
+    "or"  '(:ignore t :which-key "roam")
+    "orf" 'org-roam-find-file
+    "ori" 'org-roam-find-index
+    "orm" 'org-roam
+    "orr" 'org-roam-find-ref))
+
+(use-package org-roam-server
+  :ensure t
+  :general
+  (tyrant-def "ors" 'org-roam-server-mode))
 
 (use-package org-ref
   :ensure t
@@ -895,7 +943,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
           bibtex-completion-library-path '("~/Documents/Zotero/storage/")
           bibtex-completion-notes-path "~/Documents/Org/notes/papers/"
           bibtex-completion-notes-template-multiple-files
-          "#+TITLE: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n\n"
+          "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n\n"
           bibtex-completion-pdf-field "file"
           bibtex-dialect 'biblatex))
 
@@ -917,6 +965,96 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
         (message "No PDF found for %s" key))))
 
   (setq org-ref-open-pdf-function '+org-ref-open-pdf-at-point)
+
+  (defun +org-ref-get-bibtex-key-under-cursor ()
+    "Return key under the cursor in org-mode.
+We search forward from point to get a comma, or the end of the link,
+and then backwards to get a comma, or the beginning of the link. that
+delimits the keyword we clicked on. We also strip the text
+properties."
+    (let* ((object (org-element-context))
+           (link-string
+            (progn (org-in-regexp org-link-any-re)
+                   (cadr (split-string
+                          (match-string-no-properties 0) ":")))))
+      ;; you may click on the part before the citations. here we make
+      ;; sure to move to the beginning so you get the first citation.
+      (let ((cp (point)))
+        (goto-char (org-element-property :begin object))
+        (search-forward link-string (org-element-property :end object))
+        (goto-char (match-beginning 0))
+        ;; check if we clicked before the path and move as needed.
+        (unless (< cp (point))
+          (goto-char cp)))
+
+      (if (not (org-element-property :contents-begin object))
+          ;; this means no description in the link
+          (progn
+            ;; we need the link path start and end
+            (let (link-string-beginning link-string-end)
+              (save-excursion
+                (goto-char (org-element-property :begin object))
+                (search-forward link-string nil nil 1)
+                (setq link-string-beginning (match-beginning 0))
+                (setq link-string-end (match-end 0)))
+
+              (let (key-beginning key-end)
+                ;; The key is the text between commas, or the link boundaries
+                (save-excursion
+                  (if (search-forward "," link-string-end t 1)
+                      (setq key-end (- (match-end 0) 1)) ; we found a match
+                    (setq key-end link-string-end))) ; no comma found so take the end
+                ;; and backward to previous comma from point which defines the start character
+                (save-excursion
+                  (if (search-backward "," link-string-beginning 1 1)
+                      (setq key-beginning (+ (match-beginning 0) 1)) ; we found a match
+                    (setq key-beginning link-string-beginning))) ; no match found
+                ;; save the key we clicked on.
+                (let ((bibtex-key
+                       (org-ref-strip-string
+                        (buffer-substring key-beginning key-end))))
+                  (set-text-properties 0 (length bibtex-key) nil bibtex-key)
+                  bibtex-key))))
+
+        ;; link with description and multiple keys
+        (if (and (org-element-property :contents-begin object)
+	               (string-match "," link-string)
+	               (equal (org-element-type object) 'link))
+	          ;; point is not on the link description
+	          (if (not (>= (point) (org-element-property :contents-begin object)))
+	              (let (link-string-beginning link-string-end)
+		              (save-excursion
+		                (goto-char (org-element-property :begin object))
+		                (search-forward link-string nil t 1)
+		                (setq link-string-beginning (match-beginning 0))
+		                (setq link-string-end (match-end 0)))
+
+		              (let (key-beginning key-end)
+		                ;; The key is the text between commas, or the link boundaries
+		                (save-excursion
+		                  (if (search-forward "," link-string-end t 1)
+			                    (setq key-end (- (match-end 0) 1)) ; we found a match
+		                    (setq key-end link-string-end))) ; no comma found so take the end
+		                ;; and backward to previous comma from point which defines the start character
+
+		                (save-excursion
+		                  (if (search-backward "," link-string-beginning 1 1)
+			                    (setq key-beginning (+ (match-beginning 0) 1)) ; we found a match
+		                    (setq key-beginning link-string-beginning))) ; no match found
+		                ;; save the key we clicked on.
+		                (let ((bibtex-key
+			                     (org-ref-strip-string
+			                      (buffer-substring key-beginning key-end))))
+		                  (set-text-properties 0 (length bibtex-key) nil bibtex-key)
+		                  bibtex-key)))
+	            ;; point is on the link description, assume we want the
+	            ;; last key
+	            (let ((last-key (replace-regexp-in-string "[a-zA-Z0-9_-]*," "" link-string)))
+	              last-key))
+	        ;; link with description. assume only one key
+	        link-string))))
+
+  (advice-add 'org-ref-get-bibtex-key-under-cursor :override '+org-ref-get-bibtex-key-under-cursor)
 
   (general-def org-ref-cite-keymap "<tab>" nil)
   :general
