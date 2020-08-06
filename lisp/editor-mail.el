@@ -10,6 +10,16 @@
 
 (push "/usr/local/Cellar/mu/" load-path)
 
+(use-package mu4e-alert
+  :ensure t
+  :commands (mu4e-alert-enable-mode-line-display)
+  :config
+  (setq mu4e-alert-interesting-mail-query
+        (concat
+         "flag:unread "
+         "AND NOT flag:trashed "
+         "AND NOT maildir:/trash/")))
+
 (use-package mu4e
   :commands mu4e-update-mail-and-index
   :init
@@ -21,7 +31,8 @@
         mu4e-update-timer (run-at-time
                            t mu4e-update-interval
                            (lambda () (mu4e-update-mail-and-index
-                                  mu4e-index-update-in-background))))
+                                  mu4e-index-update-in-background)
+                             (mu4e-alert-enable-mode-line-display))))
   :config
   (setq mail-user-agent 'mu4e-user-agent
         message-citation-line-format "On %a, %b %d %Y, %f wrote:\n"
@@ -41,7 +52,7 @@
                               (:from . 22)
                               (:subject))
         mu4e-hide-index-messages t
-        mu4e-use-fancy-chars t
+        mu4e-use-fancy-chars nil
         mu4e-view-prefer-html t
         mu4e-view-show-addresses t
         mu4e-view-show-images t
@@ -178,12 +189,6 @@
   (evil-set-initial-state 'mu4e-compose-mode 'normal)
   (setq mu4e-org-link-query-in-headers-mode nil
         org-mu4e-convert-to-html t))
-
-(use-package mu4e-alert
-  :ensure t
-  :defer 10
-  :config (mu4e-alert-enable-mode-line-display))
-
 
 (provide 'editor-mail)
 ;;; editor-mail.el ends here
