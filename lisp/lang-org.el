@@ -342,12 +342,12 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
             ("r" "Review")
             ("ry" "Yesterday" plain (function (lambda () (org-journal-find-location -1)))
              "** Daily Review\n%?\n")
-            ("rd" "Today" plain (function org-journal-find-location)
+            ("rt" "Today" plain (function org-journal-find-location)
              "** Daily Review\n%?\n")
             ("rw" "Last Week" plain (function (lambda () (org-journal-find-location -7)))
-             "* Weekly Review\n%?\n")
+             "* Week %(format-time-string \"%_V\" (time-add (current-time) (days-to-time -7))) Review\n%?\n")
             ("rW" "This Week" plain (function org-journal-find-location)
-             "* Weekly Review\n%?\n")))
+             "* Week %(format-time-string \"%_V\") Review\n%?\n")))
     :config
     (defun org-capture-goto-link ()
       (org-capture-put :target
@@ -514,6 +514,26 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
   (+org-emphasize org-strike-through ?+)
   (+org-emphasize org-underline ?_)
   (+org-emphasize org-verbatim ?=)
+
+  (defun org-review (key)
+    "Org review with org-journal capture and agenda."
+    (org-capture nil key)
+    (org-agenda nil key)
+    (other-window 1))
+
+  (defhydra org-review (:hint nil :exit t)
+    "
+Org Review Transient state
+[_y_] yesterday    [_w_] last week
+[_t_] today        [_W_] this week"
+    ("y" (lambda () (interactive)
+           (org-review "ry")))
+    ("t" (lambda () (interactive)
+           (org-review "rt")))
+    ("W" (lambda () (interactive)
+           (org-review "rW")))
+    ("w" (lambda () (interactive)
+           (org-review "rw"))))
 
   ;; Export Org to Apple Note
   ;; https://emacs-china.org/t/org-apple-note/10706
@@ -713,7 +733,6 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     "oCo"    'org-clock-out
     "oCr"    'org-resolve-clocks
     "od"     '(find-org-default-notes-file :which-key "default-org-file")
-    "oe"     'org-store-agenda-views
     "of"     '(:ignore t :which-key "feeds")
     "ofi"    'org-feed-goto-inbox
     "ofu"    'org-feed-update-all
@@ -722,7 +741,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     "om"     'org-tags-view
     "oo"     'org-agenda
     "os"     'org-search-view
-    "ot"     'org-todo-list))
+    "ot"     'org-todo-list
+    "ov"     'org-review/body))
 
 (use-package evil-org
   :ensure t
