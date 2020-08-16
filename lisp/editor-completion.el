@@ -243,16 +243,14 @@ around point as the initial input."
 
       (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline))))
 
-(use-package company-quickhelp
+(use-package company-box
   :ensure t
-  :hook (company-mode . company-quickhelp-mode)
+  :hook (company-mode . company-box-mode)
   :config
-  (setq company-quickhelp-delay nil
-        company-quickhelp-use-propertized-text t)
-
-  (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))
-  :general
-  (general-def company-active-map "M-h" #'company-quickhelp-manual-begin))
+  (setq company-box-backends-colors nil
+        company-box-enable-icon nil
+        company-box-scrollbar t
+        company-box-max-candidates 50))
 
 (use-package company-prescient
   :ensure t
@@ -290,12 +288,6 @@ around point as the initial input."
         lsp-signature-auto-activate t
         lsp-signature-function 'lsp--eldoc-message
         lsp-signature-render-documentation nil)
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
-                    :major-modes '(python-mode)
-                    :remote? t
-                    :server-id 'pyls-remote))
   :general
   (tyrant-def
     :keymaps 'lsp-mode-map
