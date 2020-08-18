@@ -10,7 +10,7 @@
 
 (use-package org
   :ensure org-plus-contrib
-  :mode ("\\.org\\'" . org-mode)
+  :defer t
   :init
   (setq org-directory "~/Documents/Org/"
         org-default-notes-file (expand-file-name "inbox.org" org-directory))
@@ -39,14 +39,13 @@
         org-startup-with-inline-images t
         org-track-ordered-property-with-tag t)
 
-  (add-hook 'org-mode-hook '(lambda () (setq truncate-lines nil)))
+  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
   ;; disable <> auto pairing in electric-pair-mode for org-mode
   (add-hook 'org-mode-hook
-            '(lambda ()
-               (setq-local electric-pair-inhibit-predicate
-                           `(lambda (c)
-                              (if (char-equal c ?<) t
-                                (,electric-pair-inhibit-predicate c))))))
+            (lambda ()
+              (setq-local electric-pair-inhibit-predicate
+                          `(lambda (c) (if (char-equal c ?<) t
+                                    (,electric-pair-inhibit-predicate c))))))
 
   (defun find-org-default-notes-file ()
     "Edit the `org-default-notes-file', in the current window."
@@ -60,6 +59,7 @@
     (setq org-agenda-files '("~/Documents/Org"))
     :config
     (add-to-list 'org-modules 'org-habit t)
+
     (setq org-agenda-clockreport-parameter-plist
           '(:maxlevel 3 :scope agenda-with-archives)
           org-agenda-columns-add-appointments-to-effort-sum t
@@ -248,9 +248,12 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     (appt-activate 1))
 
   ;; Org Attach
-  (setq org-attach-archive-delete 'query
-        org-attach-id-dir (concat org-directory "attach/")
-        org-attach-method 'mv)
+  (use-package org-attach
+    :defer t
+    :config
+    (setq org-attach-archive-delete 'query
+          org-attach-id-dir (concat org-directory "attach/")
+          org-attach-method 'mv))
 
   ;; Org Babel
   (use-package ob
@@ -291,9 +294,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     (use-package verb
       :ensure t
       :defer t
-      :init
-      (use-package ob-verb
-        :commands (org-babel-execute:verb)))
+      :init (use-package ob-verb
+              :commands (org-babel-execute:verb)))
     (use-package ob-mermaid
       :ensure t
       :commands (org-babel-execute:mermaid))
@@ -364,7 +366,6 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
           (insert "* " hd "\n"
                   "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
 
-    (evil-set-initial-state 'calibredb-search-mode 'normal)
     (despot-def org-capture-mode-map
       "," 'org-capture-finalize
       "a" 'org-capture-kill
@@ -388,9 +389,6 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
           org-clock-report-include-clocking-task t))
 
   ;; Org Latex
-  (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "xelatex"))
-        org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
-
   (setq org-latex-compiler "xelatex"
         org-latex-packages-alist '(("" "mathspec" t))
         org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -bibtex -f %f"
@@ -411,14 +409,17 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
                        :latex-compiler ("xelatex -interaction nonstopmode -output-directory %o %f")
                        :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O"))))
 
-  ;; Org mac grab
-  (setq org-mac-grab-devonthink-app-p nil
-        org-mac-grab-Acrobat-app-p nil
-        org-mac-grab-Brave-app-p nil
-        org-mac-grab-Evernote-app-p nil
-        org-mac-grab-Firefox-app-p nil
-        org-mac-grab-Mail-app-p nil
-        org-mac-grab-Outlook-app-p nil)
+  ;; Org mac link
+  (use-package org-mac-link
+    :defer t
+    :config
+    (setq org-mac-grab-devonthink-app-p nil
+          org-mac-grab-Acrobat-app-p nil
+          org-mac-grab-Brave-app-p nil
+          org-mac-grab-Evernote-app-p nil
+          org-mac-grab-Firefox-app-p nil
+          org-mac-grab-Mail-app-p nil
+          org-mac-grab-Outlook-app-p nil))
 
   ;; Org Refile
   (setq org-note-files (directory-files-recursively
@@ -491,14 +492,14 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
         (delete-frame))
       res))
 
-  (advice-add #'org-agenda-quit                        :before #'org-save-all-org-buffers)
-  (advice-add #'org-agenda-quit                        :after  #'org-agenda-finalize@after)
-  (advice-add #'org-agenda-exit                        :after  #'org-agenda-finalize@after)
-  (advice-add #'org-agenda-get-restriction-and-command :around #'org-agenda-get-restriction-and-command@around)
-  (advice-add #'org-capture-finalize                   :after  #'org-capture-finalize@after)
-  (advice-add #'org-capture-select-template            :around #'org-capture-select-template@around)
-  (advice-add #'org-refile                             :after  #'org-save-all-org-buffers)
-  (advice-add #'org-switch-to-buffer-other-window      :after  #'supress-frame-splitting)
+  (advice-add 'org-agenda-quit                        :before #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-quit                        :after  #'org-agenda-finalize@after)
+  (advice-add 'org-agenda-exit                        :after  #'org-agenda-finalize@after)
+  (advice-add 'org-agenda-get-restriction-and-command :around #'org-agenda-get-restriction-and-command@around)
+  (advice-add 'org-capture-finalize                   :after  #'org-capture-finalize@after)
+  (advice-add 'org-capture-select-template            :around #'org-capture-select-template@around)
+  (advice-add 'org-refile                             :after  #'org-save-all-org-buffers)
+  (advice-add 'org-switch-to-buffer-other-window      :after  #'supress-frame-splitting)
 
 
   (defmacro +org-emphasize (fname char)
@@ -776,6 +777,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
 (use-package org-journal
   :ensure t
+  :after calendar
   :commands (org-journal-find-location)
   :init
   (setq org-journal-dir          "~/Documents/Org/journals/"
@@ -796,17 +798,12 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
        (`weekly "#+title: Weekly Journal\n#+STARTUP: folded\n\n")
        (`monthly "#+title: Monthly Journal\n#+STARTUP: folded\n\n")
        (`yearly "#+title: Yearly Journal\n#+STARTUP: folded\n\n"))))
-  :general
-  (tyrant-def
-    "oj"  '(:ignore t :which-key "org-journal")
-    "ojj" 'org-journal-new-entry
-    "ojs" 'org-journal-search-forever
-    "ojt" 'org-journal-new-scheduled-entry
-    "ojv" 'org-journal-schedule-view)
+
   (despot-def org-journal-mode-map
     "j"   'org-journal-new-entry
     "n"   'org-journal-next-entry
     "p"   'org-journal-previous-entry)
+
   (despot-def calendar-mode-map
     "r"   'org-journal-read-entry
     "i"   'org-journal-new-date-entry
@@ -815,7 +812,14 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     "s"   'org-journal-search-forever
     "w"   'org-journal-search-calendar-week
     "m"   'org-journal-search-calendar-month
-    "y"   'org-journal-search-calendar-year))
+    "y"   'org-journal-search-calendar-year)
+  :general
+  (tyrant-def
+    "oj"  '(:ignore t :which-key "org-journal")
+    "ojj" 'org-journal-new-entry
+    "ojs" 'org-journal-search-forever
+    "ojt" 'org-journal-new-scheduled-entry
+    "ojv" 'org-journal-schedule-view))
 
 (use-package org-mime
   :disabled t
@@ -881,42 +885,45 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 (use-package org-roam
   :ensure t
   :defer 5
-  :init
+  :config
   (setq org-roam-capture-templates
         '(("d" "default" plain (function org-roam-capture--get-point)
            "%?"
-           :file-name "%<%Y%m%d>-${slug}"
-           :head "#+title: ${title}\n"
+           :file-name "notes/${slug}"
+           :head "#+title: ${title}\n#+created: %<%Y%m%d>\n\n"
            :unnarrowed t))
         org-roam-capture-ref-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            "%?"
            :file-name "notes/${slug}"
-           :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+           :head "#+title: ${title}\n#+roam_key: ${ref}\n\n"
            :unnarrowed t)
           ("a" "annotation" plain (function org-roam-capture--get-point)
            "${body}\n"
-           :file-name "${slug}"
-           :head "#+title: ${title}\n#+roam_key: ${ref}\n"
+           :file-name "notes/${slug}"
+           :head "#+title: ${title}\n#+roam_key: ${ref}\n\n"
            :immediate-finish t
            :unnarrowed t
            :empty-lines 1))
         org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-directory org-directory
+        org-roam-directory (file-truename org-directory)
         org-roam-tag-sources '(prop all-directories))
-  :config
+
   (org-roam-mode)
-  (require 'org-roam-protocol)
-  :general
+
   (despot-def org-mode-map
     "ir" 'org-roam-insert-immediate
     "iR" 'org-roam-insert)
+  :general
   (tyrant-def
     "or"  '(:ignore t :which-key "roam")
+    "orb" 'org-roam-buffer-toggle-display
     "orf" 'org-roam-find-file
     "ori" 'org-roam-find-index
-    "orm" 'org-roam
     "orr" 'org-roam-find-ref))
+
+(use-package org-roam-protocol
+  :after org-protocol)
 
 (use-package org-roam-server
   :ensure t
@@ -925,7 +932,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
 (use-package org-ref
   :ensure t
-  :hook (org-mode . (lambda () (require 'org-ref)))
+  :after (:any org autex bibtex)
   :init
   (setq org-ref-completion-library 'org-ref-ivy-cite)
   :config
@@ -966,98 +973,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
 
   (setq org-ref-open-pdf-function '+org-ref-open-pdf-at-point)
 
-  (defun +org-ref-get-bibtex-key-under-cursor ()
-    "Return key under the cursor in org-mode.
-We search forward from point to get a comma, or the end of the link,
-and then backwards to get a comma, or the beginning of the link. that
-delimits the keyword we clicked on. We also strip the text
-properties."
-    (let* ((object (org-element-context))
-           (link-string
-            (progn (org-in-regexp org-link-any-re)
-                   (cadr (split-string
-                          (match-string-no-properties 0) ":")))))
-      ;; you may click on the part before the citations. here we make
-      ;; sure to move to the beginning so you get the first citation.
-      (let ((cp (point)))
-        (goto-char (org-element-property :begin object))
-        (search-forward link-string (org-element-property :end object))
-        (goto-char (match-beginning 0))
-        ;; check if we clicked before the path and move as needed.
-        (unless (< cp (point))
-          (goto-char cp)))
-
-      (if (not (org-element-property :contents-begin object))
-          ;; this means no description in the link
-          (progn
-            ;; we need the link path start and end
-            (let (link-string-beginning link-string-end)
-              (save-excursion
-                (goto-char (org-element-property :begin object))
-                (search-forward link-string nil nil 1)
-                (setq link-string-beginning (match-beginning 0))
-                (setq link-string-end (match-end 0)))
-
-              (let (key-beginning key-end)
-                ;; The key is the text between commas, or the link boundaries
-                (save-excursion
-                  (if (search-forward "," link-string-end t 1)
-                      (setq key-end (- (match-end 0) 1)) ; we found a match
-                    (setq key-end link-string-end))) ; no comma found so take the end
-                ;; and backward to previous comma from point which defines the start character
-                (save-excursion
-                  (if (search-backward "," link-string-beginning 1 1)
-                      (setq key-beginning (+ (match-beginning 0) 1)) ; we found a match
-                    (setq key-beginning link-string-beginning))) ; no match found
-                ;; save the key we clicked on.
-                (let ((bibtex-key
-                       (org-ref-strip-string
-                        (buffer-substring key-beginning key-end))))
-                  (set-text-properties 0 (length bibtex-key) nil bibtex-key)
-                  bibtex-key))))
-
-        ;; link with description and multiple keys
-        (if (and (org-element-property :contents-begin object)
-	               (string-match "," link-string)
-	               (equal (org-element-type object) 'link))
-	          ;; point is not on the link description
-	          (if (not (>= (point) (org-element-property :contents-begin object)))
-	              (let (link-string-beginning link-string-end)
-		              (save-excursion
-		                (goto-char (org-element-property :begin object))
-		                (search-forward link-string nil t 1)
-		                (setq link-string-beginning (match-beginning 0))
-		                (setq link-string-end (match-end 0)))
-
-		              (let (key-beginning key-end)
-		                ;; The key is the text between commas, or the link boundaries
-		                (save-excursion
-		                  (if (search-forward "," link-string-end t 1)
-			                    (setq key-end (- (match-end 0) 1)) ; we found a match
-		                    (setq key-end link-string-end))) ; no comma found so take the end
-		                ;; and backward to previous comma from point which defines the start character
-
-		                (save-excursion
-		                  (if (search-backward "," link-string-beginning 1 1)
-			                    (setq key-beginning (+ (match-beginning 0) 1)) ; we found a match
-		                    (setq key-beginning link-string-beginning))) ; no match found
-		                ;; save the key we clicked on.
-		                (let ((bibtex-key
-			                     (org-ref-strip-string
-			                      (buffer-substring key-beginning key-end))))
-		                  (set-text-properties 0 (length bibtex-key) nil bibtex-key)
-		                  bibtex-key)))
-	            ;; point is on the link description, assume we want the
-	            ;; last key
-	            (let ((last-key (replace-regexp-in-string "[a-zA-Z0-9_-]*," "" link-string)))
-	              last-key))
-	        ;; link with description. assume only one key
-	        link-string))))
-
-  (advice-add 'org-ref-get-bibtex-key-under-cursor :override '+org-ref-get-bibtex-key-under-cursor)
-
   (general-def org-ref-cite-keymap "<tab>" nil)
-  :general
+
   (despot-def :keymaps '(LaTeX-mode-map org-mode-map)
     "ic"       'org-ref-insert-link)
 

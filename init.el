@@ -36,8 +36,8 @@
             (defun my-minibuffer-exit-hook ()
               (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1))
 
-            (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-            (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
+            (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
+            (add-hook 'minibuffer-exit-hook  'my-minibuffer-exit-hook)))
 
 ;;; Load path
 ;; optimize: force "lisp"" and "site-lisp" at the head to reduce the startup time.
@@ -52,8 +52,8 @@
           (expand-file-name "site-lisp" user-emacs-directory)))
     (normal-top-level-add-subdirs-to-load-path)))
 
-(advice-add #'package-initialize :after #'update-load-path)
-(advice-add #'package-initialize :after #'add-subdirs-to-load-path)
+(advice-add 'package-initialize :after #'update-load-path)
+(advice-add 'package-initialize :after #'add-subdirs-to-load-path)
 
 (update-load-path)
 

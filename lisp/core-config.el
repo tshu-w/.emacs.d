@@ -199,7 +199,7 @@
         (setq buffer-read-only t)
         (buffer-disable-undo)
         (fundamental-mode))))
-  (add-hook 'find-file-hook #'check-large-file)
+  (add-hook 'find-file-hook 'check-large-file)
 
   (defun system-move-file-to-trash (file)
     (call-process "trash" nil nil nil file))

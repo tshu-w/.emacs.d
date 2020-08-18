@@ -9,7 +9,7 @@
 ;;; Code:
 
 (use-package elisp-mode
-  :mode ("\\.el\\'" . emacs-lisp-mode)
+  :defer t
   :config
   ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
   (defun eval-current-form ()
@@ -21,21 +21,10 @@
       (forward-list)
       (call-interactively 'eval-last-sexp)))
 
-  (defun nav-find-elisp-thing-at-point-other-window ()
-    "Find thing under point and go to it another window."
-    (interactive)
-    (let ((symb (variable-at-point)))
-      (if (and symb
-               (not (equal symb 0))
-               (not (fboundp symb)))
-          (find-variable-other-window symb)
-        (find-function-at-point))))
-
   (defun find-ert-test-buffer (ert-test)
     "Return the buffer where ERT-TEST is defined."
     (save-excursion
       (car (find-definition-noselect (ert-test-name ert-test) 'ert-deftest))))
-
   (defun ert-run-tests-buffer ()
     "Run all the tests in the current buffer."
     (interactive)
@@ -49,26 +38,23 @@
     "c"  '(:ignore t :which-key "compile")
     "cc" 'emacs-lisp-byte-compile
     "e"  '(:ignore t :which-key "eval")
-    "e$" 'lisp-state-eval-sexp-end-of-line
     "eb" 'eval-buffer
-    "eC" 'eval-current-form
+    "ec" 'eval-current-form
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "ef" 'eval-defun
-    "el" 'lisp-state-eval-sexp-end-of-line
-    "g"  '(:ignore t :which-key "find-symbol")
-    "gb" 'xref-pop-marker-stack
-    "gG" 'nav-find-elisp-thing-at-point-other-window
     "t"  '(:ignore t :which-key "tests")
     "tb" 'ert-run-tests-buffer
     "tq" 'ert))
 
 (use-package ielm
-  :general
+  :after elisp-mode
+  :config
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "'" 'ielm))
 
 (use-package debug
+  :after elisp-mode
   :config
   (defun elisp-toggle-debug-expr-and-eval-func ()
     "Insert or remove debug expression, evaluate function and save buffer."
@@ -83,12 +69,13 @@
           (newline-and-indent))))
     (eval-defun nil)
     (save-buffer))
-  :general
+
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "d"  '(:ignore t :which-key "debug")
     "dt" 'elisp-toggle-debug-expr-and-eval-func))
 
 (use-package edebug
+  :after elisp-mode
   :config
   (defun edebug-instrument-defun-on ()
     "Toggle on instrumentalisation for the function under `defun'."
@@ -99,7 +86,7 @@
     "Toggle off instrumentalisation for the function under `defun'."
     (interactive)
     (eval-defun nil))
-  :general
+
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "d"  '(:ignore t :which-key "debug")
     "df" 'edebug-instrument-defun-on

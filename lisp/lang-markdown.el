@@ -10,7 +10,7 @@
 
 (use-package markdown-mode
   :ensure t
-  :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode)
+  :defer t
   :config
   (despot-def markdown-mode-map
     "RET"   'markdown-do

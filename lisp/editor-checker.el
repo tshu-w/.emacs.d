@@ -112,6 +112,7 @@ If the error list is visible, hide it.  Otherwise, show it."
 
 
 (use-package flyspell
+  :disabled t
   :init
   (setq flyspell-issue-message-flag nil
         flyspell-issue-welcome-flag nil)
@@ -182,6 +183,7 @@ SCOPE can be:
 
 (use-package flyspell-correct
   :ensure t
+  :disabled t
   :general
   (tyrant-def
     "Sc" 'flyspell-correct-wrapper

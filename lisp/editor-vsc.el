@@ -101,15 +101,19 @@
 
 (use-package diff-hl
   :ensure t
-  :hook ((after-init . global-diff-hl-mode)
-         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :hook (after-init . global-diff-hl-mode)
   :config
   (setq diff-hl-side 'right)
-  :general
-  (tyrant-def "g=" 'diff-hl-diff-goto-hunk)
+
+  (with-eval-after-load 'magit
+    (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
+    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+
   (general-def 'normal
     "[ h" 'diff-hl-previous-hunk
-    "] h" 'diff-hl-next-hunk))
+    "] h" 'diff-hl-next-hunk)
+  :general
+  (tyrant-def "g=" 'diff-hl-diff-goto-hunk))
 
 (use-package git-timemachine
   :ensure t
@@ -171,24 +175,11 @@ Git Timemachine Transient State
     "gIn" 'gitignore-templates-new-file
     "gIi" 'gitignore-templates-insert))
 
-(use-package gitattributes-mode
-  :ensure t
-  :mode (("/git/attributes\\'" . gitattributes-mode)
-         ("/info/attributes\\'" . gitattributes-mode)
-         ("/\\.gitattributes\\'" . gitattributes-mode)))
+(use-package gitattributes-mode :ensure t :defer t)
 
-(use-package gitconfig-mode :ensure t
-  :mode (("/etc/gitconfig\\'" . gitconfig-mode)
-         ("/\\.gitmodules\\'" . gitconfig-mode)
-         ("/git/config\\'" . gitconfig-mode)
-         ("/modules/.*/config\\'" . gitconfig-mode)
-         ("/\\.git/config\\'" . gitconfig-mode)
-         ("/\\.gitconfig\\'" . gitconfig-mode)))
+(use-package gitconfig-mode :ensure t :defer t)
 
-(use-package gitignore-mode :ensure t
-  :mode (("/git/ignore\\'" . gitignore-mode)
-         ("/info/exclude\\'" . gitignore-mode)
-         ("/\\.gitignore\\'" . gitignore-mode)))
+(use-package gitignore-mode :ensure t :defer t)
 
 (use-package gist
   :ensure t
