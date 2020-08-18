@@ -25,20 +25,17 @@
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
-  (setq TeX-view-program-list
-        '(("Preview.app" "open -a Preview.app %o")
-          ("Skim" "open -a Skim.app %o")
-          ("displayline" "displayline -b %n %o %b")
-          ("open" "open %o"))
-        TeX-view-program-selection
-        '((output-dvi "open")
-          (output-pdf "displayline")
-          (output-html "open")))
+  (setq TeX-view-program-list '(("Preview.app" "open -a Preview.app %o")
+                                ("Skim" "open -a Skim.app %o")
+                                ("displayline" "displayline -b %n %o %b")
+                                ("open" "open %o"))
+        TeX-view-program-selection '((output-dvi "open")
+                                     (output-pdf "displayline")
+                                     (output-html "open")))
 
   (defun latex/build ()
     (interactive)
-    (let ((TeX-save-query nil))
-      (TeX-save-document (TeX-master-file)))
+    (TeX-save-document (TeX-master-file))
     (TeX-command latex-build-command 'TeX-master-file -1))
 
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)

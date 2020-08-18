@@ -10,23 +10,24 @@
 
 (use-package vterm
   :ensure t
-  :hook (vterm-mode . (lambda () (setq-local global-hl-line-mode nil)))
   :commands (vterm vterm-other-window)
   :config
   (setq vterm-buffer-name-string "vterm %s"
         vterm-clear-scrollback-when-clearing t
         vterm-kill-buffer-on-exit t)
 
+  (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
+
   (with-eval-after-load 'writeroom-mode
     (add-to-list 'writeroom-major-modes-exceptions 'vterm-mode))
 
   (with-eval-after-load 'centered-cursor-mode
     (add-hook 'vterm-mode-hook
-              '(lambda ()
-                 (add-hook 'after-change-major-mode-hook
-                           (lambda () (centered-cursor-mode 0))
-                           :append
-                           :local))))
+              (lambda ()
+                (add-hook 'after-change-major-mode-hook
+                          (lambda () (centered-cursor-mode 0))
+                          :append
+                          :local))))
 
   (evil-set-initial-state 'vterm-mode 'emacs)
   (general-def 'emacs vterm-mode-map

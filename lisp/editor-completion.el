@@ -231,7 +231,7 @@ around point as the initial input."
               (mapcar #'company-backend-with-yas company-backends)))
 
       (company-enable-yas)
-      (advice-add #'lsp--auto-configure :after #'company-enable-yas)
+      (advice-add 'lsp--auto-configure :after #'company-enable-yas)
 
       (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
         "Enable yasnippet but disable it inline."
