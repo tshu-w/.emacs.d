@@ -22,6 +22,7 @@
 
 (use-package general
   :ensure t
+  :after evil
   :config
   (general-create-definer tyrant-def
     :states '(normal insert visual motion emacs)
@@ -41,218 +42,217 @@
   (general-def universal-argument-map
     "SPC u" 'universal-argument-more)
 
-  (with-eval-after-load 'evil
-    (tyrant-def
-      "SPC"     '(execute-extended-command :which-key "M-x")
-      "TAB"     '(alternate-buffer :whick-key "last buffer")
-      "!"       '(shell-command :which-key "shell cmd")
+  (tyrant-def
+    "SPC"     '(execute-extended-command :which-key "M-x")
+    "TAB"     '(alternate-buffer :whick-key "last buffer")
+    "!"       '(shell-command :which-key "shell cmd")
 
-      "a"       '(:ignore t :which-key "applications")
-      "ac"      'calc-dispatch
-      "ad"      'dired
-      "ap"      'list-processes
-      "aP"      'proced
-      "au"      'undo-tree-visualize
+    "a"       '(:ignore t :which-key "applications")
+    "ac"      'calc-dispatch
+    "ad"      'dired
+    "ap"      'list-processes
+    "aP"      'proced
+    "au"      'undo-tree-visualize
 
-      "b"       '(:ignore t :which-key "buffers")
-      "bb"      'mode-line-other-buffer
-      "bB"      'ibuffer
-      "bd"      'kill-current-buffer
-      "bh"      'switch-to-help-buffer
-      "bm"      'switch-to-messages-buffer
-      "bn"      'next-buffer
-      "bN"      'evil-buffer-new
-      "bp"      'previous-buffer
-      "bs"      'switch-to-scratch-buffer
-      "bu"      'reopen-killed-buffer
-      "bx"      'kill-buffer-and-window
-      "br"      'read-only-mode
-      "b C-d"   'kill-other-buffers
-      "b C-S-d" 'kill-matching-buffers-rudely
+    "b"       '(:ignore t :which-key "buffers")
+    "bb"      'mode-line-other-buffer
+    "bB"      'ibuffer
+    "bd"      'kill-current-buffer
+    "bh"      'switch-to-help-buffer
+    "bm"      'switch-to-messages-buffer
+    "bn"      'next-buffer
+    "bN"      'evil-buffer-new
+    "bp"      'previous-buffer
+    "bs"      'switch-to-scratch-buffer
+    "bu"      'reopen-killed-buffer
+    "bx"      'kill-buffer-and-window
+    "br"      'read-only-mode
+    "b C-d"   'kill-other-buffers
+    "b C-S-d" 'kill-matching-buffers-rudely
 
-      "c"       '(:ignore t :which-key "compile")
-      "cb"      'switch-to-compilation-buffer
-      "cc"      'compile
-      "ck"      'kill-compilation
-      "cr"      'recompile
-      "ct"      'toggle-compilation-window
+    "c"       '(:ignore t :which-key "compile")
+    "cb"      'switch-to-compilation-buffer
+    "cc"      'compile
+    "ck"      'kill-compilation
+    "cr"      'recompile
+    "ct"      'toggle-compilation-window
 
-      "e"       '(:ignore t :which-key "errors")
-      "en"      'next-error
-      "eN"      'previous-error
-      "ep"      'previous-error
+    "e"       '(:ignore t :which-key "errors")
+    "en"      'next-error
+    "eN"      'previous-error
+    "ep"      'previous-error
 
-      "f"       '(:ignore t :which-key "files")
-      "fA"      '(find-alternate-file :which-key "find-file-and-replace-buffer")
-      "fb"      'bookmark-jump
-      "fc"      '(write-file :which-key "copy-file")
-      "fd"      'dired-jump
-      "fD"      'delete-current-buffer-file
-      "fe"      '(:ignore t :which-key "emacs")
-      "fed"     'find-user-init-file
-      "feR"     'load-user-init-file
-      "fel"     'find-library
-      "fE"      'sudo-edit
-      "ff"      'find-file
-      "fl"      'find-file-literally
-      "fo"      'open-file-or-directory-in-external-app
-      "fR"      'rename-current-buffer-file
-      "fs"      'save-buffer
-      "fS"      'evil-write-all
-      "fv"      '(:ignore t :which-key "variables")
-      "fvd"     'add-dir-local-variable
-      "fvf"     'add-file-local-variable
-      "fvp"     'add-file-local-variable-prop-line
+    "f"       '(:ignore t :which-key "files")
+    "fA"      '(find-alternate-file :which-key "find-file-and-replace-buffer")
+    "fb"      'bookmark-jump
+    "fc"      '(write-file :which-key "copy-file")
+    "fd"      'dired-jump
+    "fD"      'delete-current-buffer-file
+    "fe"      '(:ignore t :which-key "emacs")
+    "fed"     'find-user-init-file
+    "feR"     'load-user-init-file
+    "fel"     'find-library
+    "fE"      'sudo-edit
+    "ff"      'find-file
+    "fl"      'find-file-literally
+    "fo"      'open-file-or-directory-in-external-app
+    "fR"      'rename-current-buffer-file
+    "fs"      'save-buffer
+    "fS"      'evil-write-all
+    "fv"      '(:ignore t :which-key "variables")
+    "fvd"     'add-dir-local-variable
+    "fvf"     'add-file-local-variable
+    "fvp"     'add-file-local-variable-prop-line
 
-      "F"       '(:ignore t :which-key "frame")
-      "Fd"      'delete-frame
-      "FD"      'delete-other-frames
-      "Fn"      'make-frame
-      "Fo"      'other-frame
+    "F"       '(:ignore t :which-key "frame")
+    "Fd"      'delete-frame
+    "FD"      'delete-other-frames
+    "Fn"      'make-frame
+    "Fo"      'other-frame
 
-      "n"       '(:ignore t :which-key "narrow")
-      "nr"      'narrow-to-region
-      "np"      'narrow-to-page
-      "nf"      'narrow-to-defun
-      "nw"      'widen
+    "n"       '(:ignore t :which-key "narrow")
+    "nr"      'narrow-to-region
+    "np"      'narrow-to-page
+    "nf"      'narrow-to-defun
+    "nw"      'widen
 
-      "m"       (general-simulate-key "," :which-key "major mode" :state 'normal)
+    "m"       (general-simulate-key "," :which-key "major mode" :state 'normal)
 
-      "h"       '(:ignore t :which-key "help")
-      "ha"      'apropos-command
-      "hb"      'describe-bindings
-      "hc"      'describe-char
-      "hf"      'describe-function
-      "hF"      'describe-face
-      "hi"      'info-lookup-symbol
-      "hk"      'describe-key
-      "hK"      'describe-keymap
-      "h C-K"   'which-key-show-top-level
-      "hm"      'describe-mode
-      "hM"      'man
-      "hp"      'describe-package
-      "ht"      'describe-theme
-      "hv"      'describe-variable
-      "hP"      '(:ignore t :which-key "profiler")
-      "hPs"     'profiler-start
-      "hPk"     'profiler-stop
-      "hPr"     'profiler-report
+    "h"       '(:ignore t :which-key "help")
+    "ha"      'apropos-command
+    "hb"      'describe-bindings
+    "hc"      'describe-char
+    "hf"      'describe-function
+    "hF"      'describe-face
+    "hi"      'info-lookup-symbol
+    "hk"      'describe-key
+    "hK"      'describe-keymap
+    "h C-K"   'which-key-show-top-level
+    "hm"      'describe-mode
+    "hM"      'man
+    "hp"      'describe-package
+    "ht"      'describe-theme
+    "hv"      'describe-variable
+    "hP"      '(:ignore t :which-key "profiler")
+    "hPs"     'profiler-start
+    "hPk"     'profiler-stop
+    "hPr"     'profiler-report
 
-      "j"       '(:ignore t :which-key "jump/join/split")
-      "j="      'indent-region-or-buffer
-      "j+"      'iwb-region-or-buffer
-      "jd"      'dired-jump
-      "jD"      'dired-jump-other-window
-      "jf"      'find-function
-      "ji"      'imenu
-      "jv"      'find-variable
+    "j"       '(:ignore t :which-key "jump/join/split")
+    "j="      'indent-region-or-buffer
+    "j+"      'iwb-region-or-buffer
+    "jd"      'dired-jump
+    "jD"      'dired-jump-other-window
+    "jf"      'find-function
+    "ji"      'imenu
+    "jv"      'find-variable
 
-      "q"       '(:ignore t :which-key "quit")
-      "qd"      'restart-emacs-debug-init
-      "qf"      'kill-frame
-      "qr"      'restart-emacs
-      "qR"      'restart-emacs-restore-desktop
-      "qq"      'save-buffers-kill-terminal
-      "qQ"      'kill-emacs
+    "q"       '(:ignore t :which-key "quit")
+    "qd"      'restart-emacs-debug-init
+    "qf"      'kill-frame
+    "qr"      'restart-emacs
+    "qR"      'restart-emacs-restore-desktop
+    "qq"      'save-buffers-kill-terminal
+    "qQ"      'kill-emacs
 
-      "r"       '(:ignore t :which-key "register/ring")
-      "ry"      'yank-pop
-      "rm"      'pop-to-mark-command
-      "rM"      'evil-show-marks
-      "rr"      'evil-show-registers
+    "r"       '(:ignore t :which-key "register/ring")
+    "ry"      'yank-pop
+    "rm"      'pop-to-mark-command
+    "rM"      'evil-show-marks
+    "rr"      'evil-show-registers
 
-      "s"       '(:ignore t :which-key "search")
-      "sh"      'evil-ex-nohighlight
+    "s"       '(:ignore t :which-key "search")
+    "sh"      'evil-ex-nohighlight
 
-      "t"       '(:ignore t :which-key "toggles")
-      "ta"      'auto-fill-mode
-      "td"      'toggle-debug-on-error
-      "tf"      'display-fill-column-indicator-mode
-      "tF"      'toggle-frame-fullscreen
-      "th"      'global-hl-line-mode
-      "tH"      'font-lock-mode
-      "tk"      'which-key-mode
-      "tl"      'toggle-truncate-lines
-      "tn"      'linum-mode
-      "tt"      'load-theme
-      "tw"      'whitespace-mode
-      "tW"      'toggle-word-wrap
+    "t"       '(:ignore t :which-key "toggles")
+    "ta"      'auto-fill-mode
+    "td"      'toggle-debug-on-error
+    "tf"      'display-fill-column-indicator-mode
+    "tF"      'toggle-frame-fullscreen
+    "th"      'global-hl-line-mode
+    "tH"      'font-lock-mode
+    "tk"      'which-key-mode
+    "tl"      'toggle-truncate-lines
+    "tn"      'linum-mode
+    "tt"      'load-theme
+    "tw"      'whitespace-mode
+    "tW"      'toggle-word-wrap
 
-      "u"       '(universal-argument :which-key "universal arg")
+    "u"       '(universal-argument :which-key "universal arg")
 
-      "x"       '(:ignore t :which-key "text")
-      "xc"      'count-words-region
-      "xd"      '(:ignore t :which-key "delete")
-      "xdl"     'delete-blank-lines
-      "xdw"     'delete-trailing-whitespace
-      "xj"      '(:ignore t :which-key "justification")
-      "xjc"     'set-justification-center
-      "xjf"     'set-justification-full
-      "xjl"     'set-justification-left
-      "xjn"     'set-justification-none
-      "xjr"     'set-justification-right
-      "xt"      '(:ignore t :which-key "transpose")
-      "xtc"     'transpose-chars
-      "xte"     'transpose-sexps
-      "xtl"     'transpose-lines
-      "xtp"     'transpose-paragraphs
-      "xts"     'transpose-sentences
-      "xtw"     'transpose-words
+    "x"       '(:ignore t :which-key "text")
+    "xc"      'count-words-region
+    "xd"      '(:ignore t :which-key "delete")
+    "xdl"     'delete-blank-lines
+    "xdw"     'delete-trailing-whitespace
+    "xj"      '(:ignore t :which-key "justification")
+    "xjc"     'set-justification-center
+    "xjf"     'set-justification-full
+    "xjl"     'set-justification-left
+    "xjn"     'set-justification-none
+    "xjr"     'set-justification-right
+    "xt"      '(:ignore t :which-key "transpose")
+    "xtc"     'transpose-chars
+    "xte"     'transpose-sexps
+    "xtl"     'transpose-lines
+    "xtp"     'transpose-paragraphs
+    "xts"     'transpose-sentences
+    "xtw"     'transpose-words
 
-      "w"       '(:ignore t :which-key "windows")
-      "w TAB"   'alternate-window
-      "w+"      'window-layout-toggle
-      "wb"      'switch-to-minibuffer-window
-      "wd"      'delete-window
-      "wD"      'delete-other-windows
-      "wm"      'toggle-maximize-buffer
-      "wf"      'follow-mode
-      "wh"      'evil-window-left
-      "wH"      'evil-window-move-far-left
-      "wj"      'evil-window-down
-      "wJ"      'evil-window-move-very-bottom
-      "wk"      'evil-window-up
-      "wK"      'evil-window-move-very-top
-      "wl"      'evil-window-right
-      "wL"      'evil-window-move-far-right
-      "wr"      'rotate-windows-forward
-      "wR"      'rotate-windows-backward
-      "ws"      'split-window-vertically
-      "wS"      'split-window-vertically-and-focus
-      "wt"      'toggle-current-window-dedication
-      "wu"      'winner-undo
-      "wU"      'winner-redo
-      "wv"      'split-window-horizontally
-      "wV"      'split-window-horizontally-and-focus
-      "ww"      'other-window)
+    "w"       '(:ignore t :which-key "windows")
+    "w TAB"   'alternate-window
+    "w+"      'window-layout-toggle
+    "wb"      'switch-to-minibuffer-window
+    "wd"      'delete-window
+    "wD"      'delete-other-windows
+    "wm"      'toggle-maximize-buffer
+    "wf"      'follow-mode
+    "wh"      'evil-window-left
+    "wH"      'evil-window-move-far-left
+    "wj"      'evil-window-down
+    "wJ"      'evil-window-move-very-bottom
+    "wk"      'evil-window-up
+    "wK"      'evil-window-move-very-top
+    "wl"      'evil-window-right
+    "wL"      'evil-window-move-far-right
+    "wr"      'rotate-windows-forward
+    "wR"      'rotate-windows-backward
+    "ws"      'split-window-vertically
+    "wS"      'split-window-vertically-and-focus
+    "wt"      'toggle-current-window-dedication
+    "wu"      'winner-undo
+    "wU"      'winner-redo
+    "wv"      'split-window-horizontally
+    "wV"      'split-window-horizontally-and-focus
+    "ww"      'other-window)
 
-    (when (memq window-system '(mac ns))
-      (general-def
-        "H-`"   'other-frame
-        "H-a"   'mark-whole-buffer
-        "H-c"   'evil-yank
-        "H-n"   'make-frame
-        "H-m"   'iconify-frame
-        "H-q"   'save-buffers-kill-terminal
-        "H-v"   'yank
-        "H-x"   'kill-region
-        "H-w"   'delete-window
-        "H-W"   'delete-frame
-        "H-z"   'undo-tree-undo
-        "H-Z"   'undo-tree-redo
-        "H-C-F" 'toggle-frame-fullscreen
-        "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
-        "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode))))))
+  (when (memq window-system '(mac ns))
+    (general-def
+      "H-`"   'other-frame
+      "H-a"   'mark-whole-buffer
+      "H-c"   'evil-yank
+      "H-n"   'make-frame
+      "H-m"   'iconify-frame
+      "H-q"   'save-buffers-kill-terminal
+      "H-v"   'yank
+      "H-x"   'kill-region
+      "H-w"   'delete-window
+      "H-W"   'delete-frame
+      "H-z"   'undo-tree-undo
+      "H-Z"   'undo-tree-redo
+      "H-C-F" 'toggle-frame-fullscreen
+      "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
+      "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode)))))
 
 (use-package evil
   :ensure t
-  :hook ((after-init . evil-mode)
-         (prog-mode . hs-minor-mode))
+  :hook (prog-mode . hs-minor-mode)
   :init
   (setq evil-want-keybinding nil
         evil-ex-search-vim-style-regexp t
         evil-search-module 'evil-search
         evil-magic 'very-magic)
+  (evil-mode)
   :config
   (setq evil-kill-on-visual-paste nil
         evil-move-beyond-eol t
@@ -465,7 +465,7 @@
   (defun undo-tree-restore-default ()
     "Restore diff window after quit."
     (setq undo-tree-visualizer-diff t))
-  (advice-add #'undo-tree-visualizer-quit :after #'undo-tree-restore-default))
+  (advice-add 'undo-tree-visualizer-quit :after #'undo-tree-restore-default))
 
 (use-package evil-textobj-syntax
   :ensure t
@@ -522,9 +522,10 @@
 
 (use-package evil-surround
   :ensure t
-  :hook (emacs-lisp-mode . (lambda () (push '(?` . ("`" . "'")) evil-surround-pairs-alist)))
   :init
   (global-evil-surround-mode)
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (push '(?` . ("`" . "'")) evil-surround-pairs-alist)))
   ;; `s' for surround instead of `subtitute'
   (general-def 'visual evil-surround-mode-map
     "s" 'evil-surround-region

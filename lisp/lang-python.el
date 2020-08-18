@@ -9,30 +9,13 @@
 ;;; Code:
 
 (use-package python
-  :mode ("\\.py[iw]?\\'" . python-mode)
-  :hook (python-mode . (lambda ()
-                         (set (make-local-variable 'comment-inline-offset) 2)))
-  :init
-  (setq-default python-indent-guess-indent-offset nil)
-  (setq python-fill-column 88)
+  :defer t
   :config
-  (defun comint-clear-buffer ()
-    (interactive)
-    (let ((comint-buffer-maximum-size 0))
-      (comint-truncate-buffer)))
+  (setq-default python-indent-guess-indent-offset nil)
 
-  ;; the default in Emacs is M-n
-  (define-key inferior-python-mode-map (kbd "C-j") 'comint-next-input)
-  ;; the default in Emacs is M-p and this key binding overrides
-  ;; default C-k which prevents Emacs users to kill line
-  (define-key inferior-python-mode-map (kbd "C-k") 'comint-previous-input)
-  ;; the default in Emacs is M-r; C-r to search backward old output
-  ;; and should not be changed
-  (define-key inferior-python-mode-map (kbd "C-r") 'comint-history-isearch-backward)
-  ;; this key binding is for recentering buffer in Emacs
-  ;; it would be troublesome if Emacs user
-  ;; Vim users can use this key since they have other key
-  (define-key inferior-python-mode-map (kbd "C-l") 'comint-clear-buffer)
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (set (make-local-variable 'comment-inline-offset) 2)))
 
   ;; inferior-python-mode needs these variables to be defined. The python
   ;; package declares them but does not initialize them.
@@ -101,10 +84,7 @@
   (defun +python-execute-file (arg)
     "Execute a python script in a shell."
     (interactive "P")
-    ;; set compile command to buffer-file-name
-    ;; universal argument put compile buffer in comint mode
-    (let ((universal-argument t)
-          (compile-command
+    (let ((compile-command
            (format "%s %s" python-shell-interpreter
                    (shell-quote-argument
                     (file-name-nondirectory buffer-file-name)))))
@@ -155,8 +135,6 @@
     "cC"    '+python-execute-file-focus
     "d"     '(:ignore t :which-key "debug")
     "db"    '+python-toggle-breakpoint
-    "h"     '(:ignore t :which-key "help")
-    "g"     '(:ignore t :which-key "goto")
     "r"     '(:ignore t :which-key "refactor")
     "ri"    '+python-remove-unused-imports
     "s"     '(:ignore t :which-key "REPL")
@@ -171,21 +149,14 @@
 
 (use-package blacken
   :ensure t
-  :config (setq blacken-fast-unsafe t)
-  :general
+  :after python
+  :config
+  (setq blacken-fast-unsafe t)
   (despot-def python-mode-map "=" 'blacken-buffer))
 
-(use-package cython-mode
-  :ensure t
-  :mode (("\\.pxi\\'" . cython-mode)
-         ("\\.pxd\\'" . cython-mode)
-         ("\\.pyx\\'" . cython-mode)))
+(use-package cython-mode :ensure t :defer t)
 
-(use-package pip-requirements
-  :ensure t
-  :mode (("requirements\\.in" . pip-requirements-mode)
-         ("requirements[^z-a]*\\.txt\\'" . pip-requirements-mode)
-         ("\\.pip\\'" . pip-requirements-mode)))
+(use-package pip-requirements :ensure t :defer t)
 
 (use-package importmagic
   :ensure t
@@ -195,19 +166,22 @@
 
 (use-package py-isort
   :ensure t
-  :general
+  :after python
+  :config
   (despot-def python-mode-map "rI" 'py-isort-buffer))
 
 (use-package conda
   :ensure t
-  :hook (python-mode . (lambda ()
-                         (unless
-                             (file-remote-p default-directory)
-                           conda-env-autoactivate-mode)))
-  :init
+  :after python
+  :config
   (when (memq window-system '(mac ns))
     (setq conda-anaconda-home "/usr/local/anaconda3/"))
-  :general
+
+  (add-hook 'python-mode-hook (lambda ()
+                                (unless
+                                    (file-remote-p default-directory)
+                                  conda-env-autoactivate-mode)))
+
   (despot-def python-mode-map
     "vl" 'conda-env-list
     "va" 'conda-env-activate
@@ -217,9 +191,10 @@
 
 (use-package pytest
   :ensure t
+  :after python
   :config
   (add-to-list 'pytest-project-root-files "setup.cfg")
-  :general
+
   (despot-def python-mode-map
     "t" '(:ignore t :which-key "test")
     "ta" 'pytest-all
@@ -233,11 +208,7 @@
     "to" 'pytest-one
     "tO" 'pytest-pdb-one))
 
-(use-package lsp-pyright
-  :quelpa (lsp-pyright :fetcher github :repo "emacs-lsp/lsp-pyright")
-  :defer t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright))))
+(use-package lsp-pyright :ensure t :after python)
 
 
 (provide 'lang-python)

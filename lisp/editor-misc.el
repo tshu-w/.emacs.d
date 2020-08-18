@@ -60,8 +60,6 @@
 (use-package cal-china-x
   :ensure t
   :after calendar
-  :commands (cal-china-x-setup)
-  :init (cal-china-x-setup)
   :config
   (setq calendar-mark-holidays-flag nil)
   (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
@@ -83,10 +81,14 @@
   (setq calendar-holidays
         (append cal-china-x-important-holidays
                 cal-china-x-general-holidays
-                holiday-other-holidays)))
+                holiday-other-holidays))
+
+  (cal-china-x-setup))
+
 
 (use-package counsel-dash
   :ensure t
+  :disabled t
   :init
   (add-hook 'python-mode-hook (lambda () (setq-local dash-docs-docsets '("Python 3" "SciPy" "NumPy" "Pandas" "Matplotlib"))))
   (add-hook 'LaTeX-mode-hook  (lambda () (setq-local dash-docs-docsets '("LaTeX"))))
@@ -105,16 +107,14 @@
 
 (use-package devdocs
   :ensure t
+  :disabled t
   :general (tyrant-def "db" 'devdocs-search))
 
 (use-package direnv
   :ensure t
   :hook (after-init . direnv-mode))
 
-(use-package dotenv-mode
-  :ensure t
-  :mode (("\\.env\\.example\\'" . dotenv-mode)
-         ("\\.env\\'" . dotenv-mode)))
+(use-package dotenv-mode :ensure t :defer t)
 
 (use-package dumb-jump
   :ensure t
@@ -126,7 +126,7 @@
 (use-package editorconfig
   :disabled t
   :ensure t
-  :int (editorconfig-mode))
+  :init (editorconfig-mode))
 
 (use-package google-translate
   :disabled t
@@ -190,10 +190,9 @@
   :mode ("\\.epub\\'" . nov-mode)
   :init
   (with-eval-after-load 'org
-    (org-link-set-parameters
-     "nov"
-     :follow 'nov-org-link-follow
-     :store 'nov-org-link-store)))
+    (org-link-set-parameters "nov"
+                             :follow 'nov-org-link-follow
+                             :store 'nov-org-link-store)))
 
 (use-package pandoc-mode
   :ensure t
@@ -216,9 +215,8 @@
 
 (use-package pdf-tools
   :ensure t
-  :mode (("\\.pdf\\'" . pdf-view-mode))
+  :defer t
   :config
-  (add-hook 'pdf-view-mode-hook (lambda () (pdf-view-midnight-minor-mode)))
   (pdf-tools-install :no-query)
   (setq pdf-view-use-scaling t)
 
@@ -260,18 +258,19 @@
 
 (use-package rime
   :ensure t
+  :defer t
   :custom-face (rime-preedit-face ((t nil)))
   :hook ((kill-emacs . (lambda ()
                          (when (fboundp 'rime-lib-sync-user-data)
                            (ignore-errors (rime-sync))))))
-  :init
+  :config
   (setq default-input-method "rime"
-        rime-librime-root "~/.emacs.d/var/librime/dist"
+        rime-librime-root "~/.emacs.d/etc/librime/dist"
         rime-user-data-dir "~/.emacs.d/etc/rime/"
         rime-show-candidate 'posframe
         rime-show-preedit 'inline
         rime-posframe-properties (list :internal-border-width 2))
-  :general
+
   (general-def rime-mode-map
     "M-j"   'rime-force-enable
     "C-`"   'rime-send-keybinding

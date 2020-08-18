@@ -13,8 +13,9 @@
 
 (defun load-theme@after (&rest r)
   "Run `after-load-theme-hook'."
+  (ignore r)
   (run-hooks 'after-load-theme-hook))
-(advice-add #'load-theme :after #'load-theme@after)
+(advice-add 'load-theme :after #'load-theme@after)
 
 (add-hook 'after-load-theme-hook
           (lambda () (set-face-attribute 'fringe nil :background nil)))

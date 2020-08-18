@@ -35,7 +35,7 @@
   ;; fix persp and ivy-posframe conflit
   (defun persp-load-state-from-file@after (&optional _ _ _)
     (posframe-delete-all))
-  (advice-add #'persp-load-state-from-file :after #'persp-load-state-from-file@after)
+  (advice-add 'persp-load-state-from-file :after #'persp-load-state-from-file@after)
 
   (defun restart-emacs-resume-layouts (&optional args)
     "Restart emacs and resume layouts."
@@ -211,8 +211,8 @@
     (ivy-set-actions 'ivy-persp-switch-project
                      '(("d" ivy-persp-switch-project-open-dired "dired"))))
 
-  (advice-add #'persp-activate :before #'save-last-selected-perspective)
-  (advice-add #'persp-switch   :after  #'persp-switch@after)
+  (advice-add 'persp-activate :before #'save-last-selected-perspective)
+  (advice-add 'persp-switch   :after  #'persp-switch@after)
 
   (with-eval-after-load 'which-key
     ;; rename the switch-to-persp-1 entry, to 1..10

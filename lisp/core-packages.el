@@ -40,9 +40,9 @@
 
 (use-package auto-package-update
   :ensure t
-  :commands auto-package-update-now
+  :defer t
   :init
-  (defalias #'package-upgrade #'auto-package-update-now
+  (defalias 'package-upgrade #'auto-package-update-now
     "Update installed Emacs packages.")
   :config
   (setq auto-package-update-delete-old-versions t
