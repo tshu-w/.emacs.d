@@ -208,7 +208,29 @@
     "to" 'pytest-one
     "tO" 'pytest-pdb-one))
 
-(use-package lsp-pyright :ensure t :after python)
+(use-package lsp-pyright
+  :ensure t
+  :after python
+  :config
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
+                                                            (cons "pyright-langserver"
+                                                                  lsp-pyright-langserver-command-args)))
+                    :major-modes '(python-mode)
+                    :remote? t
+                    :server-id 'pyright-remote
+                    :multi-root lsp-pyright-multi-root
+                    :initialization-options (lambda () (ht-merge (lsp-configuration-section "pyright")
+                                                            (lsp-configuration-section "python")))
+                    :initialized-fn (lambda (workspace)
+                                      (with-lsp-workspace workspace
+                                        (lsp--set-configuration
+                                         (make-hash-table :test 'equal))))
+                    :download-server-fn (lambda (_client callback error-callback _update?)
+                                          (lsp-package-ensure 'pyright callback error-callback))
+                    :notification-handlers (lsp-ht ("pyright/beginProgress" 'lsp-pyright--begin-progress-callback)
+                                                   ("pyright/reportProgress" 'lsp-pyright--report-progress-callback)
+                                                   ("pyright/endProgress" 'lsp-pyright--end-progress-callback)))))
 
 
 (provide 'lang-python)
