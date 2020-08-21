@@ -377,7 +377,8 @@ containing the buffer."
           (dolist (window-config
                    (append (persp-parameter 'gui-eyebrowse-window-configs persp)
                            (persp-parameter 'term-eyebrowse-window-configs persp)))
-            (eyebrowse--rename-window-config-buffers window-config old new)))))
+            (eyebrowse--rename-window-config-buffers window-config old new)))
+        new))
 
     (when (ad-find-advice 'rename-buffer 'around 'eyebrowse-fixup-window-configs)
       (ad-disable-advice 'rename-buffer 'around 'eyebrowse-fixup-window-configs)
