@@ -33,7 +33,7 @@
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
-        org-log-done t
+        org-log-done 'time
         org-log-into-drawer t
         org-startup-indented t
         org-startup-with-inline-images t
@@ -82,7 +82,7 @@
           org-agenda-todo-ignore-scheduled 'all
           org-agenda-todo-ignore-deadlines 'far
           org-agenda-time-grid nil
-          org-deadline-warning-days 7
+          org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
           org-habit-graph-column 75
@@ -645,7 +645,8 @@ Org Review Transient state
     "p"     'org-priority
     "s"     '(:ignore t :which-key "trees/subtrees")
     "sa"    'org-toggle-archive-tag
-    "sA"    'org-archive-subtree
+    "sA"    'org-archive-to-archive-sibling
+    "s$"    'org-archive-subtree-default
     "sb"    'org-tree-to-indirect-buffer
     "sd"    'org-cut-subtree
     "sh"    'org-promote-subtree
