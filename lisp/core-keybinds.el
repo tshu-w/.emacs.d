@@ -477,7 +477,9 @@
   :ensure t
   :init
   (setq evil-collection-company-use-tng nil)
-  (evil-collection-init))
+  (evil-collection-init)
+  (add-hook 'org-agenda-mode-hook (lambda ()
+                                    (evil-collection-unimpaired-mode -1))))
 
 (use-package evil-commentary
   :ensure t
