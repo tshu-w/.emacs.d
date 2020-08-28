@@ -303,6 +303,62 @@
     "xiu" 'string-inflection-underscore
     "xiU" 'string-inflection-upcase))
 
+(use-package xwidget
+  :if (featurep 'xwidget-internal)
+  :defer t
+  :init
+  ;; (setq browse-url-browser-function 'xwidget-webkit-browse-url)
+  :config
+  (defun xwidget-webkit ()
+    "Switch to xwidget webkit buffer or open https://google.com."
+    (interactive)
+    (if (buffer-live-p xwidget-webkit-last-session-buffer)
+        (switch-to-buffer xwidget-webkit-last-session-buffer)
+      (xwidget-webkit-browse-url "https://google.com")))
+
+  (defun xwidget-webkit-browse-url@after (url &optional new-session)
+    "Switch to xwidget webkit buffer after open URL."
+    (ignore url new-session)
+    (switch-to-buffer xwidget-webkit-last-session-buffer))
+  (advice-add 'xwidget-webkit-browse-url :after #'xwidget-webkit-browse-url@after)
+
+  (defun xwidget-webkit-browse-with-external-browser (&optional url)
+    "Browse the current URL with an external browser.
+The browser to used is specified by the
+`browse-url-secondary-browser-function' variable."
+    (interactive)
+    (funcall browse-url-secondary-browser-function
+             (or url (xwidget-webkit-current-url))))
+
+  (with-eval-after-load 'writeroom-mode
+    (add-to-list 'writeroom-major-modes-exceptions 'xwidget-webkit-mode))
+
+  (general-def 'normal xwidget-webkit-mode-map
+    "&" 'xwidget-webkit-browse-with-external-browser)
+  :general
+  (tyrant-def "ab" 'xwidget-webkit))
+
+(use-package xwwp-full
+  :quelpa (xwwp :fetcher github :repo "BlueFlo0d/xwwp" :files ("*.el" "*.css" "*.js"))
+  :defer t
+  :init
+  (with-eval-after-load 'xwidget (require 'xwwp-full))
+  :config
+  (setq xwwp-follow-link-completion-system 'ivy
+        xwwp-ace-label-style '(("z-index" . "2147483647")
+                               ("color" . "red")
+                               ("opacity" . "0.7")
+                               ("background-color" . "yellow")
+                               ("font-family" . "monospace")
+                               ("font-size" . "1em")))
+
+  (general-def 'normal xwidget-webkit-mode-map
+    "H-c" 'xwidget-webkit-copy-selection-as-kill
+    "o"   'xwwp-ace-toggle
+    "O"   'xwwp-follow-link)
+  :general
+  (tyrant-def "aB" 'xwwp))
+
 (use-package winum
   :ensure t
   :hook (after-init . winum-mode)
