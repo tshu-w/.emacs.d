@@ -156,10 +156,6 @@
     "qQ"      'kill-emacs
 
     "r"       '(:ignore t :which-key "register/ring")
-    "ry"      'yank-pop
-    "rm"      'pop-to-mark-command
-    "rM"      'evil-show-marks
-    "rr"      'evil-show-registers
 
     "s"       '(:ignore t :which-key "search")
     "sh"      'evil-ex-nohighlight

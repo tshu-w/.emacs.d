@@ -55,6 +55,8 @@
   :general
   (tyrant-def
     "bb" 'ivy-switch-buffer
+    "rv" 'ivy-push-view
+    "rV" 'ivy-pop-view
     "rl" 'ivy-resume))
 
 (use-package ivy-hydra
@@ -102,6 +104,8 @@
   :ensure t
   :hook (after-init . counsel-mode)
   :config
+  (setq ivy-height-alist '((counsel-evil-registers . 20)))
+
   (defun counsel-rg-region-or-symbol ()
     "Use `counsel-rg' to search for
     the selected region or the symbol around point in the current
@@ -125,6 +129,9 @@
   (tyrant-def
     "fr" 'counsel-recentf
     "fL" 'counsel-locate
+    "ry" 'counsel-yank-pop
+    "rm" 'counsel-evil-marks
+    "rr" 'counsel-evil-registers
     "sf" 'counsel-rg
     "sF" 'counsel-rg-region-or-symbol))
 
