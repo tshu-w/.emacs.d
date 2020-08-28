@@ -74,11 +74,10 @@
 
 (use-package quelpa
   :ensure t
-  :defer t
+  :commands quelpa-read-cache
   :init
   (setq quelpa-upgrade-p nil
-        quelpa-update-melpa-p nil
-        quelpa-cache nil))
+        quelpa-update-melpa-p nil))
 
 (use-package quelpa-use-package
   :ensure t
