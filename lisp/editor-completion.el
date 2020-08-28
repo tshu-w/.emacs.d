@@ -215,6 +215,8 @@ around point as the initial input."
         company-dabbrev-char-regexp "[A-Za-z-_\\.'/]"
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
   :config
+  (add-hook 'text-mode-hook (lambda () (add-to-list 'company-backends 'company-ispell t)))
+
   ;; `yasnippet' integration
   (with-no-warnings
     (with-eval-after-load 'yasnippet
