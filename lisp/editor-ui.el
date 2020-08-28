@@ -20,6 +20,12 @@
 (add-hook 'after-load-theme-hook
           (lambda () (set-face-attribute 'fringe nil :background nil)))
 
+(add-hook 'after-load-theme-hook
+          (lambda ()
+            ;; (set-face-italic-p 'italic nil)
+            (set-face-italic font-lock-constant-face nil)
+            (set-face-italic font-lock-keyword-face nil)))
+
 (use-package doom-themes
   :ensure t
   :defer t
