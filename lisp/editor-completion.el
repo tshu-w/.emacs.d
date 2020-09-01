@@ -220,6 +220,7 @@ around point as the initial input."
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
         company-dabbrev-char-regexp "[A-Za-z-_\\.'/]"
+        company-dabbrev-ignore-buffers "\\`[ *]\\|\\.pdf\\'"
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
   :config
   (add-hook 'text-mode-hook (lambda () (add-to-list 'company-backends 'company-ispell t)))
