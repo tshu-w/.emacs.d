@@ -217,8 +217,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       "i"  '(:ignore t :which-key "insert")
       "ie" 'org-agenda-set-effort
       "ip" 'org-agenda-set-property
-      "iP" 'org-agenda-priority
       "it" 'org-agenda-set-tags
+      "p"  'org-agenda-priority
       "s"  '(:ignore t :which-key "trees/subtrees")
       "sr" 'org-agenda-refile)
 
