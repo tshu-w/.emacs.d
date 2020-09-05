@@ -216,15 +216,18 @@ around point as the initial input."
         company-selection-wrap-around t
         company-show-numbers t
         company-tooltip-align-annotations t
-        company-transformers '(company-sort-by-occurrence)
+        company-transformers '(company-sort-prefer-same-case-prefix)
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
         company-dabbrev-char-regexp "[A-Za-z-_\\.'/]"
         company-dabbrev-ignore-buffers "\\`[ *]\\|\\.pdf\\'"
+        company-backends '(company-files
+                           company-capf
+                           (company-dabbrev-code company-keywords)
+                           company-dabbrev
+                           company-ispell)
         company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
   :config
-  (add-hook 'text-mode-hook (lambda () (add-to-list 'company-backends 'company-ispell t)))
-
   ;; `yasnippet' integration
   (with-no-warnings
     (with-eval-after-load 'yasnippet
@@ -241,7 +244,6 @@ around point as the initial input."
               (mapcar #'company-backend-with-yas company-backends)))
 
       (company-enable-yas)
-      (advice-add 'lsp--auto-configure :after #'company-enable-yas)
 
       (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
         "Enable yasnippet but disable it inline."
@@ -269,8 +271,8 @@ around point as the initial input."
 (use-package company-try-hard
   :ensure t
   :general
-  (general-def "C-'" 'company-try-hard)
-  (general-def company-active-map "C-'" 'company-try-hard))
+  (general-def "C-;" 'company-try-hard)
+  (general-def company-active-map "C-;" 'company-try-hard))
 
 (use-package lsp-mode
   :ensure t
@@ -298,6 +300,11 @@ around point as the initial input."
         lsp-signature-auto-activate t
         lsp-signature-function 'lsp--eldoc-message
         lsp-signature-render-documentation nil)
+
+  (add-hook 'lsp-completion-mode-hook
+            (lambda ()
+              (when (eq (car company-backends) 'company-capf)
+                (setq company-backends (cdr company-backends)))))
   :general
   (tyrant-def
     :keymaps 'lsp-mode-map
