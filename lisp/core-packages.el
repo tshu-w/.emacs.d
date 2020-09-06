@@ -10,9 +10,10 @@
 
 ;;; Code:
 
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org"   . "https://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/")))
+(setq package-archives '(("melpa"        . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("org"          . "https://orgmode.org/elpa/")
+                         ("gnu"          . "https://elpa.gnu.org/packages/")))
 
 ;; initialize packages
 (unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
