@@ -156,7 +156,19 @@
 
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
-  :config (setq dired-dwim-target t))
+  :config
+  (setq dired-dwim-target t)
+
+  (define-advice dired-do-print (:override (&optional _))
+    "Show/hide dotfiles."
+    (interactive)
+    (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p)
+        (progn
+          (setq-local dired-dotfiles-show-p nil)
+          (dired-mark-files-regexp "^\\.")
+          (dired-do-kill-lines))
+      (revert-buffer)
+      (setq-local dired-dotfiles-show-p t))))
 
 (use-package electric
   :hook (after-init . electric-pair-mode))
@@ -177,11 +189,13 @@
 
 (use-package files
   :init
-  (setq make-backup-files nil ;; don't create backup~ files
+  (setq auto-save-default t
+        auto-save-file-name-transforms `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
+                                          ,(no-littering-expand-var-file-name "auto-save/") t))
+        auto-save-visited-interval 60
+        make-backup-files nil        ;; don't create backup~ files
         revert-without-query '(".*") ;; disable revert query
-        auto-save-default t
-        auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+        enable-remote-dir-locals t)
   :config
   ;; Prompt to open file literally if large file.
   (defun check-large-file ()
@@ -214,6 +228,23 @@
   (add-to-list 'find-file-not-found-functions 'make-directory-maybe nil #'eq))
 
 (use-package imenu :commands imenu)
+
+(use-package newcomment
+  :commands comment-or-uncomment
+  :config
+  (setq comment-auto-fill-only-comments t)
+
+  (defun comment-or-uncomment ()
+    (interactive)
+    (if (region-active-p)
+        (comment-or-uncomment-region
+         (region-beginning) (region-end))
+      (if (save-excursion
+            (beginning-of-line)
+            (looking-at "\\s-*$"))
+          (call-interactively 'comment-dwim)
+        (comment-or-uncomment-region
+         (line-beginning-position) (line-end-position))))))
 
 (use-package recentf
   :hook (after-init . recentf-mode)
@@ -252,6 +283,9 @@
         save-interprogram-paste-before-kill t
         eval-expression-print-length nil
         eval-expression-print-level nil))
+
+(use-package so-long
+  :hook (after-init . global-so-long-mode))
 
 (use-package subword
   :hook (prog-mode . subword-mode))
