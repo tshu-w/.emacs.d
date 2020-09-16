@@ -187,6 +187,7 @@
     "xjl"     'set-justification-left
     "xjn"     'set-justification-none
     "xjr"     'set-justification-right
+    "xs"      'text-scale-adjust
     "xt"      '(:ignore t :which-key "transpose")
     "xtc"     'transpose-chars
     "xte"     'transpose-sexps
@@ -221,6 +222,8 @@
     "wv"      'split-window-horizontally
     "wV"      'split-window-horizontally-and-focus
     "ww"      'other-window)
+
+  (general-def [remap comment-dwim] 'comment-or-uncomment)
 
   (when (memq window-system '(mac ns))
     (general-def
@@ -478,6 +481,7 @@
                                     (evil-collection-unimpaired-mode -1))))
 
 (use-package evil-commentary
+  :disabled t
   :ensure t
   :hook (after-init . evil-commentary-mode))
 
@@ -486,6 +490,7 @@
   :hook (after-init . evil-indent-plus-default-bindings))
 
 (use-package evil-lion
+  :disabled t
   :ensure t
   :hook (after-init . evil-lion-mode))
 
@@ -497,8 +502,11 @@
     "C-c -"   'evil-numbers/dec-at-pt))
 
 (use-package evil-matchit
-  :ensure t
-  :hook ((prog-mode LaTeX-mode) . turn-on-evil-matchit-mode))
+  :quelpa (evil-matchit :fetcher github :repo "redguardtoo/evil-matchit")
+  :hook ((prog-mode LaTeX-mode) . turn-on-evil-matchit-mode)
+  :config
+  (setq evilmi-forward-chars (string-to-list "[{(<")
+        evilmi-backward-chars (string-to-list "]})>")))
 
 (use-package evil-pinyin
   :ensure t
