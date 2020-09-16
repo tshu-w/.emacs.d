@@ -27,17 +27,19 @@
           ("SOMEDAY" . (:foreground "plum" :weight bold))))
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
-        org-clocktable-defaults '(:maxlevel 2 :lang "en" :scope file :block nil :wstart 1 :mstart 1 :tstart nil :tend nil :step nil :stepskip0 nil :fileskip0 t :tags nil :match nil :emphasize nil :link t :narrow 40! :indent t :hidefiles nil :formula % :timestamp nil :level nil :tcolumns 1 :formatter nil :properties ("Effort"))
-        org-image-actual-width 500
-        org-imenu-depth 5
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
+        org-image-actual-width 500
+        org-imenu-depth 5
         org-log-done 'time
         org-log-into-drawer t
+        org-startup-folded 'content
         org-startup-indented t
         org-startup-with-inline-images t
-        org-track-ordered-property-with-tag t)
+        org-track-ordered-property-with-tag t
+        org-use-property-inheritance t
+        org-use-sub-superscripts "{}")
 
   (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
   ;; disable <> auto pairing in electric-pair-mode for org-mode
@@ -68,7 +70,7 @@
           org-agenda-persistent-filter t
           org-agenda-restore-windows-after-quit t
           org-agenda-skip-additional-timestamps-same-entry t
-          org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled
+          org-agenda-skip-deadline-prewarning-if-scheduled t
           org-agenda-skip-scheduled-if-done t
           org-agenda-skip-deadline-if-done t
           org-agenda-skip-timestamp-if-done t
@@ -253,7 +255,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     :config
     (setq org-attach-archive-delete 'query
           org-attach-id-dir (concat org-directory "attach/")
-          org-attach-method 'mv))
+          org-attach-method 'mv
+          org-attach-store-link-p 'file))
 
   ;; Org Babel
   (use-package ob
@@ -280,8 +283,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       :ensure nil
       :commands (org-babel-execute:sh
                  org-babel-expand-body:sh
-                 org-babel-execute:bash
-                 org-babel-expand-body:bash))
+                 org-babel-execute:shell
+                 org-babel-expand-body:shell))
     (use-package ob-C
       :commands (org-babel-execute:C
                  org-babel-expand-body:C
@@ -378,7 +381,11 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
     :defer 2
     :config
     (org-clock-persistence-insinuate)
-    (setq org-clock-auto-clock-resolution 'when-no-clock-is-running
+    (org-clock-auto-clockout-insinuate)
+
+    (setq org-clocktable-defaults '(:maxlevel 2 :lang "en" :scope file :block nil :wstart 1 :mstart 1 :tstart nil :tend nil :step nil :stepskip0 nil :fileskip0 t :tags nil :match nil :emphasize nil :link t :narrow 40! :indent t :hidefiles nil :formula % :timestamp nil :level nil :tcolumns 1 :formatter nil :properties ("Effort"))
+          org-clock-auto-clockout-timer 3600
+          org-clock-auto-clock-resolution 'when-no-clock-is-running
           org-clock-history-length 10
           org-clock-idle-time 10
           org-clock-in-resume t
@@ -422,14 +429,17 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
           org-mac-grab-Outlook-app-p nil))
 
   ;; Org Refile
-  (setq org-note-files (directory-files-recursively
-                        "~/Documents/Org/notes" "^.*\\.org$")
-        org-outline-path-complete-in-steps nil
-        org-refile-allow-creating-parent-nodes 'confirm
-        org-refile-use-outline-path 'file
-        org-refile-targets '((nil :maxlevel . 5)
-                             (org-note-files :maxlevel . 4)
-                             (org-agenda-files :maxlevel . 4)))
+  (use-package org-refile
+    :defer t
+    :config
+    (setq org-note-files (directory-files-recursively
+                          "~/Documents/Org/notes" "^.*\\.org$")
+          org-outline-path-complete-in-steps nil
+          org-refile-allow-creating-parent-nodes 'confirm
+          org-refile-use-outline-path 'file
+          org-refile-targets '((nil :maxlevel . 5)
+                               (org-note-files :maxlevel . 4)
+                               (org-agenda-files :maxlevel . 4))))
 
   ;; Org Tag
   (setq org-fast-tag-selection-single-key t
@@ -938,10 +948,10 @@ Org Review Transient state
   :general
   (tyrant-def
     "or"  '(:ignore t :which-key "roam")
-    "orb" 'org-roam-buffer-toggle-display
     "orf" 'org-roam-find-file
     "ori" 'org-roam-find-index
-    "orr" 'org-roam-find-ref))
+    "orr" 'org-roam-find-ref
+    "ort" 'org-roam-buffer-toggle-display))
 
 (use-package org-roam-protocol
   :after org-protocol)
@@ -982,7 +992,8 @@ Org Review Transient state
 	          (bibtex-completion-edit-notes
 	           (list (car (org-ref-get-bibtex-key-and-file citekey)))))))
 
-  (defun +org-ref-open-pdf-at-point ()
+  ;; Override `org-ref-open-pdf-at-point' directly since `H-p' is bound to it.
+  (defun org-ref-open-pdf-at-point ()
     "Open the pdf for bibtex key under point if it exists."
     (interactive)
     (let* ((results (org-ref-get-bibtex-key-and-file))
@@ -991,8 +1002,6 @@ Org Review Transient state
       (if (file-exists-p pdf-file)
           (org-open-file pdf-file)
         (message "No PDF found for %s" key))))
-
-  (setq org-ref-open-pdf-function '+org-ref-open-pdf-at-point)
 
   (general-def org-ref-cite-keymap "<tab>" nil)
 
