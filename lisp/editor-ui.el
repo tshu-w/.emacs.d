@@ -39,6 +39,13 @@
 
 (use-package gruvbox-theme :ensure t :defer t)
 
+(use-package humanoid-themes
+  :ensure t
+  :defer t
+  :config
+  (setq humanoid-org-height nil
+        humanoid-org-bold nil))
+
 (use-package kaolin-themes
   :ensure t
   :defer t
@@ -48,7 +55,9 @@
 
 (use-package lab-themes :ensure t :defer t)
 
-(use-package modus-operandi-theme :ensure t :defer t)
+(use-package solo-jazz-theme
+  :quelpa (solo-jazz-theme :fetcher github :repo "cstby/solo-jazz-emacs-theme")
+  :defer t)
 
 (use-package spacemacs-common
   :ensure spacemacs-theme
@@ -66,18 +75,19 @@
                        flucui-light
                        gruvbox-light-medium
                        gruvbox-light-soft
+                       humanoid-light
                        kaolin-breeze
                        kaolin-light
                        kaolin-mono-light
                        kaolin-valley-light
                        lab-light
-                       modus-operandi
                        spacemacs-light
-                       tsdh-light)
+                       solo-jazz
+                       ;; tsdh-light
+                       )
   "Light themes to switch.")
 
-(defvar dark-themes '(doom-acario-dark
-                      doom-nord
+(defvar dark-themes '(doom-nord
                       doom-one
                       doom-opera
                       doom-solarized-dark
@@ -101,6 +111,7 @@
                       gruvbox-dark-hard
                       gruvbox-dark-medium
                       gruvbox-dark-soft
+                      humanoid-dark
                       kaolin-aurora
                       kaolin-blossom
                       kaolin-bubblegum
@@ -156,7 +167,7 @@
         writeroom-bottom-divider-width 0
         writeroom-fringes-outside-margins t
         writeroom-fullscreen-effect nil
-        writeroom-major-modes '(text-mode prog-mode conf-mode special-mode)
+        writeroom-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode)
         writeroom-maximize-window nil
         writeroom-mode-line t
         writeroom-mode-line-toggle-position 'mode-line-format)
