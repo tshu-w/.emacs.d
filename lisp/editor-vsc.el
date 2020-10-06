@@ -109,6 +109,10 @@
     (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
+  (with-eval-after-load 'evil
+    (evil-set-command-property 'diff-hl-previous-hunk :jump t)
+    (evil-set-command-property 'diff-hl-next-hunk :jump t))
+
   (general-def 'normal
     "[ h" 'diff-hl-previous-hunk
     "] h" 'diff-hl-next-hunk)
