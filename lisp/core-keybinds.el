@@ -131,7 +131,8 @@
     "hm"      'describe-mode
     "hM"      'man
     "hp"      'describe-package
-    "ht"      'describe-theme
+    "ht"      'describe-text-properties
+    "hT"      'describe-theme
     "hv"      'describe-variable
     "hP"      '(:ignore t :which-key "profiler")
     "hPs"     'profiler-start

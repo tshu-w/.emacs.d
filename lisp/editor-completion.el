@@ -47,11 +47,12 @@
     "s" 'wgrep-save-all-buffers)
 
   (general-def :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
-    "<escape>" 'abort-recursive-edit
-    "<tab>"    'ivy-tab
-    "C-h"      'ivy-c-h
-    "C-S-h"    'help-map
-    "C-c C-e"  'ivy-edit)
+    "<escape>"          'abort-recursive-edit
+    "<tab>"             'ivy-tab
+    "C-<return>"        'ivy-alt-done
+    "C-h"               'ivy-c-h
+    "C-S-h"             'help-map
+    "C-c C-e"           'ivy-edit)
   :general
   (tyrant-def
     "bb" 'ivy-switch-buffer
