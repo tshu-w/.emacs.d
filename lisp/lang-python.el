@@ -11,7 +11,7 @@
 (use-package python
   :defer t
   :config
-  (setq-default python-indent-guess-indent-offset nil)
+  (setq python-indent-guess-indent-offset-verbose nil)
 
   (add-hook 'python-mode-hook
             (lambda ()
@@ -23,24 +23,17 @@
   (defvar python-shell--interpreter-args nil)
 
   ;; REPL
-  (defun +python-shell-send-buffer-switch ()
-    "Send buffer content to shell and switch to it in insert mode."
-    (interactive)
-    (let ((python-mode-hook nil))
-      (python-shell-send-buffer)
-      (python-shell-switch-to-shell)))
-
   (defun +python-shell-send-buffer ()
     "Send buffer content to shell and switch to it in insert mode."
     (interactive)
     (let ((python-mode-hook nil))
       (python-shell-send-buffer)))
 
-  (defun +python-shell-send-defun-switch ()
-    "Send function content to shell and switch to it in insert mode."
+  (defun +python-shell-send-buffer-switch ()
+    "Send buffer content to shell and switch to it in insert mode."
     (interactive)
     (let ((python-mode-hook nil))
-      (python-shell-send-defun nil)
+      (python-shell-send-buffer)
       (python-shell-switch-to-shell)))
 
   (defun +python-shell-send-defun ()
@@ -49,11 +42,11 @@
     (let ((python-mode-hook nil))
       (python-shell-send-defun nil)))
 
-  (defun +python-shell-send-region-switch (start end)
-    "Send region content to shell and switch to it in insert mode."
-    (interactive "r")
+  (defun +python-shell-send-defun-switch ()
+    "Send function content to shell and switch to it in insert mode."
+    (interactive)
     (let ((python-mode-hook nil))
-      (python-shell-send-region start end)
+      (python-shell-send-defun nil)
       (python-shell-switch-to-shell)))
 
   (defun +python-shell-send-region (start end)
@@ -61,6 +54,39 @@
     (interactive "r")
     (let ((python-mode-hook nil))
       (python-shell-send-region start end)))
+
+  (defun +python-shell-send-region-switch (start end)
+    "Send region content to shell and switch to it in insert mode."
+    (interactive "r")
+    (let ((python-mode-hook nil))
+      (python-shell-send-region start end)
+      (python-shell-switch-to-shell)))
+
+  (defun +python-shell-send-line ()
+	  "Send the current line to shell"
+	  (interactive)
+	  (let ((python-mode-hook nil)
+	        (start (point-at-bol))
+	        (end (point-at-eol)))
+	    (python-shell-send-region start end)))
+
+  (defun +python-shell-send-statement ()
+	  "Send the current statement to shell, same as `python-shell-send-statement' in Emacs27."
+	  (interactive)
+    (if (fboundp 'python-shell-send-statement)
+        (call-interactively #'python-shell-send-statement)
+      (if (region-active-p)
+          (call-interactively #'python-shell-send-region)
+        (let ((python-mode-hook nil))
+	        (python-shell-send-region
+           (save-excursion (python-nav-beginning-of-statement))
+           (save-excursion (python-nav-end-of-statement)))))))
+
+  (defun +python-shell-send-statement-switch ()
+    "Send statement to shell and switch to it in insert mode."
+    (interactive)
+    (call-interactively #'+python-shell-send-statement)
+    (python-shell-switch-to-shell))
 
   (defun +python-start-or-switch-repl ()
     "Start and/or switch to the REPL."
@@ -140,34 +166,49 @@
     "s"     '(:ignore t :which-key "REPL")
     "sB"    '+python-shell-send-buffer-switch
     "sb"    '+python-shell-send-buffer
+    "se"    '+python-shell-send-statement
+    "sE"    '+python-shell-send-statement-switch
     "sF"    '+python-shell-send-defun-switch
     "sf"    '+python-shell-send-defun
+    "sl"    '+python-shell-send-line
     "si"    '+python-start-or-switch-repl
     "sR"    '+python-shell-send-region-switch
     "sr"    '+python-shell-send-region
     "v"     '(:ignore t :which-key "virtualenv")))
 
 (use-package blacken
+  :disabled t
   :ensure t
   :after python
   :config
   (setq blacken-fast-unsafe t)
   (despot-def python-mode-map "=" 'blacken-buffer))
 
+(use-package yapfify
+  :ensure t
+  ;; :hook (python-mode . yapf-mode)
+  :config
+  (despot-def python-mode-map "=" 'yapfify-region-or-buffer))
+
 (use-package cython-mode :ensure t :defer t)
 
 (use-package pip-requirements :ensure t :defer t)
 
 (use-package importmagic
+  :disabled t ;; only work with local python
   :ensure t
   :hook (python-mode . importmagic-mode)
   :config
+  (setq importmagic-style-configuration-alist '((multiline . parentheses)
+                                                (max_columns . 88)))
+  (add-to-list 'ivy-ignore-buffers "\\*epc con")
   (despot-def python-mode-map "rf" 'importmagic-fix-symbol-at-point))
 
 (use-package py-isort
   :ensure t
   :after python
   :config
+  (setq py-isort-options '("-m 1" "-ca" "-cs" "-w 88"))
   (despot-def python-mode-map "rI" 'py-isort-buffer))
 
 (use-package conda
