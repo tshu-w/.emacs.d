@@ -220,6 +220,7 @@
 (use-package ivy-bibtex
   :ensure t
   :config
+  (setq bibtex-completion-pdf-open-function 'org-open-file)
   (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-ignore-order))
   :general
   (tyrant-def
