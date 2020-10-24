@@ -268,6 +268,8 @@
         evil-visual-state-cursor  '("gray" (hbar . 2))
         evil-motion-state-cursor  '("plum3" box))
 
+  (evil-set-undo-system 'undo-tree)
+
   ;; override default-jump-handlers
   (setq default-jump-handlers '(evil-goto-definition))
   (evil-set-command-property 'jump-to-definition :jump t)
@@ -460,6 +462,7 @@
         undo-outer-limit 120000000)
 
   (setq undo-tree-auto-save-history t)
+  (global-undo-tree-mode)
   :config
   ;; TODO fix upstream
   (defun undo-tree-restore-default ()
