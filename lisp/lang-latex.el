@@ -14,6 +14,7 @@
   :custom-face (preview-reference-face ((t (:foreground "black"))))
   :config
   (setq-default TeX-engine 'xetex)
+
   (setq latex-build-command "LatexMk"
         TeX-auto-save t
         TeX-command-default latex-build-command
@@ -21,7 +22,6 @@
         TeX-parse-self t
         TeX-save-query nil
         TeX-source-correlate-start-server t
-        TeX-source-correlate-mode t
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
@@ -33,7 +33,7 @@
                                      (output-pdf "displayline")
                                      (output-html "open")))
 
-  (defun latex/build ()
+  (defun TeX-build ()
     (interactive)
     (TeX-save-document (TeX-master-file))
     (TeX-command latex-build-command 'TeX-master-file -1))
@@ -67,7 +67,7 @@
     ";"             'comment-or-uncomment-region               ;; C-c ; or C-c :
     ;; TeX-command-run-all runs compile and open the viewer
     "a"             'TeX-command-run-all                       ;; C-c C-a
-    "b"             'latex/build
+    "b"             'TeX-build
     ;; TeX-doc is a very slow function
     "h"             '(:ignore t :which-key "help")
     "hd"            'TeX-doc
@@ -171,25 +171,40 @@
           ("cp" "Insert \\citep" "\\citep{?}" cdlatex-position-cursor nil t nil)
           ("eref" "Insert \\eqref" "\\eqref{eq?}" cdlatex-position-cursor nil t nil)
           ("fref" "Insert \\ref" "\\ref{fig?}" cdlatex-position-cursor nil t nil)
-          ("sref" "Insert \\ref" "\\ref{sec?}" cdlatex-position-cursor nil t nil))))
+          ("sref" "Insert \\ref" "\\ref{sec?}" cdlatex-position-cursor nil t nil))
+        cdlatex-make-sub-superscript-roman-if-pressed-twice t))
+
 
 (use-package auctex-latexmk
   :ensure t
-  :hook (LaTeX-mode . auctex-latexmk-setup)
-  :config (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+  :after tex
+  :config
+  (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (use-package company-auctex
   :ensure t
-  :after auctex
+  :after tex
   :config (company-auctex-init))
 
 (use-package company-reftex
   :ensure t
-  :after reftex
+  :after tex
   :hook (TeX-mode . (lambda ()
                       (add-to-list
                        (make-local-variable 'company-backends)
                        '(company-reftex-labels company-reftex-citations)))))
+
+(use-package magic-latex-buffer
+  :ensure t
+  :hook (TeX-mode . magic-latex-buffer)
+  :config
+  (setq magic-latex-enable-block-highlight nil
+        magic-latex-enable-suscript        t
+        magic-latex-enable-pretty-symbols  nil
+        magic-latex-enable-block-align     nil
+        magic-latex-enable-inline-image    nil
+        magic-latex-enable-minibuffer-echo t))
 
 (use-package ebib
   :disabled t
@@ -226,6 +241,12 @@
   (tyrant-def
     "sr" 'ivy-bibtex
     "sR" 'ivy-bibtex-with-notes))
+
+(use-package xenops
+  :ensure t
+  :hook (LaTeX-mode . xenops-mode)
+  :config
+  (setq xenops-cache-directory (no-littering-expand-var-file-name "xenops")))
 
 
 (provide 'lang-latex)
