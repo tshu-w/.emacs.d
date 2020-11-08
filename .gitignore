@@ -57,7 +57,10 @@ flycheck_*.el
 
 # End of https://www.gitignore.io/api/emacs
 
+# no-littering
+var/
+
 # Rime
-/build/
+build/
 *.userdb/
 user.yaml
