@@ -57,10 +57,6 @@
     "gS"  'magit-stage-file
     "gU"  'magit-unstage-file))
 
-(use-package evil-magit
-  :ensure t
-  :hook (magit-mode . evil-magit-init))
-
 (use-package magit-gitflow
   :disabled t
   :ensure t
