@@ -511,48 +511,9 @@ a dedicated window."
 
 
 ;; ---------------------------------------------------------------------------
-;; Misc
+;; Jump Handlers
 ;; ---------------------------------------------------------------------------
 
-(defun echo (msg &rest args)
-  "Display MSG in echo-area without logging it in *Messages* buffer."
-  (interactive)
-  (let ((message-log-max nil))
-    (apply 'message msg args)))
-
-(defun macos-notify (title message)
-  "Send notifications with TITLE and MESSAGE on macOS."
-  (call-process "terminal-notifier"
-                nil 0 nil
-                "-group" "Emacs"
-                "-title" title
-                "-sender" "org.gnu.Emacs"
-                "-message" message
-                "-activate" "org.gnu.Emacs"))
-
-(defun macos-switch-back-to-previous-application ()
-  "Switch back to previous application on macOS."
-  (interactive)
-  (do-applescript
-   (mapconcat
-    #'identity
-    '("tell application \"System Events\""
-      "  tell process \"Finder\""
-      "    activate"
-      "    keystroke tab using {command down}"
-      "  end tell"
-      "end tell")
-    "\n")))
-
-(defun set-file-executable ()
-  "Add executable permissions on current file."
-  (interactive)
-  (when (buffer-file-name)
-    (set-file-modes buffer-file-name
-                    (logior (file-modes buffer-file-name) #o100))
-    (message (concat "Made " buffer-file-name " executable"))))
-
-;;; jump-handlers
 (defvar default-jump-handlers '(xref-find-definitions)
   "List of jump handlers available in every mode.")
 
@@ -663,6 +624,58 @@ sets `reference-handlers' in buffers of that mode."
     (switch-to-buffer-other-window (current-buffer))
     (goto-char pos)
     (jump-to-reference)))
+
+
+;; ---------------------------------------------------------------------------
+;; Misc
+;; ---------------------------------------------------------------------------
+
+(defun echo (msg &rest args)
+  "Display MSG in echo-area without logging it in *Messages* buffer."
+  (interactive)
+  (let ((message-log-max nil))
+    (apply 'message msg args)))
+
+(defun macos-notify (title message)
+  "Send notifications with TITLE and MESSAGE on macOS."
+  (call-process "terminal-notifier"
+                nil 0 nil
+                "-group" "Emacs"
+                "-title" title
+                "-sender" "org.gnu.Emacs"
+                "-message" message
+                "-activate" "org.gnu.Emacs"))
+
+(defun macos-switch-back-to-previous-application ()
+  "Switch back to previous application on macOS."
+  (interactive)
+  (do-applescript
+   (mapconcat
+    #'identity
+    '("tell application \"System Events\""
+      "  tell process \"Finder\""
+      "    activate"
+      "    keystroke tab using {command down}"
+      "  end tell"
+      "end tell")
+    "\n")))
+
+(defun set-file-executable ()
+  "Add executable permissions on current file."
+  (interactive)
+  (when (buffer-file-name)
+    (set-file-modes buffer-file-name
+                    (logior (file-modes buffer-file-name) #o100))
+    (message (concat "Made " buffer-file-name " executable"))))
+
+(defun iso-week-to-time (year week day)
+  "Convert ISO year, week, day to elisp time value."
+  (apply #'encode-time
+         (append '(0 0 0)
+                 (-select-by-indices
+                  '(1 0 2)
+                  (calendar-gregorian-from-absolute (calendar-iso-to-absolute
+                                                     (list week day year)))))))
 
 
 (provide 'core-funcs)
