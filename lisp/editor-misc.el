@@ -85,7 +85,6 @@
 
   (cal-china-x-setup))
 
-
 (use-package counsel-dash
   :ensure t
   :disabled t
@@ -119,8 +118,8 @@
 (use-package dumb-jump
   :ensure t
   :init
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-selector 'ivy)
-  (add-to-list 'default-jump-handlers 'dumb-jump-go 'append)
   :general (tyrant-def "jq" 'dumb-jump-quick-look))
 
 (use-package editorconfig
