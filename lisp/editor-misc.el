@@ -279,7 +279,7 @@
 (use-package sis
   :ensure t
   :hook ((after-init . sis-global-respect-mode)
-         (text-mode . sis-follow-context-mode)
+         (text-mode . sis-context-mode)
          (text-mode . sis-inline-mode))
   :config
   (sis-ism-lazyman-config nil "rime" 'native)
