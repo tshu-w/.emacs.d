@@ -53,6 +53,8 @@
               tab-width 2
               standard-indent 2)
 
+(setq-default c-basic-offset 4)
+
 ;; auto fill breaks line beyond buffer's fill-column
 (setq-default fill-column 80)
 
