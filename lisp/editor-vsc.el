@@ -115,6 +115,8 @@
   :general
   (tyrant-def "g=" 'diff-hl-diff-goto-hunk))
 
+(use-package git-auto-commit-mode :ensure t)
+
 (use-package git-timemachine
   :ensure t
   :config
