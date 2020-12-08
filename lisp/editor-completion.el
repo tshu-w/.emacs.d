@@ -73,7 +73,25 @@
   :hook (counsel-mode . ivy-rich-mode)
   :config
   (setq ivy-rich-path-style 'abbrev
-        ivy-virtual-abbreviate 'full))
+        ivy-virtual-abbreviate 'full)
+
+  ;; https://github.com/Yevgnen/ivy-rich/issues/87#issuecomment-689581896
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
+  (defvar ivy-rich--ivy-switch-buffer-cache
+    (make-hash-table :test 'equal))
+
+  (define-advice ivy-rich--ivy-switch-buffer-transformer
+      (:around (old-fn x) cache)
+    (let ((ret (gethash x ivy-rich--ivy-switch-buffer-cache)))
+      (unless ret
+        (setq ret (funcall old-fn x))
+        (puthash x ret ivy-rich--ivy-switch-buffer-cache))
+      ret))
+
+  (define-advice +ivy/switch-buffer
+      (:before (&rest _) ivy-rich-reset-cache)
+    (clrhash ivy-rich--ivy-switch-buffer-cache)))
 
 (use-package ivy-posframe
   :ensure t
