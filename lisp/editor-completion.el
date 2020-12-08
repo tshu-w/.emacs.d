@@ -170,6 +170,11 @@ around point as the initial input."
     "sb"  'swiper-all
     "sB"  'swiper-all-region-or-symbol))
 
+(use-package counsel-tramp
+  :ensure t
+  :general
+  (tyrant-def "ft" 'counsel-tramp))
+
 (use-package pyim
   :ensure t
   :after ivy

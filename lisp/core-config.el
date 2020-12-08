@@ -303,9 +303,13 @@
   :config
   (setq remote-file-name-inhibit-cache nil
         tramp-default-method "ssh"
-        tramp-default-remote-shell "/bin/zsh"
         tramp-verbose 1
-        tramp-ssh-controlmaster-options "")
+        tramp-use-ssh-controlmaster-options t
+        tramp-ssh-controlmaster-options (concat
+                                         "-o ControlPath='/tmp/tramp.%%r@%%h:%%p' "
+                                         "-o ControlMaster=auto -o ControlPersist=yes")
+        vc-handled-backends '(SVN Git))
+
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (use-package whitespace
