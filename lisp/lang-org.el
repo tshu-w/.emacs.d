@@ -915,7 +915,10 @@ Org Review Transient state
 
 (use-package org-roam
   :ensure t
-  :defer 5
+  :disabled t
+  :hook (after-init . org-roam-mode)
+  :init
+  (setq org-roam-db-location (no-littering-expand-var-file-name "org-roam.db"))
   :config
   (setq org-roam-capture-templates
         '(("d" "default" plain (function org-roam-capture--get-point)
@@ -940,18 +943,19 @@ Org Review Transient state
         org-roam-directory (file-truename org-directory)
         org-roam-tag-sources '(prop all-directories))
 
-  (org-roam-mode)
-
   (despot-def org-mode-map
     "ir" 'org-roam-insert-immediate
     "iR" 'org-roam-insert)
   :general
   (tyrant-def
-    "or"  '(:ignore t :which-key "roam")
-    "orf" 'org-roam-find-file
-    "ori" 'org-roam-find-index
-    "orr" 'org-roam-find-ref
-    "ort" 'org-roam-buffer-toggle-display))
+    "or"   '(:ignore t :which-key "roam")
+    "orf"  'org-roam-find-file
+    "ori"  'org-roam-jump-to-index
+    "orr"  'org-roam-find-ref
+    "orb"  'org-roam-buffer-toggle-display
+    "ort"  '(:ignore t :which-key "tags")
+    "orta" 'org-roam-tag-add
+    "ortd" 'org-roam-tag-delete))
 
 (use-package org-roam-protocol
   :after org-protocol)
