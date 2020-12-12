@@ -10,9 +10,11 @@
 
 (use-package magit
   :ensure t
+  :init
+  (setq magit-define-global-key-bindings nil)
   :config
-  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
-        magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1
+  (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1
+        magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-save-repository-buffers 'dontask)
 
   (defun org-reveal-advice (&rest _args)
@@ -46,10 +48,11 @@
     "g"   '(:ignore t :which-key "git")
     "gb"  'magit-blame
     "gc"  'magit-clone
-    "gf"  '(:ignore t :which-key "file")
-    "gfF" 'magit-find-file
-    "gfl" 'magit-log-buffer-file
-    "gfd" 'magit-diff
+    "gf"  'magit-file-dispatch
+    "gF"  '(:ignore t :which-key "file")
+    "gFf" 'magit-find-file
+    "gFl" 'magit-log-buffer-file
+    "gFd" 'magit-diff
     "gi"  'magit-init
     "gL"  'magit-list-repositories
     "gm"  'magit-dispatch
