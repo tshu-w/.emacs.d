@@ -167,7 +167,7 @@
         writeroom-bottom-divider-width 0
         writeroom-fringes-outside-margins t
         writeroom-fullscreen-effect nil
-        writeroom-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode)
+        writeroom-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode dired-mode)
         writeroom-maximize-window nil
         writeroom-mode-line t
         writeroom-mode-line-toggle-position 'mode-line-format)
