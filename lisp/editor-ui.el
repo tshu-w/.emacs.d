@@ -225,6 +225,13 @@
         (progn (golden-ratio-mode -1) (balance-windows))
       (progn (golden-ratio-mode) (golden-ratio))))
 
+  (with-eval-after-load 'writeroom-mode
+    (add-hook 'golden-ratio-mode-hook
+              (lambda ()
+                (if (bound-and-true-p global-writeroom-mode)
+                    (global-writeroom-mode -1)
+                  (global-writeroom-mode)))))
+
   ;; golden-ratio-exclude-modes
   (dolist (m '("bs-mode"
                "calc-mode"
