@@ -177,7 +177,6 @@
     "v"     '(:ignore t :which-key "virtualenv")))
 
 (use-package blacken
-  :disabled t
   :ensure t
   :after python
   :config
@@ -185,8 +184,9 @@
   (despot-def python-mode-map "=" 'blacken-buffer))
 
 (use-package yapfify
+  :disabled t
   :ensure t
-  ;; :hook (python-mode . yapf-mode)
+  :hook (python-mode . yapf-mode)
   :config
   (despot-def python-mode-map "=" 'yapfify-region-or-buffer))
 
