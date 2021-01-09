@@ -20,7 +20,7 @@
 
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "DONE(d)")
-          (sequence "WAITING(w@/!)" "SOMEDAY(s)" "|" "CANCELED(c)"))
+          (sequence "WAITING(w@)" "SOMEDAY(s)" "|" "CANCELED(c)"))
         org-todo-keyword-faces
         '(("CANCELED" . org-done)
           ("WAITING" . (:foreground "light coral" :weight bold))
