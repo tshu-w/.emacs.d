@@ -317,11 +317,10 @@ around point as the initial input."
         lsp-enable-symbol-highlighting nil
         lsp-enable-semantic-highlighting nil
         lsp-enable-text-document-color t
+        lsp-headerline-breadcrumb-enable nil
         lsp-keep-workspace-alive nil
         lsp-modeline-diagnostics-enable nil
         lsp-modeline-code-actions-enable nil
-        lsp-prefer-capf t
-        lsp-signature-auto-activate t
         lsp-signature-function 'lsp--eldoc-message
         lsp-signature-render-documentation nil)
 
