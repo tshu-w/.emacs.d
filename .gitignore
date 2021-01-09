@@ -64,3 +64,6 @@ var/
 build/
 *.userdb/
 user.yaml
+
+# native-comp
+eln-cache/
