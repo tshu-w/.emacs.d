@@ -96,7 +96,7 @@
                       doom-ephemeral
                       doom-Iosvkem
                       doom-material
-                      doom-moonlight
+                      ;; doom-moonlight
                       doom-nova
                       doom-oceanic-next
                       doom-palenight
@@ -112,13 +112,13 @@
                       gruvbox-dark-medium
                       gruvbox-dark-soft
                       humanoid-dark
-                      kaolin-aurora
+                      ;; kaolin-aurora
                       kaolin-blossom
                       kaolin-bubblegum
-                      kaolin-dark
-                      kaolin-eclipse
+                      ;; kaolin-dark
+                      ;; kaolin-eclipse
                       kaolin-galaxy
-                      kaolin-mono-dark
+                      ;; kaolin-mono-dark
                       kaolin-ocean
                       kaolin-temple
                       kaolin-valley-dark
