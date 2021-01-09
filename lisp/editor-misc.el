@@ -213,6 +213,7 @@
   (setq pangu-spacing-real-insert-separtor t))
 
 (use-package pdf-tools
+  :disabled t
   :ensure t
   :defer t
   :config
@@ -304,6 +305,7 @@
 
 (use-package xwidget
   :if (featurep 'xwidget-internal)
+  :disabled t
   :defer t
   :init
   ;; (setq browse-url-browser-function 'xwidget-webkit-browse-url)
@@ -339,6 +341,7 @@ The browser to used is specified by the
 
 (use-package xwwp-full
   :quelpa (xwwp :fetcher github :repo "BlueFlo0d/xwwp" :files ("*.el" "*.css" "*.js"))
+  :disabled t
   :defer t
   :init
   (with-eval-after-load 'xwidget (require 'xwwp-full))
