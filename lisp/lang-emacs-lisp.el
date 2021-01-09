@@ -54,6 +54,7 @@
     "'" 'ielm))
 
 (use-package debug
+  :disabled t
   :after elisp-mode
   :config
   (defun elisp-toggle-debug-expr-and-eval-func ()
@@ -75,6 +76,7 @@
     "dt" 'elisp-toggle-debug-expr-and-eval-func))
 
 (use-package edebug
+  :disabled t
   :after elisp-mode
   :config
   (defun edebug-instrument-defun-on ()
