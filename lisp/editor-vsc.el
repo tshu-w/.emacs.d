@@ -167,6 +167,7 @@ Git Timemachine Transient State
     "glh" 'git-link-homepage))
 
 (use-package git-messenger
+  :disabled t
   :ensure t
   :general (tyrant-def "gM" 'git-messenger:popup-message))
 
