@@ -84,7 +84,7 @@
       (concat " "
               (mapconcat (lambda (persp)
                            (format-persp-name
-                            persp (position persp persp-list)))
+                            persp (cl-position persp persp-list)))
                          persp-list " | "))))
 
   (defun show-persp-hint ()
