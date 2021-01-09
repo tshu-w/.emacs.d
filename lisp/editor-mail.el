@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-(push "/usr/local/Cellar/mu/" load-path)
-
 (use-package mu4e-alert
   :ensure t
   :commands (mu4e-alert-enable-mode-line-display)
@@ -21,6 +19,7 @@
          "AND NOT maildir:/trash/")))
 
 (use-package mu4e
+  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :commands mu4e-update-mail-and-index
   :init
   (setq mu4e-maildir "~/.mail"
