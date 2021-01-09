@@ -334,7 +334,8 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
             ("t" "Todo" entry (file org-inbox-file)
              "* TODO %?\n%i\n")
             ("j" "Journal" plain (function org-journal-find-location)
-             "** %(format-time-string org-journal-time-format)%?")
+             "** %(format-time-string org-journal-time-format)%?"
+             :jump-to-captured t :immediate-finish t)
             ("l" "Link")
             ("ll" "Link" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
@@ -343,14 +344,36 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
             ("lt" "Todo with link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n")
             ("r" "Review")
-            ("ry" "Yesterday" plain (function (lambda () (org-journal-find-location -1)))
-             "** Daily Review\n%?\n")
+            ("ry" "Yesterday" plain
+             (function (lambda () (org-journal-find-location
+                                   (time-add (current-time) (days-to-time -1)))))
+             "** Daily Review\n%?\n" :jump-to-captured t :immediate-finish t)
             ("rt" "Today" plain (function org-journal-find-location)
-             "** Daily Review\n%?\n")
-            ("rw" "Last Week" plain (function (lambda () (org-journal-find-location -7)))
-             "* Week %(format-time-string \"%_V\" (time-add (current-time) (days-to-time -7))) Review\n%?\n")
-            ("rW" "This Week" plain (function org-journal-find-location)
-             "* Week %(format-time-string \"%_V\") Review\n%?\n")))
+             "** Daily Review\n%?\n" :jump-to-captured t :immediate-finish t)
+            ("rw" "Last Week" plain
+             (function (lambda ()
+                         (org-journal-find-location
+                          (let* ((time (decode-time (current-time)))
+                                 (year (decoded-time-year time))
+                                 (week (car (calendar-iso-from-absolute
+                                             (calendar-absolute-from-gregorian
+                                              (-select-by-indices
+                                               '(4 3 5) time))))))
+                            (iso-week-to-time year (- week 1) 7)))))
+             "* Week %(format-time-string \"%_V\" (time-add (current-time) (days-to-time -7))) Review\n%?\n"
+             :jump-to-captured t :immediate-finish t)
+            ("rW" "This Week" plain
+             (function (lambda ()
+                         (org-journal-find-location
+                          (let* ((time (decode-time (current-time)))
+                                 (year (decoded-time-year time))
+                                 (week (car (calendar-iso-from-absolute
+                                             (calendar-absolute-from-gregorian
+                                              (-select-by-indices
+                                               '(4 3 5) time))))))
+                            (iso-week-to-time year week 7)))))
+             "* Week %(format-time-string \"%_V\") Review\n%?\n"
+             :jump-to-captured t :immediate-finish t)))
     :config
     (defun org-capture-goto-link ()
       (org-capture-put :target
@@ -816,10 +839,9 @@ Org Review Transient state
         org-journal-file-header #'org-journal-file-header-func
         org-journal-file-type    'monthly)
   :config
-  (defun org-journal-find-location (&optional days)
-    (let ((date (time-add (current-time) (days-to-time (or days 0)))))
-      (org-journal-new-entry t date)
-      (goto-char (point-max))))
+  (defun org-journal-find-location (&optional time)
+    (org-journal-new-entry t time)
+    (org-end-of-subtree))
 
   (defun org-journal-file-header-func (time)
     "Custom function to create journal header."
