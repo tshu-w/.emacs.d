@@ -13,7 +13,12 @@
 (setq package-archives '(("melpa"        . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("org"          . "https://orgmode.org/elpa/")
-                         ("gnu"          . "https://elpa.gnu.org/packages/")))
+                         ("gnu"          . "https://elpa.gnu.org/packages/"))
+      package-user-dir (concat user-emacs-directory "elpa/"
+                               (format "%d%s%d"
+                                       emacs-major-version
+                                       version-separator
+                                       emacs-minor-version)))
 
 ;; initialize packages
 (unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
