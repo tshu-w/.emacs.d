@@ -328,6 +328,36 @@ around point as the initial input."
             (lambda ()
               (when (eq (car company-backends) 'company-capf)
                 (setq company-backends (cdr company-backends)))))
+
+  (unless (version<= emacs-version "28.0")
+    (defun lsp-tramp-connection@override (local-command &optional generate-error-file-fn)
+      "Create LSP stdio connection named name.
+LOCAL-COMMAND is either list of strings, string or function which
+returns the command to execute."
+      (list :connect (lambda (filter sentinel name environment-fn)
+                       (let* ((final-command (lsp-resolve-final-function local-command))
+                              ;; wrap with stty to disable converting \r to \n
+                              (process-name (generate-new-buffer-name name))
+                              (wrapped-command (append '("stty" "raw" ";")
+                                                       final-command
+                                                       (list
+                                                        (concat "2>"
+                                                                (or (when generate-error-file-fn
+                                                                      (funcall generate-error-file-fn name))
+                                                                    (format "/tmp/%s-%s-stderr" name
+                                                                            (cl-incf lsp--stderr-index)))))))
+                              (process-environment
+                               (lsp--compute-process-environment environment-fn)))
+                         (let ((proc (apply 'start-file-process-shell-command process-name
+                                            (format "*%s*" process-name) `(,(mapconcat 'identity wrapped-command " ")))))
+                           (set-process-sentinel proc sentinel)
+                           (set-process-filter proc filter)
+                           (set-process-query-on-exit-flag proc nil)
+                           (set-process-coding-system proc 'binary 'binary)
+                           (cons proc proc))))
+            :test? (lambda () (-> local-command lsp-resolve-final-function lsp-server-present?))))
+
+    (advice-add 'lsp-tramp-connection :override #'lsp-tramp-connection@override))
   :general
   (tyrant-def
     :keymaps 'lsp-mode-map
