@@ -26,7 +26,12 @@
     "t" 'json-toggle-boolean
     "n" 'json-nullify-sexp))
 
-(use-package jsonnet-mode :ensure t :defer t)
+(use-package jsonnet-mode
+  :ensure t
+  :defer t
+  :config
+  (despot-def jsonnet-mode-map
+    "=" 'jsonnet-reformat-buffer))
 
 (use-package web-mode :ensure t :defer t)
 
