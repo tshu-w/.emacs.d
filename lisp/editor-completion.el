@@ -109,7 +109,8 @@
                                          jump-to-reference
                                          jump-to-reference-other-window))
   ;; Use ivy-xref to display `xref.el' results.
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+  (setq xref-show-definitions-function #'ivy-xref-show-defs
+        xref-show-xrefs-function       #'ivy-xref-show-xrefs))
 
 (use-package counsel
   :ensure t
