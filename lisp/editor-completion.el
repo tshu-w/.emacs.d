@@ -36,23 +36,10 @@
           (delete-minibuffer-contents))
       (ivy-backward-delete-char)))
 
-  (defun ivy-edit ()
-    "Edit the current search results in a buffer using wgrep."
-    (interactive)
-    (run-with-idle-timer 0 nil 'ivy-wgrep-change-to-wgrep-mode)
-    (ivy-occur))
-
-  (despot-def ivy-occur-grep-mode-map
-    "w" 'ivy-wgrep-change-to-wgrep-mode
-    "s" 'wgrep-save-all-buffers)
-
   (general-def :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
-    "<escape>"          'abort-recursive-edit
     "<tab>"             'ivy-tab
-    "C-<return>"        'ivy-alt-done
     "C-h"               'ivy-c-h
-    "C-S-h"             'help-map
-    "C-c C-e"           'ivy-edit)
+    "C-S-h"             help-map)
   :general
   (tyrant-def
     "bb" 'ivy-switch-buffer
@@ -60,11 +47,7 @@
     "rV" 'ivy-pop-view
     "rl" 'ivy-resume))
 
-(use-package ivy-hydra
-  :ensure t
-  :general
-  (general-def hydra-ivy/keymap
-    "<escape>" 'hydra-ivy/keyboard-escape-quit-and-exit))
+(use-package ivy-hydra :ensure t :defer t)
 
 (use-package ivy-rich
   :ensure t
@@ -141,9 +124,6 @@
                                          (recentf-cleanup)
                                          (counsel-recentf))
                                        "refresh list")))
-
-  (general-def read-expression-map
-    "C-r" 'counsel-minibuffer-history)
   :general
   (tyrant-def
     "fr" 'counsel-recentf
@@ -215,19 +195,11 @@ around point as the initial input."
                   x)
         (pyim-cregexp-build x)))))
 
-(use-package wgrep
-  :ensure t
-  :general
-  (despot-def wgrep-mode-map
-    "," 'wgrep-finish-edit
-    "c" 'wgrep-finish-edit
-    "a" 'wgrep-abort-changes
-    "k" 'wgrep-abort-changes))
-
 (use-package smex
   :ensure t
   :defer t
   :init (setq smex-history-length 32))
+
 
 (use-package company
   :ensure t

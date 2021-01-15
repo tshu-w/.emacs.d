@@ -31,19 +31,7 @@
   (advice-add 'magit-diff-visit-file          :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-worktree-file :after #'org-reveal-advice)
 
-  (general-def 'normal magit-blame-read-only-mode-map
-    "RET"      'magit-show-commit)
-
-  (despot-def with-editor-mode-map
-    ","      'with-editor-finish
-    "a"      'with-editor-cancel
-    "c"      'with-editor-finish
-    "k"      'with-editor-cancel)
-  (despot-def magit-log-select-mode-map
-    ","      'magit-log-select-pick
-    "a"      'magit-log-select-quit
-    "c"      'magit-log-select-pick
-    "k"      'magit-log-select-quit)
+  (general-def 'normal magit-log-select-mode-map "q" 'magit-log-select-quit)
   :general
   (tyrant-def
     "g"   '(:ignore t :which-key "git")
@@ -77,18 +65,7 @@
   :ensure t
   :hook (magit-mode . magit-delta-mode))
 
-(use-package forge
-  :ensure t
-  :after magit
-  :config
-  (despot-def forge-topic-mode-map
-    "c" 'forge-create-post
-    "e" 'forge-edit-post)
-  (despot-def forge-post-mode-map
-    "," 'forge-post-submit
-    "c" 'forge-post-submit
-    "k" 'forge-post-cancel
-    "a" 'forge-post-cancel))
+(use-package forge :ensure t :after magit)
 
 (use-package transient
   :ensure t

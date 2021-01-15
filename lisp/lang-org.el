@@ -1041,9 +1041,6 @@ Org Review Transient state
     "gk"       'org-ref-bibtex-previous-entry)
 
   (despot-def bibtex-mode-map
-    ;; Navigation
-    "j"  'org-ref-bibtex-next-entry
-    "k"  'org-ref-bibtex-previous-entry
     ;; Open
     "b"  'org-ref-open-in-browser
     "n"  'org-ref-open-bibtex-notes
