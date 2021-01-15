@@ -52,7 +52,6 @@
     "ad"      'dired
     "ap"      'list-processes
     "aP"      'proced
-    "au"      'undo-tree-visualize
 
     "b"       '(:ignore t :which-key "buffers")
     "bb"      'mode-line-other-buffer
@@ -61,12 +60,11 @@
     "bh"      'switch-to-help-buffer
     "bm"      'switch-to-messages-buffer
     "bn"      'next-buffer
-    "bN"      'evil-buffer-new
     "bp"      'previous-buffer
+    "br"      'read-only-mode
     "bs"      'switch-to-scratch-buffer
     "bu"      'reopen-killed-buffer
     "bx"      'kill-buffer-and-window
-    "br"      'read-only-mode
     "b C-d"   'kill-other-buffers
     "b C-S-d" 'kill-matching-buffers-rudely
 
@@ -79,7 +77,6 @@
 
     "e"       '(:ignore t :which-key "errors")
     "en"      'next-error
-    "eN"      'previous-error
     "ep"      'previous-error
 
     "f"       '(:ignore t :which-key "files")
@@ -98,7 +95,6 @@
     "fo"      'open-file-or-directory-in-external-app
     "fR"      'rename-current-buffer-file
     "fs"      'save-buffer
-    "fS"      'evil-write-all
     "fv"      '(:ignore t :which-key "variables")
     "fvd"     'add-dir-local-variable
     "fvf"     'add-file-local-variable
@@ -168,7 +164,6 @@
     "tF"      'toggle-frame-fullscreen
     "th"      'global-hl-line-mode
     "tH"      'font-lock-mode
-    "tk"      'which-key-mode
     "tl"      'toggle-truncate-lines
     "tn"      'linum-mode
     "tt"      'load-theme
@@ -238,8 +233,8 @@
       "H-x"   'kill-region
       "H-w"   'delete-window
       "H-W"   'delete-frame
-      "H-z"   'undo-tree-undo
-      "H-Z"   'undo-tree-redo
+      "H-z"   'evil-undo
+      "H-Z"   'evil-redo
       "H-C-F" 'toggle-frame-fullscreen
       "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
       "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode)))))
@@ -268,7 +263,13 @@
         evil-visual-state-cursor  '("gray" (hbar . 2))
         evil-motion-state-cursor  '("plum3" box))
 
-  (evil-set-undo-system 'undo-tree)
+  (use-package undo-fu :ensure t)
+  (use-package undo-fu-session
+    :ensure t
+    :config
+    (global-undo-fu-session-mode)
+    (setq undo-fu-session-incompatible-files '("\\.gpg$" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
+  (evil-set-undo-system 'undo-fu)
 
   ;; override default-jump-handlers
   (setq default-jump-handlers '(evil-goto-definition))
@@ -433,42 +434,13 @@
 
   (general-def 'normal
     "C-,"      'evil-repeat-find-char-reverse
-    "K"        'evil-smart-doc-lookup
     "zf"       'reposition-window
     "gd"       'jump-to-definition
     "gD"       'jump-to-definition-other-window
     "gr"       'jump-to-reference
     "gR"       'jump-to-reference-other-window)
 
-  (general-def 'insert [remap evil-complete-previous] 'hippie-expand)
-
-  ;; make <escape> quit as much as possible
-  (general-def :keymaps '(minibuffer-local-map
-                          minibuffer-local-ns-map
-                          minibuffer-local-completion-map
-                          minibuffer-local-must-match-map
-                          minibuffer-local-isearch-map)
-    "<escape>" 'abort-recursive-edit))
-
-(use-package undo-tree
-  :ensure t
-  :init
-  (setq undo-tree-visualizer-timestamps t
-        undo-tree-visualizer-diff t
-        ;; 10X bump of the undo limits to avoid issues with premature
-        ;; Emacs GC which truncages the undo history very aggresively
-        undo-limit 800000
-        undo-strong-limit 12000000
-        undo-outer-limit 120000000)
-
-  (setq undo-tree-auto-save-history t)
-  (global-undo-tree-mode)
-  :config
-  ;; TODO fix upstream
-  (defun undo-tree-restore-default ()
-    "Restore diff window after quit."
-    (setq undo-tree-visualizer-diff t))
-  (advice-add 'undo-tree-visualizer-quit :after #'undo-tree-restore-default))
+  (general-def 'insert [remap evil-complete-previous] 'hippie-expand))
 
 (use-package evil-textobj-syntax
   :ensure t
