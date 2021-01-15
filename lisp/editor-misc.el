@@ -85,24 +85,14 @@
 
   (cal-china-x-setup))
 
-(use-package counsel-dash
+(use-package dash-at-point
+  :if (memq window-system '(mac ns))
   :ensure t
-  :disabled t
-  :init
-  (add-hook 'python-mode-hook (lambda () (setq-local dash-docs-docsets '("Python 3" "SciPy" "NumPy" "Pandas" "Matplotlib"))))
-  (add-hook 'LaTeX-mode-hook  (lambda () (setq-local dash-docs-docsets '("LaTeX"))))
-  (add-hook 'sh-mode-hook     (lambda () (setq-local dash-docs-docsets '("Bash"))))
-  (add-hook 'c++-mode-hook    (lambda () (setq-local dash-docs-docsets '("C++"))))
-  :config
-  (setq dash-docs-browser-func 'eww)
-  (add-to-list 'ivy-re-builders-alist '(counsel-dash-at-point . ivy--regex-ignore-order))
-  (add-to-list 'ivy-re-builders-alist '(counsel-dash . ivy--regex-ignore-order))
   :general
   (tyrant-def
-    "d"  '(:ignore t :which-key "docs")
-    "da" 'dash-docs-activate-docset
-    "dh" 'counsel-dash-at-point
-    "dH" 'counsel-dash))
+    "d" '(:ignore t :which-key "docs")
+    "dd" 'dash-at-point
+    "dD" 'dash-at-point-with-docset))
 
 (use-package devdocs
   :ensure t
