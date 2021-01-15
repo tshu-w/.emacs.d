@@ -484,22 +484,13 @@
   (add-hook 'org-agenda-mode-hook (lambda ()
                                     (evil-collection-unimpaired-mode -1))))
 
-(use-package evil-commentary
-  :disabled t
-  :ensure t
-  :hook (after-init . evil-commentary-mode))
-
 (use-package evil-indent-plus
   :ensure t
   :hook (after-init . evil-indent-plus-default-bindings))
 
-(use-package evil-lion
-  :disabled t
-  :ensure t
-  :hook (after-init . evil-lion-mode))
-
 (use-package evil-numbers
   :ensure t
+  :disabled t
   :general
   (general-def evil-normal-state-map
     "C-c +"   'evil-numbers/inc-at-pt
@@ -520,6 +511,7 @@
 
 (use-package evil-snipe
   :ensure t
+  :disabled t
   :hook ((after-init . evil-snipe-mode)
          (after-init . evil-snipe-override-mode))
   :init
@@ -540,19 +532,6 @@
   (general-def 'visual evil-surround-mode-map
     "s" 'evil-surround-region
     "S" 'evil-substitute))
-
-(use-package evil-visualstar
-  :ensure t
-  :general
-  (general-def evil-visual-state-map
-    "*" 'evil-visualstar/begin-search-forward
-    "#" 'evil-visualstar/begin-search-backward))
-
-(use-package linum-relative
-  :ensure t
-  :config (setq linum-relative-current-symbol "")
-  :general (tyrant-def "tr" 'linum-relative-toggle))
-
 
 (provide 'core-keybinds)
 ;;; core-keybinds.el ends here
