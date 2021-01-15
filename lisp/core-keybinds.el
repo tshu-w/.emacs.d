@@ -276,133 +276,125 @@
   (evil-set-command-property 'jump-to-definition :jump t)
   (evil-set-command-property 'jump-to-reference :jump t)
 
-  ;; Thanks to `editorconfig-emacs' for many of these
-  (defvar evil-indent-variable-alist
-    ;; Note that derived modes must come before their sources
-    '(((awk-mode c-mode c++-mode java-mode
-                 idl-mode java-mode objc-mode pike-mode) . c-basic-offset)
-      (groovy-mode . groovy-indent-offset)
-      (python-mode . python-indent-offset)
-      (cmake-mode . cmake-tab-width)
-      (coffee-mode . coffee-tab-width)
-      (cperl-mode . cperl-indent-level)
-      (css-mode . css-indent-offset)
-      (elixir-mode . elixir-smie-indent-basic)
-      ((emacs-lisp-mode lisp-mode) . lisp-indent-offset)
-      (enh-ruby-mode . enh-ruby-indent-level)
-      (erlang-mode . erlang-indent-level)
-      (js2-mode . js2-basic-offset)
-      (js3-mode . js3-indent-level)
-      ((js-mode json-mode) . js-indent-level)
-      (latex-mode . (LaTeX-indent-level tex-indent-basic))
-      (livescript-mode . livescript-tab-width)
-      (mustache-mode . mustache-basic-offset)
-      (nxml-mode . nxml-child-indent)
-      (perl-mode . perl-indent-level)
-      (puppet-mode . puppet-indent-level)
-      (ruby-mode . ruby-indent-level)
-      (rust-mode . rust-indent-offset)
-      (scala-mode . scala-indent:step)
-      (sgml-mode . sgml-basic-offset)
-      (sh-mode . sh-basic-offset)
-      (typescript-mode . typescript-indent-level)
-      (web-mode . web-mode-markup-indent-offset)
-      (yaml-mode . yaml-indent-offset))
-    "An alist where each key is either a symbol corresponding
+  (progn
+    ;; Thanks to `editorconfig-emacs' for many of these
+    (defvar evil-indent-variable-alist
+      ;; Note that derived modes must come before their sources
+      '(((awk-mode c-mode c++-mode java-mode
+                   idl-mode java-mode objc-mode pike-mode) . c-basic-offset)
+        (groovy-mode . groovy-indent-offset)
+        (python-mode . python-indent-offset)
+        (cmake-mode . cmake-tab-width)
+        (coffee-mode . coffee-tab-width)
+        (cperl-mode . cperl-indent-level)
+        (css-mode . css-indent-offset)
+        (elixir-mode . elixir-smie-indent-basic)
+        ((emacs-lisp-mode lisp-mode) . lisp-indent-offset)
+        (enh-ruby-mode . enh-ruby-indent-level)
+        (erlang-mode . erlang-indent-level)
+        (js2-mode . js2-basic-offset)
+        (js3-mode . js3-indent-level)
+        ((js-mode json-mode) . js-indent-level)
+        (latex-mode . (LaTeX-indent-level tex-indent-basic))
+        (livescript-mode . livescript-tab-width)
+        (mustache-mode . mustache-basic-offset)
+        (nxml-mode . nxml-child-indent)
+        (perl-mode . perl-indent-level)
+        (puppet-mode . puppet-indent-level)
+        (ruby-mode . ruby-indent-level)
+        (rust-mode . rust-indent-offset)
+        (scala-mode . scala-indent:step)
+        (sgml-mode . sgml-basic-offset)
+        (sh-mode . sh-basic-offset)
+        (typescript-mode . typescript-indent-level)
+        (web-mode . web-mode-markup-indent-offset)
+        (yaml-mode . yaml-indent-offset))
+      "An alist where each key is either a symbol corresponding
   to a major mode, a list of such symbols, or the symbol t,
   acting as default. The values are either integers, symbols
   or lists of these.")
 
-  (defun set-evil-shift-width ()
-    "Set the value of `evil-shift-width' based on the indentation settings of the
+    (defun set-evil-shift-width ()
+      "Set the value of `evil-shift-width' based on the indentation settings of the
   current major mode."
-    (let ((shift-width
-           (catch 'break
-             (dolist (test evil-indent-variable-alist)
-               (let ((mode (car test))
-                     (val (cdr test)))
-                 (when (or (and (symbolp mode) (derived-mode-p mode))
-                           (and (listp mode) (apply 'derived-mode-p mode))
-                           (eq 't mode))
-                   (when (not (listp val))
-                     (setq val (list val)))
-                   (dolist (v val)
-                     (cond
-                      ((integerp v) (throw 'break v))
-                      ((and (symbolp v) (boundp v))
-                       (throw 'break (symbol-value v))))))))
-             (throw 'break (default-value 'evil-shift-width)))))
-      (when (and (integerp shift-width)
-                 (< 0 shift-width))
-        (setq-local evil-shift-width shift-width))))
+      (let ((shift-width
+             (catch 'break
+               (dolist (test evil-indent-variable-alist)
+                 (let ((mode (car test))
+                       (val (cdr test)))
+                   (when (or (and (symbolp mode) (derived-mode-p mode))
+                             (and (listp mode) (apply 'derived-mode-p mode))
+                             (eq 't mode))
+                     (when (not (listp val))
+                       (setq val (list val)))
+                     (dolist (v val)
+                       (cond
+                        ((integerp v) (throw 'break v))
+                        ((and (symbolp v) (boundp v))
+                         (throw 'break (symbol-value v))))))))
+               (throw 'break (default-value 'evil-shift-width)))))
+        (when (and (integerp shift-width)
+                   (< 0 shift-width))
+          (setq-local evil-shift-width shift-width))))
 
-  ;; after major mode has changed, reset evil-shift-width
-  (add-hook 'after-change-major-mode-hook 'set-evil-shift-width 'append)
+    ;; after major mode has changed, reset evil-shift-width
+    (add-hook 'after-change-major-mode-hook 'set-evil-shift-width 'append))
 
 
-  (defmacro define-text-object-regexp (key name start-regexp end-regexp)
-    "Define a text object.
+  (progn
+    (defmacro define-text-object-regexp (key name start-regexp end-regexp)
+      "Define a text object.
   START-REGEXP and END-REGEXP are the boundaries of the text object."
-    (let ((inner-name (make-symbol (concat "evil-inner-" name)))
-          (outer-name (make-symbol (concat "evil-outer-" name))))
-      `(progn
-         (evil-define-text-object ,inner-name (count &optional beg end type)
-           (evil-select-paren ,start-regexp ,end-regexp beg end type count nil))
-         (evil-define-text-object ,outer-name (count &optional beg end type)
-           (evil-select-paren ,start-regexp ,end-regexp beg end type count t))
-         (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
-         (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+      (let ((inner-name (make-symbol (concat "evil-inner-" name)))
+            (outer-name (make-symbol (concat "evil-outer-" name))))
+        `(progn
+           (evil-define-text-object ,inner-name (count &optional beg end type)
+             (evil-select-paren ,start-regexp ,end-regexp beg end type count nil))
+           (evil-define-text-object ,outer-name (count &optional beg end type)
+             (evil-select-paren ,start-regexp ,end-regexp beg end type count t))
+           (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
+           (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
 
-  (defmacro define-text-object (key name start end)
-    "Define a text object and a surround pair.
+    (defmacro define-text-object (key name start end)
+      "Define a text object and a surround pair.
   START and END are strings (not regular expressions) that define
   the boundaries of the text object."
-    `(progn
-       (define-text-object-regexp ,key ,name
-         ,(regexp-quote start)
-         ,(regexp-quote end))
-       (with-eval-after-load 'evil-surround
-         (add-to-list 'evil-surround-pairs-alist
-                      (cons (string-to-char ,key)
-                            (if ,end
-                                (cons ,start ,end)
-                              ,start))))))
+      `(progn
+         (define-text-object-regexp ,key ,name
+           ,(regexp-quote start)
+           ,(regexp-quote end))
+         (with-eval-after-load 'evil-surround
+           (add-to-list 'evil-surround-pairs-alist
+                        (cons (string-to-char ,key)
+                              (if ,end
+                                  (cons ,start ,end)
+                                ,start))))))
 
-  (define-text-object "$" "dollar" "$" "$")
-  (define-text-object "*" "star" "*" "*")
-  (define-text-object "8" "block-star" "/*" "*/")
-  (define-text-object "|" "bar" "|" "|")
-  (define-text-object "%" "percent" "%" "%")
-  (define-text-object "/" "slash" "/" "/")
-  (define-text-object "_" "underscore" "_" "_")
-  (define-text-object "-" "hyphen" "-" "-")
-  (define-text-object "~" "tilde" "~" "~")
-  (define-text-object "=" "equal" "=" "=")
-  (define-text-object "«" "double-angle-bracket" "«" "»")
-  (define-text-object "｢" "corner-bracket" "｢" "｣")
-  (define-text-object "‘" "single-quotation-mark" "‘" "’")
-  (define-text-object "“" "double-quotation-mark" "“" "”")
-  (define-text-object ";" "elisp-comment" ";; " "")
+    (define-text-object "$" "dollar" "$" "$")
+    (define-text-object "*" "star" "*" "*")
+    (define-text-object "8" "block-star" "/*" "*/")
+    (define-text-object "|" "bar" "|" "|")
+    (define-text-object "%" "percent" "%" "%")
+    (define-text-object "/" "slash" "/" "/")
+    (define-text-object "_" "underscore" "_" "_")
+    (define-text-object "-" "hyphen" "-" "-")
+    (define-text-object "~" "tilde" "~" "~")
+    (define-text-object "=" "equal" "=" "=")
+    (define-text-object "«" "double-angle-bracket" "«" "»")
+    (define-text-object "｢" "corner-bracket" "｢" "｣")
+    (define-text-object "‘" "single-quotation-mark" "‘" "’")
+    (define-text-object "“" "double-quotation-mark" "“" "”")
+    (define-text-object ";" "elisp-comment" ";; " "")
 
-  (evil-define-text-object evil-pasted (count &rest args)
-    (list (save-excursion (evil-goto-mark ?\[) (point))
-          (save-excursion (evil-goto-mark ?\]) (1+ (point)))))
-  (define-key evil-inner-text-objects-map "P" 'evil-pasted)
+    (evil-define-text-object evil-pasted (count &rest args)
+      (list (save-excursion (evil-goto-mark ?\[) (point))
+            (save-excursion (evil-goto-mark ?\]) (1+ (point)))))
+    (define-key evil-inner-text-objects-map "P" 'evil-pasted)
 
-  ;; define text-object for entire buffer
-  (evil-define-text-object evil-inner-buffer (count &optional beg end type)
-    (list (point-min) (point-max)))
-  (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
-
-  (defun evil-smart-doc-lookup ()
-    "Run documentation lookup command specific to the major mode.
-  Use command bound to `SPC m h h` if defined, otherwise fall back
-  to `evil-lookup'"
-    (interactive)
-    (let ((binding (key-binding (kbd ",hh"))))
-      (if (commandp binding)
-          (call-interactively binding)
-        (evil-lookup))))
+    ;; define text-object for entire buffer
+    (evil-define-text-object evil-inner-buffer (count &optional beg end type)
+      (list (point-min) (point-max)))
+    (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer))
 
   ;; This will keep eldoc active when you are in a method and you go in insert mode.
   (with-eval-after-load 'eldoc
@@ -416,21 +408,22 @@
     (eldoc-add-command #'evil-cp-insert-at-beginning-of-form)
     (eldoc-add-command #'evil-cp-append))
 
-  (defun evil-org-insert-state-in-edit-buffer (fun &rest args)
-    "Bind `evil-default-state' to `insert' before calling FUN with ARGS."
-    (let ((evil-default-state 'insert)
-          ;; Force insert state
-          evil-emacs-state-modes
-          evil-normal-state-modes
-          evil-motion-state-modes
-          evil-visual-state-modes
-          evil-operator-state-modes
-          evil-replace-state-modes)
-      (apply fun args)
-      (evil-refresh-cursor)))
+  (progn
+    (defun evil-org-insert-state-in-edit-buffer (fun &rest args)
+      "Bind `evil-default-state' to `insert' before calling FUN with ARGS."
+      (let ((evil-default-state 'insert)
+            ;; Force insert state
+            evil-emacs-state-modes
+            evil-normal-state-modes
+            evil-motion-state-modes
+            evil-visual-state-modes
+            evil-operator-state-modes
+            evil-replace-state-modes)
+        (apply fun args)
+        (evil-refresh-cursor)))
 
-  (advice-add 'org-babel-do-key-sequence-in-edit-buffer
-              :around #'evil-org-insert-state-in-edit-buffer)
+    (advice-add 'org-babel-do-key-sequence-in-edit-buffer
+                :around #'evil-org-insert-state-in-edit-buffer))
 
   (general-def 'normal
     "C-,"      'evil-repeat-find-char-reverse
