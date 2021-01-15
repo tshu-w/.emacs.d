@@ -162,7 +162,7 @@
   :config
   (setq dired-dwim-target t)
 
-  (define-advice dired-do-print (:override (&optional _))
+  (defun dired-show-hide-dotfile()
     "Show/hide dotfiles."
     (interactive)
     (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p)
@@ -171,7 +171,8 @@
           (dired-mark-files-regexp "^\\.")
           (dired-do-kill-lines))
       (revert-buffer)
-      (setq-local dired-dotfiles-show-p t))))
+      (setq-local dired-dotfiles-show-p t)))
+  (advice-add 'dired-do-print :override #'dired-show-file-type))
 
 (use-package electric
   :hook (after-init . electric-pair-mode))
