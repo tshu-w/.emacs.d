@@ -121,10 +121,13 @@
 (put 'downcase-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 
+;; inhibit annoying warnings
+(setq warning-minimum-log-level :error)
+
 ;; don't let the cursor go into minibuffer prompt
 ;; Tip taken from Xah Lee: http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
-(setq minibuffer-prompt-properties
-      '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
+;; (setq minibuffer-prompt-properties
+;;       '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)
@@ -281,10 +284,11 @@
   :hook (before-save . delete-trailing-whitespace)
   :config
   (setq column-number-mode t
-        ;; save clipboard contents into kill-ring before replace them
-        save-interprogram-paste-before-kill t
+        delete-trailing-lines nil
         eval-expression-print-length nil
-        eval-expression-print-level nil))
+        eval-expression-print-level nil
+        ;; save clipboard contents into kill-ring before replace them
+        save-interprogram-paste-before-kill t))
 
 (use-package so-long
   :hook (after-init . global-so-long-mode))
@@ -292,16 +296,10 @@
 (use-package subword
   :hook (prog-mode . subword-mode))
 
-(use-package time
-  :defer t
-  :config
-  (setq display-time-24hr-format t
-        display-time-default-load-average nil))
-
 (use-package tramp
   :defer t
   :config
-  (setq remote-file-name-inhibit-cache nil
+  (setq remote-file-name-inhibit-cache 60
         tramp-default-method "ssh"
         tramp-verbose 1
         tramp-use-ssh-controlmaster-options t

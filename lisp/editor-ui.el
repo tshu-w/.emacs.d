@@ -37,7 +37,11 @@
 
 (use-package flucui-themes :ensure t :defer t)
 
-(use-package gruvbox-theme :ensure t :defer t)
+(use-package gruvbox-theme
+  :ensure t
+  :defer t
+  :custom-face
+  (internal-border ((t (:background nil)))))
 
 (use-package humanoid-themes
   :ensure t
@@ -83,27 +87,26 @@
                        lab-light
                        spacemacs-light
                        solo-jazz
-                       ;; tsdh-light
-                       )
+                       modus-operandi)
   "Light themes to switch.")
 
-(defvar dark-themes '(doom-nord
-                      doom-one
-                      doom-opera
-                      doom-solarized-dark
-                      doom-tomorrow-night
+(defvar dark-themes '(doom-city-lights
                       doom-dark+
                       doom-ephemeral
                       doom-Iosvkem
                       doom-material
-                      ;; doom-moonlight
+                      doom-nord
                       doom-nova
                       doom-oceanic-next
+                      doom-one
+                      doom-opera
                       doom-palenight
                       doom-peacock
                       doom-rouge
+                      doom-solarized-dark
                       doom-sourcerer
                       doom-spacegrey
+                      doom-tomorrow-night
                       doom-wilmersdorf
                       doom-vibrant
                       doom-zenburn
@@ -112,18 +115,15 @@
                       gruvbox-dark-medium
                       gruvbox-dark-soft
                       humanoid-dark
-                      ;; kaolin-aurora
                       kaolin-blossom
                       kaolin-bubblegum
-                      ;; kaolin-dark
-                      ;; kaolin-eclipse
                       kaolin-galaxy
-                      ;; kaolin-mono-dark
                       kaolin-ocean
                       kaolin-temple
                       kaolin-valley-dark
                       lab-dark
-                      spacemacs-dark)
+                      spacemacs-dark
+                      modus-vivendi)
   "Dark themes to switch.")
 
 (add-hook 'ns-system-appearance-change-functions
@@ -204,8 +204,6 @@
           :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("^\*WoMan.+\*$"
           :regexp t    :position bottom                                   ) popwin:special-display-config)
-  (push '("*Google Translate*"
-          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("^\\*Flycheck.+\\*$"
           :dedicated t :position bottom :stick t :noselect t   :regexp t  ) popwin:special-display-config)
   (push '("*lsp-help*"
@@ -225,6 +223,7 @@
         (progn (golden-ratio-mode -1) (balance-windows))
       (progn (golden-ratio-mode) (golden-ratio))))
 
+  ;; TODO: better logic
   (with-eval-after-load 'writeroom-mode
     (add-hook 'golden-ratio-mode-hook
               (lambda ()
