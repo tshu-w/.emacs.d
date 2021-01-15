@@ -73,6 +73,7 @@
 
 (use-package no-littering
   :ensure t
+  :defer t
   :config
   (with-eval-after-load 'recentf
     (add-to-list 'recentf-exclude no-littering-var-directory)
@@ -99,8 +100,7 @@
     (interactive)
     (restart-emacs (cons "--debug-init" args))))
 
-(use-package help-fns+
-  :commands describe-keymap)
+(use-package help-fns+ :commands describe-keymap)
 
 
 (provide 'core-packages)

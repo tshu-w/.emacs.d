@@ -15,7 +15,9 @@
 
   (add-hook 'python-mode-hook
             (lambda ()
-              (set (make-local-variable 'comment-inline-offset) 2)))
+              (set (make-local-variable 'comment-inline-offset) 2)
+              (setq fill-column 88
+                    tab-width 4)))
 
   ;; inferior-python-mode needs these variables to be defined. The python
   ;; package declares them but does not initialize them.
@@ -173,36 +175,19 @@
     "sl"    '+python-shell-send-line
     "si"    '+python-start-or-switch-repl
     "sR"    '+python-shell-send-region-switch
-    "sr"    '+python-shell-send-region
-    "v"     '(:ignore t :which-key "virtualenv")))
+    "sr"    '+python-shell-send-region))
 
 (use-package blacken
   :ensure t
   :after python
   :config
-  (setq blacken-fast-unsafe t)
+  (setq blacken-fast-unsafe t
+        blacken-line-length 'fill)
   (despot-def python-mode-map "=" 'blacken-buffer))
-
-(use-package yapfify
-  :disabled t
-  :ensure t
-  :hook (python-mode . yapf-mode)
-  :config
-  (despot-def python-mode-map "=" 'yapfify-region-or-buffer))
 
 (use-package cython-mode :ensure t :defer t)
 
 (use-package pip-requirements :ensure t :defer t)
-
-(use-package importmagic
-  :disabled t ;; only work with local python
-  :ensure t
-  :hook (python-mode . importmagic-mode)
-  :config
-  (setq importmagic-style-configuration-alist '((multiline . parentheses)
-                                                (max_columns . 88)))
-  (add-to-list 'ivy-ignore-buffers "\\*epc con")
-  (despot-def python-mode-map "rf" 'importmagic-fix-symbol-at-point))
 
 (use-package py-isort
   :ensure t
@@ -218,13 +203,8 @@
   (when (memq window-system '(mac ns))
     (setq conda-anaconda-home "/usr/local/anaconda3/"))
 
-  (add-hook 'python-mode-hook (lambda ()
-                                (unless
-                                    (file-remote-p default-directory)
-                                  conda-env-autoactivate-mode)))
-
   (despot-def python-mode-map
-    "vl" 'conda-env-list
+    "v"  '(:ignore t :which-key "virtualenv")
     "va" 'conda-env-activate
     "vd" 'conda-env-deactivate
     "vA" 'conda-env-autoactivate-mode
