@@ -124,10 +124,13 @@
 (use-package git-timemachine
   :ensure t
   :config
-  (defhydra git-timemachine-menu (
-                                  :pre (unless (bound-and-true-p git-timemachine-mode)
-                                         (call-interactively 'git-timemachine))
-                                  :hint nil)
+  (defhydra git-timemachine-menu
+    (
+     :foreign-keys run
+     :hint nil
+     :pre (unless (bound-and-true-p git-timemachine-mode)
+            (call-interactively 'git-timemachine))
+     :post (git-timemachine-quit))
     "
 Git Timemachine Transient State
 [_p_/_N_] previous [_n_] next [_c_] current [_g_] goto nth rev [_Y_] copy hash [_q_] quit"
