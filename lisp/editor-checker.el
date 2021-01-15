@@ -91,6 +91,7 @@ If the error list is visible, hide it.  Otherwise, show it."
 
 (use-package flycheck-posframe
   :ensure t
+  :if (display-graphic-p)
   :custom-face (flycheck-posframe-border-face ((t (:inherit default))))
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config
@@ -102,6 +103,7 @@ If the error list is visible, hide it.  Otherwise, show it."
   (with-eval-after-load 'company
     ;; Don't display popups if company is open
     (add-hook 'flycheck-posframe-inhibit-functions #'company--active-p))
+
   (with-eval-after-load 'evil
     ;; Don't display popups while in insert or replace mode, as it can affect
     ;; the cursor's position or cause disruptive input delays.
@@ -112,7 +114,7 @@ If the error list is visible, hide it.  Otherwise, show it."
 
 
 (use-package flyspell
-  :disabled t
+  :after tex
   :init
   (setq flyspell-issue-message-flag nil
         flyspell-issue-welcome-flag nil)
@@ -183,7 +185,6 @@ SCOPE can be:
 
 (use-package flyspell-correct
   :ensure t
-  :disabled t
   :general
   (tyrant-def
     "Sc" 'flyspell-correct-wrapper
