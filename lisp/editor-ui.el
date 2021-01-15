@@ -343,10 +343,6 @@
   :ensure t
   :hook (prog-mode . highlight-numbers-mode))
 
-(use-package clean-aindent-mode
-  :ensure t
-  :hook (prog-mode . clean-aindent-mode))
-
 (use-package eval-sexp-fu
   :ensure t
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))

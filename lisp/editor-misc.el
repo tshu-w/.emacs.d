@@ -127,35 +127,6 @@
   :ensure t
   :init (editorconfig-mode))
 
-(use-package google-translate
-  :disabled t
-  :ensure t
-  :init
-  (setq google-translate-enable-ido-completion t
-        google-translate-show-phonetic t
-        google-translate-default-source-language "en"
-        google-translate-default-target-language "zh-CN")
-  :config
-  (defun set-google-translate-languages (source target)
-    "Set source language for google translate.
-     For instance pass En as source for English."
-    (interactive
-     "sEnter source language (ie. en): \nsEnter target language (ie. en): "
-     source target)
-    (message
-     (format "Set google translate source language to %s and target to %s"
-             source target))
-    (setq google-translate-default-source-language (downcase source))
-    (setq google-translate-default-target-language (downcase target)))
-  :general
-  (tyrant-def
-    "xg"  '(:ignore t :which-key "google-translate")
-    "xgl" 'set-google-translate-languages
-    "xgQ" 'google-translate-query-translate-reverse
-    "xgq" 'google-translate-query-translate
-    "xgT" 'google-translate-at-point-reverse
-    "xgt" 'google-translate-at-point))
-
 (use-package helpful
   :ensure t
   :config
@@ -170,10 +141,6 @@
     "hk" 'helpful-key
     "hf" 'helpful-callable
     "hv" 'helpful-variable))
-
-(use-package insert-translated-name
-  :quelpa (insert-translated-name :fetcher github :repo "manateelazycat/insert-translated-name")
-  :general ("H-t" 'insert-translated-name-insert))
 
 (use-package link-hint
   :ensure t
@@ -211,45 +178,6 @@
   :hook (org-mode . pangu-spacing-mode)
   :config
   (setq pangu-spacing-real-insert-separtor t))
-
-(use-package pdf-tools
-  :disabled t
-  :ensure t
-  :defer t
-  :config
-  (pdf-tools-install :no-query)
-  (setq pdf-view-use-scaling t)
-
-  (despot-def pdf-view-mode-map
-    ;; Annotations
-    "a"              '(:ignore t :which-key "annotations")
-    "aD"              'pdf-annot-delete
-    "at"              'pdf-annot-attachment-dired
-    "ah"              'pdf-annot-add-highlight-markup-annotation
-    "al"              'pdf-annot-list-annotations
-    "am"              'pdf-annot-add-markup-annotation
-    "ao"              'pdf-annot-add-strikeout-markup-annotation
-    "as"              'pdf-annot-add-squiggly-markup-annotation
-    "at"              'pdf-annot-add-text-annotation
-    "au"              'pdf-annot-add-underline-markup-annotation
-    "f"              '(:ignore t :which-key "fit")
-    ;; Fit image to window
-    "fw"              'pdf-view-fit-width-to-window
-    "fh"              'pdf-view-fit-height-to-window
-    "fp"              'pdf-view-fit-page-to-window
-    "s"              '(:ignore t :which-key "slice/search")
-    ;; Slicing image
-    "sm"              'pdf-view-set-slice-using-mouse
-    "sb"              'pdf-view-set-slice-froquelpam-bounding-box
-    "sr"              'pdf-view-reset-slice
-    ;; Other
-    "ss"              'pdf-occur
-    "p"               'pdf-misc-print-document
-    "O"               'pdf-outline
-    "n"               'pdf-view-midnight-minor-mode)
-
-  (general-def 'visual pdf-view-mode-map
-    "y"        'pdf-view-kill-ring-save))
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
@@ -302,64 +230,6 @@
     "xi_" 'string-inflection-underscore
     "xiu" 'string-inflection-underscore
     "xiU" 'string-inflection-upcase))
-
-(use-package xwidget
-  :if (featurep 'xwidget-internal)
-  :disabled t
-  :defer t
-  :init
-  ;; (setq browse-url-browser-function 'xwidget-webkit-browse-url)
-  :config
-  (defun xwidget-webkit ()
-    "Switch to xwidget webkit buffer or open https://google.com."
-    (interactive)
-    (if (buffer-live-p xwidget-webkit-last-session-buffer)
-        (switch-to-buffer xwidget-webkit-last-session-buffer)
-      (xwidget-webkit-browse-url "https://google.com")))
-
-  (defun xwidget-webkit-browse-url@after (url &optional new-session)
-    "Switch to xwidget webkit buffer after open URL."
-    (ignore url new-session)
-    (switch-to-buffer xwidget-webkit-last-session-buffer))
-  (advice-add 'xwidget-webkit-browse-url :after #'xwidget-webkit-browse-url@after)
-
-  (defun xwidget-webkit-browse-with-external-browser (&optional url)
-    "Browse the current URL with an external browser.
-The browser to used is specified by the
-`browse-url-secondary-browser-function' variable."
-    (interactive)
-    (funcall browse-url-secondary-browser-function
-             (or url (xwidget-webkit-current-url))))
-
-  (with-eval-after-load 'writeroom-mode
-    (add-to-list 'writeroom-major-modes-exceptions 'xwidget-webkit-mode))
-
-  (general-def 'normal xwidget-webkit-mode-map
-    "&" 'xwidget-webkit-browse-with-external-browser)
-  :general
-  (tyrant-def "ab" 'xwidget-webkit))
-
-(use-package xwwp-full
-  :quelpa (xwwp :fetcher github :repo "BlueFlo0d/xwwp" :files ("*.el" "*.css" "*.js"))
-  :disabled t
-  :defer t
-  :init
-  (with-eval-after-load 'xwidget (require 'xwwp-full))
-  :config
-  (setq xwwp-follow-link-completion-system 'ivy
-        xwwp-ace-label-style '(("z-index" . "2147483647")
-                               ("color" . "red")
-                               ("opacity" . "0.7")
-                               ("background-color" . "yellow")
-                               ("font-family" . "monospace")
-                               ("font-size" . "1em")))
-
-  (general-def 'normal xwidget-webkit-mode-map
-    "H-c" 'xwidget-webkit-copy-selection-as-kill
-    "o"   'xwwp-ace-toggle
-    "O"   'xwwp-follow-link)
-  :general
-  (tyrant-def "aB" 'xwwp))
 
 (use-package winum
   :ensure t
