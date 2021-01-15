@@ -14,6 +14,11 @@
   :init
   (setq org-directory "~/Documents/Org/"
         org-default-notes-file (expand-file-name "inbox.org" org-directory))
+  (use-package org-protocol
+    :defer t
+    :init
+    (defadvice server-execute (before enable-org-protocol activate)
+      (unless (featurep 'org-protocol) (require 'org-protocol))))
   :config
   (add-to-list 'org-modules 'org-tempo t)
   (add-to-list 'org-modules 'org-protocol t)
