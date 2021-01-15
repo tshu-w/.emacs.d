@@ -234,8 +234,6 @@
 (use-package newcomment
   :commands comment-or-uncomment
   :config
-  (setq comment-auto-fill-only-comments t)
-
   (defun comment-or-uncomment ()
     (interactive)
     (if (region-active-p)
