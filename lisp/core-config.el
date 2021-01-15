@@ -154,7 +154,8 @@
     "Save desktop without annoying prompts."
     (interactive)
     (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
-    (desktop-save-in-desktop-dir)))
+    (let ((inhibit-message t))
+      (desktop-save-in-desktop-dir))))
 
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
