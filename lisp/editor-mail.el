@@ -151,6 +151,7 @@
                         ;; IMAP-deleted:
                         (mu4e~proc-move docid (mu4e~mark-check-target target) "-N"))))
 
+  ;; TODO evil-collection style shortcut
   (despot-def mu4e-compose-mode-map
     "," 'message-send-and-exit
     "c" 'message-send-and-exit
