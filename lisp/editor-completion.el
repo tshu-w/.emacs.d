@@ -59,22 +59,31 @@
         ivy-virtual-abbreviate 'full)
 
   ;; https://github.com/Yevgnen/ivy-rich/issues/87#issuecomment-689581896
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  (progn
+    (defvar ivy-rich-cache
+      (make-hash-table :test 'equal))
 
-  (defvar ivy-rich--ivy-switch-buffer-cache
-    (make-hash-table :test 'equal))
+    (defun ivy-rich-cache-lookup (delegate candidate)
+      (let ((result (gethash candidate ivy-rich-cache)))
+        (unless result
+          (setq result (funcall delegate candidate))
+          (puthash candidate result ivy-rich-cache))
+        result))
 
-  (define-advice ivy-rich--ivy-switch-buffer-transformer
-      (:around (old-fn x) cache)
-    (let ((ret (gethash x ivy-rich--ivy-switch-buffer-cache)))
-      (unless ret
-        (setq ret (funcall old-fn x))
-        (puthash x ret ivy-rich--ivy-switch-buffer-cache))
-      ret))
+    (defun ivy-rich-cache-reset ()
+      (clrhash ivy-rich-cache))
 
-  (define-advice +ivy/switch-buffer
-      (:before (&rest _) ivy-rich-reset-cache)
-    (clrhash ivy-rich--ivy-switch-buffer-cache)))
+    (defun ivy-rich-cache-rebuild ()
+      (mapc (lambda (buffer)
+              (ivy-rich--ivy-switch-buffer-transformer (buffer-name buffer)))
+            (buffer-list)))
+
+    (defun ivy-rich-cache-rebuild-trigger ()
+      (ivy-rich-cache-reset)
+      (run-with-idle-timer 1 nil 'ivy-rich-cache-rebuild))
+
+    (advice-add 'ivy-rich--ivy-switch-buffer-transformer :around 'ivy-rich-cache-lookup)
+    (advice-add 'ivy-switch-buffer :after 'ivy-rich-cache-rebuild-trigger)))
 
 (use-package ivy-posframe
   :ensure t
@@ -83,8 +92,8 @@
   (setq ivy-posframe-parameters '((left-fringe . 8)
                                   (right-fringe . 8))
         ivy-posframe-display-functions-alist
-        '((swiper . ivy-display-function-fallback)
-          (complete-symbol . ivy-posframe-display-at-point)
+        '((complete-symbol . ivy-posframe-display-at-point)
+          (swiper . ivy-display-function-fallback)
           (t . ivy-posframe-display-at-frame-center))))
 
 (use-package ivy-xref
