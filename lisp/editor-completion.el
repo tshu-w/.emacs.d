@@ -280,6 +280,7 @@ around point as the initial input."
   (general-def "C-;" 'company-try-hard)
   (general-def company-active-map "C-;" 'company-try-hard))
 
+
 (use-package lsp-mode
   :ensure t
   :hook ((prog-mode . (lambda ()
@@ -304,7 +305,8 @@ around point as the initial input."
         lsp-modeline-diagnostics-enable nil
         lsp-modeline-code-actions-enable nil
         lsp-signature-function 'lsp--eldoc-message
-        lsp-signature-render-documentation nil)
+        lsp-signature-render-documentation nil
+        lsp-keymap-prefix "SPC l")
 
   (add-hook 'lsp-completion-mode-hook
             (lambda ()
@@ -312,59 +314,17 @@ around point as the initial input."
                 (setq company-backends (cdr company-backends)))))
 
   (unless (version<= emacs-version "28.0")
-    (defun lsp-tramp-connection@override (local-command &optional generate-error-file-fn)
-      "Create LSP stdio connection named name.
-LOCAL-COMMAND is either list of strings, string or function which
-returns the command to execute."
-      (list :connect (lambda (filter sentinel name environment-fn)
-                       (let* ((final-command (lsp-resolve-final-function local-command))
-                              ;; wrap with stty to disable converting \r to \n
-                              (process-name (generate-new-buffer-name name))
-                              (wrapped-command (append '("stty" "raw" ";")
-                                                       final-command
-                                                       (list
-                                                        (concat "2>"
-                                                                (or (when generate-error-file-fn
-                                                                      (funcall generate-error-file-fn name))
-                                                                    (format "/tmp/%s-%s-stderr" name
-                                                                            (cl-incf lsp--stderr-index)))))))
-                              (process-environment
-                               (lsp--compute-process-environment environment-fn)))
-                         (let ((proc (apply 'start-file-process-shell-command process-name
-                                            (format "*%s*" process-name) `(,(mapconcat 'identity wrapped-command " ")))))
-                           (set-process-sentinel proc sentinel)
-                           (set-process-filter proc filter)
-                           (set-process-query-on-exit-flag proc nil)
-                           (set-process-coding-system proc 'binary 'binary)
-                           (cons proc proc))))
-            :test? (lambda () (-> local-command lsp-resolve-final-function lsp-server-present?))))
+    (defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
+      "Start a program in a subprocess.  Return the process object for it.
+Similar to `start-process-shell-command', but calls `start-file-process'."
+      ;; On remote hosts, the local `shell-file-name' might be useless.
+      (let ((command (mapconcat 'identity args " ")))
+        (funcall start-file-process-shell-command name buffer command)))
 
-    (advice-add 'lsp-tramp-connection :override #'lsp-tramp-connection@override))
-  :general
-  (tyrant-def
-    :keymaps 'lsp-mode-map
-    "l" (general-simulate-key "s-l" :which-key "lsp-mode")))
+    (advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around))
 
-(use-package lsp-ui
-  :disabled t
-  :ensure t
-  :hook (lsp-mode . lsp-ui-mode)
-  :init
-  (setq lsp-ui-doc-delay 0.5
-        lsp-ui-doc-include-signature t
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-doc-border (face-foreground 'default)
-        lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
-                              ,(face-foreground 'font-lock-string-face)
-                              ,(face-foreground 'font-lock-constant-face)
-                              ,(face-foreground 'font-lock-variable-name-face)))
-  :config
-  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
-  (add-hook 'after-load-theme-hook
-            (lambda ()
-              (setq lsp-ui-doc-border (face-foreground 'default))
-              (set-face-background 'lsp-ui-doc-background
-                                   (face-background 'tooltip)))))
+  (tyrant-def lsp-mode
+    :definer 'minor-mode "l" lsp-command-map))
 
 (use-package lsp-ivy
   :ensure t
