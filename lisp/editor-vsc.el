@@ -196,9 +196,9 @@ Git Timemachine Transient State
   :config
   (evil-set-initial-state 'gist-list-mode 'motion)
   (general-def 'motion 'gist-list-menu-mode-map
-    "K" 'gist-kill-current
-    "o" 'gist-browse-current-url
-    "gr" 'gist-list-reload
+    "K"   'gist-kill-current
+    "o"   'gist-browse-current-url
+    "gr"  'gist-list-reload
     "RET" 'gist-fetch-current)
   :general
   (tyrant-def
@@ -212,7 +212,10 @@ Git Timemachine Transient State
 (use-package github-stars
   :ensure t
   :general
-  (tyrant-def "sg" 'github-stars-browse-url))
+  (tyrant-def
+    "g G"   '(:ignore t :which-key "github stars")
+    "g G s" 'github-stars-browse-url
+    "g G l" 'github-stars-list))
 
 
 (provide 'editor-vsc)
