@@ -222,8 +222,18 @@
         (fundamental-mode))))
   (add-hook 'find-file-hook 'check-large-file)
 
-  (defun system-move-file-to-trash (file)
-    (call-process "trash" nil nil nil file))
+  ;; TODO: find a better implementation or report issue for it
+  ;; https://github.com/emacs-mirror/emacs/commit/06585bb939ed61574a4b79455c58cab02f11f0fc
+  (defun system-move-file-to-trash (filename)
+    (if (file-remote-p filename)
+        (with-parsed-tramp-file-name
+         filename nil
+         (tramp-flush-file-properties v localname)
+         (tramp-send-command
+          v (format "%s %s"
+	                  (tramp-get-remote-trash v)
+	                  (tramp-shell-quote-argument localname))))
+      (call-process "trash" nil nil nil filename)))
 
   (defun make-directory-maybe ()
     "Create parent directory if not exists while visiting file."
