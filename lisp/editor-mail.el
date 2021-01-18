@@ -151,15 +151,6 @@
                         ;; IMAP-deleted:
                         (mu4e~proc-move docid (mu4e~mark-check-target target) "-N"))))
 
-  ;; TODO evil-collection style shortcut
-  (despot-def mu4e-compose-mode-map
-    "," 'message-send-and-exit
-    "c" 'message-send-and-exit
-    "k" 'message-kill-buffer
-    "a" 'message-kill-buffer
-    "s" 'message-dont-send         ; saves as draft
-    "f" 'mml-attach-file)
-
   (general-def 'normal mu4e-view-mode-map
     "o"        'ace-link
     "C-o"      'mu4e-view-open-attachment)
