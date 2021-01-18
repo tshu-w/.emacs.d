@@ -210,6 +210,8 @@ around point as the initial input."
   :defer t
   :init (setq smex-history-length 32))
 
+(use-package wgrep :ensure t)
+
 
 (use-package company
   :ensure t
