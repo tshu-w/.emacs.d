@@ -56,7 +56,8 @@
               ;; disable <> auto pairing in electric-pair-mode for org-mode
               (setq-local electric-pair-inhibit-predicate
                           `(lambda (c) (if (char-equal c ?<) t
-                                    (,electric-pair-inhibit-predicate c))))))
+                                    (,electric-pair-inhibit-predicate c))))
+              (org-align-tags t)))
 
   (defun open-org-inbox-file ()
     "Open `org-inbox-file'"
