@@ -36,19 +36,23 @@
           ("SOMEDAY" . (:foreground "plum" :weight bold))))
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
+        org-fontify-quote-and-verse-blocks t
+        org-fontify-whole-heading-line t
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
+        org-highlight-latex-and-related '(native)
         org-image-actual-width '(500)
         org-imenu-depth 4
         org-log-done 'time
         org-log-into-drawer t
-        org-startup-folded 'content
+        org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
         org-track-ordered-property-with-tag t
         org-use-property-inheritance t
-        org-use-sub-superscripts "{}")
+        org-use-sub-superscripts "{}"
+        org-yank-adjusted-subtrees t)
 
   (add-hook 'org-mode-hook
             (lambda ()
@@ -103,9 +107,10 @@
                                         (search category-keep))
           org-agenda-span 'day
           org-agenda-start-on-weekday nil
+          org-agenda-time-grid nil
+          org-agenda-time-leading-zero t
           org-agenda-todo-ignore-scheduled 'all
           org-agenda-todo-ignore-deadlines 'far
-          org-agenda-time-grid nil
           org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
