@@ -14,7 +14,9 @@
   :init
   (setq org-directory "~/Documents/Org/"
         org-note-directory (concat org-directory "notes/")
-        org-default-notes-file (concat org-directory "inbox.org"))
+        org-inbox-file (concat org-directory "inbox.org")
+        org-project-file (concat org-directory "projects.org")
+        org-default-notes-file org-inbox-file)
 
   (use-package org-protocol
     :defer t
@@ -56,10 +58,18 @@
                           `(lambda (c) (if (char-equal c ?<) t
                                     (,electric-pair-inhibit-predicate c))))))
 
-  (defun find-org-default-notes-file ()
-    "Edit the `org-default-notes-file', in the current window."
+  (defun open-org-inbox-file ()
+    "Open `org-inbox-file'"
     (interactive)
-    (find-file org-default-notes-file))
+    (find-file org-inbox-file))
+
+  (defalias 'open-org-default-notes-file #'open-org-inbox-file
+    "Open `org-default-notes-file'")
+
+  (defun open-org-project-file ()
+    "Open `org-project-file'"
+    (interactive)
+    (find-file org-project-file))
 
   (unless (fboundp 'find-lisp-find-files)
     (autoload #'find-lisp-find-files "find-lisp" nil t))
@@ -296,8 +306,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
   (use-package org-capture
     :defer t
     :init
-    (setq org-inbox-file org-default-notes-file
-          org-capture-templates
+    (setq org-capture-templates
           '(("i" "Inbox" entry (file org-inbox-file) "* %?\n%i\n")
             ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
             ("j" "Journal" plain (function org-journal-find-location)
@@ -647,14 +656,12 @@ Org Review Transient state
     "oCj"    'org-clock-jump-to-current-clock
     "oCo"    'org-clock-out
     "oCr"    'org-resolve-clocks
-    "od"     '(find-org-default-notes-file :which-key "default-org-file")
-    "of"     '(:ignore t :which-key "feeds")
-    "ofi"    'org-feed-goto-inbox
-    "ofu"    'org-feed-update-all
+    "od"     'open-org-default-notes-file
     "og"     'org-mac-grab-link
     "ol"     'org-store-link
     "om"     'org-tags-view
     "oo"     'org-agenda
+    "op"     'open-org-project-file
     "os"     'org-search-view
     "ot"     'org-todo-list
     "ov"     'org-review/body))
@@ -771,7 +778,7 @@ Org Review Transient state
   (setq org-link-elisp-confirm-function nil)
   (with-eval-after-load 'org-capture (require 'org-projectile))
   :config
-  (setq org-projectile-projects-file (concat org-directory "projects.org"))
+  (setq org-projectile-projects-file org-project-file)
 
   (add-to-list 'org-capture-templates
                (org-projectile-project-todo-entry) t)
@@ -781,21 +788,13 @@ Org Review Transient state
                 :capture-heading "Project Todo with link"
                 :capture-template "* TODO %?\n%a\n") t)
 
-  (defun org-projectile-capture (&optional arg)
-    (interactive "P")
-    (if arg
-        (org-projectile-project-todo-completing-read :empty-lines 1)
-      (org-projectile-capture-for-current-project :empty-lines 1)))
-
   (defun org-projectile-goto-todos ()
     (interactive)
     (if (projectile-project-p)
         (org-projectile-goto-location-for-project (projectile-project-name))
       (find-file org-projectile-projects-file)))
   :general
-  (tyrant-def
-    "op" 'org-projectile-capture
-    "po" 'org-projectile-goto-todos))
+  (tyrant-def "po" 'org-projectile-goto-todos))
 
 (use-package org-randomnote
   :ensure t
