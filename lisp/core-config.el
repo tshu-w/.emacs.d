@@ -144,9 +144,10 @@
     (add-hook 'emacs-startup-hook 'desktop-read)
     (delete "--restore-desktop" command-line-args))
 
-  (setq desktop-save t
+  (setq desktop-buffers-not-to-save "^$"
         desktop-load-locked-desktop t
-        desktop-restore-frames nil)
+        desktop-restore-frames nil
+        desktop-save t)
   :config
   (defun restart-emacs-restore-desktop (&optional args)
     "Restart emacs and restore desktop."
