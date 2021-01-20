@@ -53,7 +53,8 @@
   :ensure t
   ;; if `counsel' loads after `ivy-rich', it overrides some of `ivy-rich''s
   ;; transformers
-  :hook (counsel-mode . ivy-rich-mode)
+  :hook ((counsel-mode . ivy-rich-mode)
+         (ivy-rich-mode . ivy-rich-project-root-cache-mode))
   :config
   (setq ivy-rich-path-style 'abbrev
         ivy-virtual-abbreviate 'full)
