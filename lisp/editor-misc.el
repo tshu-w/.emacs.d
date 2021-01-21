@@ -91,16 +91,9 @@
     "dd" 'dash-at-point
     "dD" 'dash-at-point-with-docset))
 
-(use-package devdocs
-  :ensure t
-  :disabled t
-  :general (tyrant-def "db" 'devdocs-search))
-
 (use-package direnv
   :ensure t
   :hook (after-init . direnv-mode))
-
-(use-package dotenv-mode :ensure t :defer t)
 
 (use-package dumb-jump
   :ensure t
@@ -204,19 +197,6 @@
 
   (setq-default sis-inline-tighten-head-rule 0
                 sis-inline-tighten-tail-rule 1))
-
-(use-package string-inflection
-  :ensure t
-  :general
-  (tyrant-def
-    "xi"  '(:ignore t :which-key "inflection")
-    "xic" 'string-inflection-lower-camelcase
-    "xiC" 'string-inflection-camelcase
-    "xi-" 'string-inflection-kebab-case
-    "xik" 'string-inflection-kebab-case
-    "xi_" 'string-inflection-underscore
-    "xiu" 'string-inflection-underscore
-    "xiU" 'string-inflection-upcase))
 
 (use-package winum
   :ensure t

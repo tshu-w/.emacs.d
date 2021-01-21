@@ -146,11 +146,6 @@ Git Timemachine Transient State
     "glL" 'git-link-copy-url-only
     "glh" 'git-link-homepage))
 
-(use-package git-messenger
-  :disabled t
-  :ensure t
-  :general (tyrant-def "gM" 'git-messenger:popup-message))
-
 (use-package gitignore-templates
   :ensure t
   :config

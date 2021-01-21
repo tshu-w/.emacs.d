@@ -100,13 +100,6 @@
     "M-k"      'markdown-move-up
     "M-l"      'markdown-demote))
 
-(use-package markdown-toc
-  :ensure t
-  :after markdown-mode
-  :config
-  (despot-def markdown-mode-map
-    "it" 'markdown-toc-generate-toc))
-
 (use-package mmm-mode
   :ensure t
   :hook (markdown-mode . mmm-mode)
