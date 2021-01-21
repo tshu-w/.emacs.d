@@ -978,7 +978,7 @@ _z_: Open zotero  _i_: Insert cite  _h_: change type
 
 (use-package toc-org
   :ensure t
-  :hook (org-mode . toc-org-mode)
+  :hook ((org-mode markdown-mode) . toc-org-mode)
   :config (setq toc-org-max-depth 3))
 
 

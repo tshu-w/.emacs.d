@@ -214,101 +214,6 @@
     "bM" 'switch-to-messages-buffer
     "wp" 'popwin:close-popup-window))
 
-(use-package golden-ratio
-  :ensure t
-  :config
-  (defun toggle-golden-ratio ()
-    (interactive)
-    (if (bound-and-true-p golden-ratio-mode)
-        (progn (golden-ratio-mode -1) (balance-windows))
-      (progn (golden-ratio-mode) (golden-ratio))))
-
-  ;; TODO: better logic
-  (with-eval-after-load 'writeroom-mode
-    (add-hook 'golden-ratio-mode-hook
-              (lambda ()
-                (if (bound-and-true-p global-writeroom-mode)
-                    (global-writeroom-mode -1)
-                  (global-writeroom-mode)))))
-
-  ;; golden-ratio-exclude-modes
-  (dolist (m '("bs-mode"
-               "calc-mode"
-               "ediff-mode"
-               "dired-mode"
-               "gud-mode"
-               "gdb-locals-mode"
-               "gdb-registers-mode"
-               "gdb-breakpoints-mode"
-               "gdb-threads-mode"
-               "gdb-frames-mode"
-               "gdb-inferior-io-mode"
-               "gdb-disassembly-mode"
-               "gdb-memory-mode"
-               "ranger-mode"
-               "speedbar-mode"
-               " *transient*"))
-    (add-to-list 'golden-ratio-exclude-modes m))
-
-  ;; golden-ratio-extra-commands
-  (dolist (f '(ace-window
-               ace-delete-window
-               ace-select-window
-               ace-swap-window
-               ace-maximize-window
-               avy-pop-mark
-               buf-move-left
-               buf-move-right
-               buf-move-up
-               buf-move-down
-               evil-avy-goto-word-or-subword-1
-               evil-avy-goto-line
-               evil-window-delete
-               evil-window-split
-               evil-window-vsplit
-               evil-window-left
-               evil-window-right
-               evil-window-up
-               evil-window-down
-               evil-window-bottom-right
-               evil-window-top-left
-               evil-window-mru
-               evil-window-next
-               evil-window-prev
-               evil-window-new
-               evil-window-vnew
-               evil-window-rotate-upwards
-               evil-window-rotate-downwards
-               evil-window-move-very-top
-               evil-window-move-far-left
-               evil-window-move-far-right
-               evil-window-move-very-bottom
-               next-multiframe-window
-               previous-multiframe-window
-               quit-window
-               winum-select-window-0-or-10
-               winum-select-window-1
-               winum-select-window-2
-               winum-select-window-3
-               winum-select-window-4
-               winum-select-window-5
-               winum-select-window-6
-               winum-select-window-7
-               winum-select-window-8
-               winum-select-window-9
-               windmove-left
-               windmove-right
-               windmove-up
-               windmove-down))
-    (add-to-list 'golden-ratio-extra-commands f))
-
-  ;; golden-ratio-exclude-buffer-names
-  (dolist (n '(" *NeoTree*"
-               "*LV*"
-               " *which-key*"))
-    (add-to-list 'golden-ratio-exclude-buffer-names n))
-  :general (tyrant-def "tg" 'toggle-golden-ratio))
-
 (use-package hl-todo
   :ensure t
   ;; global hook activates hl-todo-mode for prog-mode, text-mode
@@ -327,13 +232,6 @@
   (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold)
   :general (tyrant-def "tp" 'highlight-parentheses-mode))
 
-(use-package indent-guide
-  :ensure t
-  :config
-  (setq indent-guide-delay 0.3)
-  :general
-  (tyrant-def "ti" 'indent-guide-mode))
-
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -349,12 +247,6 @@
 (use-package hide-comnt
   :general
   (tyrant-def "t c" '(hide/show-comments-toggle :which-key "toggle-comments")))
-
-(use-package centered-cursor-mode
-  :ensure t
-  :config
-  (setq ccm-recenter-at-end-of-file t)
-  :general (tyrant-def "t-" 'centered-cursor-mode))
 
 
 (provide 'editor-ui)

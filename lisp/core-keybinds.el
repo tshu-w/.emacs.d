@@ -453,14 +453,6 @@
   :ensure t
   :hook (after-init . evil-indent-plus-default-bindings))
 
-(use-package evil-numbers
-  :ensure t
-  :disabled t
-  :general
-  (general-def evil-normal-state-map
-    "C-c +"   'evil-numbers/inc-at-pt
-    "C-c -"   'evil-numbers/dec-at-pt))
-
 (use-package evil-matchit
   :quelpa (evil-matchit :fetcher github :repo "redguardtoo/evil-matchit")
   :hook ((prog-mode LaTeX-mode) . turn-on-evil-matchit-mode)
@@ -473,19 +465,6 @@
   :hook (after-init . global-evil-pinyin-mode)
   :init
   (setq evil-pinyin-scheme 'simplified-xiaohe-all))
-
-(use-package evil-snipe
-  :ensure t
-  :disabled t
-  :hook ((after-init . evil-snipe-mode)
-         (after-init . evil-snipe-override-mode))
-  :init
-  (setq evil-snipe-scope 'line
-        evil-snipe-show-prompt t)
-  :config
-  (general-def 'visual evil-snipe-local-mode-map
-    "z" 'evil-snipe-s
-    "Z" 'evil-snipe-S))
 
 (use-package evil-surround
   :ensure t
