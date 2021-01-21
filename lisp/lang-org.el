@@ -888,7 +888,61 @@ Org Review Transient state
           "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n\n"
           bibtex-completion-pdf-field "file"))
 
-  (general-def org-ref-cite-keymap "<tab>" nil)
+  (defun org-ref-open-zotero-at-point ()
+    "Open the Zotero item for bibtex key under point."
+    (interactive)
+    (let ((thekey (org-ref-get-bibtex-key-under-cursor)))
+      (open-file-in-external-app (format "zotero://select/items/@%s" thekey))))
+
+  (defun org-ref-open-in-zotero ()
+    "Open the Zotero item for a bibtex entry, if it exists."
+    (interactive)
+    (save-excursion
+      (bibtex-beginning-of-entry)
+      (let* ((bibtex-expand-strings t)
+             (entry (bibtex-parse-entry t))
+             (thekey (reftex-get-bib-field "=key=" entry)))
+        (open-file-in-external-app (format "zotero://select/items/@%s" thekey)))))
+
+  (general-def org-ref-cite-keymap
+    "<tab>" nil
+    "H-z"  'org-ref-open-zotero-at-point)
+
+  (defhydra org-ref-cite-hydra (:color blue)
+    "
+_p_: Open pdf     _w_: WOS          _g_: Google Scholar _K_: Copy citation to clipboard
+_u_: Open url     _r_: WOS related  _P_: Pubmed         _k_: Copy key to clipboard
+_n_: Open notes   _c_: WOS citing   _C_: Crossref       _f_: Copy formatted entry
+_o_: Open entry   _e_: Email entry  ^ ^                 _q_: quit
+_z_: Open zotero  _i_: Insert cite  _h_: change type
+"
+    ("o" org-ref-open-citation-at-point nil)
+    ("p" (funcall org-ref-open-pdf-function) nil)
+    ("n" org-ref-open-notes-at-point nil)
+    ("u" org-ref-open-url-at-point nil)
+    ("z" org-ref-open-zotero-at-point nil)
+    ("w" org-ref-wos-at-point nil)
+    ("r" org-ref-wos-related-at-point nil)
+    ("c" org-ref-wos-citing-at-point nil)
+    ("g" org-ref-google-scholar-at-point nil)
+    ("P" org-ref-pubmed-at-point nil)
+    ("C" org-ref-crossref-at-point nil)
+    ("K" org-ref-copy-entry-as-summary nil)
+    ("k" (progn
+	         (kill-new
+	          (car (org-ref-get-bibtex-key-and-file))))
+     nil)
+    ("f" (kill-new
+	        (org-ref-format-entry (org-ref-get-bibtex-key-under-cursor)))
+     nil)
+
+    ("e" (kill-new (save-excursion
+		                 (org-ref-open-citation-at-point)
+		                 (org-ref-email-bibtex-entry)))
+     nil)
+    ("i" (funcall org-ref-insert-cite-function))
+    ("h" org-ref-change-cite-type)
+    ("q" nil))
 
   (despot-def org-mode-map "ic" 'org-ref-insert-link)
 
@@ -903,6 +957,7 @@ Org Review Transient state
     "b"  'org-ref-open-in-browser
     "n"  'org-ref-open-bibtex-notes
     "p"  'org-ref-open-bibtex-pdf
+    "z"  'org-ref-open-in-zotero
     ;; Misc
     "h"  'org-ref-bibtex-hydra/body
     "i"  'org-ref-bibtex-hydra/org-ref-bibtex-new-entry/body-and-exit
