@@ -181,33 +181,30 @@
   :hook (after-init . popwin-mode)
   :config
   ;; don't use default value but manage it ourselves
-  (setq popwin:special-display-config nil)
+  (setq popwin:special-display-config nil
+        popwin:popup-window-height 0.4)
 
   ;; buffers that we manage
-  (push '("*Help*"
-          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("^\*helpful.+\*$"
-          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Process List*"
-          :dedicated t :position bottom :stick t :noselect nil :height 0.4) popwin:special-display-config)
-  (push '("*compilation*"
-          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '(help-mode
+          :dedicated t :position bottom :stick nil :noselect nil ) popwin:special-display-config)
+  (push '(helpful-mode
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '(process-menu-mode
+          :dedicated t :position bottom :stick t   :noselect t   ) popwin:special-display-config)
+  (push '(compilation-mode
+          :dedicated t :position bottom :stick t   :noselect t   ) popwin:special-display-config)
+  (push '(flycheck-error-list-mode
+          :dedicated t :position bottom :stick t   :noselect t   ) popwin:special-display-config)
+  (push '("*eshell*"
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '("*eshell*"
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
   (push '("*Shell Command Output*"
-          :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
   (push '("*Async Shell Command*"
-          :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("*ert*"
-          :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("*grep*"
-          :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("*nosetests*"
-          :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("^\*WoMan.+\*$"
-          :regexp t    :position bottom                                   ) popwin:special-display-config)
-  (push '("^\\*Flycheck.+\\*$"
-          :dedicated t :position bottom :stick t :noselect t   :regexp t  ) popwin:special-display-config)
-  (push '("*lsp-help*"
-          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '("^\\*WoMan.+\\*$"
+          :regexp t    :position bottom                          ) popwin:special-display-config)
   :general
   (tyrant-def
     "bm" 'popwin:messages
