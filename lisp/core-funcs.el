@@ -297,14 +297,14 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
     (switch-to-buffer (get-buffer-create "*scratch*"))))
 
 (defun switch-to-messages-buffer (&optional arg)
-  "Switch to the `*Messages*' buffer.
-if prefix argument ARG is given, switch to it in an other, possibly new window."
+  "Switch to the `*Messages*' buffer in another window.
+if prefix argument ARG is given, display it in the selected window."
   (interactive "P")
   (with-current-buffer (messages-buffer)
     (goto-char (point-max))
     (if arg
-        (switch-to-buffer-other-window (current-buffer))
-      (switch-to-buffer (current-buffer)))))
+        (switch-to-buffer (current-buffer))
+      (switch-to-buffer-other-window (current-buffer)))))
 
 (defun switch-to-minibuffer-window ()
   "Switch to minibuffer window (if active)."
