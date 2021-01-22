@@ -54,14 +54,16 @@
         org-use-sub-superscripts "{}"
         org-yank-adjusted-subtrees t)
 
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (setq truncate-lines nil)
-              ;; disable <> auto pairing in electric-pair-mode for org-mode
-              (setq-local electric-pair-inhibit-predicate
-                          `(lambda (c) (if (char-equal c ?<) t
-                                    (,electric-pair-inhibit-predicate c))))
-              (org-align-tags t)))
+  (defun init-org-mode ()
+    "Stuff to do when opening `org-mode' files."
+    (setq truncate-lines nil)
+    ;; disable <> auto pairing in electric-pair-mode for org-mode
+    (setq-local electric-pair-inhibit-predicate
+                `(lambda (c) (if (char-equal c ?<) t
+                          (,electric-pair-inhibit-predicate c))))
+    (org-align-tags t))
+
+  (add-hook 'org-mode-hook #'init-org-mode)
 
   (defun open-org-inbox-file ()
     "Open `org-inbox-file'"
