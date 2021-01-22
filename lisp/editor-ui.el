@@ -176,22 +176,40 @@
     "wc" 'writeroom-mode
     "wC" 'global-writeroom-mode))
 
-(use-package shackle
+(use-package popwin
   :ensure t
-  :hook (after-init . shackle-mode)
+  :hook (after-init . popwin-mode)
   :config
-  (setq shackle-default-size 0.4
-        shackle-rules
-        '((help-mode                :align t)
-          (helpful-mode             :align t)
-          (process-menu-mode        :align t :select nil)
-          (compilation-mode         :align t :select nil)
-          (flycheck-error-list-mode :align t :select nil)
-          ("*eshell*"               :align t :popup t)
-          ("*Backtrace*"            :align t)
-          ("*Messages*"             :align t)
-          ("*Shell Command Output*" :align t)
-          ("*Async Shell Command*"  :align t))))
+  ;; don't use default value but manage it ourselves
+  (setq popwin:special-display-config nil
+        popwin:popup-window-height 0.4)
+
+  ;; buffers that we manage
+  (push '(help-mode
+          :dedicated t :position bottom :stick nil :noselect nil ) popwin:special-display-config)
+  (push '(helpful-mode
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '(process-menu-mode
+          :dedicated t :position bottom :stick t   :noselect t   ) popwin:special-display-config)
+  (push '(compilation-mode
+          :dedicated t :position bottom :stick t   :noselect t   ) popwin:special-display-config)
+  (push '(flycheck-error-list-mode
+          :dedicated t :position bottom :stick t   :noselect t   ) popwin:special-display-config)
+  (push '("*eshell*"
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '("*eshell*"
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '("*Shell Command Output*"
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '("*Async Shell Command*"
+          :dedicated t :position bottom :stick t   :noselect nil ) popwin:special-display-config)
+  (push '("^\\*WoMan.+\\*$"
+          :regexp t    :position bottom                          ) popwin:special-display-config)
+  :general
+  (tyrant-def
+    "bm" 'popwin:messages
+    "bM" 'switch-to-messages-buffer
+    "wp" 'popwin:close-popup-window))
 
 (use-package hl-todo
   :ensure t
