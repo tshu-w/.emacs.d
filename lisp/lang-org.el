@@ -253,6 +253,25 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
       "M-SPC"    'org-agenda/body
       "s-M-SPC"  'org-agenda/body))
 
+  (use-package appt
+    :defer 5
+    :config
+    (defun appt-disp-alert (min-to-appt current-time appt-msg)
+      (alert (format "Appointment in %s minutes" min-to-appt)
+             :title (format "%s" appt-msg)))
+
+    (defun org-agenda-to-appt-refresh ()
+      (org-agenda-to-appt t))
+
+    (setq appt-display-interval 5
+          appt-message-warning-time 15
+          appt-disp-window-function 'appt-disp-alert)
+
+    (add-hook 'org-capture-after-finalize-hook #'org-agenda-to-appt-refresh)
+    (run-at-time nil 6000 #'org-agenda-to-appt-refresh)
+
+    (appt-activate t))
+
   (use-package org-attach
     :defer t
     :config
