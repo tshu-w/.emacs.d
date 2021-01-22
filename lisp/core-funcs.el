@@ -636,16 +636,6 @@ sets `reference-handlers' in buffers of that mode."
   (let ((message-log-max nil))
     (apply 'message msg args)))
 
-(defun macos-notify (title message)
-  "Send notifications with TITLE and MESSAGE on macOS."
-  (call-process "terminal-notifier"
-                nil 0 nil
-                "-group" "Emacs"
-                "-title" title
-                "-sender" "org.gnu.Emacs"
-                "-message" message
-                "-activate" "org.gnu.Emacs"))
-
 (defun macos-switch-back-to-previous-application ()
   "Switch back to previous application on macOS."
   (interactive)
