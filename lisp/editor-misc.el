@@ -32,6 +32,24 @@
   :general
   (tyrant-def "tA" 'aggressive-indent-mode))
 
+(use-package alert
+  :ensure t
+  :defer t
+  :config
+  (when (memq window-system '(mac ns))
+    (defun alert-notifier-notify (info)
+      (if alert-notifier-command
+          (let ((args
+                 (list "-group" "Emacs"
+                       "-sender"  "org.gnu.Emacs"
+                       "-activate" "org.gnu.Emacs"
+                       "-title"   (alert-encode-string (plist-get info :title))
+                       "-message" (alert-encode-string (plist-get info :message)))))
+            (apply #'call-process alert-notifier-command nil nil nil args)))
+      (alert-message-notify info))
+
+    (setq alert-default-style 'notifier)))
+
 (use-package avy
   :ensure t
   :config
