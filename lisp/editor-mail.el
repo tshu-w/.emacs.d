@@ -27,7 +27,7 @@
         mu4e-get-mail-command "mbsync -a"
         mu4e-main-buffer-hide-personal-addresses t
         mu4e-update-interval (* 6 60 60)
-        mu4e-update-timer (run-at-time
+        mu4e-update-timer (run-with-timer
                            t mu4e-update-interval
                            (lambda () (mu4e-update-mail-and-index
                                   mu4e-index-update-in-background)
@@ -83,6 +83,18 @@
   ;; mu4e contexts setting,
   ;; offical example: https://www.djcbsoftware.nl/code/mu/mu4e/Contexts-example.html
   (load "mu4e-contexts.el.gpg")
+
+  (defun mu4e-mark-google-trash-as-read (&optional _)
+    (let* ((cmd "mu find maildir:/gmail/trash flag:unread --format=sexp 2>/dev/null")
+           (res (concat "(list" (shell-command-to-string cmd) ")"))
+           (msgs (car (read-from-string res))))
+      (unless (equal '(list) msgs)
+        (dolist (msg msgs)
+          (when-let ((docid (mu4e-message-field msg :docid)))
+            (unless (= docid 0)
+              (mu4e~proc-move docid nil "+S-u-N")))))))
+
+  (advice-add 'mu4e :before #'mu4e-mark-google-trash-as-read)
 
   (require 'smtpmail-async)
   (setq send-mail-function         'async-smtpmail-send-it
