@@ -470,7 +470,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
                                (org-note-files :maxlevel . 2))))
 
   (setq org-fast-tag-selection-single-key t
-        org-tags-column 0
+        org-tags-column -80
         org-tags-match-list-sublevels 'intented
         org-tags-exclude-from-inheritance '("PROJ")
         org-tag-alist '((:startgroup)
