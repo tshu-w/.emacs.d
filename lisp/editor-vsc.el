@@ -31,6 +31,11 @@
   (advice-add 'magit-diff-visit-file          :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-worktree-file :after #'org-reveal-advice)
 
+  (use-package magit-wip
+    :config
+    (setq magit-wip-merge-branch t)
+    (magit-wip-mode))
+
   (general-def 'normal magit-log-select-mode-map "q" 'magit-log-select-quit)
   :general
   (tyrant-def
