@@ -58,10 +58,10 @@
                   x)
         (evil-pinyin--build-regexp x))))
 
-  (general-def :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
-    "<tab>"             'ivy-tab
-    "C-h"               'ivy-c-h
-    "C-S-h"             help-map)
+  (general-def '(ivy-minibuffer-map ivy-switch-buffer-map)
+    "<tab>"    'ivy-tab
+    "C-h"      'ivy-c-h
+    "C-S-h"    help-map)
   :general
   (tyrant-def
     "bb" 'ivy-switch-buffer
