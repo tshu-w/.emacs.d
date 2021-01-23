@@ -13,10 +13,14 @@
   :hook (after-init . ivy-mode)
   :config
   (setq ivy-height 15
-        ivy-use-virtual-buffers t
         ivy-initial-inputs-alist nil ;; it will change after counsel load
-        ivy-use-selectable-prompt t)
+        ivy-use-selectable-prompt t
+        ivy-use-virtual-buffers t
 
+        ivy-re-builders-alist '((t . ivy--cregex-plus))
+        ivy-preferred-re-builders '((ivy--cregex-plus . "ivy")
+                                    (ivy--cregex-ignore-order . "order")
+                                    (ivy--regex-fuzzy . "fuzzy")))
   (defun ivy-tab ()
     (interactive)
     (let ((dir ivy--directory))
@@ -35,6 +39,24 @@
             (counsel-up-directory)
           (delete-minibuffer-contents))
       (ivy-backward-delete-char)))
+
+  (defun ivy--cregex-plus (str)
+    (let ((x (ivy--regex-plus str)))
+      (if (listp x)
+          (mapcar (lambda (y)
+                    (cons (evil-pinyin--build-regexp (car y))
+                          (cdr y)))
+                  x)
+        (evil-pinyin--build-regexp x))))
+
+  (defun ivy--cregex-ignore-order (str)
+    (let ((x (ivy--regex-ignore-order str)))
+      (if (listp x)
+          (mapcar (lambda (y)
+                    (cons (evil-pinyin--build-regexp (car y))
+                          (cdr y)))
+                  x)
+        (evil-pinyin--build-regexp x))))
 
   (general-def :keymaps '(ivy-minibuffer-map ivy-switch-buffer-map)
     "<tab>"             'ivy-tab
@@ -183,28 +205,6 @@ around point as the initial input."
   :ensure t
   :general
   (tyrant-def "ft" 'counsel-tramp))
-
-(use-package pyim
-  :ensure t
-  :after ivy
-  :commands eh-ivy-cregexp
-  :init
-  (setq pyim-default-scheme   'xiaohe-shuangpin
-        ivy-re-builders-alist '((t . eh-ivy-cregexp)))
-  :config
-  (defun eh-ivy-cregexp (str)
-    (let ((x (ivy--regex-ignore-order str))
-          (case-fold-search nil))
-      (if (listp x)
-          (mapcar (lambda (y)
-                    (if (cdr y)
-                        (list (if (equal (car y) "")
-                                  ""
-                                (pyim-cregexp-build (car y)))
-                              (cdr y))
-                      (list (pyim-cregexp-build (car y)))))
-                  x)
-        (pyim-cregexp-build x)))))
 
 (use-package smex
   :ensure t
