@@ -463,6 +463,7 @@
 (use-package evil-pinyin
   :ensure t
   :hook (after-init . global-evil-pinyin-mode)
+  :commands (evil-pinyin--build-regexp)
   :init
   (setq evil-pinyin-scheme 'simplified-xiaohe-all))
 
