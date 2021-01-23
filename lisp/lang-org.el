@@ -419,6 +419,7 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
                                         (alert "Do you forget to clock-in?"
                                                :title "Org Clock")))))
 
+    (plist-put org-clocktable-defaults :maxlevel 3)
     (plist-put org-clocktable-defaults :link t)
     (plist-put org-clocktable-defaults :formula '%)
     (plist-put org-clocktable-defaults :fileskip0 t)
@@ -770,10 +771,10 @@ Org Review Transient state
     "Custom function to create journal header."
     (concat
      (pcase org-journal-file-type
-       (`daily "#+title: Daily Journal\n#+STARTUP: showeverything\n\n")
-       (`weekly "#+title: Weekly Journal\n#+STARTUP: folded\n\n")
-       (`monthly "#+title: Monthly Journal\n#+STARTUP: folded\n\n")
-       (`yearly "#+title: Yearly Journal\n#+STARTUP: folded\n\n"))))
+       (`daily "#+title: Daily Journal\n#+startup: showeverything\n\n")
+       (`weekly "#+title: Weekly Journal\n#+startup: folded\n\n")
+       (`monthly "#+title: Monthly Journal\n#+startup: folded\n\n")
+       (`yearly "#+title: Yearly Journal\n#+startup: folded\n\n"))))
 
   (despot-def org-journal-mode-map
     "j"   'org-journal-new-entry
