@@ -65,7 +65,12 @@
   :ensure t
   :hook (magit-mode . magit-delta-mode))
 
-(use-package forge :ensure t :after magit)
+(use-package forge
+  :ensure t
+  :after magit
+  :config
+  ;; TODO: https://github.com/emacs-evil/evil-collection/issues/446
+  (transient-append-suffix 'magit-dispatch 'magit-remote '("'" "Submodule" magit-submodule)))
 
 (use-package transient
   :ensure t
