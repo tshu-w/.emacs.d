@@ -1004,6 +1004,34 @@ _z_: Open zotero  _i_: Insert cite  _h_: change type
   :config
   (org-superstar-configure-like-org-bullets))
 
+(use-package deft
+  :ensure t
+  :config
+  (setq deft-auto-save-interval 0
+        deft-default-extension "org"
+        deft-directory org-directory
+        deft-recursive t
+        deft-use-filter-string-for-filename t
+        deft-file-naming-rules '((noslash . "-") (nospace . "_") (case-fn . downcase))
+        deft-strip-summary-regexp (concat "\\("
+                                          "[\n\t]" ;; blank
+                                          "\\|^#\\+[[:upper:]_]+:.*$" ;; org-mode metadata
+                                          "\\|^#\\+[[:alnum:]_]+:.*$" ;; org-mode metadata
+                                          "\\)"))
+
+  (general-def 'normal deft-mode-map
+    "A"  'deft-archive-file
+    "D"  'deft-delete-file
+    "F"  'deft-find-file
+    "gr" 'deft-refresh
+    "q"  'quit-window
+    "R"  'deft-rename-file
+    "S"  'deft-filter-clear
+    "T"  'deft-toggle-incremental-search
+    "/"  'deft-filter)
+  :general
+  (tyrant-def "ad" 'deft))
+
 (use-package toc-org
   :ensure t
   :hook ((org-mode markdown-mode) . toc-org-mode)
