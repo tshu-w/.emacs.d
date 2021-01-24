@@ -206,10 +206,11 @@ around point as the initial input."
   :general
   (tyrant-def "ft" 'counsel-tramp))
 
-(use-package smex
+(use-package ivy-prescient
   :ensure t
-  :defer t
-  :init (setq smex-history-length 32))
+  :hook (ivy-mode . ivy-prescient-mode)
+  :config
+  (setq ivy-prescient-enable-filtering nil))
 
 (use-package wgrep :ensure t)
 
