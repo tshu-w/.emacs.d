@@ -40,23 +40,31 @@
           (delete-minibuffer-contents))
       (ivy-backward-delete-char)))
 
+  (use-package pyim
+    :ensure t
+    :commands pyim-cregexp-build
+    :init
+    (setq pyim-default-scheme 'xiaohe-shuangpin))
+
   (defun ivy--cregex-plus (str)
-    (let ((x (ivy--regex-plus str)))
+    (let ((x (ivy--regex-plus str))
+          (case-fold-search nil))
       (if (listp x)
           (mapcar (lambda (y)
-                    (cons (evil-pinyin--build-regexp (car y))
+                    (cons (pyim-cregexp-build (car y))
                           (cdr y)))
                   x)
-        (evil-pinyin--build-regexp x))))
+        (pyim-cregexp-build x))))
 
   (defun ivy--cregex-ignore-order (str)
-    (let ((x (ivy--regex-ignore-order str)))
+    (let ((x (ivy--regex-ignore-order str))
+          (case-fold-search nil))
       (if (listp x)
           (mapcar (lambda (y)
-                    (cons (evil-pinyin--build-regexp (car y))
+                    (cons (pyim-cregexp-build (car y))
                           (cdr y)))
                   x)
-        (evil-pinyin--build-regexp x))))
+        (pyim-cregexp-build x))))
 
   (general-def '(ivy-minibuffer-map ivy-switch-buffer-map)
     "<tab>"    'ivy-tab
