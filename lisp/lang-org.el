@@ -161,7 +161,20 @@
               (org-deadline-warning-days 30)))))
 
     (advice-add 'org-agenda-quit :before #'org-save-all-org-buffers)
-    (advice-add 'org-refile      :after  #'org-save-all-org-buffers)
+
+    (defun org-inherited-priority (s)
+      (cond
+       ;; Priority cookie in this heading
+       ((string-match org-priority-regexp s)
+        (* 1000 (- org-priority-lowest
+		               (org-priority-to-value (match-string 2 s)))))
+       ;; No priority cookie, but already at highest level
+       ((not (org-up-heading-safe))
+        (* 1000 (- org-priority-lowest org-priority-default)))
+       ;; Look for the parent's priority
+       (t (org-inherited-priority (org-get-heading)))))
+
+    (setq org-priority-get-priority-function #'org-inherited-priority)
 
     (defhydra org-agenda (
                           :foreign-keys run
@@ -468,7 +481,9 @@ Headline^^          Visit entry^^               Filter^^                  Date^^
           org-refile-use-outline-path 'file
           org-refile-targets '((nil :maxlevel . 4)
                                (org-agenda-files :maxlevel . 3)
-                               (org-note-files :maxlevel . 2))))
+                               (org-note-files :maxlevel . 2)))
+
+    (advice-add 'org-refile :after #'org-save-all-org-buffers))
 
   (setq org-fast-tag-selection-single-key t
         org-tags-column -80
