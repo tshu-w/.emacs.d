@@ -16,12 +16,12 @@
 (defun find-user-init-file ()
   "Edit the `user-init-file', in the current window."
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file (concat user-emacs-directory "init.el")))
 
 (defun load-user-init-file ()
   "Load the `user-init-file', in same window."
   (interactive)
-  (load-file "~/.emacs.d/init.el"))
+  (load-file (concat user-emacs-directory "init.el")))
 
 (defun rename-current-buffer-file (&optional arg)
   "Rename the current buffer and the file it is visiting.
