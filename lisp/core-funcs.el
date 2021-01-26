@@ -18,11 +18,6 @@
   (interactive)
   (find-file (concat user-emacs-directory "init.el")))
 
-(defun load-user-init-file ()
-  "Load the `user-init-file', in same window."
-  (interactive)
-  (load-file (concat user-emacs-directory "init.el")))
-
 (defun rename-current-buffer-file (&optional arg)
   "Rename the current buffer and the file it is visiting.
 If the buffer isn't visiting a file, ask if it should
@@ -185,28 +180,6 @@ containing the current file by the default explorer."
           (open-file-in-external-app file-path)
         (message "No file associated to this buffer.")))))
 
-;; find file functions in split
-(defun display-in-split (buffer alist)
-  "Split selected window and display BUFFER in the new window.
-BUFFER and ALIST have the same form as in `display-buffer'. If ALIST contains
-a split-side entry, its value must be usable as the SIDE argument for
-`split-window'."
-  (let ((window (split-window nil nil (cdr (assq 'split-side alist)))))
-    (window--display-buffer buffer window 'window alist)
-    window))
-
-(defun find-file-vsplit (file)
-  "Find FILE in vertical split."
-  (interactive "FFind file (vsplit): ")
-  (let ((buffer (find-file-noselect file)))
-    (pop-to-buffer buffer '(display-in-split (split-side . right)))))
-
-(defun find-file-split (file)
-  "Find FILE in horizontal split."
-  (interactive "FFind file (split): ")
-  (let ((buffer (find-file-noselect file)))
-    (pop-to-buffer buffer '(display-in-split (split-side . below)))))
-
 (defun -delete-file (filename &optional ask-user)
   "Remove specified file or directory.
 
@@ -252,34 +225,23 @@ FILENAME is deleted using `-delete-file' function.."
         (window-configuration-to-register ?_)
         (delete-other-windows)))))
 
-(defun indent-region-or-buffer ()
-  "Indent a region if selected, otherwise the whole buffer."
+(defun indent-region-or-buffer (&optional arg)
+  "Indent a region if selected, otherwise the whole buffer.
+if prefix argument ARG is given, `untabify' first."
   (interactive)
   (save-excursion
     (if (region-active-p)
         (progn
+          (when arg
+            (untabify (region-beginning) (region-end)))
           (indent-region (region-beginning) (region-end))
           (message "Indented selected region."))
       (progn
-        (evil-indent (point-min) (point-max))
+        (when arg
+            (untabify (region-beginning) (region-end)))
+        (indent-region (point-min) (point-max))
         (message "Indented buffer.")))
     (whitespace-cleanup)))
-
-;; from http://emacsblog.org/2007/01/17/indent-whole-buffer/
-(defun iwb-region-or-buffer ()
-  "IWBs a region if selected, otherwise the whole buffer."
-  (interactive)
-  (save-excursion
-    (if (region-active-p)
-        (progn
-          (untabify (region-beginning) (region-end))
-          (indent-region (region-beginning) (region-end)))
-      (progn
-        (set-buffer-file-coding-system default-file-name-coding-system)
-        ;; (set-buffer-file-coding-system 'utf-8-unix)
-        (untabify (point-min) (point-max))
-        (indent-region (point-min) (point-max))
-        (whitespace-cleanup)))))
 
 (defun switch-to-help-buffer ()
   "Open or select the `*Help*' buffer, if it exists."

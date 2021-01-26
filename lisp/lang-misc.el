@@ -15,7 +15,8 @@
   :defer t
   :config
   (add-hook 'json-mode-hook
-            (lambda ()
+            (defun init-json-mode ()
+              "Stuff to do when opening `json-mode' files."
               (make-local-variable 'js-indent-level)
               (setq js-indent-level 2)))
 

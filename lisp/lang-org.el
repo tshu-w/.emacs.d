@@ -40,7 +40,7 @@
         org-hide-emphasis-markers t
         org-highlight-latex-and-related '(native)
         org-image-actual-width '(500)
-        org-imenu-depth 4
+        org-imenu-depth 3
         org-log-done 'time
         org-log-into-drawer t
         org-startup-folded t
@@ -58,8 +58,7 @@
               ;; disable <> auto pairing in electric-pair-mode for org-mode
               (setq-local electric-pair-inhibit-predicate
                           `(lambda (c) (if (char-equal c ?<) t
-                                    (,electric-pair-inhibit-predicate c))))
-              (org-align-tags t)))
+                                    (,electric-pair-inhibit-predicate c))))))
 
   (defun open-org-inbox-file ()
     "Open `org-inbox-file'"
@@ -174,8 +173,9 @@
     (general-def 'motion org-agenda-mode-map
       "sd" 'org-agenda-filter-remove-all)
     (despot-def org-agenda-mode-map
-      "d" 'org-agenda-deadline
-      "s" 'org-agenda-schedule))
+      "d"  '(:ignore t :which-key "dates")
+      "dd" 'org-agenda-deadline
+      "ds" 'org-agenda-schedule))
 
   (use-package org-attach
     :defer t
@@ -233,7 +233,7 @@
       "Fix redisplay of inline images after a code block evaluation."
       (when org-inline-image-overlays
         (org-redisplay-inline-images)))
-    (add-hook 'org-babel-after-execute-hook 'ob-fix-inline-images))
+    (add-hook 'org-babel-after-execute-hook #'ob-fix-inline-images))
 
   (use-package org-capture
     :defer t
@@ -638,6 +638,8 @@ Org Review Transient state
 (use-package appt
   :hook (after-init . appt-activate)
   :config
+  (fset 'diary-list-entries 'ignore)
+
   (defun appt-disp-alert (min-to-appt current-time appt-msg)
     (alert (format "Appointment in %s minutes" min-to-appt)
            :title (format "%s" appt-msg)))
@@ -759,7 +761,6 @@ Org Review Transient state
         org-roam-tag-sources '(prop all-directories))
   :config
   (org-roam-mode)
-
   (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
 
   (despot-def org-mode-map

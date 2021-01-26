@@ -34,18 +34,6 @@
 
     (setq alert-default-style 'notifier)))
 
-(use-package avy
-  :ensure t
-  :config
-  (setq avy-all-windows 'all-frames
-        avy-background t)
-  :general
-  (tyrant-def
-    "jb" 'avy-pop-mark
-    "jj" '(avy-goto-char-timer :which-key "avy timer")
-    "jl" '(avy-goto-line :which-key "avy line")
-    "jw" '(avy-goto-word-or-subword-1 :which-key "avy word")))
-
 (use-package calibredb
   :ensure t
   :config
@@ -55,9 +43,7 @@
   (evil-set-initial-state 'calibredb-search-mode 'motion)
   (general-def 'motion calibredb-search-mode-map "/" 'calibredb-search-live-filter)
   :general
-  (tyrant-def
-    "aC" 'calibredb
-    "sc" 'calibredb-find-counsel))
+  (tyrant-def "aC" 'calibredb))
 
 (use-package cal-china-x
   :ensure t
@@ -99,10 +85,10 @@
 
 (use-package dumb-jump
   :ensure t
+  :defer t
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  (setq dumb-jump-selector 'ivy)
-  :general (tyrant-def "jq" 'dumb-jump-quick-look))
+  (setq dumb-jump-selector 'ivy))
 
 (use-package editorconfig
   :disabled t
@@ -117,7 +103,8 @@
         (select-window window)
       (pop-to-buffer buf)))
 
-  (setq helpful-switch-buffer-function #'helpful-reuse-window)
+  (setq helpful-max-buffers 3
+        helpful-switch-buffer-function #'helpful-reuse-window)
   :general
   (tyrant-def
     "hk" 'helpful-key
@@ -158,15 +145,14 @@
 (use-package pandoc-mode
   :ensure t
   :hook (pandoc-mode . pandoc-load-default-settings)
+  :commands pandoc
   :config
-  (defun run-pandoc ()
+  (defun pandoc ()
     "Start pandoc for the buffer and open the menu"
     (interactive)
     ;; only run pandoc-mode if not active, as it resets pandoc--local-settings
     (if (not (bound-and-true-p pandoc-mode)) (pandoc-mode))
-    (pandoc-main-hydra/body))
-  :general
-  (tyrant-def "a C-P" 'run-pandoc))
+    (pandoc-main-hydra/body)))
 
 (use-package pangu-spacing
   :ensure t
@@ -286,11 +272,10 @@ stays on current"
   :config
   (setq wakatime-cli-path (executable-find "wakatime")
         wakatime-api-key "3fd63845-ecde-47ea-bd1a-7042221d1046")
+
   (defun wakatime-dashboard ()
     (interactive)
-    (browse-url "https://wakatime.com/dashboard"))
-  :general
-  (tyrant-def "aw" 'wakatime-dashboard))
+    (browse-url "https://wakatime.com/dashboard")))
 
 
 (provide 'editor-misc)

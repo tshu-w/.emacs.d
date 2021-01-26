@@ -11,20 +11,10 @@
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
 
-(defun load-theme@after (&rest r)
+(defun load-theme@after (&rest _)
   "Run `after-load-theme-hook'."
-  (ignore r)
   (run-hooks 'after-load-theme-hook))
 (advice-add 'load-theme :after #'load-theme@after)
-
-(add-hook 'after-load-theme-hook
-          (lambda () (set-face-attribute 'fringe nil :background nil)))
-
-(add-hook 'after-load-theme-hook
-          (lambda ()
-            ;; (set-face-italic-p 'italic nil)
-            (set-face-italic font-lock-constant-face nil)
-            (set-face-italic font-lock-keyword-face nil)))
 
 (use-package doom-themes
   :ensure t
@@ -57,7 +47,12 @@
   (setq kaolin-themes-org-scale-headings nil
         kaolin-themes-modeline-border nil))
 
-(use-package lab-themes :ensure t :defer t)
+(use-package lab-themes
+  :ensure t
+  :defer t
+  :custom-face
+  (font-lock-keyword-face ((t (:slant normal))))
+  (font-lock-constant-face ((t (:slant normal)))))
 
 (use-package solo-jazz-theme
   :quelpa (solo-jazz-theme :fetcher github :repo "cstby/solo-jazz-emacs-theme")
@@ -127,11 +122,11 @@
   "Dark themes to switch.")
 
 (add-hook 'ns-system-appearance-change-functions
-          #'(lambda (appearance)
-              (mapc #'disable-theme custom-enabled-themes)
-              (pcase appearance
-                ('light (load-theme (seq-random-elt light-themes) t))
-                ('dark (load-theme (seq-random-elt dark-themes) t)))))
+          (lambda (appearance)
+            (mapc #'disable-theme custom-enabled-themes)
+            (pcase appearance
+              ('light (load-theme (seq-random-elt light-themes) t))
+              ('dark (load-theme (seq-random-elt dark-themes) t)))))
 
 (use-package doom-modeline
   :ensure t
@@ -152,7 +147,7 @@
       (set-face-attribute 'mode-line-inactive nil
                           :height 120 :fontset "fontset-modeline")))
   (smaller-modeline)
-  (add-hook 'after-load-theme-hook 'smaller-modeline))
+  (add-hook 'after-load-theme-hook #'smaller-modeline))
 
 (use-package hide-mode-line
   :ensure t
@@ -215,12 +210,11 @@
   :ensure t
   :hook (prog-mode . highlight-parentheses-mode)
   :config
-  (setq hl-paren-delay 0.2
-        hl-paren-colors '("Springgreen3"
-                          "IndianRed1"
-                          "IndianRed3"
-                          "IndianRed4"))
-  (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold)
+  (setq highlight-parentheses-colors '("Springgreen3"
+                                       "IndianRed1"
+                                       "IndianRed3"
+                                       "IndianRed4"))
+  (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultra-bold)
   :general (tyrant-def "tp" 'highlight-parentheses-mode))
 
 (use-package rainbow-delimiters
@@ -237,7 +231,7 @@
 
 (use-package hide-comnt
   :general
-  (tyrant-def "t c" '(hide/show-comments-toggle :which-key "toggle-comments")))
+  (tyrant-def "tc" '(hide/show-comments-toggle :which-key "toggle-comments")))
 
 
 (provide 'editor-ui)
