@@ -30,14 +30,14 @@
             (setq file-name-handler-alist default-file-name-handler-alist)
             (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1)
 
-            (defun my-minibuffer-setup-hook ()
+            (defun minibuffer-setup ()
               (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6))
 
-            (defun my-minibuffer-exit-hook ()
+            (defun minibuffer-exit ()
               (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1))
 
-            (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
-            (add-hook 'minibuffer-exit-hook  'my-minibuffer-exit-hook)))
+            (add-hook 'minibuffer-setup-hook #'minibuffer-setup)
+            (add-hook 'minibuffer-exit-hook  #'minibuffer-exit)))
 
 ;;; Load path
 ;; optimize: force "lisp"" and "site-lisp" at the head to reduce the startup time.

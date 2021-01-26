@@ -41,8 +41,10 @@
 
         mu4e-change-filenames-when-moving t
         mu4e-completing-read-function 'completing-read
+        mu4e-compose-complete-only-personal t
         mu4e-compose-dont-reply-to-self t
         mu4e-compose-format-flowed nil
+        mu4e-compose-reply-ignore-address '("not?\\(?:_-\\)?reply")
         mu4e-confirm-quit nil
         mu4e-headers-fields '((:account . 10)
                               (:human-date . 12)
@@ -51,7 +53,7 @@
                               (:subject))
         mu4e-hide-index-messages t
         mu4e-use-fancy-chars nil
-        mu4e-view-prefer-html t
+        mu4e-view-prefer-html nil
         mu4e-view-show-addresses t
         mu4e-view-show-images t
         mu4e-view-image-max-width 800)
@@ -93,7 +95,6 @@
           (when-let ((docid (mu4e-message-field msg :docid)))
             (unless (= docid 0)
               (mu4e~proc-move docid nil "+S-u-N")))))))
-
   (advice-add 'mu4e :before #'mu4e-mark-google-trash-as-read)
 
   (require 'smtpmail-async)
@@ -167,7 +168,7 @@
     "o"        'link-hint-open-link
     "C-o"      'mu4e-view-open-attachment)
   :general
-  (tyrant-def "a m" 'mu4e))
+  (tyrant-def "am" 'mu4e))
 
 (use-package mu4e-org
   :commands (org-mu4e-compose-org-mode)

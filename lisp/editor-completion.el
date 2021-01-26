@@ -43,7 +43,7 @@
   (use-package pyim
     :ensure t
     :commands pyim-cregexp-build
-    :init
+    :config
     (setq pyim-default-scheme 'xiaohe-shuangpin))
 
   (defun ivy--cregex-plus (str)
@@ -119,18 +119,20 @@
 (use-package ivy-posframe
   :ensure t
   :hook (ivy-mode . ivy-posframe-mode)
+  :custom-face (fringe ((t (:background nil))))
   :config
   (setq ivy-posframe-parameters '((left-fringe . 8)
                                   (right-fringe . 8))
         ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
           (swiper . ivy-display-function-fallback)
+          (swiper-all . ivy-display-function-fallback)
           (t . ivy-posframe-display-at-frame-center))))
 
 (use-package ivy-xref
   :ensure t
-  :defer t
-  :init
+  :after xref
+  :config
   (setq xref-prompt-for-identifier '(not xref-find-definitions
                                          xref-find-definitions-other-window
                                          xref-find-definitions-other-frame
@@ -152,24 +154,15 @@
   (defun counsel-rg-region-or-symbol ()
     "Use `counsel-rg' to search for
     the selected region or the symbol around point in the current
-    directory ."
+    directory."
     (interactive)
     (counsel-rg (if (region-active-p)
                     (buffer-substring-no-properties
                      (region-beginning) (region-end))
                   (thing-at-point 'symbol t))))
-
-  ;; append ivy actions
-  (ivy-add-actions 'counsel-recentf '(("r"
-                                       (lambda (arg) (interactive)
-                                         (recentf-cleanup)
-                                         (counsel-recentf))
-                                       "refresh list")))
   :general
   (tyrant-def
-    "fr" 'counsel-recentf
     "fL" 'counsel-locate
-    "ry" 'counsel-yank-pop
     "rm" 'counsel-evil-marks
     "rr" 'counsel-evil-registers
     "sf" 'counsel-rg
@@ -310,7 +303,7 @@ around point as the initial input."
         lsp-enable-links nil
         lsp-enable-on-type-formatting nil
         lsp-enable-symbol-highlighting nil
-        lsp-enable-semantic-highlighting nil
+        lsp-semantic-tokens-enable nil
         lsp-enable-text-document-color t
         lsp-headerline-breadcrumb-enable nil
         lsp-keep-workspace-alive nil
@@ -345,27 +338,21 @@ Similar to `start-process-shell-command', but calls `start-file-process'."
 
 (use-package yasnippet
   :ensure t
-  :defer 2
+  :hook (after-init . yas-global-mode)
   :config
-  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
   (setq yas-triggers-in-field t
         yas-wrap-around-region t)
 
-  (use-package yasnippet-snippets
-    :ensure t
-    :init (yasnippet-snippets-initialize))
-
-  (yas-global-mode)
   ;; disable yas minor mode map
-  ;; use hippie-expand instead
-  (setq yas-minor-mode-map (make-sparse-keymap))
-  :general
-  (general-def 'insert yas-minor-mode-map
-    "\t"       'yas-maybe-expand))
+  (setq yas-minor-mode-map (make-sparse-keymap)))
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet)
 
 (use-package yatemplate
   :ensure t
-  :defer 2
+  :after yasnippet
   :config
   (setq yatemplate-dir (no-littering-expand-etc-file-name "templates/"))
   (yatemplate-fill-alist)

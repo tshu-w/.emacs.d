@@ -71,13 +71,7 @@
   ;; To disable collection of benchmark data after init is done.
   :hook (after-init . benchmark-init/deactivate))
 
-(use-package no-littering
-  :ensure t
-  :defer t
-  :config
-  (with-eval-after-load 'recentf
-    (add-to-list 'recentf-exclude no-littering-var-directory)
-    (add-to-list 'recentf-exclude no-littering-etc-directory)))
+(use-package no-littering :ensure t :defer t)
 
 (use-package quelpa
   :ensure t

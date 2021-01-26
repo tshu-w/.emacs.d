@@ -24,8 +24,7 @@
 
     For example: To unfold from a magit diff buffer, evaluate the following:
     (advice-add 'magit-diff-visit-file :after #'org-reveal-advice)"
-    (when (derived-mode-p 'org-mode)
-      (org-reveal)))
+    (when (derived-mode-p 'org-mode) (org-reveal)))
 
   (advice-add 'magit-blame-addition           :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-file          :after #'org-reveal-advice)
@@ -48,7 +47,6 @@
     "gFl" 'magit-log-buffer-file
     "gFd" 'magit-diff
     "gi"  'magit-init
-    "gL"  'magit-list-repositories
     "gm"  'magit-dispatch
     "gs"  'magit-status
     "gS"  'magit-stage-file
@@ -59,12 +57,6 @@
   :ensure t
   :hook (magit-mode . turn-on-magit-gitflow)
   :config (general-def magit-mode-map "%" 'magit-gitflow-popup))
-
-(use-package magit-svn
-  :disabled t
-  :ensure t
-  :hook (magit-mode . turn-on-magit-svn)
-  :config (general-def magit-mode-map "~" 'magit-svn))
 
 (use-package magit-delta
   :ensure t
@@ -102,34 +94,17 @@
 
   (general-def 'normal
     "[ h" 'diff-hl-previous-hunk
-    "] h" 'diff-hl-next-hunk)
-  :general
-  (tyrant-def "g=" 'diff-hl-diff-goto-hunk))
+    "] h" 'diff-hl-next-hunk))
 
 (use-package git-auto-commit-mode :ensure t)
 
 (use-package git-timemachine
   :ensure t
   :config
-  (defhydra git-timemachine-menu
-    (
-     :foreign-keys run
-     :hint nil
-     :pre (unless (bound-and-true-p git-timemachine-mode)
-            (call-interactively 'git-timemachine))
-     :post (git-timemachine-quit))
-    "
-Git Timemachine Transient State
-[_p_/_N_] previous [_n_] next [_c_] current [_g_] goto nth rev [_Y_] copy hash [_q_] quit"
-    ("c" git-timemachine-show-current-revision)
-    ("g" git-timemachine-show-nth-revision)
-    ("p" git-timemachine-show-previous-revision)
-    ("n" git-timemachine-show-next-revision)
-    ("N" git-timemachine-show-previous-revision)
-    ("Y" git-timemachine-kill-revision)
-    ("q" nil))
+  (general-def git-timemachine-mode-map
+    "gt" '(:ignore t :which-key "git-timemachine"))
   :general
-  (tyrant-def "gt" 'git-timemachine-menu/body))
+  (tyrant-def "gt" 'git-timemachine))
 
 (use-package git-link
   :ensure t
@@ -195,9 +170,9 @@ Git Timemachine Transient State
   :ensure t
   :general
   (tyrant-def
-    "g G"   '(:ignore t :which-key "github stars")
-    "g G s" 'github-stars-browse-url
-    "g G l" 'github-stars-list))
+    "gG"   '(:ignore t :which-key "github stars")
+    "gGs" 'github-stars-browse-url
+    "gGl" 'github-stars-list))
 
 
 (provide 'editor-vsc)

@@ -20,13 +20,14 @@
   (setq eshell-hist-ignoredups t
         eshell-plain-echo-behavior t)
 
-  (add-hook 'eshell-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
-  (add-hook 'eshell-output-filter-functions #'eshell-truncate-buffer)
-
   (add-hook 'eshell-mode-hook
-            (lambda ()
+            (defun init-eshell-mode ()
+              "Stuff to do when enabling `eshell-mode'."
+              (setq-local global-hl-line-mode nil)
               (company-mode)
-              (setq-local company-frontends '(company-preview-frontend))))
+              (company-box-mode -1)))
+
+  (add-hook 'eshell-output-filter-functions #'eshell-truncate-buffer)
 
   ;; quick commands
   (defalias 'eshell/ec    'find-file-other-window)
@@ -34,7 +35,6 @@
   (defalias 'eshell/magit 'magit-status)
 
   (use-package em-term
-    :defer t
     :config
     (mapc (lambda (x) (add-to-list 'eshell-visual-commands x))
           '("el" "elinks" "htop" "less" "ssh" "tmux" "top")))
@@ -77,8 +77,8 @@
 
 (use-package terminal-here
   :ensure t
-  :init
-  (setq terminal-here-terminal-command '("open" "-a" "iterm.app" "."))
+  :config
+  (setq terminal-here-mac-terminal-command 'iterm2)
   :general
   (tyrant-def
     "\""   'terminal-here-launch
