@@ -164,7 +164,7 @@
                         (mu4e~proc-move docid (mu4e~mark-check-target target) "-N"))))
 
   (general-def 'normal mu4e-view-mode-map
-    "o"        'ace-link
+    "o"        'link-hint-open-link
     "C-o"      'mu4e-view-open-attachment)
   :general
   (tyrant-def "a m" 'mu4e))
