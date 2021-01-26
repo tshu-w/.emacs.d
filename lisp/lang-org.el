@@ -18,11 +18,8 @@
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file)
 
-  (use-package org-protocol
-    :defer t
-    :init
-    (defadvice server-execute (before enable-org-protocol activate)
-      (unless (featurep 'org-protocol) (require 'org-protocol))))
+  (defadvice server-execute (before enable-org-protocol activate)
+    (unless (featurep 'org-protocol) (require 'org-protocol)))
   :config
   (add-to-list 'org-modules 'org-tempo t)
   (add-to-list 'org-modules 'org-protocol t)
@@ -54,16 +51,15 @@
         org-use-sub-superscripts "{}"
         org-yank-adjusted-subtrees t)
 
-  (defun init-org-mode ()
-    "Stuff to do when opening `org-mode' files."
-    (setq truncate-lines nil)
-    ;; disable <> auto pairing in electric-pair-mode for org-mode
-    (setq-local electric-pair-inhibit-predicate
-                `(lambda (c) (if (char-equal c ?<) t
-                          (,electric-pair-inhibit-predicate c))))
-    (org-align-tags t))
-
-  (add-hook 'org-mode-hook #'init-org-mode)
+  (add-hook 'org-mode-hook
+            (defun init-org-mode ()
+              "Stuff to do when opening `org-mode' files."
+              (setq truncate-lines nil)
+              ;; disable <> auto pairing in electric-pair-mode for org-mode
+              (setq-local electric-pair-inhibit-predicate
+                          `(lambda (c) (if (char-equal c ?<) t
+                                    (,electric-pair-inhibit-predicate c))))
+              (org-align-tags t)))
 
   (defun open-org-inbox-file ()
     "Open `org-inbox-file'"
@@ -79,7 +75,7 @@
     (find-file org-project-file))
 
   (unless (fboundp 'find-lisp-find-files)
-    (autoload #'find-lisp-find-files "find-lisp" nil t))
+    (autoload #'find-lisp-find-files "find-lisp"))
   (defun org-note-files ()
     "Get the list of note files."
     (find-lisp-find-files org-note-directory "\.org$"))
@@ -162,128 +158,24 @@
 
     (advice-add 'org-agenda-quit :before #'org-save-all-org-buffers)
 
-    (defun org-inherited-priority (s)
-      (cond
-       ;; Priority cookie in this heading
-       ((string-match org-priority-regexp s)
-        (* 1000 (- org-priority-lowest
-		               (org-priority-to-value (match-string 2 s)))))
-       ;; No priority cookie, but already at highest level
-       ((not (org-up-heading-safe))
-        (* 1000 (- org-priority-lowest org-priority-default)))
-       ;; Look for the parent's priority
-       (t (org-inherited-priority (org-get-heading)))))
-
-    (setq org-priority-get-priority-function #'org-inherited-priority)
-
-    (defhydra org-agenda (
-                          :foreign-keys run
-                          :hint nil
-                          :pre (setq which-key-inhibit t)
-                          :post (setq which-key-inhibit nil))
-      "
-Org-agenda transient state
-Headline^^          Visit entry^^               Filter^^                  Date^^                 Toggle mode^^       View^^           Clock^^       Other^^
---------^^--------- -----------^^-------------- ------^^----------------- ----^^---------------- -----------^^------ ----^^---------- -----^^------ -----^^-----------
-[_ht_] set status   [_SPC_] in other window     [_ft_] by tag             [_ds_] schedule        [_tf_] follow       [_vd_] day       [_cI_] in     [_gr_] reload
-[_hk_] kill         [_TAB_] & go to location    [_fr_] refine by tag      [_dS_] un-schedule     [_tl_] log          [_vw_] week      [_cO_] out    [_._]  go to today
-[_hr_] refile       [_RET_] & del other windows [_fc_] by category        [_dd_] set deadline    [_ta_] archive      [_vt_] fortnight [_cq_] cancel [_gd_] go to date
-[_hA_] archive      [_o_]   link                [_fh_] by top headline    [_dD_] remove deadline [_tr_] clock report [_vm_] month     [_cj_] jump   ^^
-[_h:_] set tags     ^^                          [_fx_] by regexp          [_dt_] timestamp       [_ti_] clock issues [_vy_] year      ^^            ^^
-[_hp_] set priority ^^                          [_fd_] delete all filters [_+_]  do later        [_td_] diaries      [_vn_] next span ^^            ^^
-^^                  ^^                          ^^                        [_-_]  do earlier      ^^                  [_vp_] prev span ^^            ^^
-^^                  ^^                          ^^                        ^^                     ^^                  [_vr_] reset     ^^            ^^
-[_q_] quit
-"
-      ;; Entry
-      ("h:" org-agenda-set-tags)
-      ("hA" org-agenda-archive-default)
-      ("hk" org-agenda-kill)
-      ("hp" org-agenda-priority)
-      ("hr" org-agenda-refile)
-      ("ht" org-agenda-todo)
-      ;; Visit entry
-      ("SPC"   org-agenda-show-and-scroll-up)
-      ("<tab>" org-agenda-goto :exit t)
-      ("TAB"   org-agenda-goto :exit t)
-      ("RET"   org-agenda-switch-to :exit t)
-      ("o"     link-hint-open-link :exit t)
-      ;; Date
-      ("+" org-agenda-do-date-later)
-      ("-" org-agenda-do-date-earlier)
-      ("dd" org-agenda-deadline)
-      ("dD" (lambda () (interactive)
-              (let ((current-prefix-arg '(4)))
-                (call-interactively 'org-agenda-deadline))))
-      ("ds" org-agenda-schedule)
-      ("dS" (lambda () (interactive)
-              (let ((current-prefix-arg '(4)))
-                (call-interactively 'org-agenda-schedule))))
-      ("dt" org-agenda-date-prompt)
-      ;; View
-      ("vd" org-agenda-day-view)
-      ("vm" org-agenda-month-view)
-      ("vn" org-agenda-later)
-      ("vp" org-agenda-earlier)
-      ("vr" org-agenda-reset-view)
-      ("vt" org-agenda-fortnight-view)
-      ("vw" org-agenda-week-view)
-      ("vy" org-agenda-year-view)
-      ;; Toggle mode
-      ("ta" org-agenda-archives-mode)
-      ("td" org-agenda-toggle-diary)
-      ("tf" org-agenda-follow-mode)
-      ("ti" org-agenda-show-clocking-issues)
-      ("tl" org-agenda-log-mode)
-      ("tr" org-agenda-clockreport-mode)
-      ;; Filter
-      ("fc" org-agenda-filter-by-category)
-      ("fd" org-agenda-filter-remove-all)
-      ("fh" org-agenda-filter-by-top-headline)
-      ("fr" org-agenda-filter-by-tag-refine)
-      ("ft" org-agenda-filter-by-tag)
-      ("fx" org-agenda-filter-by-regexp)
-      ;; Clock
-      ("cI" org-agenda-clock-in :exit t)
-      ("cj" org-agenda-clock-goto :exit t)
-      ("cO" org-agenda-clock-out)
-      ("cq" org-agenda-clock-cancel)
-      ;; Other
-      ("q" nil :exit t)
-      ("gr" org-agenda-redo)
-      ("." org-agenda-goto-today)
-      ("gd" org-agenda-goto-date))
-
-    (despot-def org-agenda-mode-map
-      "a"  'org-agenda
-      "c"  'org-agenda-columns
-      "d"  '(:ignore t :which-key "dates")
-      "dd" 'org-agenda-deadline
-      "ds" 'org-agenda-schedule
-      "p"  'org-agenda-priority)
+    (setq org-priority-get-priority-function
+          (defun org-inherited-priority (s)
+            (cond
+             ;; Priority cookie in this heading
+             ((string-match org-priority-regexp s)
+              (* 1000 (- org-priority-lowest
+		                     (org-priority-to-value (match-string 2 s)))))
+             ;; No priority cookie, but already at highest level
+             ((not (org-up-heading-safe))
+              (* 1000 (- org-priority-lowest org-priority-default)))
+             ;; Look for the parent's priority
+             (t (org-inherited-priority (org-get-heading))))))
 
     (general-def 'motion org-agenda-mode-map
-      "M-SPC"    'org-agenda/body
-      "s-M-SPC"  'org-agenda/body))
-
-  (use-package appt
-    :defer 5
-    :config
-    (defun appt-disp-alert (min-to-appt current-time appt-msg)
-      (alert (format "Appointment in %s minutes" min-to-appt)
-             :title (format "%s" appt-msg)))
-
-    (defun org-agenda-to-appt-refresh ()
-      (org-agenda-to-appt t))
-
-    (setq appt-display-interval 5
-          appt-message-warning-time 15
-          appt-disp-window-function 'appt-disp-alert)
-
-    (add-hook 'org-capture-after-finalize-hook #'org-agenda-to-appt-refresh)
-    (run-at-time nil 6000 #'org-agenda-to-appt-refresh)
-
-    (appt-activate t))
+      "sd" 'org-agenda-filter-remove-all)
+    (despot-def org-agenda-mode-map
+      "d" 'org-agenda-deadline
+      "s" 'org-agenda-schedule))
 
   (use-package org-attach
     :defer t
@@ -606,6 +498,7 @@ Org Review Transient state
     "id"    'org-insert-drawer
     "ie"    'org-set-effort
     "if"    'org-footnote-new
+    "ig"    'org-mac-grab-link
     "ih"    'org-insert-heading
     "iH"    'org-insert-heading-after-current
     "ii"    'org-insert-item
@@ -695,7 +588,6 @@ Org Review Transient state
   :general
   (tyrant-def
     "o"      '(:ignore t :which-key "org")
-    "o#"     'org-agenda-list-stuck-projects
     "o/"     'org-occur-in-agenda-files
     "oa"     'org-agenda-list
     "oc"     'org-capture
@@ -707,13 +599,9 @@ Org Review Transient state
     "oCo"    'org-clock-out
     "oCr"    'org-resolve-clocks
     "od"     'open-org-default-notes-file
-    "og"     'org-mac-grab-link
     "ol"     'org-store-link
-    "om"     'org-tags-view
     "oo"     'org-agenda
     "op"     'open-org-project-file
-    "os"     'org-search-view
-    "ot"     'org-todo-list
     "ov"     'org-review/body))
 
 (use-package evil-org
@@ -721,7 +609,7 @@ Org Review Transient state
   :hook (org-mode . evil-org-mode)
   :init
   (with-eval-after-load 'org-agenda
-    (require 'evil-org-agenda)
+    (autoload #'evil-org-agenda-set-keys "evil-org-agenda" nil t)
     (evil-org-agenda-set-keys))
   :config
   (add-hook 'evil-org-mode-hook
@@ -740,6 +628,27 @@ Org Review Transient state
     (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
     (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
+(use-package appt
+  :hook (after-init . appt-activate)
+  :config
+  (defun appt-disp-alert (min-to-appt current-time appt-msg)
+    (alert (format "Appointment in %s minutes" min-to-appt)
+           :title (format "%s" appt-msg)))
+
+  (defun org-agenda-to-appt-refresh ()
+    (org-agenda-to-appt t))
+
+  (setq appt-display-diary nil
+        appt-display-interval 5
+        appt-message-warning-time 15
+        appt-disp-window-function 'appt-disp-alert)
+
+  (with-eval-after-load 'org-capture
+    (add-hook 'org-capture-after-finalize-hook #'org-agenda-to-appt-refresh))
+
+  (with-eval-after-load 'org-agenda
+    (run-at-time nil 6000 #'org-agenda-to-appt-refresh)))
+
 (use-package org-download
   :ensure t
   :hook ((org-mode dired-mode) . org-download-enable)
@@ -751,22 +660,12 @@ Org Review Transient state
   (setq org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"
         org-download-image-attr-list '("#+ATTR_ORG:  :width 500px"
-                                       "#+ATTR_HTML: :width 80% :align center"))
-
-  (despot-def org-mode-map
-    "iD" '(:ignore nil :which-key "download")
-    "iDy" 'org-download-yank
-    "iDs" 'org-download-screenshot))
+                                       "#+ATTR_HTML: :width 80% :align center")))
 
 (use-package org-edit-latex
   :ensure t
   :hook (org-mode . org-edit-latex-mode)
   :init (setq org-edit-latex-create-master nil))
-
-(use-package org-fragtog
-  :ensure t
-  :general
-  (despot-def org-mode-map "Tf" 'org-fragtog-mode))
 
 (use-package org-journal
   :ensure t
@@ -789,38 +688,14 @@ Org Review Transient state
        (`daily "#+title: Daily Journal\n#+startup: showeverything\n\n")
        (`weekly "#+title: Weekly Journal\n#+startup: folded\n\n")
        (`monthly "#+title: Monthly Journal\n#+startup: folded\n\n")
-       (`yearly "#+title: Yearly Journal\n#+startup: folded\n\n"))))
-
-  (despot-def org-journal-mode-map
-    "j"   'org-journal-new-entry
-    "n"   'org-journal-next-entry
-    "p"   'org-journal-previous-entry)
-
-  (despot-def calendar-mode-map
-    "r"   'org-journal-read-entry
-    "i"   'org-journal-new-date-entry
-    "n"   'org-journal-next-entry
-    "p"   'org-journal-previous-entry
-    "s"   'org-journal-search-forever
-    "w"   'org-journal-search-calendar-week
-    "m"   'org-journal-search-calendar-month
-    "y"   'org-journal-search-calendar-year)
-  :general
-  (tyrant-def
-    "oj"  '(:ignore t :which-key "org-journal")
-    "ojj" 'org-journal-new-entry
-    "ojs" 'org-journal-search-forever
-    "ojt" 'org-journal-new-scheduled-entry
-    "ojv" 'org-journal-schedule-view))
+       (`yearly "#+title: Yearly Journal\n#+startup: folded\n\n")))))
 
 (use-package org-mru-clock
   :ensure t
   :config
   (setq org-mru-clock-files #'org-agenda-files)
   :general
-  (tyrant-def
-    "oCi"    'org-mru-clock-in
-    "oC SPC" 'org-mru-clock-select-recent-task))
+  (tyrant-def "oCi"    'org-mru-clock-in))
 
 (use-package org-projectile
   :ensure t
@@ -851,13 +726,15 @@ Org Review Transient state
   :config
   (setq org-randomnote-candidates (org-note-files))
   :general
-  (tyrant-def
-    "oR"  '(:ignore t :which-key "random")
-    "oRn" 'org-randomnote))
+  (despot-def org-mode-map
+    "R"  '(:ignore t :which-key "random")
+    "Rn" 'org-randomnote))
 
 (use-package org-random-todo
   :ensure t
-  :general (tyrant-def "oRt" 'org-random-todo-goto-new))
+  :general
+  (despot-def org-mode-map
+    "Rt" 'org-random-todo-goto-new))
 
 (use-package org-roam
   :ensure t
@@ -879,18 +756,14 @@ Org Review Transient state
   (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
 
   (despot-def org-mode-map
-    "ir" 'org-roam-insert-immediate
-    "iR" 'org-roam-insert)
-  :general
-  (tyrant-def
-    "or"     '(:ignore t :which-key "roam")
-    "orf"    'org-roam-find-file
-    "ori"    'org-roam-jump-to-index
-    "orr"    'org-roam-find-ref
-    "or SPC" 'org-roam
-    "ort"    '(:ignore t :which-key "tags")
-    "orta"   'org-roam-tag-add
-    "ortd"   'org-roam-tag-delete))
+    "ir"    'org-roam-insert
+    "r"     '(:ignore t :which-key "roam")
+    "r SPC" 'org-roam
+    "rf"    'org-roam-find-file
+    "rr"    'org-roam-find-ref
+    "ri"    'org-roam-jump-to-index
+    "rt"    'org-roam-tag-add
+    "rT"    'org-roam-tag-delete))
 
 (use-package org-roam-protocol :after org-protocol)
 
@@ -905,7 +778,7 @@ Org Review Transient state
     (browse-url
      (format "http://%s:%d" org-roam-server-host org-roam-server-port)))
   :general
-  (tyrant-def "ors" 'open-org-roam-server))
+  (despot-def org-mode-map "rs" 'open-org-roam-server))
 
 (use-package org-ref
   :ensure t
@@ -926,7 +799,6 @@ Org Review Transient state
     (setq bibtex-autokey-year-length 4
           bibtex-completion-additional-search-fields '(keywords)
           bibtex-completion-bibliography reftex-default-bibliography
-          bibtex-completion-library-path '("~/Documents/Zotero/storage/")
           bibtex-completion-notes-path (concat org-directory "notes/papers/")
           bibtex-completion-notes-template-multiple-files
           "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n\n"
@@ -952,7 +824,7 @@ Org Review Transient state
     "<tab>" nil
     "H-z"  'org-ref-open-zotero-at-point)
 
-  (defhydra org-ref-cite-hydra (:color blue)
+  (defhydra org-ref-cite-hydra (:color blue :hint nil)
     "
 _p_: Open pdf     _w_: WOS          _g_: Google Scholar _K_: Copy citation to clipboard
 _u_: Open url     _r_: WOS related  _P_: Pubmed         _k_: Copy key to clipboard
@@ -988,31 +860,90 @@ _z_: Open zotero  _i_: Insert cite  _h_: change type
     ("h" org-ref-change-cite-type)
     ("q" nil))
 
+  (defhydra org-ref-bibtex-hydra (:color blue :hint nil)
+    "
+_p_: Open pdf     _y_: Copy key               _N_: New entry            _w_: WOS
+_b_: Open url     _f_: Copy formatted entry   _o_: Copy entry           _c_: WOS citing
+_r_: Refile entry _k_: Add keywords           _d_: delete entry         _a_: WOS related
+_e_: Email entry  _K_: Edit keywords          _L_: clean entry          _P_: Pubmed
+_U_: Update entry _N_: New entry              _R_: Crossref             _g_: Google Scholar
+_s_: Sort entry   _a_: Remove nonascii        _h_: helm-bibtex          _q_: quit
+_u_: Update field _F_: file funcs             _A_: Assoc pdf with entry
+_n_: Open notes   ^ ^                         _T_: Title case
+_z_: Open Zotero  ^ ^                         _S_: Sentence case
+"
+    ("p" org-ref-open-bibtex-pdf)
+    ("P" org-ref-bibtex-pubmed)
+    ("w" org-ref-bibtex-wos)
+    ("c" org-ref-bibtex-wos-citing)
+    ("a" org-ref-bibtex-wos-related)
+    ("R" org-ref-bibtex-crossref)
+    ("g" org-ref-bibtex-google-scholar)
+    ("N" org-ref-bibtex-new-entry/body)
+    ("n" org-ref-open-bibtex-notes)
+    ("z" org-ref-open-in-zotero)
+    ("o" (lambda ()
+	         (interactive)
+	         (bibtex-copy-entry-as-kill)
+	         (message "Use %s to paste the entry"
+		                (substitute-command-keys (format "\\[bibtex-yank]")))))
+    ("d" bibtex-kill-entry)
+    ("L" org-ref-clean-bibtex-entry)
+    ("y" (save-excursion
+	         (bibtex-beginning-of-entry)
+	         (when (looking-at bibtex-entry-maybe-empty-head)
+	           (kill-new (bibtex-key-in-head)))))
+    ("f" (progn
+	         (bibtex-beginning-of-entry)
+	         (kill-new
+	          (org-ref-format-entry
+	           (cdr (assoc "=key=" (bibtex-parse-entry t)))))))
+    ("k" helm-tag-bibtex-entry)
+    ("K" (lambda ()
+           (interactive)
+           (org-ref-set-bibtex-keywords
+            (read-string "Keywords: "
+                         (bibtex-autokey-get-field "keywords"))
+            t)))
+    ("b" org-ref-open-in-browser)
+    ("r" (lambda ()
+	         (interactive)
+           (bibtex-beginning-of-entry)
+           (bibtex-kill-entry)
+           (find-file (completing-read
+                       "Bibtex file: "
+                       (f-entries "." (lambda (f) (f-ext? f "bib")))))
+           (goto-char (point-max))
+           (bibtex-yank)
+           (save-buffer)
+           (kill-buffer)))
+    ("e" org-ref-email-bibtex-entry)
+    ("U" (doi-utils-update-bibtex-entry-from-doi (org-ref-bibtex-entry-doi)))
+    ("u" doi-utils-update-field)
+    ("F" org-ref-bibtex-file/body)
+    ("h" helm-bibtex)
+    ("A" org-ref-bibtex-assoc-pdf-with-entry)
+    ("a" org-ref-replace-nonascii)
+    ("s" org-ref-sort-bibtex-entry)
+    ("T" org-ref-title-case-article)
+    ("S" org-ref-sentence-case-article)
+    ("q" nil))
+
   (despot-def org-mode-map "ic" 'org-ref-insert-link)
 
   (general-def 'normal bibtex-mode-map
+    "RET"      'org-ref-bibtex-hydra/body
     "C-j"      'org-ref-bibtex-next-entry
     "C-k"      'org-ref-bibtex-previous-entry
     "gj"       'org-ref-bibtex-next-entry
     "gk"       'org-ref-bibtex-previous-entry)
 
   (despot-def bibtex-mode-map
-    ;; Open
-    "b"  'org-ref-open-in-browser
-    "n"  'org-ref-open-bibtex-notes
-    "p"  'org-ref-open-bibtex-pdf
-    "z"  'org-ref-open-in-zotero
-    ;; Misc
-    "h"  'org-ref-bibtex-hydra/body
-    "i"  'org-ref-bibtex-hydra/org-ref-bibtex-new-entry/body-and-exit
-    "s"  'bibtex-sort-buffer
-    ;; Lookup utilities
-    "l"  '(:ignore t :which-key "lookup")
-    "la" 'arxiv-add-bibtex-entry
-    "lc" 'crossref-add-bibtex-entry
-    "ld" 'doi-add-bibtex-entry
-    "li" 'isbn-to-bibtex
-    "lp" 'pubmed-insert-bibtex-from-pmid))
+    "," 'org-ref-bibtex-file/body
+    "a" 'arxiv-add-bibtex-entry
+    "c" 'crossref-add-bibtex-entry
+    "d" 'doi-add-bibtex-entry
+    "i" 'isbn-to-bibtex))
 
 (use-package org-superstar
   :ensure t
@@ -1050,8 +981,7 @@ _z_: Open zotero  _i_: Insert cite  _h_: change type
 
 (use-package toc-org
   :ensure t
-  :hook ((org-mode markdown-mode) . toc-org-mode)
-  :config (setq toc-org-max-depth 3))
+  :hook ((org-mode markdown-mode) . toc-org-mode))
 
 
 (provide 'lang-org)
