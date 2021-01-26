@@ -8,22 +8,6 @@
 
 ;;; Code:
 
-(use-package ace-link
-  :ensure t
-  :general
-  (general-def
-    :keymaps '(compilation-mode-map
-               custom-mode-map
-               eww-link-keymap
-               eww-mode-map
-               help-mode-map
-               helpful-mode-map
-               Info-mode-map
-               xref--xref-buffer-mode-map
-               woman-mode-map)
-    :states  'normal
-    "o"      'ace-link))
-
 (use-package aggressive-indent
   :ensure t
   :hook (emacs-lisp-mode . aggressive-indent-mode)
@@ -143,6 +127,19 @@
 (use-package link-hint
   :ensure t
   :general
+  (general-def
+    :keymaps '(compilation-mode-map
+               custom-mode-map
+               eww-link-keymap
+               eww-mode-map
+               help-mode-map
+               helpful-mode-map
+               Info-mode-map
+               xref--xref-buffer-mode-map
+               woman-mode-map)
+    :states  'normal
+    "o"      'link-hint-open-link)
+
   (tyrant-def
     "xo" 'link-hint-open-link
     "xl" 'link-hint-open-multiple-links
