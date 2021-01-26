@@ -298,7 +298,14 @@
           (goto-char (point-max))
           (or (bolp) (insert "\n"))
           (insert "* " hd "\n"
-                  "[[" (plist-get org-store-link-plist :link) "]]" "\n")))))
+                  "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
+
+    (when (memq window-system '(mac ns))
+      (defun org-capture-finalize@after (&rest r)
+        (when (equal "ll" (plist-get org-capture-plist :key))
+          (run-at-time 0.2 nil #'macos-switch-back-to-previous-application)))
+
+      (advice-add 'org-capture-finalize :after #'org-capture-finalize@after)))
 
   (use-package org-clock
     :defer 3
