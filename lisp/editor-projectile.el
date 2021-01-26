@@ -11,9 +11,6 @@
 (use-package projectile
   :ensure t
   :hook (after-init . projectile-mode)
-  :config
-  (setq projectile-sort-order 'recentf
-        projectile-completion-system 'ivy)
   :general
   (tyrant-def
     "p"  '(:ignore t :which-key "projects")
@@ -27,7 +24,6 @@
     "pD" 'projectile-dired
     "pe" 'projectile-edit-dir-locals
     "pf" 'projectile-find-file
-    "pF" 'projectile-find-file-dwim
     "pg" 'projectile-find-tag
     "pG" 'projectile-regenerate-tags
     "pI" 'projectile-invalidate-cache
@@ -64,12 +60,11 @@
   (tyrant-def
     "/"     '(counsel-projectile-rg :which-key "search project")
     "*"     '(counsel-projectile-rg-region-or-symbol :which-key "search project w/input")
-    "p SPC" 'counsel-projectile
     "pb"    'counsel-projectile-switch-to-buffer
     "pd"    'counsel-projectile-find-dir
     "pp"    'counsel-projectile-switch-project
     "pf"    'counsel-projectile-find-file
-    "p!"    'projectile-run
+    "p SPC" 'counsel-projectile
     "sp"    'counsel-projectile-rg
     "sP"    'counsel-projectile-rg-region-or-symbol))
 

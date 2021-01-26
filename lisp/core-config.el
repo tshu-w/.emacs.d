@@ -221,7 +221,7 @@
         (setq buffer-read-only t)
         (buffer-disable-undo)
         (fundamental-mode))))
-  (add-hook 'find-file-hook 'check-large-file)
+  (add-hook 'find-file-hook #'check-large-file)
 
   ;; TODO: find a better implementation or report issue for it
   ;; https://github.com/emacs-mirror/emacs/commit/06585bb939ed61574a4b79455c58cab02f11f0fc

@@ -107,10 +107,8 @@ If the error list is visible, hide it.  Otherwise, show it."
   (with-eval-after-load 'evil
     ;; Don't display popups while in insert or replace mode, as it can affect
     ;; the cursor's position or cause disruptive input delays.
-    (add-hook 'flycheck-posframe-inhibit-functions
-              #'evil-insert-state-p)
-    (add-hook 'flycheck-posframe-inhibit-functions
-              #'evil-replace-state-p)))
+    (add-hook 'flycheck-posframe-inhibit-functions #'evil-insert-state-p)
+    (add-hook 'flycheck-posframe-inhibit-functions #'evil-replace-state-p)))
 
 
 (use-package flyspell
@@ -171,6 +169,13 @@ SCOPE can be:
       (if (consp ispell-filter)
           (setq poss (ispell-parse-output (car ispell-filter))))
       (or (eq poss t) (stringp poss))))
+
+  (use-package flyspell-correct
+    :ensure t
+    :general
+    (tyrant-def
+      "Sc" 'flyspell-correct-wrapper
+      "Ss" 'flyspell-correct-at-point))
   :general
   (tyrant-def
     "S"   '(:ignore t :which-key "spelling")
@@ -182,13 +187,6 @@ SCOPE can be:
     "Sn"  'flyspell-goto-next-error
     "Sr"  'flyspell-region
     "tS"  'flyspell-mode))
-
-(use-package flyspell-correct
-  :ensure t
-  :general
-  (tyrant-def
-    "Sc" 'flyspell-correct-wrapper
-    "Ss" 'flyspell-correct-at-point))
 
 
 (provide 'editor-checker)

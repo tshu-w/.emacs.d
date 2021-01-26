@@ -49,19 +49,16 @@
 
     "a"       '(:ignore t :which-key "applications")
     "ac"      'calc-dispatch
-    "ad"      'dired
     "ap"      'list-processes
     "aP"      'proced
 
     "b"       '(:ignore t :which-key "buffers")
-    "bb"      'mode-line-other-buffer
     "bB"      'ibuffer
     "bd"      'kill-current-buffer
     "bh"      'switch-to-help-buffer
     "bm"      'switch-to-messages-buffer
     "bn"      'next-buffer
     "bp"      'previous-buffer
-    "br"      'read-only-mode
     "bs"      'switch-to-scratch-buffer
     "bu"      'reopen-killed-buffer
     "bx"      'kill-buffer-and-window
@@ -87,12 +84,12 @@
     "fD"      'delete-current-buffer-file
     "fe"      '(:ignore t :which-key "emacs")
     "fed"     'find-user-init-file
-    "feR"     'load-user-init-file
     "fel"     'find-library
     "fE"      'sudo-edit
     "ff"      'find-file
     "fl"      'find-file-literally
     "fo"      'open-file-or-directory-in-external-app
+    "fr"      'read-only-mode
     "fR"      'rename-current-buffer-file
     "fs"      'save-buffer
     "fv"      '(:ignore t :which-key "variables")
@@ -105,12 +102,6 @@
     "FD"      'delete-other-frames
     "Fn"      'make-frame
     "Fo"      'other-frame
-
-    "n"       '(:ignore t :which-key "narrow")
-    "nr"      'narrow-to-region
-    "np"      'narrow-to-page
-    "nf"      'narrow-to-defun
-    "nw"      'widen
 
     "m"       (general-simulate-key "," :which-key "major mode" :state 'normal)
 
@@ -137,12 +128,9 @@
 
     "j"       '(:ignore t :which-key "jump/join/split")
     "j="      'indent-region-or-buffer
-    "j+"      'iwb-region-or-buffer
     "jd"      'dired-jump
     "jD"      'dired-jump-other-window
-    "jf"      'find-function
     "ji"      'imenu
-    "jv"      'find-variable
 
     "q"       '(:ignore t :which-key "quit")
     "qd"      'restart-emacs-debug-init
@@ -155,7 +143,7 @@
     "r"       '(:ignore t :which-key "register/ring")
 
     "s"       '(:ignore t :which-key "search")
-    "sh"      'evil-ex-nohighlight
+    "st"      'evil-ex-nohighlight
 
     "t"       '(:ignore t :which-key "toggles")
     "ta"      'auto-fill-mode
@@ -177,12 +165,6 @@
     "xd"      '(:ignore t :which-key "delete")
     "xdl"     'delete-blank-lines
     "xdw"     'delete-trailing-whitespace
-    "xj"      '(:ignore t :which-key "justification")
-    "xjc"     'set-justification-center
-    "xjf"     'set-justification-full
-    "xjl"     'set-justification-left
-    "xjn"     'set-justification-none
-    "xjr"     'set-justification-right
     "xs"      'text-scale-adjust
     "xt"      '(:ignore t :which-key "transpose")
     "xtc"     'transpose-chars
@@ -237,7 +219,7 @@
       "H-Z"   'evil-redo
       "H-C-F" 'toggle-frame-fullscreen
       "H-s"   'save-buffer
-      "H-<backspace>" (defun delete-line-before-point()
+      "H-<backspace>" (defun delete-line-before-point ()
                         (interactive)
                         (let ((prev-pos (point)))
                           (forward-visible-line 0)
@@ -343,8 +325,7 @@
           (setq-local evil-shift-width shift-width))))
 
     ;; after major mode has changed, reset evil-shift-width
-    (add-hook 'after-change-major-mode-hook 'set-evil-shift-width 'append))
-
+    (add-hook 'after-change-major-mode-hook #'set-evil-shift-width 'append))
 
   (progn
     (defmacro define-text-object-regexp (key name start-regexp end-regexp)
@@ -451,8 +432,9 @@
   :init
   (setq evil-collection-company-use-tng nil)
   (evil-collection-init)
-  (add-hook 'org-agenda-mode-hook (lambda ()
-                                    (evil-collection-unimpaired-mode -1))))
+  (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (evil-collection-unimpaired-mode -1))))
 
 (use-package evil-indent-plus
   :ensure t
@@ -471,12 +453,25 @@
   :init
   (setq evil-pinyin-scheme 'simplified-xiaohe-all))
 
+(use-package evil-snipe
+  :ensure t
+  :hook ((after-init . evil-snipe-mode)
+         (after-init . evil-snipe-override-mode))
+  :config
+  (setq evil-snipe-scope 'buffer
+        evil-snipe-show-prompt t)
+
+  (general-def 'visual evil-snipe-local-mode-map
+    "z" 'evil-snipe-s
+    "Z" 'evil-snipe-S))
+
 (use-package evil-surround
   :ensure t
-  :init
-  (global-evil-surround-mode)
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                    (push '(?` . ("`" . "'")) evil-surround-pairs-alist)))
+  :hook (after-init . global-evil-surround-mode)
+  :config
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (push '(?` . ("`" . "'")) evil-surround-pairs-alist)))
   ;; `s' for surround instead of `subtitute'
   (general-def 'visual evil-surround-mode-map
     "s" 'evil-surround-region
