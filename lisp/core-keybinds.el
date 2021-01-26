@@ -236,8 +236,13 @@
       "H-z"   'evil-undo
       "H-Z"   'evil-redo
       "H-C-F" 'toggle-frame-fullscreen
-      "H-s" (lambda () (interactive) (call-interactively (key-binding "\C-x\C-s")))
-      "H-<backspace>" (lambda () (interactive) (kill-line 0) (indent-according-to-mode)))))
+      "H-s"   'save-buffer
+      "H-<backspace>" (defun delete-line-before-point()
+                        (interactive)
+                        (let ((prev-pos (point)))
+                          (forward-visible-line 0)
+                          (delete-region (point) prev-pos)
+                          (indent-according-to-mode))))))
 
 (use-package evil
   :ensure t
