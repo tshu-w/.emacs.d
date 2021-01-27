@@ -32,6 +32,10 @@
 ;; initialization, so we must prevent Emacs from doing it early!
 (setq package-enable-at-startup nil)
 
+;; enable package-quickstart
+(setq package-quickstart t
+      package-quickstart-file "~/.emacs.d/var/package-quickstart.el")
+
 ;; Inhibit resizing frame
 (setq frame-inhibit-implied-resize t)
 
