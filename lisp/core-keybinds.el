@@ -201,7 +201,14 @@
     "wV"      'split-window-horizontally-and-focus
     "ww"      'other-window)
 
-  (general-def [remap comment-dwim] 'comment-or-uncomment)
+  (general-def
+    [remap comment-dwim] 'comment-or-uncomment
+    "M-j" (defun scroll-other-window-next-line (&optional arg)
+            (interactive "P")
+            (scroll-other-window (or arg 1)))
+    "M-k" (defun scroll-other-window-previous-line (&optional arg)
+            (interactive "P")
+            (scroll-other-window (- (or arg 1)))))
 
   (when (memq window-system '(mac ns))
     (general-def
