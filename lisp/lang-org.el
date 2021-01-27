@@ -163,7 +163,7 @@
              ;; Priority cookie in this heading
              ((string-match org-priority-regexp s)
               (* 1000 (- org-priority-lowest
-		                     (org-priority-to-value (match-string 2 s)))))
+                         (org-priority-to-value (match-string 2 s)))))
              ;; No priority cookie, but already at highest level
              ((not (org-up-heading-safe))
               (* 1000 (- org-priority-lowest org-priority-default)))
@@ -853,16 +853,16 @@ _z_: Open zotero  _i_: Insert cite  _h_: change type
     ("C" org-ref-crossref-at-point nil)
     ("K" org-ref-copy-entry-as-summary nil)
     ("k" (progn
-	         (kill-new
-	          (car (org-ref-get-bibtex-key-and-file))))
+           (kill-new
+            (car (org-ref-get-bibtex-key-and-file))))
      nil)
     ("f" (kill-new
-	        (org-ref-format-entry (org-ref-get-bibtex-key-under-cursor)))
+          (org-ref-format-entry (org-ref-get-bibtex-key-under-cursor)))
      nil)
 
     ("e" (kill-new (save-excursion
-		                 (org-ref-open-citation-at-point)
-		                 (org-ref-email-bibtex-entry)))
+                     (org-ref-open-citation-at-point)
+                     (org-ref-email-bibtex-entry)))
      nil)
     ("i" (funcall org-ref-insert-cite-function))
     ("h" org-ref-change-cite-type)
@@ -891,21 +891,21 @@ _z_: Open Zotero  ^ ^                         _S_: Sentence case
     ("n" org-ref-open-bibtex-notes)
     ("z" org-ref-open-in-zotero)
     ("o" (lambda ()
-	         (interactive)
-	         (bibtex-copy-entry-as-kill)
-	         (message "Use %s to paste the entry"
-		                (substitute-command-keys (format "\\[bibtex-yank]")))))
+           (interactive)
+           (bibtex-copy-entry-as-kill)
+           (message "Use %s to paste the entry"
+                    (substitute-command-keys (format "\\[bibtex-yank]")))))
     ("d" bibtex-kill-entry)
     ("L" org-ref-clean-bibtex-entry)
     ("y" (save-excursion
-	         (bibtex-beginning-of-entry)
-	         (when (looking-at bibtex-entry-maybe-empty-head)
-	           (kill-new (bibtex-key-in-head)))))
+           (bibtex-beginning-of-entry)
+           (when (looking-at bibtex-entry-maybe-empty-head)
+             (kill-new (bibtex-key-in-head)))))
     ("f" (progn
-	         (bibtex-beginning-of-entry)
-	         (kill-new
-	          (org-ref-format-entry
-	           (cdr (assoc "=key=" (bibtex-parse-entry t)))))))
+           (bibtex-beginning-of-entry)
+           (kill-new
+            (org-ref-format-entry
+             (cdr (assoc "=key=" (bibtex-parse-entry t)))))))
     ("k" helm-tag-bibtex-entry)
     ("K" (lambda ()
            (interactive)
@@ -915,7 +915,7 @@ _z_: Open Zotero  ^ ^                         _S_: Sentence case
             t)))
     ("b" org-ref-open-in-browser)
     ("r" (lambda ()
-	         (interactive)
+           (interactive)
            (bibtex-beginning-of-entry)
            (bibtex-kill-entry)
            (find-file (completing-read
