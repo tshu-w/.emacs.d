@@ -245,7 +245,7 @@
              "** %(format-time-string org-journal-time-format)%?"
              :jump-to-captured t :immediate-finish t)
             ("l" "Link")
-            ("ll" "Link" plain (file+function org-inbox-file org-capture-goto-link)
+            ("ll" "Web link" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
             ("li" "Inbox with link" entry (file org-inbox-file)
              "* %?\n%a\n%i\n")
@@ -283,29 +283,65 @@
              "* Week %(format-time-string \"%_V\") Review\n%?\n"
              :jump-to-captured t :immediate-finish t)))
     :config
+    (setq org-capture-web-link-key "ll"
+          org-capture-auto-refile-rules
+          `(("https?://arxiv\\.org" ,org-inbox-file "arXiv")))
+
     (defun org-capture-goto-link ()
-      (org-capture-put :target
-                       (list 'file+headline
-                             (nth 1 (org-capture-get :target))
-                             (plist-get org-store-link-plist :description)))
-      (org-capture-put-target-region-and-position)
-      (widen)
-      (let ((hd (plist-get org-store-link-plist :description)))
+      (let ((file (nth 1 (org-capture-get :target)))
+            (headline (plist-get org-store-link-plist :description))
+            (link (plist-get org-store-link-plist :link)))
+        (org-capture-put :target (list 'file+headline file headline))
+        (widen)
         (goto-char (point-min))
-        (if (re-search-forward
-             (format org-complex-heading-regexp-format (regexp-quote hd)) nil t)
-            (org-end-of-subtree)
-          (goto-char (point-max))
-          (or (bolp) (insert "\n"))
-          (insert "* " hd "\n"
-                  "[[" (plist-get org-store-link-plist :link) "]]" "\n"))))
+        (let (case-fold-search)
+          (if (re-search-forward
+               (format org-complex-heading-regexp-format
+                       (regexp-quote headline)) nil t)
+              (org-end-of-subtree)
+            (org-capture-put :flag t)
+            (goto-char (point-max))
+            (or (bolp) (insert "\n"))
+            (insert "* " headline "\n")
+            (insert "[[" link "]]\n")))))
+
+    (defun org-refile-to (file headline)
+      "`org-refile' to exact HEADLINE in FILE."
+      (if-let ((pos (save-excursion
+                      (org-find-exact-headline-in-buffer
+                       headline (or (find-buffer-visiting file)
+				                            (find-file-noselect file)) t))))
+          (org-refile nil nil (list headline file nil pos))
+        (user-error (format "There is not headline \"%s\" in %s." headline file))))
+
+    (defun org-capture-auto-refile ()
+      (when (and (string= (org-capture-get :key) org-capture-web-link-key)
+                 (org-capture-get :flag))
+        (catch 'break
+          (dolist (rule org-capture-auto-refile-rules)
+            (let ((regexp   (nth 0 rule))
+                  (file     (nth 1 rule))
+                  (headline (nth 2 rule))
+                  (link     (plist-get org-store-link-plist :link)))
+              (when (string-match-p regexp link)
+                (let ((base (or (buffer-base-buffer) (current-buffer)))
+	                    (pos (make-marker)))
+                  (set-marker pos (save-excursion (org-back-to-heading t) (point)) base)
+                  (save-window-excursion
+                    (with-current-buffer base
+	                    (org-with-point-at pos
+                        (org-refile-to file headline)))))
+                (throw 'break t)))))))
+
+    (add-hook 'org-capture-before-finalize-hook #'org-capture-auto-refile)
 
     (when (memq window-system '(mac ns))
-      (defun org-capture-finalize@after (&rest r)
-        (when (equal "ll" (plist-get org-capture-plist :key))
-          (run-at-time 0.2 nil #'macos-switch-back-to-previous-application)))
+      (defun org-capture-after-finalize ()
+        (when (string= (org-capture-get :key) org-capture-web-link-key)
+          (run-at-time 0.25 nil #'macos-switch-back-to-previous-application)))
 
-      (advice-add 'org-capture-finalize :after #'org-capture-finalize@after)))
+      (add-hook 'org-capture-after-finalize-hook #'org-capture-after-finalize))
+    )
 
   (use-package org-clock
     :defer 3
@@ -380,9 +416,7 @@
           org-refile-use-outline-path 'file
           org-refile-targets '((nil :maxlevel . 4)
                                (org-agenda-files :maxlevel . 3)
-                               (org-note-files :maxlevel . 2)))
-
-    (advice-add 'org-refile :after #'org-save-all-org-buffers))
+                               (org-note-files :maxlevel . 2))))
 
   (setq org-fast-tag-selection-single-key t
         org-tags-column -80
