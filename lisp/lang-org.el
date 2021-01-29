@@ -14,6 +14,7 @@
   :init
   (setq org-directory "~/Documents/Org/"
         org-note-directory (concat org-directory "notes/")
+        org-journal-directory (concat org-directory "journals/")
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file)
@@ -75,18 +76,23 @@
 
   (unless (fboundp 'find-lisp-find-files)
     (autoload #'find-lisp-find-files "find-lisp"))
+
   (defun org-note-files ()
-    "Get the list of note files."
+    "Get the list of `org-mode' file in `org-note-directory'."
     (find-lisp-find-files org-note-directory "\.org$"))
+
+  (defun org-journal-files ()
+    "Get the list of `org-mode' file in `org-journal-directory'."
+    (find-lisp-find-files org-journal-directory "\.org$"))
 
   (use-package org-agenda
     :defer t
     :init
-    (setq org-agenda-files `(,org-directory))
+    (setq org-agenda-files `(,org-directory ,org-journal-directory))
     :config
     (add-to-list 'org-modules 'org-habit t)
 
-    (setq org-agenda-clockreport-parameter-plist '(:maxlevel 3 :scope agenda-with-archives)
+    (setq org-agenda-clockreport-parameter-plist '(:maxlevel 5 :scope agenda-with-archives)
           org-agenda-columns-add-appointments-to-effort-sum t
           org-agenda-compact-blocks t
           org-agenda-dim-blocked-tasks t
@@ -241,9 +247,8 @@
     (setq org-capture-templates
           '(("i" "Inbox" entry (file org-inbox-file) "* %?\n%i\n")
             ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
-            ("j" "Journal" plain (function org-journal-find-location)
-             "** %(format-time-string org-journal-time-format)%?"
-             :jump-to-captured t :immediate-finish t)
+            ("j" "Journal" entry (function org-datetree-goto-location)
+             "* %<%H:%M> %?\n" :clock-in t :clock-keep t)
             ("l" "Link")
             ("ll" "Web link" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
@@ -252,96 +257,88 @@
             ("lt" "Todo with link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n")
             ("r" "Review")
-            ("ry" "Yesterday" plain
-             (function (lambda () (org-journal-find-location
-                              (time-add (current-time) (days-to-time -1)))))
-             "** Daily Review\n%?\n" :jump-to-captured t :immediate-finish t)
-            ("rt" "Today" plain (function org-journal-find-location)
-             "** Daily Review\n%?\n" :jump-to-captured t :immediate-finish t)
-            ("rw" "Last Week" plain
-             (function (lambda ()
-                         (org-journal-find-location
-                          (let* ((time (decode-time (current-time)))
-                                 (year (decoded-time-year time))
-                                 (week (car (calendar-iso-from-absolute
-                                             (calendar-absolute-from-gregorian
-                                              (-select-by-indices
-                                               '(4 3 5) time))))))
-                            (iso-week-to-time year (- week 1) 7)))))
-             "* Week %(format-time-string \"%_V\" (time-add (current-time) (days-to-time -7))) Review\n%?\n"
-             :jump-to-captured t :immediate-finish t)
-            ("rW" "This Week" plain
-             (function (lambda ()
-                         (org-journal-find-location
-                          (let* ((time (decode-time (current-time)))
-                                 (year (decoded-time-year time))
-                                 (week (car (calendar-iso-from-absolute
-                                             (calendar-absolute-from-gregorian
-                                              (-select-by-indices
-                                               '(4 3 5) time))))))
-                            (iso-week-to-time year week 7)))))
-             "* Week %(format-time-string \"%_V\") Review\n%?\n"
-             :jump-to-captured t :immediate-finish t)))
+            ("ry" "Yesterday" entry (function
+                                     (lambda ()
+                                       (org-datetree-goto-location
+                                        (time-add (current-time) (days-to-time -1)))))
+             "* Daily Review\n" :immediate-finish t :jump-to-captured t)
+            ("rt" "Today" entry (function org-datetree-goto-location)
+             "* Daily Review\n" :immediate-finish t :jump-to-captured t)
+            ("rd" "Select a date" entry (function org-datetree-goto-read-date-location)
+             "* Daily Review\n" :immediate-finish t :jump-to-captured t)
+            ("rw" "Last Week" entry (function
+                                     (lambda ()
+                                       (let ((org-reverse-datetree-level-formats
+                                              (butlast org-reverse-datetree-level-formats)))
+                                         (org-datetree-goto-location
+                                          (time-add (current-time) (days-to-time -7))))))
+             "* Weekly Review" :immediate-finish t :jump-to-captured t)
+            ("rW" "This Week" entry (function
+                                     (lambda ()
+                                       (let ((org-reverse-datetree-level-formats
+                                              (butlast org-reverse-datetree-level-formats)))
+                                         (org-datetree-goto-location))))
+             "* Weekly Review" :immediate-finish t :jump-to-captured t)))
     :config
-    (setq org-capture-web-link-key "ll"
-          org-capture-auto-refile-rules
-          `(("https?://arxiv\\.org" ,org-inbox-file "arXiv")))
+    (progn ;; web link
+      (setq org-capture-web-link-key "ll"
+            org-capture-auto-refile-rules
+            `(("https?://arxiv\\.org" ,org-inbox-file "arXiv")))
 
-    (defun org-capture-goto-link ()
-      (let ((file (nth 1 (org-capture-get :target)))
-            (headline (plist-get org-store-link-plist :description))
-            (link (plist-get org-store-link-plist :link)))
-        (org-capture-put :target (list 'file+headline file headline))
-        (widen)
-        (goto-char (point-min))
-        (let (case-fold-search)
-          (if (re-search-forward
-               (format org-complex-heading-regexp-format
-                       (regexp-quote headline)) nil t)
-              (org-end-of-subtree)
-            (org-capture-put :flag t)
-            (goto-char (point-max))
-            (or (bolp) (insert "\n"))
-            (insert "* " headline "\n")
-            (insert "[[" link "]]\n")))))
+      (defun org-capture-goto-link ()
+        (let ((file (nth 1 (org-capture-get :target)))
+              (headline (plist-get org-store-link-plist :description))
+              (link (plist-get org-store-link-plist :link)))
+          (org-capture-put :target (list 'file+headline file headline))
+          (widen)
+          (goto-char (point-min))
+          (let (case-fold-search)
+            (if (re-search-forward
+                 (format org-complex-heading-regexp-format
+                         (regexp-quote headline)) nil t)
+                (org-end-of-subtree)
+              (org-capture-put :flag t)
+              (goto-char (point-max))
+              (or (bolp) (insert "\n"))
+              (insert "* " headline "\n")
+              (insert "[[" link "]]\n")))))
 
-    (defun org-refile-to (file headline)
-      "`org-refile' to exact HEADLINE in FILE."
-      (if-let ((pos (save-excursion
-                      (org-find-exact-headline-in-buffer
-                       headline (or (find-buffer-visiting file)
-				                            (find-file-noselect file)) t))))
-          (org-refile nil nil (list headline file nil pos))
-        (user-error (format "There is not headline \"%s\" in %s." headline file))))
+      (defun org-refile-to (file headline)
+        "`org-refile' to exact HEADLINE in FILE."
+        (if-let ((pos (save-excursion
+                        (org-find-exact-headline-in-buffer
+                         headline (or (find-buffer-visiting file)
+				                              (find-file-noselect file)) t))))
+            (org-refile nil nil (list headline file nil pos))
+          (user-error (format "There is not headline \"%s\" in %s." headline file))))
 
-    (defun org-capture-auto-refile ()
-      (when (and (string= (org-capture-get :key) org-capture-web-link-key)
-                 (org-capture-get :flag))
-        (catch 'break
-          (dolist (rule org-capture-auto-refile-rules)
-            (let ((regexp   (nth 0 rule))
-                  (file     (nth 1 rule))
-                  (headline (nth 2 rule))
-                  (link     (plist-get org-store-link-plist :link)))
-              (when (string-match-p regexp link)
-                (let ((base (or (buffer-base-buffer) (current-buffer)))
-	                    (pos (make-marker)))
-                  (set-marker pos (save-excursion (org-back-to-heading t) (point)) base)
-                  (save-window-excursion
-                    (with-current-buffer base
-	                    (org-with-point-at pos
-                        (org-refile-to file headline)))))
-                (throw 'break t)))))))
+      (defun org-capture-auto-refile ()
+        (when (and (string= (org-capture-get :key) org-capture-web-link-key)
+                   (org-capture-get :flag))
+          (catch 'break
+            (dolist (rule org-capture-auto-refile-rules)
+              (let ((regexp   (nth 0 rule))
+                    (file     (nth 1 rule))
+                    (headline (nth 2 rule))
+                    (link     (plist-get org-store-link-plist :link)))
+                (when (string-match-p regexp link)
+                  (let ((base (or (buffer-base-buffer) (current-buffer)))
+	                      (pos (make-marker)))
+                    (set-marker pos (save-excursion (org-back-to-heading t) (point)) base)
+                    (save-window-excursion
+                      (with-current-buffer base
+	                      (org-with-point-at pos
+                          (org-refile-to file headline)))))
+                  (throw 'break t)))))))
 
-    (add-hook 'org-capture-before-finalize-hook #'org-capture-auto-refile)
+      (add-hook 'org-capture-before-finalize-hook #'org-capture-auto-refile)
 
-    (when (memq window-system '(mac ns))
-      (defun org-capture-after-finalize ()
-        (when (string= (org-capture-get :key) org-capture-web-link-key)
-          (run-at-time 0.25 nil #'macos-switch-back-to-previous-application)))
+      (when (memq window-system '(mac ns))
+        (defun org-capture-after-finalize ()
+          (when (string= (org-capture-get :key) org-capture-web-link-key)
+            (run-at-time 0.25 nil #'macos-switch-back-to-previous-application)))
 
-      (add-hook 'org-capture-after-finalize-hook #'org-capture-after-finalize))
-    )
+        (add-hook 'org-capture-after-finalize-hook #'org-capture-after-finalize))))
 
   (use-package org-clock
     :defer 3
@@ -367,7 +364,7 @@
                                         (alert "Do you forget to clock-in?"
                                                :title "Org Clock")))))
 
-    (plist-put org-clocktable-defaults :maxlevel 3)
+    (plist-put org-clocktable-defaults :maxlevel 5)
     (plist-put org-clocktable-defaults :link t)
     (plist-put org-clocktable-defaults :formula '%)
     (plist-put org-clocktable-defaults :fileskip0 t)
@@ -462,7 +459,7 @@
 
   (progn
     (defun org-review (key)
-      "Org review with org-journal capture and agenda."
+      "Org review with org capture and agenda."
       (org-capture nil key)
       (org-agenda nil key)
       (other-window 1))
@@ -563,6 +560,7 @@ Org Review Transient state
     "sn"    'org-narrow-to-subtree
     "sN"    'widen
     "sr"    'org-refile
+    "sR"    'org-datetree-refile
     "ss"    'org-sparse-tree
     "sS"    'org-sort
     "t"     '(:ignore t :which-key "tables")
@@ -710,29 +708,6 @@ Org Review Transient state
   :hook (org-mode . org-edit-latex-mode)
   :init (setq org-edit-latex-create-master nil))
 
-(use-package org-journal
-  :ensure t
-  :after calendar
-  :commands (org-journal-find-location)
-  :init
-  (setq org-journal-dir          "~/Documents/Org/journals/"
-        org-journal-date-format  "%A, %B %d %Y"
-        org-journal-file-header #'org-journal-file-header-func
-        org-journal-file-type    'monthly)
-  :config
-  (defun org-journal-find-location (&optional time)
-    (org-journal-new-entry t time)
-    (org-end-of-subtree))
-
-  (defun org-journal-file-header-func (time)
-    "Custom function to create journal header."
-    (concat
-     (pcase org-journal-file-type
-       (`daily "#+title: Daily Journal\n#+startup: showeverything\n\n")
-       (`weekly "#+title: Weekly Journal\n#+startup: folded\n\n")
-       (`monthly "#+title: Monthly Journal\n#+startup: folded\n\n")
-       (`yearly "#+title: Yearly Journal\n#+startup: folded\n\n")))))
-
 (use-package org-mru-clock
   :ensure t
   :config
@@ -778,6 +753,46 @@ Org Review Transient state
   :general
   (despot-def org-mode-map
     "Rt" 'org-random-todo-goto-new))
+
+(use-package org-reverse-datetree
+  :ensure t
+  :commands (org-datetree-goto-location
+             org-datetree-goto-read-date-location
+             org-datetree-refile)
+  :init
+  (setq-default org-reverse-datetree-level-formats '("%Y" "%Y-%m %B" "%Y W%W" "%Y-%m-%d %A"))
+  :config
+  (setq org-datetree-file-format (concat org-journal-directory "%Y.org"))
+
+  (defun org-datetree-goto-location (&optional time)
+    "wrapper for `org-reverse-datetree-goto-date-in-file'.
+go to `org-datetree-file-format' file based on TIME."
+    (let* ((time (or time (current-time)))
+           (file (format-time-string org-datetree-file-format time)))
+      (set-buffer (or (org-find-base-buffer-visiting file)
+                      (find-file-noselect file)))
+      (org-reverse-datetree-goto-date-in-file time)))
+
+  (defun org-datetree-goto-read-date-location (&optional time)
+    "wrapper for `org-reverse-datetree-goto-read-date-in-file'.
+go to `org-journal-file-format' file based on TIME."
+    (interactive)
+    (let* ((time (or time (org-read-date nil t nil)))
+           (file (format-time-string org-datetree-file-format time)))
+      (set-buffer (or (org-find-base-buffer-visiting file)
+                      (find-file-noselect file)))
+      (org-reverse-datetree-goto-date-in-file time)))
+
+  (defun org-datetree-refile (ask-always &optional time prefer)
+    "wrapper for `org-reverse-datetree-refile-to-file'.
+go to `org-journal-file-format' file based on TIME."
+    (interactive "P")
+    (let* ((prefer (or prefer '("CLOSED")))
+           (time (or time (org-reverse-datetree--get-entry-time
+                           :ask-always ask-always
+                           :prefer prefer)))
+           (file (format-time-string org-datetree-file-format time)))
+      (org-reverse-datetree-refile-to-file file time :ask-always ask-always :prefer prefer))))
 
 (use-package org-roam
   :ensure t
