@@ -283,7 +283,8 @@
     (progn ;; web link
       (setq org-capture-web-link-key "ll"
             org-capture-auto-refile-rules
-            `(("https?://arxiv\\.org" ,org-inbox-file "arXiv")))
+            `(("https?://arxiv\\.org" ,org-inbox-file "arXiv")
+              ("https?://git\\(?:hub\\|lab\\)\\.com" ,org-inbox-file "Repos")))
 
       (defun org-capture-goto-link ()
         (let ((file (nth 1 (org-capture-get :target)))
@@ -301,16 +302,22 @@
               (goto-char (point-max))
               (or (bolp) (insert "\n"))
               (insert "* " headline "\n")
-              (insert "[[" link "]]\n")))))
+              (insert "[[" link "]]\n")
+              (point)))))
 
       (defun org-refile-to (file headline)
-        "`org-refile' to exact HEADLINE in FILE."
-        (if-let ((pos (save-excursion
-                        (org-find-exact-headline-in-buffer
-                         headline (or (find-buffer-visiting file)
-				                              (find-file-noselect file)) t))))
-            (org-refile nil nil (list headline file nil pos))
-          (user-error (format "There is not headline \"%s\" in %s." headline file))))
+        "`org-refile' to exact HEADLINE in FILE.
+Create at last if HEADLINE doesn't exist."
+        (let* ((buffer (or (find-buffer-visiting file)
+                           (find-file-noselect file)))
+               (pos (save-excursion
+                      (or (org-find-exact-headline-in-buffer headline buffer t)
+                          (with-current-buffer buffer
+                            (goto-char (point-max))
+                            (unless (bolp) (insert "\n"))
+                            (insert "* " headline "\n")
+                            (point))))))
+          (org-refile nil nil (list headline file nil pos))))
 
       (defun org-capture-auto-refile ()
         (when (and (string= (org-capture-get :key) org-capture-web-link-key)
@@ -323,11 +330,11 @@
                     (link     (plist-get org-store-link-plist :link)))
                 (when (string-match-p regexp link)
                   (let ((base (or (buffer-base-buffer) (current-buffer)))
-	                      (pos (make-marker)))
+                        (pos (make-marker)))
                     (set-marker pos (save-excursion (org-back-to-heading t) (point)) base)
                     (save-window-excursion
                       (with-current-buffer base
-	                      (org-with-point-at pos
+                        (org-with-point-at pos
                           (org-refile-to file headline)))))
                   (throw 'break t)))))))
 
