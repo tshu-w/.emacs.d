@@ -20,7 +20,9 @@
 
 (use-package mu4e
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-  :commands mu4e-update-mail-and-index
+  :commands (mu4e-update-mail-and-index
+             mu4e-org-open
+             mu4e-org-store-link)
   :init
   (setq mu4e-maildir "~/.mail"
         mu4e-attachment-dir "~/Downloads"
@@ -32,6 +34,11 @@
                            (lambda () (mu4e-update-mail-and-index
                                   mu4e-index-update-in-background)
                              (mu4e-alert-enable-mode-line-display))))
+
+  (with-eval-after-load 'org
+    (org-link-set-parameters "mu4e"
+                             :follow #'mu4e-org-open
+                             :store  #'mu4e-org-store-link))
   :config
   (setq mail-user-agent 'mu4e-user-agent
         message-citation-line-format "On %a, %b %d %Y, %f wrote:\n"
