@@ -245,7 +245,7 @@
           (keyboard-quit)))))
   (add-to-list 'find-file-not-found-functions 'make-directory-maybe nil #'eq))
 
-(use-package imenu :commands imenu)
+(use-package imenu)
 
 (use-package newcomment
   :commands comment-or-uncomment
