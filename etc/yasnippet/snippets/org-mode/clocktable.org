@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: clocktable
-# key: clocktable
-# --
-#+BEGIN: clocktable :scope agenda-with-archives :block $0
-#+END:
