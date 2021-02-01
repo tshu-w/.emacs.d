@@ -261,25 +261,29 @@
                                      (lambda ()
                                        (org-datetree-goto-location
                                         (time-add (current-time) (days-to-time -1)))))
-             "* Daily Review\n" :immediate-finish t :jump-to-captured t)
+             "* Daily Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
             ("rt" "Today" entry (function org-datetree-goto-location)
-             "* Daily Review\n" :immediate-finish t :jump-to-captured t)
+             "* Daily Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
             ("rd" "Select a date" entry (function org-datetree-goto-read-date-location)
-             "* Daily Review\n" :immediate-finish t :jump-to-captured t)
+             "* Daily Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
             ("rw" "Last Week" entry (function
                                      (lambda ()
                                        (let ((org-reverse-datetree-level-formats
                                               (butlast org-reverse-datetree-level-formats)))
                                          (org-datetree-goto-location
                                           (time-add (current-time) (days-to-time -7))))))
-             "* Weekly Review" :immediate-finish t :jump-to-captured t)
+             "* Weekly Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
             ("rW" "This Week" entry (function
                                      (lambda ()
                                        (let ((org-reverse-datetree-level-formats
                                               (butlast org-reverse-datetree-level-formats)))
                                          (org-datetree-goto-location))))
-             "* Weekly Review" :immediate-finish t :jump-to-captured t)))
+             "* Weekly Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)))
     :config
+    (defun org-capture-insert-clock-report ()
+      (concat "#+BEGIN: clocktable :scope agenda-with-archives :block \n"
+              "#+END:\n"))
+
     (progn ;; web link
       (setq org-capture-web-link-key "ll"
             org-capture-auto-refile-rules
