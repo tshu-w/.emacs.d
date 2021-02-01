@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: mail
-# key: mail
-# --
-
-#+OPTIONS: tex:dvisvgm
-#+OPTIONS: toc:0
