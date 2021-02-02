@@ -116,7 +116,7 @@
     "hK"      'describe-keymap
     "h C-K"   'which-key-show-top-level
     "hm"      'describe-mode
-    "hM"      'man
+    "hM"      'woman
     "hp"      'describe-package
     "ht"      'describe-text-properties
     "hT"      'describe-theme
