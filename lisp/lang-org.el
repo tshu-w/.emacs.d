@@ -110,15 +110,15 @@
           org-agenda-skip-timestamp-if-done t
           org-agenda-skip-scheduled-if-deadline-is-shown t
           org-agenda-sorting-strategy '((agenda time-up priority-down)
-                                        (todo priority-down category-keep)
-                                        (tags priority-down category-keep)
+                                        (todo todo-state-up priority-down category-keep)
+                                        (tags todo-state-up priority-down category-keep)
                                         (search category-keep))
           org-agenda-span 'day
           org-agenda-start-on-weekday nil
           org-agenda-time-grid nil
           org-agenda-time-leading-zero t
           org-agenda-todo-ignore-scheduled 'all
-          org-agenda-todo-ignore-deadlines 'far
+          org-agenda-todo-ignore-deadlines 'near
           org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
