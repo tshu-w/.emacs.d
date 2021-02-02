@@ -59,7 +59,12 @@
               ;; disable <> auto pairing in electric-pair-mode for org-mode
               (setq-local electric-pair-inhibit-predicate
                           `(lambda (c) (if (char-equal c ?<) t
-                                    (,electric-pair-inhibit-predicate c))))))
+                                    (,electric-pair-inhibit-predicate c))))
+
+              ;; auto update modified time-stamp when saving
+              (setq-local time-stamp-pattern "^#\\+last_modified:[ \t]%%$"
+                          time-stamp-format "[%Y-%m-%d %a]")
+              (add-hook 'before-save-hook 'time-stamp nil t)))
 
   (defun open-org-inbox-file ()
     "Open `org-inbox-file'"
@@ -813,7 +818,7 @@ go to `org-journal-file-format' file based on TIME."
         '(("d" "default" plain (function org-roam-capture--get-point)
            "%?"
            :file-name "${slug}"
-           :head "#+title: ${title}\n#+created: %<%Y%m%d>\n"
+           :head "#+title: ${title}\n#+created: %u\n#+last_modified: %u\n\n"
            :unnarrowed t))
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
@@ -869,7 +874,7 @@ go to `org-journal-file-format' file based on TIME."
           bibtex-completion-bibliography reftex-default-bibliography
           bibtex-completion-notes-path (concat org-directory "notes/papers/")
           bibtex-completion-notes-template-multiple-files
-          "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n\n"
+          "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n#+created: %u\n#+last_modified: %u\n\n"
           bibtex-completion-pdf-field "file"))
 
   (defun org-ref-open-zotero-at-point ()
