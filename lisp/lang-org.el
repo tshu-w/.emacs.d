@@ -826,7 +826,12 @@ go to `org-journal-file-format' file based on TIME."
         org-roam-tag-sources '(prop all-directories))
   :config
   (org-roam-mode)
-  (add-hook 'org-roam-buffer-prepare-hook #'hide-mode-line-mode)
+
+  (add-hook 'org-roam-buffer-prepare-hook
+            (defun init-org-roam-buffer ()
+              "Stuff to do when prefering org-roam buffers."
+              (hide-mode-line-mode)
+              (writeroom-mode -1)))
 
   (despot-def org-mode-map
     "ir"    'org-roam-insert
