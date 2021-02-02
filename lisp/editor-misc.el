@@ -98,10 +98,14 @@
 (use-package helpful
   :ensure t
   :config
-  (defun helpful-reuse-window (buf)
-    (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
-        (select-window window)
-      (pop-to-buffer buf)))
+  (defun helpful-reuse-window (buffer-or-name)
+    "Switch to helpful BUFFER-OR-NAME.
+
+The logic is simple, if we are currently in the helpful buffer,
+reuse it's window, otherwise create new one."
+    (if (eq major-mode 'helpful-mode)
+        (switch-to-buffer buffer-or-name)
+      (pop-to-buffer buffer-or-name)))
 
   (setq helpful-max-buffers 3
         helpful-switch-buffer-function #'helpful-reuse-window)
