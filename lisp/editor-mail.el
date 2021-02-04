@@ -24,9 +24,9 @@
              mu4e-org-open
              mu4e-org-store-link)
   :init
-  (setq mu4e-maildir "~/.mail"
+  (setq mu4e-maildir "$XDG_DATA_HOME/mail"
         mu4e-attachment-dir "~/Downloads"
-        mu4e-get-mail-command "mbsync -a"
+        mu4e-get-mail-command "mbsync -c $XDG_CONFIG_HOME/isync/mbsyncrc -a"
         mu4e-main-buffer-hide-personal-addresses t
         mu4e-update-interval (* 6 60 60)
         mu4e-update-timer (run-with-timer
