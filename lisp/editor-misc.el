@@ -178,8 +178,8 @@ reuse it's window, otherwise create new one."
                            (ignore-errors (rime-sync))))))
   :config
   (setq default-input-method "rime"
-        rime-librime-root "~/.emacs.d/etc/librime/dist"
-        rime-user-data-dir "~/.emacs.d/etc/rime/"
+        rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
+        rime-user-data-dir (no-littering-expand-etc-file-name "rime/")
         rime-show-candidate 'posframe
         rime-show-preedit 'inline
         rime-posframe-properties (list :internal-border-width 2))
