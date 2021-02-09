@@ -58,10 +58,6 @@
   :hook (magit-mode . turn-on-magit-gitflow)
   :config (general-def magit-mode-map "%" 'magit-gitflow-popup))
 
-(use-package magit-delta
-  :ensure t
-  :hook (magit-mode . magit-delta-mode))
-
 (use-package forge :ensure t :after magit)
 
 (use-package transient
