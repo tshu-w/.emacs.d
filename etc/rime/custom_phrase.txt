@@ -1,1 +1,1 @@
-/Users/wangtianshu/Documents/dotfiles/backup/Library/Rime/custom_phrase.txt
+/Users/wangtianshu/Library/Rime/custom_phrase.txt

@@ -1,1 +1,1 @@
-/Users/wangtianshu/Documents/dotfiles/backup/Library/Rime/essay.txt
+/Users/wangtianshu/Library/Rime/essay.txt
