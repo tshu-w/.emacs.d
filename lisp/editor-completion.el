@@ -54,7 +54,7 @@
                     (cons (pyim-cregexp-build (car y))
                           (cdr y)))
                   x)
-        (pyim-cregexp-build x))))
+        (if (string= "" x) x (pyim-cregexp-build x)))))
 
   (defun ivy--cregex-ignore-order (str)
     (let ((x (ivy--regex-ignore-order str))
@@ -64,7 +64,7 @@
                     (cons (pyim-cregexp-build (car y))
                           (cdr y)))
                   x)
-        (pyim-cregexp-build x))))
+        (if (string= "" x) x (pyim-cregexp-build x)))))
 
   (general-def '(ivy-minibuffer-map ivy-switch-buffer-map)
     "<tab>"    'ivy-tab
