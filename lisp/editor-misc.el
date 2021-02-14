@@ -186,9 +186,7 @@ reuse it's window, otherwise create new one."
 
   (general-def rime-mode-map
     "M-j"   'rime-force-enable
-    "C-`"   'rime-send-keybinding
-    "C-~"   'rime-send-keybinding
-    "C-S-`" 'rime-send-keybinding))
+    "C-`"   'rime-send-keybinding))
 
 (use-package sis
   :ensure t
