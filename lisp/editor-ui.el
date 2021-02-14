@@ -66,6 +66,7 @@
         spacemacs-theme-comment-bg nil))
 
 (defvar light-themes '(doom-acario-light
+                       doom-homage-white
                        doom-nord-light
                        doom-one-light
                        doom-opera-light
@@ -87,7 +88,7 @@
 
 (defvar dark-themes '(doom-city-lights
                       doom-dark+
-                      doom-ephemeral
+                      doom-homage-dark
                       doom-Iosvkem
                       doom-material
                       doom-nord
@@ -106,9 +107,9 @@
                       doom-vibrant
                       doom-zenburn
                       flucui-dark
-                      gruvbox-dark-hard
+                      ;; gruvbox-dark-hard
                       gruvbox-dark-medium
-                      gruvbox-dark-soft
+                      ;; gruvbox-dark-soft
                       humanoid-dark
                       kaolin-blossom
                       kaolin-bubblegum
