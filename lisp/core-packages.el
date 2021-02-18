@@ -59,9 +59,8 @@
   :ensure t
   :defer t
   :init
-  (setq exec-path-from-shell-check-startup-files nil
-        exec-path-from-shell-arguments '("-l")
-        exec-path-from-shell-variables '("PATH" "MANPATH"))
+  (setq exec-path-from-shell-arguments '("-l")
+        exec-path-from-shell-variables '("PATH" "MANPATH" "GNUPGHOME"))
   (exec-path-from-shell-initialize))
 
 (use-package benchmark-init
