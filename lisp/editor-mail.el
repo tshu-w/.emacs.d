@@ -10,13 +10,7 @@
 
 (use-package mu4e-alert
   :ensure t
-  :commands (mu4e-alert-enable-mode-line-display)
-  :config
-  (setq mu4e-alert-interesting-mail-query
-        (concat
-         "flag:unread "
-         "AND NOT flag:trashed "
-         "AND NOT maildir:/trash/")))
+  :commands mu4e-alert-enable-mode-line-display)
 
 (use-package mu4e
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
@@ -78,12 +72,12 @@
 
   (setq mu4e-bookmarks
         '(("flag:unread AND NOT flag:trashed" "Unread messages"   ?u)
-          ("maildir:/inbox/" "Inbox messages"                     ?i)
-          ("maildir:/sent/" "Sent messages"                       ?s)
-          ("maildir:/junk/" "Junk messages"                       ?j)
-          ("maildir:/trash/" "Trash messages"                     ?T)
-          ("maildir:/archive/" "Archive messages"                 ?a)
-          ("maildir:/drafts/"  "Drafts messages"                  ?d)
+          ("maildir:/Inbox/" "Inbox messages"                     ?i)
+          ("maildir:/Sent/" "Sent messages"                       ?s)
+          ("maildir:/Spam/" "Spam messages"                       ?S)
+          ("maildir:/Trash/" "Trash messages"                     ?T)
+          ("maildir:/Archive/" "Archive messages"                 ?a)
+          ("maildir:/Drafts/"  "Drafts messages"                  ?d)
           ("flag:flagged AND NOT flag:trashed" "Flagged messages" ?f)
           ("date:today..now" "Today's messages"                   ?t)
           ("date:7d..now" "Last 7 days"                           ?w)
@@ -91,18 +85,42 @@
 
   ;; mu4e contexts setting,
   ;; offical example: https://www.djcbsoftware.nl/code/mu/mu4e/Contexts-example.html
-  (load "mu4e-contexts.el.gpg")
-
-  (defun mu4e-mark-google-trash-as-read (&optional _)
-    (let* ((cmd "mu find maildir:/gmail/trash flag:unread --format=sexp 2>/dev/null")
-           (res (concat "(list" (shell-command-to-string cmd) ")"))
-           (msgs (car (read-from-string res))))
-      (unless (equal '(list) msgs)
-        (dolist (msg msgs)
-          (when-let ((docid (mu4e-message-field msg :docid)))
-            (unless (= docid 0)
-              (mu4e~proc-move docid nil "+S-u-N")))))))
-  (advice-add 'mu4e :before #'mu4e-mark-google-trash-as-read)
+  (setq mu4e-context-policy 'pick-first
+        mu4e-contexts
+        `(,(make-mu4e-context
+            :name "fastmail"
+            :match-func (lambda (msg)
+                          (when msg
+                            (string-prefix-p "/fastmail" (mu4e-message-field msg :maildir))))
+            :enter-func (lambda () (mu4e-message "Switch to the fastmail context"))
+            :leave-func (lambda () (mu4e-clear-caches))
+            :vars '((user-mail-address . "wang@tianshu.me")
+                    (mu4e-compose-signature . "Tianshu Wang\n")
+                    (mu4e-sent-folder . "/fastmail/Sent")
+                    (mu4e-drafts-folder . "/fastmail/Drafts")
+                    (mu4e-trash-folder . "/fastmail/Trash")
+                    (mu4e-refile-folder . "/fastmail/Archive")
+                    (smtpmail-smtp-server . "smtp.fastmail.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))))
+          ,(make-mu4e-context
+            :name "iscas"
+            :match-func (lambda (msg)
+                          (when msg
+                            (string-prefix-p "/iscas" (mu4e-message-field msg :maildir))))
+            :enter-func (lambda () (mu4e-message "Switch to the iscas context"))
+            :leave-func (lambda () (mu4e-clear-caches))
+            :vars '((user-mail-address . "tianshu2020@iscas.ac.cn")
+                    (mu4e-compose-signature . "Tianshu Wang\n")
+                    (mu4e-sent-folder . "/iscas/Sent")
+                    (mu4e-drafts-folder . "/iscas/Drafts")
+                    (mu4e-trash-folder . "/iscas/Trash")
+                    (mu4e-refile-folder . "/iscas/Archive")
+                    (smtpmail-smtp-server . "mail.cstnet.cn")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 994)
+                    (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))))))
 
   (require 'smtpmail-async)
   (setq send-mail-function         'async-smtpmail-send-it
@@ -185,8 +203,7 @@
   :commands (org-mu4e-compose-org-mode)
   :config
   (evil-set-initial-state 'mu4e-compose-mode 'normal)
-  (setq mu4e-org-link-query-in-headers-mode nil
-        org-mu4e-convert-to-html t))
+  (setq mu4e-org-link-query-in-headers-mode nil))
 
 (provide 'editor-mail)
 ;;; editor-mail.el ends here

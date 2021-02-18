@@ -11,7 +11,8 @@
 (set-language-environment 'utf-8)
 (set-default-coding-systems 'utf-8)
 
-(setq user-mail-address "wang@tianshu.me")
+(setq user-full-name "Tianshu Wang"
+      user-mail-address "wang@tianshu.me")
 
 (when (memq window-system '(mac ns))
   (setq url-proxy-services
