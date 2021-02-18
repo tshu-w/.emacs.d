@@ -1,9 +1,9 @@
 ;;; editor-checker.el --- -*- lexical-binding: t; -*-
 ;;; Commentary:
 
-;; Copyright (C) 2020  Tianshu Wang
+;; Copyright (C) 2020-2021  Tianshu Wang
 
-;; Author: Tianshu Wang <volekingsg@gmail.com>
+;; Author: Tianshu Wang <wang@tianshu.me>
 
 ;;; Commentary:
 

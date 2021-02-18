@@ -1,8 +1,8 @@
 ;;; core-config.el --- -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020  Tianshu Wang
+;; Copyright (C) 2020-2021  Tianshu Wang
 
-;; Author: Tianshu Wang <volekingsg@gmail.com>
+;; Author: Tianshu Wang <wang@tianshu.me>
 
 ;;; Commentary:
 
@@ -11,7 +11,7 @@
 (set-language-environment 'utf-8)
 (set-default-coding-systems 'utf-8)
 
-(setq user-mail-address "volekingsg@gmail.com")
+(setq user-mail-address "wang@tianshu.me")
 
 (when (memq window-system '(mac ns))
   (setq url-proxy-services

@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2020  Tianshu Wang
 
-;; Author: Tianshu Wang <volekingsg@gmail.com>
+;; Author: Tianshu Wang <wang@tianshu.me>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
