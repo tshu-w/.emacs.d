@@ -60,7 +60,7 @@
   :defer t
   :init
   (setq exec-path-from-shell-arguments '("-l")
-        exec-path-from-shell-variables '("PATH" "MANPATH" "GNUPGHOME"))
+        exec-path-from-shell-variables '("PATH" "MANPATH" "GNUPGHOME" "SSH_AUTH_SOCK"))
   (exec-path-from-shell-initialize))
 
 (use-package benchmark-init
