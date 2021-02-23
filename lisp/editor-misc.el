@@ -79,10 +79,6 @@
     "dd" 'dash-at-point
     "dD" 'dash-at-point-with-docset))
 
-(use-package direnv
-  :ensure t
-  :hook (after-init . direnv-mode))
-
 (use-package dumb-jump
   :ensure t
   :defer t
