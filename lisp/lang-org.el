@@ -44,6 +44,7 @@
         org-imenu-depth 3
         org-log-done 'time
         org-log-into-drawer t
+        org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg")
         org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
