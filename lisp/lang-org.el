@@ -39,12 +39,12 @@
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
-        org-highlight-latex-and-related '(native)
+        org-highlight-latex-and-related '(native script entities)
         org-image-actual-width '(500)
         org-imenu-depth 3
         org-log-done 'time
         org-log-into-drawer t
-        org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg")
+        org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
         org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
@@ -409,7 +409,9 @@ Create at last if HEADLINE doesn't exist."
                          :message "you need to install the programs: xelatex and imagemagick."
                          :image-input-type "pdf" :image-output-type "png" :image-size-adjust (1.0 . 1.0)
                          :latex-compiler ("xelatex -interaction nonstopmode -output-directory %o %f")
-                         :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))))
+                         :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O"))))
+
+    (plist-put org-format-latex-options :scale 1.5))
 
   (use-package org-mac-link
     :defer t
