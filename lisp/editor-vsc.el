@@ -18,6 +18,8 @@
         magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-save-repository-buffers 'dontask)
 
+  (add-hook 'magit-process-find-password-functions 'magit-process-password-auth-source)
+
   (defun org-reveal-advice (&rest _args)
     "Unfold the org headings for a target line.
     This can be used to advice functions that might open .org files.
