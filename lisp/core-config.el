@@ -314,10 +314,7 @@
   (setq remote-file-name-inhibit-cache 60
         tramp-default-method "ssh"
         tramp-verbose 1
-        tramp-use-ssh-controlmaster-options t
-        tramp-ssh-controlmaster-options (concat
-                                         "-o ControlPath='/tmp/tramp.%%r@%%h:%%p' "
-                                         "-o ControlMaster=auto -o ControlPersist=yes")
+        tramp-use-ssh-controlmaster-options nil
         vc-handled-backends '(SVN Git))
 
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
