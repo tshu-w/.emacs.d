@@ -243,7 +243,8 @@
         evil-magic 'very-magic)
   (evil-mode)
   :config
-  (setq evil-kill-on-visual-paste nil
+  (setq evil-cross-lines t
+        evil-kill-on-visual-paste nil
         evil-move-beyond-eol t
         evil-shift-width 2
         evil-want-C-i-jump t
