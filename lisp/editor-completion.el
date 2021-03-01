@@ -290,7 +290,7 @@ around point as the initial input."
   :ensure t
   :hook ((prog-mode . (lambda ()
                         (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
-                          (lsp-deferred))))
+                          (lsp))))
          (lsp-mode . lsp-enable-which-key-integration))
   :init
   (setq read-process-output-max (* 1024 1024))
@@ -318,15 +318,39 @@ around point as the initial input."
               (when (eq (car company-backends) 'company-capf)
                 (setq company-backends (cdr company-backends)))))
 
-  (unless (version<= emacs-version "28.0")
-    (defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
-      "Start a program in a subprocess.  Return the process object for it.
-Similar to `start-process-shell-command', but calls `start-file-process'."
-      ;; On remote hosts, the local `shell-file-name' might be useless.
-      (let ((command (mapconcat 'identity args " ")))
-        (funcall start-file-process-shell-command name buffer command)))
-
-    (advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around))
+  (defun lsp-tramp-connection (local-command &optional generate-error-file-fn)
+    "Create LSP stdio connection named name.
+LOCAL-COMMAND is either list of strings, string or function which
+returns the command to execute."
+    (defvar tramp-connection-properties)
+    ;; Force a direct asynchronous process.
+    (when (file-remote-p default-directory)
+      (add-to-list 'tramp-connection-properties
+                   (list (regexp-quote (file-remote-p default-directory))
+                         "direct-async-process" t)))
+    (list :connect (lambda (filter sentinel name environment-fn)
+                     (let* ((final-command (lsp-resolve-final-function
+                                            local-command))
+                            (_stderr (or (when generate-error-file-fn
+                                           (funcall generate-error-file-fn name))
+                                         (format "/tmp/%s-%s-stderr" name
+                                                 (cl-incf lsp--stderr-index))))
+                            (process-name (generate-new-buffer-name name))
+                            (process-environment
+                             (lsp--compute-process-environment environment-fn))
+                            (proc (make-process
+                                   :name process-name
+                                   :buffer (format "*%s*" process-name)
+                                   :command final-command
+                                   :connection-type 'pipe
+                                   :coding 'no-conversion
+                                   :noquery t
+                                   :filter filter
+                                   :sentinel sentinel
+                                   :file-handler t)))
+                       (cons proc proc)))
+          :test? (lambda () (-> local-command lsp-resolve-final-function
+                           lsp-server-present?))))
 
   (tyrant-def lsp-mode
     :definer 'minor-mode "l" lsp-command-map))
