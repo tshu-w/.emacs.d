@@ -272,8 +272,7 @@ around point as the initial input."
   :config
   (setq company-box-backends-colors nil
         company-box-enable-icon nil
-        company-box-scrollbar t
-        company-box-max-candidates 50))
+        company-box-scrollbar t))
 
 (use-package company-prescient
   :ensure t
