@@ -213,7 +213,7 @@ around point as the initial input."
   :config
   (setq ivy-prescient-enable-filtering nil))
 
-(use-package wgrep :ensure t)
+(use-package wgrep :ensure t :defer t)
 
 
 (use-package company
