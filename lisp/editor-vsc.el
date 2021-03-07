@@ -8,6 +8,11 @@
 
 ;;; Code:
 
+(use-package vc
+  :defer t
+  :config
+  (setq vc-follow-symlinks t))
+
 (use-package magit
   :ensure t
   :init
