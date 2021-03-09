@@ -872,6 +872,7 @@ go to `org-journal-file-format' file based on TIME."
         org-ref-default-bibliography reftex-default-bibliography
         org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
         org-ref-notes-function 'org-ref-notes-function-many-files
+        org-ref-notes-directory (concat org-directory "notes/papers/")
         orhc-bibtex-cache-file (no-littering-expand-var-file-name ".orhc-bibtex-cache"))
 
   (use-package bibtex-completion
@@ -880,7 +881,7 @@ go to `org-journal-file-format' file based on TIME."
     (setq bibtex-autokey-year-length 4
           bibtex-completion-additional-search-fields '(keywords)
           bibtex-completion-bibliography reftex-default-bibliography
-          bibtex-completion-notes-path (concat org-directory "notes/papers/")
+          bibtex-completion-notes-path org-ref-notes-directory
           bibtex-completion-notes-template-multiple-files
           "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n#+created: %u\n#+last_modified: %u\n\n"
           bibtex-completion-pdf-field "file"))
