@@ -49,7 +49,7 @@ flycheck_*.el
 .projectile
 
 # directory configuration
-.dir-locals.el
+# .dir-locals.el
 
 # network security
 /network-security.data
