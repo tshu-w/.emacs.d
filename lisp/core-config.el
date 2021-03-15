@@ -63,6 +63,8 @@
 (setq ring-bell-function 'ignore
       visible-bell nil)
 
+(setq frame-resize-pixelwise t)
+
 ;; Highlight and allow to open http link at point in programming buffers
 ;; goto-address-prog-mode only highlights links in strings and comments
 (add-hook 'prog-mode-hook #'goto-address-prog-mode)
@@ -167,7 +169,7 @@
   :config
   (setq dired-dwim-target t)
 
-  (defun dired-show-hide-dotfile()
+  (defun dired-show-hide-dotfile ()
     "Show/hide dotfiles."
     (interactive)
     (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p)
