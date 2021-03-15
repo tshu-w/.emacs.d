@@ -295,6 +295,7 @@ around point as the initial input."
   (setq read-process-output-max (* 1024 1024))
   :config
   (setq lsp-auto-guess-root t
+        lsp-completion-provider :none
         lsp-enable-dap-auto-configure nil
         lsp-enable-file-watchers nil
         lsp-enable-folding nil
@@ -311,11 +312,6 @@ around point as the initial input."
         lsp-signature-function 'lsp--eldoc-message
         lsp-signature-render-documentation nil
         lsp-keymap-prefix "SPC l")
-
-  (add-hook 'lsp-completion-mode-hook
-            (lambda ()
-              (when (eq (car company-backends) 'company-capf)
-                (setq company-backends (cdr company-backends)))))
 
   (defun lsp-tramp-connection (local-command &optional generate-error-file-fn)
     "Create LSP stdio connection named name.
