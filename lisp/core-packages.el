@@ -77,11 +77,7 @@
   ;; To disable collection of benchmark data after init is done.
   :hook (after-init . benchmark-init/deactivate))
 
-(use-package no-littering
-  :ensure t
-  :defer t
-  :init
-  (setq no-littering-var-directory (expand-file-name "~/.cache/emacs/")))
+(use-package no-littering :ensure t :defer t)
 
 (use-package quelpa
   :ensure t
