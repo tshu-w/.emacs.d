@@ -34,7 +34,7 @@
 
 ;; enable package-quickstart
 (setq package-quickstart t
-      package-quickstart-file "~/.emacs.d/var/package-quickstart.el")
+      package-quickstart-file (concat user-emacs-directory "var/package-quickstart.el"))
 
 ;; Inhibit resizing frame
 (setq frame-inhibit-implied-resize t)
