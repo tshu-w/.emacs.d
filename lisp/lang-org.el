@@ -717,10 +717,9 @@ Org Review Transient state
     (org-download--fullname (org-link-unescape link)))
   (setq org-download-method '+org-download-method)
 
-  (setq org-download-method 'attach
-        org-download-screenshot-method "screencapture -i %s"
-        org-download-image-attr-list '("#+ATTR_ORG:  :width 500px"
-                                       "#+ATTR_HTML: :width 80% :align center")))
+  (setq org-download-annotate-function (lambda (_link) "")
+        org-download-method 'attach
+        org-download-screenshot-method "screencapture -i %s"))
 
 (use-package org-edit-latex
   :ensure t
