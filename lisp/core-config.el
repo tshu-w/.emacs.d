@@ -107,7 +107,8 @@
 (setq x-underline-at-descent-line t)
 
 ;; When emacs asks for "yes" or "no", let "y" or "n" suffice
-(fset 'yes-or-no-p 'y-or-n-p)
+;; (fset 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 
 (defun server-remove-kill-buffer-hook ()
   "Remove prompt if the file is opened in other clients."
