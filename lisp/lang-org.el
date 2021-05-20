@@ -40,7 +40,7 @@
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
         org-highlight-latex-and-related '(native script entities)
-        org-image-actual-width '(500)
+        org-image-actual-width '(700)
         org-imenu-depth 3
         org-log-done 'time
         org-log-into-drawer t
