@@ -86,6 +86,9 @@
 ;; autosave each change
 (setq bookmark-save-flag 1)
 
+;; disable bookmark fontify
+(setq bookmark-fontify nil)
+
 ;; keep focus while navigating help buffers
 (setq help-window-select t)
 
