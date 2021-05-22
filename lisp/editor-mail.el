@@ -8,10 +8,6 @@
 
 ;;; Code:
 
-(use-package mu4e-alert
-  :ensure t
-  :commands mu4e-alert-enable-mode-line-display)
-
 (use-package mu4e
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :commands (mu4e-update-mail-and-index
@@ -26,8 +22,7 @@
         mu4e-update-timer (run-with-timer
                            t mu4e-update-interval
                            (lambda () (mu4e-update-mail-and-index
-                                  mu4e-index-update-in-background)
-                             (mu4e-alert-enable-mode-line-display))))
+                                  mu4e-index-update-in-background))))
 
   (with-eval-after-load 'org
     (org-link-set-parameters "mu4e"
@@ -71,8 +66,7 @@
                      (format "%s" (substring maildir 1 (string-match-p "/" maildir 1)))))))
 
   (setq mu4e-bookmarks
-        '(("flag:unread AND NOT flag:trashed" "Unread messages"   ?u)
-          ("maildir:/Inbox/" "Inbox messages"                     ?i)
+        '(("maildir:/Inbox/" "Inbox messages"                     ?i)
           ("maildir:/Sent/" "Sent messages"                       ?s)
           ("maildir:/Spam/" "Spam messages"                       ?S)
           ("maildir:/Trash/" "Trash messages"                     ?T)
