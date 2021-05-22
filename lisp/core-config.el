@@ -325,6 +325,22 @@
 
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
+(use-package xref
+  :ensure nil
+  :defer t
+  :config
+  (setq xref-prompt-for-identifier '(not xref-find-definitions
+                                         xref-find-definitions-other-window
+                                         xref-find-definitions-other-frame
+                                         xref-find-references
+                                         jump-to-definition
+                                         jump-to-definition-other-window
+                                         jump-to-reference
+                                         jump-to-reference-other-window))
+
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read
+        xref-show-xrefs-function       #'xref-show-definitions-completing-read))
+
 (use-package whitespace
   :hook ((prog-mode . show-trailing-whitespace)
          (diff-mode . whitespace-mode)
