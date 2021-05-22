@@ -235,6 +235,24 @@
   :general
   (tyrant-def "tc" '(hide/show-comments-toggle :which-key "toggle-comments")))
 
+(use-package xterm-color
+  :ensure t
+  :defer t
+  :init
+  (setq compilation-environment '("TERM=xterm-256color"))
+
+  (defun compilation-filter@around (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'compilation-filter@around)
+
+  (with-eval-after-load 'eshell
+    (add-hook 'eshell-before-prompt-hook
+              (lambda () (setq xterm-color-preserve-properties t)))
+
+    (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
+    (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions))
+    (setenv "TERM" "xterm-256color")))
+
 
 (provide 'editor-ui)
 ;;; editor-ui.el ends here
