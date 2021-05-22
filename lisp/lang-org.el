@@ -235,11 +235,16 @@
     (use-package verb
       :ensure t
       :defer t
-      :init (use-package ob-verb
-              :commands (org-babel-execute:verb)))
-    (use-package ob-mermaid
+      :init
+      (use-package ob-verb
+        :commands (org-babel-execute:verb)))
+    (use-package mermaid-mode
       :ensure t
-      :commands (org-babel-execute:mermaid))
+      :commands (org-babel-execute:mermaid)
+      :config
+      (setq mermaid-flags "-c $XDG_CONFIG_HOME/mmdc/config.json"
+            mermaid-output-format ".svg"
+            mermaid-tmp-dir (no-littering-expand-var-file-name "mermaid")))
     :config
     (defun ob-fix-inline-images ()
       "Fix redisplay of inline images after a code block evaluation."
