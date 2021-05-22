@@ -129,22 +129,6 @@
           (swiper-all . ivy-display-function-fallback)
           (t . ivy-posframe-display-at-frame-center))))
 
-(use-package ivy-xref
-  :ensure t
-  :after xref
-  :config
-  (setq xref-prompt-for-identifier '(not xref-find-definitions
-                                         xref-find-definitions-other-window
-                                         xref-find-definitions-other-frame
-                                         xref-find-references
-                                         jump-to-definition
-                                         jump-to-definition-other-window
-                                         jump-to-reference
-                                         jump-to-reference-other-window))
-  ;; Use ivy-xref to display `xref.el' results.
-  (setq xref-show-definitions-function #'ivy-xref-show-defs
-        xref-show-xrefs-function       #'ivy-xref-show-xrefs))
-
 (use-package counsel
   :ensure t
   :hook (after-init . counsel-mode)
