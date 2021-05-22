@@ -113,6 +113,8 @@ reuse it's window, otherwise create new one."
 
 (use-package link-hint
   :ensure t
+  :config
+  (setq link-hint-restore nil)
   :general
   (general-def
     :keymaps '(compilation-mode-map
