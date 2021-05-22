@@ -190,12 +190,12 @@
 
 (use-package pip-requirements :ensure t :defer t)
 
-(use-package py-isort
+(use-package python-isort
   :ensure t
   :after python
   :config
-  (setq py-isort-options '("-m 1" "-ca" "-cs" "-w 88"))
-  (despot-def python-mode-map "rI" 'py-isort-buffer))
+  (setq python-isort-arguments '("--ca" "--cs" "--stdout" "-"))
+  (despot-def python-mode-map "rI" 'python-isort))
 
 (use-package conda
   :ensure t
