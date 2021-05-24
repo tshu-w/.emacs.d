@@ -100,8 +100,6 @@
     (interactive)
     (restart-emacs (cons "--debug-init" args))))
 
-(use-package help-fns+ :commands describe-keymap)
-
 
 (provide 'core-packages)
 ;;; core-packages.el ends here
