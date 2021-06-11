@@ -334,10 +334,6 @@ returns the command to execute."
   (tyrant-def lsp-mode
     :definer 'minor-mode "l" lsp-command-map))
 
-(use-package lsp-ivy
-  :ensure t
-  :commands lsp-ivy-workspace-symbol)
-
 
 (use-package yasnippet
   :ensure t
