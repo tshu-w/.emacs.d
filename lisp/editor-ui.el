@@ -25,13 +25,9 @@
   (diff-hl-delete ((t (:background nil))))
   (diff-hl-insert ((t (:background nil)))))
 
-(use-package flucui-themes :ensure t :defer t)
+(use-package berrys-theme :ensure t :defer t)
 
-(use-package gruvbox-theme
-  :ensure t
-  :defer t
-  :custom-face
-  (internal-border ((t (:background nil)))))
+(use-package flucui-themes :ensure t :defer t)
 
 (use-package humanoid-themes
   :ensure t
@@ -54,10 +50,6 @@
   (font-lock-keyword-face ((t (:slant normal))))
   (font-lock-constant-face ((t (:slant normal)))))
 
-(use-package solo-jazz-theme
-  :quelpa (solo-jazz-theme :fetcher github :repo "cstby/solo-jazz-emacs-theme")
-  :defer t)
-
 (use-package spacemacs-common
   :ensure spacemacs-theme
   :defer t
@@ -65,16 +57,23 @@
   (setq spacemacs-theme-org-height nil
         spacemacs-theme-comment-bg nil))
 
+(use-package solo-jazz-theme
+  :quelpa (solo-jazz-theme :fetcher github :repo "cstby/solo-jazz-emacs-theme")
+  :defer t)
+
 (defvar light-themes '(doom-acario-light
+                       doom-ayu-light
+                       doom-flatwhite
+                       doom-gruvbox-light
                        doom-homage-white
                        doom-nord-light
                        doom-one-light
                        doom-opera-light
+                       doom-plain
                        doom-solarized-light
                        doom-tomorrow-day
+                       berrys
                        flucui-light
-                       gruvbox-light-medium
-                       gruvbox-light-soft
                        humanoid-light
                        kaolin-breeze
                        kaolin-light
@@ -86,30 +85,57 @@
                        modus-operandi)
   "Light themes to switch.")
 
-(defvar dark-themes '(doom-city-lights
+(defvar dark-themes '(doom-1337
+                      doom-acario-dark
+                      doom-ayu-mirage
+                      doom-badger
+                      doom-challenger-deep
+                      doom-city-lights
                       doom-dark+
-                      doom-homage-dark
+                      doom-dracula
+                      doom-ephemeral
+                      doom-fairy-floss
+                      doom-gruvbox
+                      doom-henna
+                      doom-homage-black
+                      doom-horizon
                       doom-Iosvkem
+                      doom-ir-black
+                      doom-laserwave
+                      doom-manegarm
                       doom-material
+                      doom-miramare
+                      doom-molokai
+                      doom-monokai-classic
+                      doom-monokai-pro
+                      doom-monokai-machine
+                      doom-monokai-octagon
+                      doom-monokai-ristretto
+                      doom-monokai-spectrum
+                      doom-moonlight
                       doom-nord
                       doom-nova
                       doom-oceanic-next
+                      doom-old-hope
                       doom-one
                       doom-opera
+                      doom-outrun-electric
                       doom-palenight
                       doom-peacock
+                      doom-plain-dark
                       doom-rouge
+                      doom-shades-of-purple
+                      doom-snazzy
                       doom-solarized-dark
+                      doom-solarized-dark-high-contrast
                       doom-sourcerer
                       doom-spacegrey
                       doom-tomorrow-night
-                      doom-wilmersdorf
                       doom-vibrant
+                      doom-wilmersdorf
+                      doom-xcode
                       doom-zenburn
                       flucui-dark
-                      ;; gruvbox-dark-hard
-                      gruvbox-dark-medium
-                      ;; gruvbox-dark-soft
                       humanoid-dark
                       kaolin-blossom
                       kaolin-bubblegum
@@ -131,9 +157,10 @@
 
 (use-package doom-modeline
   :ensure t
-  :hook (emacs-startup . doom-modeline-mode)
+  :hook (after-load-theme . doom-modeline-mode)
   :config
   (setq inhibit-compacting-font-caches t
+
         doom-modeline-height 1
         doom-modeline-buffer-file-name-style 'auto
         doom-modeline-icon nil
