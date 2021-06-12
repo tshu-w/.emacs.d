@@ -13,7 +13,8 @@
 (setq package-archives '(("melpa"        . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("org"          . "https://orgmode.org/elpa/")
-                         ("gnu"          . "https://elpa.gnu.org/packages/"))
+                         ("gnu"          . "https://elpa.gnu.org/packages/")
+                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/"))
       package-user-dir (concat user-emacs-directory "elpa/"
                                (format "%d%s%d"
                                        emacs-major-version
