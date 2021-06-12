@@ -171,7 +171,10 @@
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
   :config
-  (setq dired-dwim-target t)
+  (setq dired-auto-revert-buffer t
+        dired-create-destination-dirs 'ask
+        dired-dwim-target t
+        dired-vc-rename-file t)
 
   (defun dired-show-hide-dotfile ()
     "Show/hide dotfiles."
