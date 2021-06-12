@@ -9,7 +9,7 @@
 ;;; Code:
 
 (use-package org
-  :ensure org-plus-contrib
+  :ensure t
   :defer t
   :init
   (setq org-directory "~/Documents/Org/"
@@ -418,17 +418,6 @@ Create at last if HEADLINE doesn't exist."
 
     (plist-put org-format-latex-options :scale 1.5))
 
-  (use-package org-mac-link
-    :defer t
-    :config
-    (setq org-mac-grab-devonthink-app-p nil
-          org-mac-grab-Acrobat-app-p nil
-          org-mac-grab-Brave-app-p nil
-          org-mac-grab-Evernote-app-p nil
-          org-mac-grab-Firefox-app-p nil
-          org-mac-grab-Mail-app-p nil
-          org-mac-grab-Outlook-app-p nil))
-
   (use-package org-refile
     :defer t
     :config
@@ -667,6 +656,18 @@ Org Review Transient state
     "op"     'open-org-project-file
     "ov"     'org-review/body))
 
+(use-package org-mac-link
+  :ensure org-contrib
+  :defer t
+  :config
+  (setq org-mac-grab-devonthink-app-p nil
+        org-mac-grab-Acrobat-app-p nil
+        org-mac-grab-Brave-app-p nil
+        org-mac-grab-Evernote-app-p nil
+        org-mac-grab-Firefox-app-p nil
+        org-mac-grab-Mail-app-p nil
+        org-mac-grab-Outlook-app-p nil))
+
 (use-package evil-org
   :ensure t
   :hook (org-mode . evil-org-mode)
@@ -764,6 +765,7 @@ Org Review Transient state
 
 (use-package org-randomnote
   :ensure t
+  :disabled t
   :config
   (setq org-randomnote-candidates (org-note-files))
   :general
@@ -773,6 +775,7 @@ Org Review Transient state
 
 (use-package org-random-todo
   :ensure t
+  :disabled t
   :general
   (despot-def org-mode-map
     "Rt" 'org-random-todo-goto-new))
