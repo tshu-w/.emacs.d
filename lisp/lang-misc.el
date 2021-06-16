@@ -10,22 +10,22 @@
 
 (use-package dockerfile-mode :ensure t :defer t)
 
-(use-package json-mode
-  :ensure t
+
+(use-package js
   :defer t
+  :mode ("\\.json\\'" . json-mode)
   :config
-  (add-hook 'json-mode-hook
-            (defun init-json-mode ()
-              "Stuff to do when opening `json-mode' files."
-              (make-local-variable 'js-indent-level)
-              (setq js-indent-level 2)))
+  (defvar json-mode-map
+    (make-sparse-keymap)
+    "Keymap for `json-mode'.")
+
+  (define-derived-mode json-mode js-mode "JSON"
+    (make-local-variable 'js-indent-level)
+    (setq js-indent-level 2))
 
   (despot-def json-mode-map
-    "=" 'json-mode-beautify
-    "p" 'json-mode-show-path
-    "P" 'json-mode-kill-path
-    "t" 'json-toggle-boolean
-    "n" 'json-nullify-sexp))
+    "=" 'json-pretty-print-buffer
+    "+" 'json-pretty-print-buffer-ordered))
 
 (use-package jsonnet-mode
   :ensure t

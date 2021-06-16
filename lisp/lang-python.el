@@ -186,10 +186,6 @@
         blacken-line-length 'fill)
   (despot-def python-mode-map "=" 'blacken-buffer))
 
-(use-package cython-mode :ensure t :defer t)
-
-(use-package pip-requirements :ensure t :defer t)
-
 (use-package python-isort
   :ensure t
   :after python
