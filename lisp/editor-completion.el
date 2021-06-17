@@ -293,7 +293,6 @@ around point as the initial input."
         lsp-keep-workspace-alive nil
         lsp-modeline-diagnostics-enable nil
         lsp-modeline-code-actions-enable nil
-        lsp-signature-function 'lsp--eldoc-message
         lsp-signature-render-documentation nil
         lsp-keymap-prefix "SPC l")
 
