@@ -245,8 +245,7 @@ stays on current"
   :ensure t
   :hook (prog-mode . wakatime-mode)
   :config
-  (setq wakatime-cli-path (executable-find "wakatime")
-        wakatime-api-key "3fd63845-ecde-47ea-bd1a-7042221d1046")
+  (setq wakatime-cli-path (executable-find "wakatime"))
 
   (defun wakatime-dashboard ()
     (interactive)
