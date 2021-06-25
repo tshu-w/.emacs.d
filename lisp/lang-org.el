@@ -298,7 +298,8 @@
     (progn ;; web link
       (setq org-capture-web-link-key "ll"
             org-capture-auto-refile-rules
-            `(("https?://arxiv\\.org" ,org-inbox-file "arXiv")
+            `(("https?://arxiv\\.org" ,org-project-file "Daily Papers")
+              ("https?://dl\\.acm\\.org" ,org-project-file "Daily Papers")
               ("https?://git\\(?:hub\\|lab\\)\\.com" ,org-inbox-file "Repos")))
 
       (defun org-capture-goto-link ()
