@@ -148,16 +148,23 @@
                       modus-vivendi)
   "Dark themes to switch.")
 
-(add-hook 'ns-system-appearance-change-functions
-          (lambda (appearance)
-            (mapc #'disable-theme custom-enabled-themes)
-            (pcase appearance
-              ('light (load-theme (seq-random-elt light-themes) t))
-              ('dark (load-theme (seq-random-elt dark-themes) t)))))
+(if (boundp 'ns-system-appearance-change-functions)
+    (add-hook 'ns-system-appearance-change-functions
+              (defun load-theme-randomly (appearance)
+                (mapc #'disable-theme custom-enabled-themes)
+                (pcase appearance
+                  ('light (load-theme (seq-random-elt light-themes) t))
+                  ('dark (load-theme (seq-random-elt dark-themes) t))))))
+
+(add-hook 'after-load-theme-hook
+          (defun bolder-faces ()
+            (set-face-attribute 'font-lock-function-name-face nil :weight 'semi-bold)
+            (set-face-attribute 'font-lock-keyword-face nil :weight 'semi-bold)))
 
 (use-package doom-modeline
   :ensure t
-  :hook (after-load-theme . doom-modeline-mode)
+  :hook ((after-load-theme . doom-modeline-mode)
+         (after-load-theme . smaller-modeline))
   :config
   (setq inhibit-compacting-font-caches t
 
@@ -173,9 +180,7 @@
       (set-face-attribute 'mode-line nil
                           :height 120 :fontset "fontset-modeline")
       (set-face-attribute 'mode-line-inactive nil
-                          :height 120 :fontset "fontset-modeline")))
-  (smaller-modeline)
-  (add-hook 'after-load-theme-hook #'smaller-modeline))
+                          :height 120 :fontset "fontset-modeline"))))
 
 (use-package hide-mode-line
   :ensure t
