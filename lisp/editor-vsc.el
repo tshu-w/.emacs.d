@@ -94,7 +94,7 @@
     "[ h" 'diff-hl-previous-hunk
     "] h" 'diff-hl-next-hunk))
 
-(use-package git-auto-commit-mode :ensure t)
+(use-package git-auto-commit-mode :ensure t :defer t)
 
 (use-package git-timemachine
   :ensure t
@@ -164,13 +164,7 @@
     "ggr" 'gist-region
     "ggR" 'gist-region-private))
 
-(use-package github-stars
-  :ensure t
-  :general
-  (tyrant-def
-    "gG"   '(:ignore t :which-key "github stars")
-    "gGs" 'github-stars-browse-url
-    "gGl" 'github-stars-list))
+(use-package github-stars :ensure t :defer t)
 
 
 (provide 'editor-vsc)
