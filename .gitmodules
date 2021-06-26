@@ -1,0 +1,3 @@
+[submodule "cstby/solo-jazz-emacs-theme"]
+	path = site-lisp/solo-jazz-emacs-theme
+	url = https://github.com/cstby/solo-jazz-emacs-theme

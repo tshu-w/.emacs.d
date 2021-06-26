@@ -57,9 +57,7 @@
   (setq spacemacs-theme-org-height nil
         spacemacs-theme-comment-bg nil))
 
-(use-package solo-jazz-theme
-  :quelpa (solo-jazz-theme :fetcher github :repo "cstby/solo-jazz-emacs-theme")
-  :defer t)
+(use-package solo-jazz-theme :defer t)
 
 (defvar light-themes '(doom-acario-light
                        doom-ayu-light
