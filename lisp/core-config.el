@@ -46,8 +46,7 @@
 (when (display-graphic-p)
   (set-monospaced-font "Source Code Pro" "PingFang SC" 14 16))
 
-(setq initial-major-mode 'text-mode ;; "start with the *scratch* buffer in text mode"
-      initial-scratch-message nil   ;; "make scratch buffer empty"
+(setq initial-scratch-message nil   ;; "make scratch buffer empty"
       inhibit-startup-message t)    ;; "disable splash screen"
 
 (setq-default indent-tabs-mode nil ;; use only spaces and no tabs
@@ -310,9 +309,6 @@
         eval-expression-print-level nil
         ;; save clipboard contents into kill-ring before replace them
         save-interprogram-paste-before-kill t))
-
-(use-package so-long
-  :hook (after-init . global-so-long-mode))
 
 (use-package subword
   :hook (prog-mode . subword-mode))
