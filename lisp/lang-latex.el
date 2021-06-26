@@ -159,7 +159,9 @@ the automatic filling of the current paragraph."
 (use-package reftex
   :hook (TeX-mode . reftex-mode)
   :config
-  (setq reftex-plug-into-AUCTeX '(nil nil t t t)
+  (setq reftex-default-bibliography '("~/Documents/Zotero/references.bib"
+                                      "~/Documents/Zotero/refs.bib")
+        reftex-plug-into-AUCTeX '(nil nil t t t)
         reftex-use-fonts t)
 
   (despot-def (TeX-mode-map LaTeX-mode-map)
@@ -199,17 +201,6 @@ the automatic filling of the current paragraph."
   (auctex-latexmk-setup)
   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
-(use-package company-auctex
-  :ensure t
-  :after tex
-  :hook (TeX-mode . (lambda ()
-                      (add-to-list (make-local-variable 'company-backends) 'company-auctex-labels)
-                      (add-to-list (make-local-variable 'company-backends) 'company-auctex-bibs)
-                      (add-to-list (make-local-variable 'company-backends)
-                                   '(company-auctex-macros
-                                     company-auctex-symbols
-                                     company-auctex-environments)))))
-
 (use-package company-reftex
   :ensure t
   :after tex
@@ -218,10 +209,22 @@ the automatic filling of the current paragraph."
                        (make-local-variable 'company-backends)
                        '(company-reftex-labels company-reftex-citations)))))
 
+(use-package bibtex-completion
+  :defer t
+  :config
+  (setq bibtex-autokey-year-length 4
+        bibtex-completion-additional-search-fields '(keywords)
+        bibtex-completion-bibliography '("~/Documents/Zotero/references.bib"
+                                         "~/Documents/Zotero/refs.bib")
+        bibtex-completion-notes-path "~/Documents/Org/notes/papers/"
+        bibtex-completion-notes-template-multiple-files
+        "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n#+created: %u\n#+last_modified: %u\n\n"
+        bibtex-completion-pdf-field "file"
+        bibtex-completion-pdf-open-function 'org-open-file))
+
 (use-package ivy-bibtex
   :ensure t
   :config
-  (setq bibtex-completion-pdf-open-function 'org-open-file)
   (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-ignore-order))
   :general
   (tyrant-def
