@@ -272,7 +272,7 @@
          (line-beginning-position) (line-end-position))))))
 
 (use-package recentf
-  :hook (after-init . recentf-mode)
+  :defer t
   :config
   (setq recentf-max-saved-items 100
         recentf-auto-cleanup 'never)
