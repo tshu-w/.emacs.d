@@ -449,7 +449,7 @@
   :hook (after-init . evil-indent-plus-default-bindings))
 
 (use-package evil-matchit
-  :quelpa (evil-matchit :fetcher github :repo "redguardtoo/evil-matchit")
+  :ensure t
   :hook ((prog-mode LaTeX-mode) . turn-on-evil-matchit-mode)
   :config
   (setq evilmi-forward-chars (string-to-list "[{(<")
