@@ -80,18 +80,6 @@
 
 (use-package no-littering :ensure t :defer t)
 
-(use-package quelpa
-  :ensure t
-  :commands quelpa-read-cache
-  :init
-  (setq quelpa-upgrade-p nil
-        quelpa-update-melpa-p nil))
-
-(use-package quelpa-use-package
-  :ensure t
-  :init
-  (setq quelpa-use-package-inhibit-loading-quelpa t))
-
 (use-package restart-emacs
   :ensure t
   :commands (restart-emacs restart-emacs-debug-init)
