@@ -10,21 +10,18 @@
 
 (use-package org
   :ensure t
-  :defer t
   :init
   (setq org-directory "~/Documents/Org/"
         org-note-directory (concat org-directory "notes/")
         org-journal-directory (concat org-directory "journals/")
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
-        org-default-notes-file org-inbox-file)
+        org-default-notes-file org-inbox-file
+        org-modules-loaded t)
 
   (defadvice server-execute (before enable-org-protocol activate)
     (unless (featurep 'org-protocol) (require 'org-protocol)))
   :config
-  (add-to-list 'org-modules 'org-tempo t)
-  (add-to-list 'org-modules 'org-protocol t)
-
   (setq org-todo-keywords
         '((sequence "TODO(t)" "|" "DONE(d)")
           (sequence "WAITING(w@)" "SOMEDAY(s)" "|" "CANCELED(c)"))
@@ -39,7 +36,6 @@
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
-        org-highlight-latex-and-related '(native script entities)
         org-image-actual-width '(700)
         org-imenu-depth 3
         org-log-done 'time
@@ -96,7 +92,7 @@
     :init
     (setq org-agenda-files `(,org-directory ,org-journal-directory))
     :config
-    (add-to-list 'org-modules 'org-habit t)
+    (require 'org-habit)
 
     (setq org-agenda-clockreport-parameter-plist '(:maxlevel 5 :scope agenda-with-archives)
           org-agenda-columns-add-appointments-to-effort-sum t
@@ -182,12 +178,7 @@
              ;; Look for the parent's priority
              (t (org-inherited-priority (org-get-heading))))))
 
-    (general-def 'motion org-agenda-mode-map
-      "sd" 'org-agenda-filter-remove-all)
-    (despot-def org-agenda-mode-map
-      "d"  '(:ignore t :which-key "dates")
-      "dd" 'org-agenda-deadline
-      "ds" 'org-agenda-schedule))
+    (general-def 'motion org-agenda-mode-map "sd" 'org-agenda-filter-remove-all))
 
   (use-package org-attach
     :defer t
@@ -231,20 +222,6 @@
       :config
       (setq org-babel-C-compiler "gcc -std=c++17"
             org-babel-C++-compiler "g++ -std=c++17"))
-
-    (use-package verb
-      :ensure t
-      :defer t
-      :init
-      (use-package ob-verb
-        :commands (org-babel-execute:verb)))
-    (use-package mermaid-mode
-      :ensure t
-      :commands (org-babel-execute:mermaid)
-      :config
-      (setq mermaid-flags "-c $XDG_CONFIG_HOME/mmdc/config.json"
-            mermaid-output-format ".svg"
-            mermaid-tmp-dir (no-littering-expand-var-file-name "mermaid")))
     :config
     (defun ob-fix-inline-images ()
       "Fix redisplay of inline images after a code block evaluation."
@@ -323,7 +300,7 @@
 
       (defun org-refile-to (file headline)
         "`org-refile' to exact HEADLINE in FILE.
-Create at last if HEADLINE doesn't exist."
+Create at the end of the FILE if HEADLINE doesn't exist."
         (let* ((buffer (or (find-buffer-visiting file)
                            (find-file-noselect file)))
                (pos (save-excursion
@@ -615,7 +592,6 @@ Org Review Transient state
     "Ti"    'org-toggle-inline-images
     "Tl"    'org-toggle-link-display
     "Tt"    'org-show-todo-tree
-    "TT"    'org-todo
     "TV"    'space-doc-mode
     "Tx"    'org-latex-preview
     "x"     '(:ignore t :which-key "text")
@@ -694,8 +670,10 @@ Org Review Transient state
     (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
 (use-package appt
-  :hook (after-init . appt-activate)
+  :after org
   :config
+  (appt-activate 1)
+
   (fset 'diary-list-entries 'ignore)
 
   (defun appt-disp-alert (min-to-appt current-time appt-msg)
@@ -718,7 +696,7 @@ Org Review Transient state
 
 (use-package org-download
   :ensure t
-  :hook ((org-mode dired-mode) . org-download-enable)
+  :after org
   :config
   (defun +org-download-method (link)
     (org-download--fullname (org-link-unescape link)))
@@ -727,18 +705,6 @@ Org Review Transient state
   (setq org-download-annotate-function (lambda (_link) "")
         org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"))
-
-(use-package org-edit-latex
-  :ensure t
-  :hook (org-mode . org-edit-latex-mode)
-  :init (setq org-edit-latex-create-master nil))
-
-(use-package org-mru-clock
-  :ensure t
-  :config
-  (setq org-mru-clock-files #'org-agenda-files)
-  :general
-  (tyrant-def "oCi"    'org-mru-clock-in))
 
 (use-package org-projectile
   :ensure t
@@ -763,23 +729,6 @@ Org Review Transient state
       (find-file org-projectile-projects-file)))
   :general
   (tyrant-def "po" 'org-projectile-goto-todos))
-
-(use-package org-randomnote
-  :ensure t
-  :disabled t
-  :config
-  (setq org-randomnote-candidates (org-note-files))
-  :general
-  (despot-def org-mode-map
-    "R"  '(:ignore t :which-key "random")
-    "Rn" 'org-randomnote))
-
-(use-package org-random-todo
-  :ensure t
-  :disabled t
-  :general
-  (despot-def org-mode-map
-    "Rt" 'org-random-todo-goto-new))
 
 (use-package org-reverse-datetree
   :ensure t
@@ -821,78 +770,18 @@ go to `org-journal-file-format' file based on TIME."
            (file (format-time-string org-datetree-file-format time)))
       (org-reverse-datetree-refile-to-file file time :ask-always ask-always :prefer prefer))))
 
-(use-package org-roam
-  :ensure t
-  :defer 5
-  :init
-  (setq org-roam-capture-templates
-        '(("d" "default" plain (function org-roam-capture--get-point)
-           "%?"
-           :file-name "${slug}"
-           :head "#+title: ${title}\n#+created: %u\n#+last_modified: %u\n\n"
-           :unnarrowed t))
-        org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
-        org-roam-directory org-note-directory
-        org-roam-tag-sources '(prop all-directories))
-  :config
-  (org-roam-mode)
-
-  (add-hook 'org-roam-buffer-prepare-hook
-            (defun init-org-roam-buffer ()
-              "Stuff to do when prefering org-roam buffers."
-              (hide-mode-line-mode)
-              (writeroom-mode -1)))
-
-  (despot-def org-mode-map
-    "ir"    'org-roam-insert
-    "r"     '(:ignore t :which-key "roam")
-    "r SPC" 'org-roam
-    "rf"    'org-roam-find-file
-    "rr"    'org-roam-find-ref
-    "ri"    'org-roam-jump-to-index
-    "rt"    'org-roam-tag-add
-    "rT"    'org-roam-tag-delete))
-
-(use-package org-roam-protocol :after org-protocol)
-
-(use-package org-roam-server
-  :ensure t
-  :config
-  (defun open-org-roam-server()
-    "Enable `org-roam-server-mode' and open link"
-    (interactive)
-    (unless (bound-and-true-p org-roam-server-mode)
-      (org-roam-server-mode))
-    (browse-url
-     (format "http://%s:%d" org-roam-server-host org-roam-server-port)))
-  :general
-  (despot-def org-mode-map "rs" 'open-org-roam-server))
-
 (use-package org-ref
   :ensure t
-  :after (:any org bibtex)
+  :defer t
   :init
   (setq org-ref-completion-library 'org-ref-ivy-cite)
   :config
-  (setq reftex-default-bibliography '("~/Documents/Zotero/references.bib"
-                                      "~/Documents/Zotero/refs.bib")
-        org-ref-default-bibliography reftex-default-bibliography
+  (setq org-ref-default-bibliography '("~/Documents/Zotero/references.bib"
+                                       "~/Documents/Zotero/refs.bib")
         org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
         org-ref-notes-function 'org-ref-notes-function-many-files
         org-ref-notes-directory (concat org-directory "notes/papers/")
         orhc-bibtex-cache-file (no-littering-expand-var-file-name ".orhc-bibtex-cache"))
-
-  (use-package bibtex-completion
-    :commands (bibtex-completion-edit-notes bibtex-completion-find-pdf)
-    :init
-    (setq bibtex-autokey-year-length 4
-          bibtex-completion-additional-search-fields '(keywords)
-          bibtex-completion-bibliography reftex-default-bibliography
-          bibtex-completion-notes-path org-ref-notes-directory
-          bibtex-completion-notes-template-multiple-files
-          "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n#+created: %u\n#+last_modified: %u\n\n"
-          bibtex-completion-pdf-field "file"))
 
   (defun org-ref-open-zotero-at-point ()
     "Open the Zotero item for bibtex key under point."
@@ -1041,37 +930,11 @@ _z_: Open Zotero  ^ ^                         _S_: Sentence case
   :config
   (org-superstar-configure-like-org-bullets))
 
-(use-package deft
-  :ensure t
-  :config
-  (setq deft-auto-save-interval 0
-        deft-default-extension "org"
-        deft-directory org-directory
-        deft-recursive t
-        deft-use-filter-string-for-filename t
-        deft-file-naming-rules '((noslash . "-") (nospace . "_") (case-fn . downcase))
-        deft-strip-summary-regexp (concat "\\("
-                                          "[\n\t]" ;; blank
-                                          "\\|^#\\+[[:upper:]_]+:.*$" ;; org-mode metadata
-                                          "\\|^#\\+[[:alnum:]_]+:.*$" ;; org-mode metadata
-                                          "\\)"))
-
-  (general-def 'normal deft-mode-map
-    "A"  'deft-archive-file
-    "D"  'deft-delete-file
-    "F"  'deft-find-file
-    "gr" 'deft-refresh
-    "q"  'quit-window
-    "R"  'deft-rename-file
-    "S"  'deft-filter-clear
-    "T"  'deft-toggle-incremental-search
-    "/"  'deft-filter)
-  :general
-  (tyrant-def "ad" 'deft))
-
 (use-package toc-org
   :ensure t
-  :hook ((org-mode markdown-mode) . toc-org-mode))
+  :after org
+  :general
+  (despot-def org-mode-map "TT" 'toc-org-mode))
 
 
 (provide 'lang-org)
