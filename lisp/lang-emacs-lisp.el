@@ -9,7 +9,6 @@
 ;;; Code:
 
 (use-package elisp-mode
-  :defer t
   :config
   ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
   (defun eval-current-form ()
@@ -48,8 +47,7 @@
     "tq" 'ert))
 
 (use-package ielm
-  :after elisp-mode
-  :config
+  :general
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "'" 'ielm))
 
