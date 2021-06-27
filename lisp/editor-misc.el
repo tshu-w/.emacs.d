@@ -174,6 +174,10 @@ reuse it's window, otherwise create new one."
   (setq-default sis-inline-tighten-head-rule 0
                 sis-inline-tighten-tail-rule 1))
 
+(use-package undohist
+  :ensure t
+  :hook (after-init . undohist-initialize))
+
 (use-package winum
   :ensure t
   :hook (after-init . winum-mode)

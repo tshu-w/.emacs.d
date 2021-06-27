@@ -258,13 +258,7 @@
         evil-visual-state-cursor  '("gray" (hbar . 2))
         evil-motion-state-cursor  '("plum3" box))
 
-  (use-package undo-fu :ensure t)
-  (use-package undo-fu-session
-    :ensure t
-    :config
-    (global-undo-fu-session-mode)
-    (setq undo-fu-session-incompatible-files '("\\.gpg$" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
-  (evil-set-undo-system 'undo-fu)
+  (evil-set-undo-system 'undo-redo)
 
   ;; override default-jump-handlers
   (setq default-jump-handlers '(evil-goto-definition))
