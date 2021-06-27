@@ -61,7 +61,9 @@
               ;; auto update modified time-stamp when saving
               (setq-local time-stamp-pattern "^#\\+last_modified:[ \t]%%$"
                           time-stamp-format "[%Y-%m-%d %a]")
-              (add-hook 'before-save-hook 'time-stamp nil t)))
+              (add-hook 'before-save-hook 'time-stamp nil t)
+
+              (setq imenu-create-index-function #'org-imenu-get-tree)))
 
   (defun open-org-inbox-file ()
     "Open `org-inbox-file'"
