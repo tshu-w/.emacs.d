@@ -519,7 +519,6 @@ Org Review Transient state
     "dT"    'org-time-stamp-inactive
     "e"     '(:ignore t :which-key "export")
     "ee"    'org-export-dispatch
-    "ea"    'org-export-apple-note
     "f"     '(:ignore t :which-key "feeds")
     "fi"    'org-feed-goto-inbox
     "fu"    'org-feed-update-all
