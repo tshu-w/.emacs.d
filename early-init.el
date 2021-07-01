@@ -21,8 +21,8 @@
 
 ;;; Code:
 
-;; make sure comp-eln-load-path under `user-emacs-directory'
-(setq comp-eln-load-path `(,(concat user-emacs-directory "eln-cache/") "../native-lisp/"))
+;; make sure native-comp-eln-load-path under `user-emacs-directory'
+(setq native-comp-eln-load-path `(,(concat user-emacs-directory "eln-cache/")))
 
 ;; Defer garbage collection further back in the startup process
 (setq gc-cons-threshold most-positive-fixnum)
