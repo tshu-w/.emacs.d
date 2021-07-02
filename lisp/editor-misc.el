@@ -45,15 +45,6 @@
   :general
   (tyrant-def "aC" 'calibredb))
 
-(use-package dash-at-point
-  :if (memq window-system '(mac ns))
-  :ensure t
-  :general
-  (tyrant-def
-    "d" '(:ignore t :which-key "docs")
-    "dd" 'dash-at-point
-    "dD" 'dash-at-point-with-docset))
-
 (use-package dumb-jump
   :ensure t
   :defer t

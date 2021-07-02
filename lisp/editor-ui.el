@@ -180,11 +180,6 @@
       (set-face-attribute 'mode-line-inactive nil
                           :height 120 :fontset "fontset-modeline"))))
 
-(use-package hide-mode-line
-  :ensure t
-  :general
-  (tyrant-def "tm" 'hide-mode-line-mode))
-
 (use-package writeroom-mode
   :ensure t
   :hook (emacs-startup . global-writeroom-mode)
