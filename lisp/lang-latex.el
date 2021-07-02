@@ -228,8 +228,8 @@ the automatic filling of the current paragraph."
   (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-ignore-order))
   :general
   (tyrant-def
-    "sr" 'ivy-bibtex
-    "sR" 'ivy-bibtex-with-notes))
+    "sr" '(ivy-bibtex :which-key "search refs")
+    "sR" '(ivy-bibtex-with-notes :which-key "search refs w/ notes")))
 
 (use-package xenops
   :ensure t

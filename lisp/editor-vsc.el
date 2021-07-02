@@ -48,12 +48,10 @@
     "g"   '(:ignore t :which-key "git")
     "gb"  'magit-blame
     "gc"  'magit-clone
+    "gd"  'magit-diff
     "gf"  'magit-file-dispatch
-    "gF"  '(:ignore t :which-key "file")
-    "gFf" 'magit-find-file
-    "gFl" 'magit-log-buffer-file
-    "gFd" 'magit-diff
     "gi"  'magit-init
+    "gl"  'magit-log-buffer-file
     "gm"  'magit-dispatch
     "gs"  'magit-status
     "gS"  'magit-stage-file
@@ -74,7 +72,8 @@
 
 (use-package browse-at-remote
   :ensure t
-  :general (tyrant-def "go" 'browse-at-remote))
+  :general
+  (tyrant-def "go" 'browse-at-remote))
 
 (use-package diff-hl
   :ensure t
@@ -122,12 +121,12 @@
       (call-interactively 'git-link-commit)))
   :general
   (tyrant-def
-    "gl"  '(:ignore t :which-key "links")
-    "glc" 'git-link-commit
-    "glC" 'git-link-commit-copy-url-only
-    "gll" 'git-link
-    "glL" 'git-link-copy-url-only
-    "glh" 'git-link-homepage))
+    "gL"  '(:ignore t :which-key "links")
+    "gLc" 'git-link-commit
+    "gLC" 'git-link-commit-copy-url-only
+    "gLl" 'git-link
+    "gLL" 'git-link-copy-url-only
+    "gLh" 'git-link-homepage))
 
 (use-package gitignore-templates
   :ensure t

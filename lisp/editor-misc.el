@@ -82,6 +82,7 @@ reuse it's window, otherwise create new one."
         helpful-switch-buffer-function #'helpful-reuse-window)
   :general
   (tyrant-def
+    "hh" 'helpful-at-point
     "hk" 'helpful-key
     "hf" 'helpful-callable
     "hv" 'helpful-variable))
@@ -225,7 +226,6 @@ stays on current"
                  (swap-buffers-to-window ,n t))))))
   :general
   (tyrant-def
-    "`" '(winum-select-window-by-number :which-key "select window by number")
     "0" '(winum-select-window-0-or-10   :which-key "select window 0 or 10")
     "1" '(winum-select-window-1         :which-key ("1\.\.9" . "select window 1..9"))
     "2" '(winum-select-window-2         :which-key t)

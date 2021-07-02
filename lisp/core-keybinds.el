@@ -53,40 +53,39 @@
     "aP"      'proced
 
     "b"       '(:ignore t :which-key "buffers")
-    "bB"      'ibuffer
+    "bb"      'switch-to-buffer
+    "bB"      'switch-to-buffer-other-window
     "bd"      'kill-current-buffer
     "bh"      'switch-to-help-buffer
+    "bj"      'bookmark-jump
+    "bJ"      'bookmark-jump-other-window
     "bm"      'switch-to-messages-buffer
-    "bn"      'next-buffer
-    "bp"      'previous-buffer
     "bs"      'switch-to-scratch-buffer
+    "bS"      'bookmark-set
     "bu"      'reopen-killed-buffer
     "bx"      'kill-buffer-and-window
     "b C-d"   'kill-other-buffers
     "b C-S-d" 'kill-matching-buffers-rudely
 
-    "c"       '(:ignore t :which-key "compile")
+    "c"       '(:ignore t :which-key "code")
     "cb"      'switch-to-compilation-buffer
     "cc"      'compile
-    "ck"      'kill-compilation
+    "cn"      'next-error
+    "cp"      'previous-error
     "cr"      'recompile
     "ct"      'toggle-compilation-window
-
-    "e"       '(:ignore t :which-key "errors")
-    "en"      'next-error
-    "ep"      'previous-error
+    "cx"      'kill-compilation
 
     "f"       '(:ignore t :which-key "files")
-    "fA"      '(find-alternate-file :which-key "find-file-and-replace-buffer")
-    "fb"      'bookmark-jump
-    "fc"      '(write-file :which-key "copy-file")
-    "fd"      'dired-jump
+    "fC"      '(write-file :which-key "copy-file")
     "fD"      'delete-current-buffer-file
     "fe"      '(:ignore t :which-key "emacs")
     "fed"     'find-user-init-file
     "fel"     'find-library
     "fE"      'sudo-edit
     "ff"      'find-file
+    "fj"      'dired-jump
+    "fJ"      'dired-jump-other-window
     "fl"      'find-file-literally
     "fo"      'open-file-or-directory-in-external-app
     "fr"      'read-only-mode
@@ -126,12 +125,6 @@
     "hPk"     'profiler-stop
     "hPr"     'profiler-report
 
-    "j"       '(:ignore t :which-key "jump/join/split")
-    "j="      'indent-region-or-buffer
-    "jd"      'dired-jump
-    "jD"      'dired-jump-other-window
-    "ji"      'imenu
-
     "q"       '(:ignore t :which-key "quit")
     "qd"      'restart-emacs-debug-init
     "qf"      'kill-frame
@@ -140,16 +133,14 @@
     "qq"      'save-buffers-kill-terminal
     "qQ"      'kill-emacs
 
-    "r"       '(:ignore t :which-key "register/ring")
-
     "s"       '(:ignore t :which-key "search")
-    "st"      'evil-ex-nohighlight
+    "si"      'imenu
+    "sh"      '(evil-ex-nohighlight :which-key "disable highlightings")
 
     "t"       '(:ignore t :which-key "toggles")
     "ta"      'auto-fill-mode
     "td"      'toggle-debug-on-error
     "tf"      'display-fill-column-indicator-mode
-    "tF"      'toggle-frame-fullscreen
     "th"      'global-hl-line-mode
     "tH"      'font-lock-mode
     "tl"      'toggle-truncate-lines
@@ -161,10 +152,9 @@
     "u"       '(universal-argument :which-key "universal arg")
 
     "x"       '(:ignore t :which-key "text")
+    "x="      'indent-region-or-buffer
     "xc"      'count-words-region
-    "xd"      '(:ignore t :which-key "delete")
-    "xdl"     'delete-blank-lines
-    "xdw"     'delete-trailing-whitespace
+    "xd"      'delete-trailing-whitespace
     "xs"      'text-scale-adjust
     "xt"      '(:ignore t :which-key "transpose")
     "xtc"     'transpose-chars

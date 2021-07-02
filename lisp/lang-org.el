@@ -632,7 +632,7 @@ Org Review Transient state
     "ol"     'org-store-link
     "oo"     'org-agenda
     "op"     'open-org-project-file
-    "ov"     'org-review/body))
+    "ov"     '(org-review/body :which-key "org-review")))
 
 (use-package org-mac-link
   :ensure org-contrib

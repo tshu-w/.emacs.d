@@ -274,7 +274,6 @@
   :hook (after-init . server-mode))
 
 (use-package simple
-  :hook (before-save . delete-trailing-whitespace)
   :config
   (setq column-number-mode t
         delete-trailing-lines nil
