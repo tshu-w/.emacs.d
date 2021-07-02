@@ -191,12 +191,6 @@ around point as the initial input."
   :general
   (tyrant-def "ft" 'counsel-tramp))
 
-(use-package ivy-prescient
-  :ensure t
-  :hook (ivy-mode . ivy-prescient-mode)
-  :config
-  (setq ivy-prescient-enable-filtering nil))
-
 (use-package wgrep :ensure t :defer t)
 
 
@@ -258,15 +252,30 @@ around point as the initial input."
         company-box-enable-icon nil
         company-box-scrollbar nil))
 
-(use-package company-prescient
-  :ensure t
-  :hook (company-mode . company-prescient-mode))
-
 (use-package company-try-hard
   :ensure t
   :general
   (general-def "C-;" 'company-try-hard)
   (general-def company-active-map "C-;" 'company-try-hard))
+
+
+(use-package prescient
+  :ensure t
+  :hook (after-init . prescient-persist-mode)
+  :init
+  (use-package ivy-prescient
+    :ensure t
+    :after counsel
+    :hook (ivy-mode . ivy-prescient-mode)
+    :config
+    (setq ivy-prescient-enable-filtering nil))
+
+  (use-package company-prescient
+    :ensure t
+    :hook (company-mode . company-prescient-mode))
+  :config
+  (setq prescient-sort-full-matches-first t
+        prescient-sort-length-enable nil))
 
 
 (use-package lsp-mode
