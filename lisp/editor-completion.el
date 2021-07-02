@@ -357,14 +357,6 @@ returns the command to execute."
   :ensure t
   :after yasnippet)
 
-(use-package yatemplate
-  :ensure t
-  :after yasnippet
-  :config
-  (setq yatemplate-dir (no-littering-expand-etc-file-name "templates/"))
-  (yatemplate-fill-alist)
-  (auto-insert-mode))
-
 
 (provide 'editor-completion)
 ;;; editor-completion.el ends here
