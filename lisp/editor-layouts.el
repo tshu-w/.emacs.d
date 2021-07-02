@@ -227,16 +227,16 @@
   (tyrant-def
     "bB"    'ivy-switch-buffers-not-restricted
     "l"     '(:ignore t :which-key "layouts")
-    "l0"    'switch-to-persp-0
-    "l1"    'switch-to-persp-1
-    "l2"    'switch-to-persp-2
-    "l3"    'switch-to-persp-3
-    "l4"    'switch-to-persp-4
-    "l5"    'switch-to-persp-5
-    "l6"    'switch-to-persp-6
-    "l7"    'switch-to-persp-7
-    "l8"    'switch-to-persp-8
-    "l9"    'switch-to-persp-9
+    "l0"    '(switch-to-persp-0 :which-key ("0\.\.9" . "select layout 0..9"))
+    "l1"    '(switch-to-persp-1 :which-key t)
+    "l2"    '(switch-to-persp-2 :which-key t)
+    "l3"    '(switch-to-persp-3 :which-key t)
+    "l4"    '(switch-to-persp-4 :which-key t)
+    "l5"    '(switch-to-persp-5 :which-key t)
+    "l6"    '(switch-to-persp-6 :which-key t)
+    "l7"    '(switch-to-persp-7 :which-key t)
+    "l8"    '(switch-to-persp-8 :which-key t)
+    "l9"    '(switch-to-persp-9 :which-key t)
     "l SPC" 'persp-switch
     "l TAB" 'alternate-persp
     "l["    'move-current-persp-left

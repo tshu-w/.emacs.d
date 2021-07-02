@@ -69,13 +69,7 @@
   (general-def '(ivy-minibuffer-map ivy-switch-buffer-map)
     "<tab>"    'ivy-tab
     "C-h"      'ivy-c-h
-    "C-S-h"    help-map)
-  :general
-  (tyrant-def
-    "bb" 'ivy-switch-buffer
-    "rv" 'ivy-push-view
-    "rV" 'ivy-pop-view
-    "rl" 'ivy-resume))
+    "C-S-h"    help-map))
 
 (use-package ivy-hydra :ensure t :defer t)
 
@@ -146,11 +140,9 @@
                   (thing-at-point 'symbol t))))
   :general
   (tyrant-def
-    "fL" 'counsel-locate
-    "rm" 'counsel-evil-marks
-    "rr" 'counsel-evil-registers
-    "sf" 'counsel-rg
-    "sF" 'counsel-rg-region-or-symbol))
+    "fL" '(counsel-locate :which-key "locate-file")
+    "sd" '(counsel-rg :which-key "search dir")
+    "sD" '(counsel-rg-region-or-symbol :which-key "search dir w/ input")))
 
 (use-package swiper
   :ensure t
@@ -181,15 +173,15 @@ around point as the initial input."
       (swiper-all input)))
   :general
   (tyrant-def
-    "ss"  'swiper
-    "sS"  'swiper-region-or-symbol
-    "sb"  'swiper-all
-    "sB"  'swiper-all-region-or-symbol))
+    "ss"  '(swiper :which-key "search buffer")
+    "sS"  '(swiper-region-or-symbol :which-key "search buffer w/ input")
+    "sb"  '(swiper-all :which-key "search buffers")
+    "sB"  '(swiper-all-region-or-symbol :which-key "search buffers w/ input")))
 
 (use-package counsel-tramp
   :ensure t
   :general
-  (tyrant-def "ft" 'counsel-tramp))
+  (tyrant-def "ft" '(counsel-tramp :which-key "tramp-file")))
 
 (use-package wgrep :ensure t :defer t)
 

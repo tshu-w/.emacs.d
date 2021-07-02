@@ -36,6 +36,7 @@
 
 (use-package counsel-projectile
   :ensure t
+  :hook (after-init . counsel-projectile-mode)
   :config
   (defun counsel-projectile-rg-region-or-symbol ()
     "Use `counsel-projectile-rg' to search for
@@ -59,14 +60,7 @@
   :general
   (tyrant-def
     "/"     '(counsel-projectile-rg :which-key "search project")
-    "*"     '(counsel-projectile-rg-region-or-symbol :which-key "search project w/input")
-    "pb"    'counsel-projectile-switch-to-buffer
-    "pd"    'counsel-projectile-find-dir
-    "pp"    'counsel-projectile-switch-project
-    "pf"    'counsel-projectile-find-file
-    "p SPC" 'counsel-projectile
-    "sp"    'counsel-projectile-rg
-    "sP"    'counsel-projectile-rg-region-or-symbol))
+    "*"     '(counsel-projectile-rg-region-or-symbol :which-key "search project w/ input")))
 
 
 (provide 'editor-projectile)
