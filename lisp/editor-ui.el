@@ -84,13 +84,13 @@
   "Light themes to switch.")
 
 (defvar dark-themes '(doom-1337
-                      doom-acario-dark
+                      ;; doom-acario-dark
                       doom-ayu-mirage
                       doom-badger
                       doom-challenger-deep
                       doom-city-lights
                       doom-dark+
-                      doom-dracula
+                      ;; doom-dracula
                       doom-ephemeral
                       doom-fairy-floss
                       doom-gruvbox
@@ -100,21 +100,21 @@
                       doom-Iosvkem
                       doom-ir-black
                       doom-laserwave
-                      doom-manegarm
+                      ;; doom-manegarm
                       doom-material
                       doom-miramare
-                      doom-molokai
-                      doom-monokai-classic
+                      ;; doom-molokai
+                      ;; doom-monokai-classic
                       doom-monokai-pro
                       doom-monokai-machine
-                      doom-monokai-octagon
-                      doom-monokai-ristretto
-                      doom-monokai-spectrum
+                      ;; doom-monokai-octagon
+                      ;; doom-monokai-ristretto
+                      ;; doom-monokai-spectrum
                       doom-moonlight
                       doom-nord
                       doom-nova
                       doom-oceanic-next
-                      doom-old-hope
+                      ;; doom-old-hope
                       doom-one
                       doom-opera
                       doom-outrun-electric
@@ -122,7 +122,7 @@
                       doom-peacock
                       doom-plain-dark
                       doom-rouge
-                      doom-shades-of-purple
+                      ;; doom-shades-of-purple
                       doom-snazzy
                       doom-solarized-dark
                       doom-solarized-dark-high-contrast
@@ -133,7 +133,7 @@
                       doom-wilmersdorf
                       doom-xcode
                       doom-zenburn
-                      flucui-dark
+                      ;; flucui-dark
                       humanoid-dark
                       kaolin-blossom
                       kaolin-bubblegum
