@@ -260,16 +260,12 @@
 (use-package savehist
   :hook (after-init . savehist-mode)
   :config
-  ;; minibuffer history
   (setq enable-recursive-minibuffers t ; allow commands in minibuffers
         history-length 100
         savehist-additional-variables '(evil-jumps-history
-                                        mark-ring
-                                        global-mark-ring
-                                        search-ring
-                                        regexp-search-ring
-                                        extended-command-history)
-        savehist-autosave-interval 60))
+                                        mark-ring global-mark-ring
+                                        search-ring regexp-search-ring
+                                        extended-command-history)))
 
 (use-package saveplace
   :hook (after-init . save-place-mode))
