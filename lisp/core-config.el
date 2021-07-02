@@ -143,29 +143,23 @@
   (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode))
 
 (use-package desktop
-  :hook ((auto-save kill-emacs) . desktop-save-without-prompts)
-  :commands (restart-emacs-restore-desktop desktop-save-without-prompts)
-  :init
-  (when (member "--restore-desktop" command-line-args)
-    (add-hook 'emacs-startup-hook 'desktop-read)
-    (delete "--restore-desktop" command-line-args))
-
-  (setq desktop-buffers-not-to-save "^$"
+  :commands restart-emacs-without-desktop
+  :init (desktop-save-mode)
+  :config
+  ;; inhibit no-loaded prompt
+  (setq desktop-file-modtime (file-attribute-modification-time
+                              (file-attributes
+                               (desktop-full-file-name)))
+        desktop-lazy-verbose nil
         desktop-load-locked-desktop t
+        desktop-restore-eager 1
         desktop-restore-frames nil
         desktop-save t)
-  :config
-  (defun restart-emacs-restore-desktop (&optional args)
-    "Restart emacs and restore desktop."
-    (interactive)
-    (restart-emacs (cons "--restore-desktop" args)))
 
-  (defun desktop-save-without-prompts ()
-    "Save desktop without annoying prompts."
+  (defun restart-emacs-without-desktop (&optional args)
+    "Restart emacs without desktop."
     (interactive)
-    (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
-    (let ((inhibit-message t))
-      (desktop-save-in-desktop-dir))))
+    (restart-emacs (cons "--no-desktop" args))))
 
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
