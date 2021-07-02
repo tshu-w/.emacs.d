@@ -159,7 +159,13 @@
   (defun restart-emacs-without-desktop (&optional args)
     "Restart emacs without desktop."
     (interactive)
-    (restart-emacs (cons "--no-desktop" args))))
+    (restart-emacs (cons "--no-desktop" args)))
+
+  (defun desktop-read@override (desktop-read)
+    "Inhibit `desktop-read' message"
+    (let ((inhibit-message t))
+      (funcall desktop-read)))
+  (advice-add 'desktop-read :around #'desktop-read@override))
 
 (use-package dired
   :commands (dired dired-jump dired-jump-other-window)
