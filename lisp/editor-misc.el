@@ -175,7 +175,9 @@ reuse it's window, otherwise create new one."
 
 (use-package undohist
   :ensure t
-  :hook (after-init . undohist-initialize))
+  :hook (after-init . undohist-initialize)
+  :config
+  (setq undohist-ignored-files '("EDITMSG")))
 
 (use-package winum
   :ensure t
