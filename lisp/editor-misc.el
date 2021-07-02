@@ -164,8 +164,7 @@ reuse it's window, otherwise create new one."
 (use-package sis
   :ensure t
   :hook ((after-init . sis-global-respect-mode)
-         (text-mode . sis-context-mode)
-         (text-mode . sis-inline-mode))
+         (text-mode . sis-context-mode))
   :config
   (sis-ism-lazyman-config nil "rime" 'native)
 
