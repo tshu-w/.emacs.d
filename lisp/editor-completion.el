@@ -87,7 +87,7 @@
          (ivy-rich-mode . ivy-rich-project-root-cache-mode))
   :config
   (setq ivy-rich-path-style 'abbrev
-        ivy-virtual-abbreviate 'full)
+        ivy-virtual-abbreviate 'abbreviate)
 
   ;; https://github.com/Yevgnen/ivy-rich/issues/87#issuecomment-689581896
   (progn
