@@ -167,19 +167,7 @@
   (setq dired-auto-revert-buffer t
         dired-create-destination-dirs 'ask
         dired-dwim-target t
-        dired-vc-rename-file t)
-
-  (defun dired-show-hide-dotfile ()
-    "Show/hide dotfiles."
-    (interactive)
-    (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p)
-        (progn
-          (setq-local dired-dotfiles-show-p nil)
-          (dired-mark-files-regexp "^\\.")
-          (dired-do-kill-lines))
-      (revert-buffer)
-      (setq-local dired-dotfiles-show-p t)))
-  (advice-add 'dired-do-print :override #'dired-show-file-type))
+        dired-vc-rename-file t))
 
 (use-package electric
   :hook (after-init . electric-pair-mode))
