@@ -135,7 +135,6 @@
 
     "s"       '(:ignore t :which-key "search")
     "si"      'imenu
-    "sh"      '(evil-ex-nohighlight :which-key "disable highlightings")
 
     "t"       '(:ignore t :which-key "toggles")
     "ta"      'auto-fill-mode
@@ -402,6 +401,7 @@
 
     (advice-add 'org-babel-do-key-sequence-in-edit-buffer
                 :around #'evil-org-insert-state-in-edit-buffer))
+  (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
   (general-def 'normal
     "C-,"      'evil-repeat-find-char-reverse
