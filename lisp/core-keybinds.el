@@ -423,6 +423,14 @@
   (setq evilmi-forward-chars (string-to-list "[{(<")
         evilmi-backward-chars (string-to-list "]})>")))
 
+(use-package evil-owl
+  :ensure t
+  :hook (after-init . evil-owl-mode)
+  :config
+  (setq evil-owl-display-method 'posframe
+        evil-owl-idle-delay 0.5
+        evil-owl-max-string-length 50))
+
 (use-package evil-pinyin
   :ensure t
   :hook (after-init . global-evil-pinyin-mode)
