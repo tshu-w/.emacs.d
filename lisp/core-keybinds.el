@@ -406,7 +406,6 @@
 (use-package evil-collection
   :ensure t
   :init
-  (setq evil-collection-company-use-tng nil)
   (evil-collection-init)
   (add-hook 'org-agenda-mode-hook
             (lambda ()
