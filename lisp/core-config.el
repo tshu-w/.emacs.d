@@ -262,10 +262,34 @@
   :config
   (setq enable-recursive-minibuffers t ; allow commands in minibuffers
         history-length 100
+        savehist-autosave-interval nil
         savehist-additional-variables '(evil-jumps-history
                                         mark-ring global-mark-ring
                                         search-ring regexp-search-ring
-                                        extended-command-history)))
+                                        extended-command-history))
+
+  (add-hook 'savehist-save-hook
+            (defun savehist-unpropertize-variables-h ()
+              "Remove text properties from `kill-ring' to reduce savehist cache size."
+              (setq kill-ring
+                    (mapcar #'substring-no-properties
+                            (cl-remove-if-not #'stringp kill-ring))
+                    register-alist
+                    (cl-loop for (reg . item) in register-alist
+                             if (stringp item)
+                             collect (cons reg (substring-no-properties item))
+                             else collect (cons reg item)))))
+
+  (add-hook 'savehist-save-hook
+            (defun savehist-remove-unprintable-registers-h ()
+              "Remove unwriteable registers (e.g. containing window configurations).
+Otherwise, `savehist' would discard `register-alist' entirely if we don't omit
+the unwritable tidbits."
+              ;; Save new value in the temp buffer savehist is running
+              ;; `savehist-save-hook' in. We don't want to actually remove the
+              ;; unserializable registers in the current session!
+              (setq-local register-alist
+                          (cl-remove-if-not #'savehist-printable register-alist)))))
 
 (use-package saveplace
   :hook (after-init . save-place-mode))
