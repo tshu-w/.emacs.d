@@ -229,6 +229,7 @@
   (setq evil-want-keybinding nil
         evil-ex-search-vim-style-regexp t
         evil-search-module 'evil-search
+        evil-symbol-word-search t
         evil-magic 'very-magic)
   (evil-mode)
   :config
