@@ -82,7 +82,93 @@
          (ivy-rich-mode . ivy-rich-project-root-cache-mode))
   :config
   (setq ivy-rich-path-style 'abbrev
-        ivy-virtual-abbreviate 'abbreviate)
+        ivy-virtual-abbreviate 'abbreviate
+        ivy-rich-parse-remote-buffer nil)
+
+  (plist-put ivy-rich-display-transformers-list 'package-reinstall 'ivy-rich--package-install-transformer)
+  (plist-put ivy-rich-display-transformers-list 'describe-package 'ivy-rich--package-install-transformer)
+
+  (defun ivy-rich-describe-variable-transformer (cand)
+    "Previews the value of the variable in the minibuffer"
+    (let* ((sym (intern cand))
+           (val (and (boundp sym) (symbol-value sym)))
+           (print-level 3))
+      (replace-regexp-in-string
+       "[\n\t\^[\^M\^@\^G]" " "
+       (cond ((booleanp val)
+              (propertize (format "%s" val) 'face
+                          (if (null val)
+                              'font-lock-comment-face
+                            'font-lock-function-name-face)))
+             ((symbolp val)
+              (propertize (format "'%s" val)
+                          'face 'font-lock-keyword-face))
+             ((keymapp val)
+              (propertize "<keymap>" 'face 'font-lock-constant-face))
+             ((listp val)
+              (prin1-to-string val))
+             ((stringp val)
+              (propertize (format "%S" val) 'face 'font-lock-string-face))
+             ((numberp val)
+              (propertize (format "%s" val) 'face 'font-lock-doc-face))
+             ((format "%s" val)))
+       t)))
+
+  (ivy-rich-set-columns 'counsel-describe-variable
+                        '((counsel-describe-variable-transformer (:width 0.3)) ; the original transformer
+                          (ivy-rich-describe-variable-transformer (:width 15))
+                          (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))
+
+  (defun ivy-rich-file-group (candidate)
+    "Displays the file group of the candidate for ivy-rich"
+    (let ((candidate (expand-file-name candidate ivy--directory)))
+      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
+          ""
+        (let* ((group-id (file-attribute-group-id (file-attributes candidate)))
+               (group-function (if (fboundp #'group-name) #'group-name #'identity))
+               (group-name (funcall group-function group-id)))
+          (format "%s" group-name)))))
+
+  (defun ivy-rich-file-modes (candidate)
+    "Displays the file mode of the candidate for ivy-rich."
+    (let ((candidate (expand-file-name candidate ivy--directory)))
+      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
+          ""
+        (format "%s" (file-attribute-modes (file-attributes candidate))))))
+
+  (defun ivy-rich-file-size (candidate)
+    "Displays the file size of the candidate for ivy-rich."
+    (let ((candidate (expand-file-name candidate ivy--directory)))
+      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
+          ""
+        (let ((size (file-attribute-size (file-attributes candidate))))
+          (cond
+           ((> size 1000000) (format "%.1fM " (/ size 1000000.0)))
+           ((> size 1000) (format "%.1fk " (/ size 1000.0)))
+           (t (format "%d " size)))))))
+
+  (defun ivy-rich-file-user (candidate)
+    "Displays the file user of the candidate for ivy-rich."
+    (let ((candidate (expand-file-name candidate ivy--directory)))
+      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
+          ""
+        (let* ((user-id (file-attribute-user-id (file-attributes candidate)))
+               (user-name (user-login-name user-id)))
+          (format "%s" user-name)))))
+
+  (defun ivy-rich-file-last-modified-time (candidate)
+    (let ((candidate (expand-file-name candidate ivy--directory)))
+      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
+          ""
+        (format-time-string "%Y-%m-%d %H:%M:%S" (nth 5 (file-attributes candidate))))))
+
+  (ivy-rich-set-columns 'counsel-find-file
+                        '((ivy-rich-candidate               (:width 0.35))
+                          (ivy-rich-file-user               (:width 11 :face font-lock-doc-face))
+                          (ivy-rich-file-group              (:width 11 :face font-lock-doc-face))
+                          (ivy-rich-file-modes              (:width 10 :face font-lock-doc-face))
+                          (ivy-rich-file-size               (:width 8  :face font-lock-doc-face))
+                          (ivy-rich-file-last-modified-time (:width 20 :face font-lock-doc-face))))
 
   ;; https://github.com/Yevgnen/ivy-rich/issues/87#issuecomment-689581896
   (progn

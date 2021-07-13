@@ -59,6 +59,11 @@
 
 (use-package helpful
   :ensure t
+  :init
+  (with-eval-after-load 'counsel
+    (setq counsel-describe-function-function #'helpful-callable
+          counsel-describe-variable-function #'helpful-variable
+          counsel-descbinds-function         #'helpful-callable))
   :config
   (defun helpful-reuse-window (buffer-or-name)
     "Switch to helpful BUFFER-OR-NAME.
@@ -72,11 +77,7 @@ reuse it's window, otherwise create new one."
   (setq helpful-max-buffers 3
         helpful-switch-buffer-function #'helpful-reuse-window)
   :general
-  (tyrant-def
-    "hh" 'helpful-at-point
-    "hk" 'helpful-key
-    "hf" 'helpful-callable
-    "hv" 'helpful-variable))
+  (tyrant-def "hk" '(helpful-key :which-key "describe-key")))
 
 (use-package link-hint
   :ensure t
