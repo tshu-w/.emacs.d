@@ -16,6 +16,7 @@
         ivy-initial-inputs-alist nil ;; it will change after counsel load
         ivy-use-selectable-prompt t
         ivy-use-virtual-buffers t
+        ivy-wrap t
 
         ivy-re-builders-alist '((t . ivy--cregex-plus))
         ivy-preferred-re-builders '((ivy--cregex-plus . "ivy")
