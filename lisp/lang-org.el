@@ -150,7 +150,9 @@
               (todo "SOMEDAY"))
              ((org-agenda-start-day "-1w")
               (org-agenda-start-with-clockreport-mode t)
-              (org-agenda-archives-mode t)))
+              (org-agenda-archives-mode t)
+              (org-agenda-compact-blocks nil)
+              (org-agenda-show-all-dates nil)))
             ("rW" "This Week"
              ((agenda "" ((org-agenda-span 7)
                           (org-agenda-start-on-weekday 1)))
@@ -161,7 +163,9 @@
               (todo "WAITING")
               (todo "SOMEDAY"))
              ((org-agenda-start-with-clockreport-mode t)
-              (org-agenda-archives-mode t)))
+              (org-agenda-archives-mode t)
+              (org-agenda-compact-blocks nil)
+              (org-agenda-show-all-dates nil)))
             ("d" "Upcoming deadlines" agenda ""
              ((org-agenda-entry-types '(:deadline))
               (org-agenda-span 1)
