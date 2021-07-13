@@ -192,7 +192,8 @@ the automatic filling of the current paragraph."
           ("eref" "Insert \\eqref" "\\eqref{eq?}" cdlatex-position-cursor nil t nil)
           ("fref" "Insert \\ref" "\\ref{fig?}" cdlatex-position-cursor nil t nil)
           ("sref" "Insert \\ref" "\\ref{sec?}" cdlatex-position-cursor nil t nil))
-        cdlatex-make-sub-superscript-roman-if-pressed-twice t))
+        cdlatex-make-sub-superscript-roman-if-pressed-twice t
+        cdlatex-sub-super-scripts-outside-math-mode nil))
 
 (use-package auctex-latexmk
   :ensure t
