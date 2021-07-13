@@ -227,7 +227,7 @@
   (tyrant-def
     "bm" '(popwin:messages :which-key "messages-buffer")
     "bM" 'switch-to-messages-buffer
-    "wp" '(popwin:close-popup-window :which-key "close-popup-window")))
+    "wx" '(popwin:close-popup-window :which-key "close-popup-window")))
 
 (use-package hl-todo
   :ensure t
