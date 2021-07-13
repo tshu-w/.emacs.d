@@ -31,6 +31,7 @@
           ("SOMEDAY" . (:foreground "plum" :weight bold))))
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
+        org-cycle-open-archived-trees t
         org-fontify-quote-and-verse-blocks t
         org-fontify-whole-heading-line t
         org-global-properties '(("STYLE_ALL" . "habit")
