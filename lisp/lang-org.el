@@ -46,7 +46,8 @@
         org-startup-with-inline-images t
         org-track-ordered-property-with-tag t
         org-use-property-inheritance t
-        org-use-sub-superscripts "{}"
+        org-use-sub-superscripts '{}
+        org-export-with-sub-superscripts org-use-sub-superscripts
         org-yank-adjusted-subtrees t)
 
   (add-hook 'org-mode-hook
