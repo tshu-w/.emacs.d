@@ -184,7 +184,9 @@
   :ensure t
   :hook (emacs-startup . global-writeroom-mode)
   :config
-  (setq writeroom-width 128
+  (setq split-width-threshold 120
+
+        writeroom-width 128
         writeroom-bottom-divider-width 0
         writeroom-fringes-outside-margins t
         writeroom-fullscreen-effect nil
