@@ -654,6 +654,7 @@ Org Review Transient state
 
 (use-package evil-org
   :ensure t
+  :after evil
   :hook (org-mode . evil-org-mode)
   :init
   (with-eval-after-load 'org-agenda

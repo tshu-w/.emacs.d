@@ -210,6 +210,11 @@ the automatic filling of the current paragraph."
                        (make-local-variable 'company-backends)
                        '(company-reftex-labels company-reftex-citations)))))
 
+(use-package evil-tex
+  :ensure t
+  :after evil
+  :hook (TeX-mode . evil-tex-mode))
+
 (use-package bibtex-completion
   :defer t
   :config
