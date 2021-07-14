@@ -284,7 +284,7 @@ around point as the initial input."
         company-selection-wrap-around t
         company-show-numbers t
         company-tooltip-align-annotations t
-        company-transformers '(company-sort-prefer-same-case-prefix)
+        company-transformers '(delete-dups company-sort-prefer-same-case-prefix)
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
         company-dabbrev-char-regexp "[A-Za-z-_\\.'/]"
@@ -336,6 +336,17 @@ around point as the initial input."
   :general
   (general-def "C-;" 'company-try-hard)
   (general-def company-active-map "C-;" 'company-try-hard))
+
+(use-package company-tabnine
+  :ensure t
+  :defer t
+  :init
+  (setq company-backends '(company-files
+                           (company-capf :with company-tabnine :separate)
+                           (company-dabbrev-code company-keywords)
+                           company-dabbrev
+                           company-tabnine
+                           company-ispell)))
 
 
 (use-package prescient
