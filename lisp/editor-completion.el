@@ -282,7 +282,7 @@ around point as the initial input."
         company-minimum-prefix-length 1
         company-require-match nil
         company-selection-wrap-around t
-        company-show-numbers t
+        company-show-quick-access t
         company-tooltip-align-annotations t
         company-transformers '(delete-dups company-sort-prefer-same-case-prefix)
         company-dabbrev-ignore-case nil
