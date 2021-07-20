@@ -57,7 +57,7 @@
   (setq spacemacs-theme-org-height nil
         spacemacs-theme-comment-bg nil))
 
-(use-package solo-jazz-theme :defer t)
+(use-package solo-jazz-theme :ensure t :defer t)
 
 (defvar light-themes '(doom-acario-light
                        doom-ayu-light
