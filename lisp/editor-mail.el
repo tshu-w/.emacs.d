@@ -181,7 +181,7 @@
                         ;; Here's the main difference to the regular trash mark,
                         ;; no +T before -N so the message is not marked as
                         ;; IMAP-deleted:
-                        (mu4e~proc-move docid (mu4e~mark-check-target target) "-N"))))
+                        (mu4e~proc-move docid (mu4e~mark-check-target target) "+S-u-N"))))
 
   (general-def 'normal mu4e-view-mode-map
     "o"        'link-hint-open-link
