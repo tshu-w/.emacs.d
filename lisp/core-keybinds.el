@@ -388,12 +388,6 @@
 
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
-  ;; https://github.com/emacs-evil/evil/pull/1340
-  (defun evil-ex-start-word-search@around (fun &rest args)
-    (let ((evil-ex-search-vim-style-regexp nil))
-      (apply fun args)))
-  (advice-add 'evil-ex-start-word-search :around #'evil-ex-start-word-search@around)
-
   (general-def 'normal
     "C-,"      'evil-repeat-find-char-reverse
     "zf"       'reposition-window
