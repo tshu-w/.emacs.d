@@ -657,15 +657,12 @@ Org Review Transient state
   :after evil
   :hook (org-mode . evil-org-mode)
   :init
+  (setq evil-org-key-theme '(navigation insert textobjects additional shift todo heading))
+
   (with-eval-after-load 'org-agenda
     (autoload #'evil-org-agenda-set-keys "evil-org-agenda" nil t)
     (evil-org-agenda-set-keys))
   :config
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme
-               '(navigation insert textobjects additional shift todo heading))))
-
   (defun surround-drawer ()
     (let ((dname (read-from-minibuffer "" "")))
       (cons (format ":%s:" (upcase (or dname ""))) ":END:")))
