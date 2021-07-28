@@ -98,15 +98,15 @@
                       doom-homage-black
                       doom-horizon
                       doom-Iosvkem
-                      doom-ir-black
+                      ;; doom-ir-black
                       doom-laserwave
                       ;; doom-manegarm
                       doom-material
-                      doom-miramare
+                      ;; doom-miramare
                       ;; doom-molokai
                       ;; doom-monokai-classic
                       doom-monokai-pro
-                      doom-monokai-machine
+                      ;; doom-monokai-machine
                       ;; doom-monokai-octagon
                       ;; doom-monokai-ristretto
                       ;; doom-monokai-spectrum
@@ -117,7 +117,7 @@
                       ;; doom-old-hope
                       doom-one
                       doom-opera
-                      doom-outrun-electric
+                      ;; doom-outrun-electric
                       doom-palenight
                       doom-peacock
                       doom-plain-dark
