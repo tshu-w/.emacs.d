@@ -195,6 +195,14 @@ the automatic filling of the current paragraph."
         cdlatex-make-sub-superscript-roman-if-pressed-twice t
         cdlatex-sub-super-scripts-outside-math-mode nil))
 
+(use-package aas
+  :ensure t
+  :hook ((TeX-mode org-mode) . aas-activate-for-major-mode))
+
+(use-package laas
+  :ensure t
+  :hook (TeX-mode . laas-mode))
+
 (use-package auctex-latexmk
   :ensure t
   :after tex
