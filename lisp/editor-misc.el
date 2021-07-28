@@ -57,6 +57,22 @@
   :ensure t
   :init (editorconfig-mode))
 
+(use-package elfeed
+  :ensure t
+  :init
+  (with-eval-after-load 'writeroom-mode
+    (add-to-list 'writeroom-major-modes 'elfeed-search-mode)
+    (add-to-list 'writeroom-major-modes 'elfeed-show-mode))
+  :general
+  (tyrant-def "ae" 'elfeed))
+
+(use-package elfeed-org
+  :ensure t
+  :after elfeed
+  :config
+  (elfeed-org)
+  (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
+
 (use-package helpful
   :ensure t
   :init
