@@ -173,6 +173,7 @@
   (setq dired-auto-revert-buffer t
         dired-create-destination-dirs 'ask
         dired-dwim-target t
+        dired-kill-when-opening-new-dired-buffer t
         dired-vc-rename-file t))
 
 (use-package electric
