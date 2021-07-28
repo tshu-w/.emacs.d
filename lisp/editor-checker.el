@@ -12,6 +12,7 @@
 (use-package flycheck
   :ensure t
   :hook (prog-mode . flycheck-mode)
+  :custom-face (flycheck-info ((t (:underline nil))))
   :config
   (setq flycheck-check-syntax-automatically '(save mode-enabled)
         flycheck-display-errors-delay 0.25
