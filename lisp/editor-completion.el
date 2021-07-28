@@ -428,8 +428,16 @@ returns the command to execute."
           :test? (lambda () (-> local-command lsp-resolve-final-function
                            lsp-server-present?))))
 
-  (tyrant-def lsp-mode
-    :definer 'minor-mode "l" lsp-command-map))
+  ;; https://github.com/emacs-lsp/lsp-mode/issues/2932
+  (defun lsp-restart ()
+    (interactive)
+    (lsp-disconnect)
+    (setq lsp--session nil)
+    (lsp))
+
+  (tyrant-def lsp-mode :definer 'minor-mode
+    "l" lsp-command-map
+    "lR" '(lsp-restart :which-key "restart")))
 
 
 (use-package yasnippet
