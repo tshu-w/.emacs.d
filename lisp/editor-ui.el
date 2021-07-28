@@ -180,6 +180,14 @@
       (set-face-attribute 'mode-line-inactive nil
                           :height 120 :fontset "fontset-modeline"))))
 
+(use-package tree-sitter
+  :ensure t
+  :hook ((python-mode . tree-sitter-hl-mode)))
+
+(use-package tree-sitter-langs
+  :ensure t
+  :after tree-sitter)
+
 (use-package writeroom-mode
   :ensure t
   :hook (emacs-startup . global-writeroom-mode)
