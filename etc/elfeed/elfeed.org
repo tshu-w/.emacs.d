@@ -116,7 +116,7 @@
 ** [[https://oldj.net/feed][oldj's blog]]
 ** [[https://paul.pub/feed.xml][保罗的酒吧]]
 ** [[https://rizime.substack.com/feed][Λ-Reading]]
-** [[https://scomper.me/feed][壹页单章]]
+** [[https://pepcn.com/feed][壹页单章]]
 ** [[https://shuzang.github.io/posts/index.xml][Shuzang's Blog]]
 ** [[https://taresky.com/feed][TARESKY]]
 ** [[https://tech.meituan.com/feed][美团技术团队]]
@@ -165,7 +165,7 @@
 * Platform                                                       :elfeed:Platform:
 ** [[http://sspai.com/feed][少数派]]
 ** [[https://feedx.net/rss/guanzhi.xml][观止]]
-** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]
+** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]                                                            :ignore:
 ** [[https://hnrss.org/best][Hacker News]]
 ** [[https://liqi.io/index.xml][利器]]
 ** [[https://rsshub.app/sspai/matrix][SSPAI Matrix]]
@@ -173,5 +173,6 @@
 ** [[https://www.dgtle.com/feed][数字尾巴]]
 ** [[https://www.guokr.com/handpick/rss/][果壳网]]
 ** [[https://www.huxiu.com/rss/0.xml][虎嗅网]]
-** [[https://www.zhihu.com/rss][知乎每日精选]]
+** [[https://www.zhihu.com/rss][知乎每日精选]]                                                        :ignore:
 ** [[https://xueqiu.com/hots/topic/rss][雪球 - 今日话题]]
+** [[https://www.reddit.com/r/zsh.rss][reddit | zsh]]
