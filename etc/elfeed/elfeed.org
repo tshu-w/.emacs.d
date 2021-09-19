@@ -166,7 +166,7 @@
 ** [[http://sspai.com/feed][少数派]]
 ** [[https://feedx.net/rss/guanzhi.xml][观止]]
 ** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]                                                            :ignore:
-** [[https://hnrss.org/best][Hacker News]]
+** [[https://hnrss.org/best][Hacker News]]                                                         :ignore:
 ** [[https://liqi.io/index.xml][利器]]
 ** [[https://rsshub.app/sspai/matrix][SSPAI Matrix]]
 ** [[https://rsshub.app/v2ex/topics/latest][V2EX-最新主题]]
