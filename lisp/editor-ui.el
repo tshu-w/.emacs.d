@@ -60,7 +60,7 @@
 (use-package solo-jazz-theme :ensure t :defer t)
 
 (defvar light-themes '(doom-acario-light
-                       doom-ayu-light
+                       ;; doom-ayu-light
                        doom-flatwhite
                        doom-gruvbox-light
                        doom-homage-white
@@ -85,16 +85,16 @@
 
 (defvar dark-themes '(doom-1337
                       ;; doom-acario-dark
-                      doom-ayu-mirage
+                      ;; doom-ayu-mirage
                       doom-badger
                       doom-challenger-deep
                       doom-city-lights
                       doom-dark+
                       ;; doom-dracula
-                      doom-ephemeral
-                      doom-fairy-floss
+                      ;; doom-ephemeral
+                      ;; doom-fairy-floss
                       doom-gruvbox
-                      doom-henna
+                      ;; doom-henna
                       doom-homage-black
                       doom-horizon
                       doom-Iosvkem
