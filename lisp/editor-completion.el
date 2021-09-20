@@ -378,6 +378,7 @@ around point as the initial input."
   (setq read-process-output-max (* 1024 1024))
   :config
   (setq lsp-completion-provider :none
+        lsp-diagnostic-clean-after-change t
         lsp-enable-dap-auto-configure nil
         lsp-enable-file-watchers nil
         lsp-enable-folding nil
