@@ -12,10 +12,7 @@
   :ensure auctex
   :defer t
   :mode ("\\.[tT]e[xX]\\'" . TeX-tex-mode)
-  :custom-face (preview-reference-face ((t (:foreground "black"))))
   :config
-  (setq-default TeX-engine 'xetex)
-
   (setq TeX-auto-save t
         TeX-command-default "LatexMk"
         TeX-master t
@@ -31,6 +28,17 @@
                                      (output-html "open"))
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
+
+  (defvar latex-nofill-env '("equation"
+                             "equation*"
+                             "align"
+                             "align*"
+                             "tabular"
+                             "tabular*"
+                             "tabu"
+                             "tabu*"
+                             "tikzpicture")
+    "List of environment names in which `auto-fill-mode' will be inhibited.")
 
   (defun latex-autofill ()
     "Check whether the pointer is currently inside one of the
@@ -62,6 +70,16 @@ the automatic filling of the current paragraph."
     (interactive)
     (TeX-save-document (TeX-master-file))
     (TeX-command TeX-command-default 'TeX-master-file -1))
+
+  (add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (add-hook 'after-save-hook 'TeX-build nil 'local)))
+
+  (defun TeX-process-check@around (fun name)
+    (cl-flet ((yes-or-no-p (&rest args) t)
+              (y-or-n-p (&rest args) t))
+      (funcall fun name)))
+  (advice-add 'TeX-process-check :around #'TeX-process-check@around)
 
   ;; Rebindings for TeX-font
   (defun font-bold () (interactive) (TeX-font nil ?\C-b))
@@ -209,14 +227,6 @@ the automatic filling of the current paragraph."
   :config
   (auctex-latexmk-setup)
   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
-
-(use-package company-reftex
-  :ensure t
-  :after tex
-  :hook (TeX-mode . (lambda ()
-                      (add-to-list
-                       (make-local-variable 'company-backends)
-                       '(company-reftex-labels company-reftex-citations)))))
 
 (use-package evil-tex
   :ensure t
