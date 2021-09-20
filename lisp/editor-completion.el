@@ -287,7 +287,7 @@ around point as the initial input."
         company-transformers '(delete-dups company-sort-prefer-same-case-prefix)
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil
-        company-dabbrev-char-regexp "[A-Za-z-_\\.'/]"
+        company-dabbrev-char-regexp "[A-Za-z-_\\'/]"
         company-dabbrev-ignore-buffers "\\`[ *]\\|\\.pdf\\'"
         company-backends '(company-files
                            company-capf
