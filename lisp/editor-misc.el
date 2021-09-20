@@ -158,9 +158,10 @@ reuse it's window, otherwise create new one."
   :hook ((kill-emacs . (lambda ()
                          (when (fboundp 'rime-lib-sync-user-data)
                            (ignore-errors (rime-sync))))))
+  :init
+  (setq default-input-method "rime")
   :config
-  (setq default-input-method "rime"
-        rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
+  (setq rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
         rime-user-data-dir (no-littering-expand-etc-file-name "rime/")
         rime-show-candidate 'posframe
         rime-show-preedit 'inline
@@ -170,17 +171,12 @@ reuse it's window, otherwise create new one."
     "M-j"   'rime-force-enable
     "C-`"   'rime-send-keybinding))
 
-(use-package sis
+(use-package fcitx
   :ensure t
-  :hook ((after-init . sis-global-respect-mode)
-         (text-mode . sis-context-mode))
-  :config
-  (sis-ism-lazyman-config nil "rime" 'native)
-
-  (setq sis-prefix-override-keys '("C-c" "C-x" "C-h" "M-SPC"))
-
-  (setq-default sis-inline-tighten-head-rule 0
-                sis-inline-tighten-tail-rule 1))
+  :after exec-path-from-shell
+  :init
+  (fcitx-aggressive-setup)
+  (fcitx-prefix-keys-turn-off))
 
 (use-package undohist
   :ensure t
