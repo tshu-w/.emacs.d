@@ -63,11 +63,25 @@
   :hook (magit-mode . turn-on-magit-gitflow)
   :config (general-def magit-mode-map "%" 'magit-gitflow-popup))
 
-(use-package forge :ensure t :after magit)
+(use-package forge
+  :ensure t
+  :defer t
+  :init
+  (defun evil-collection-magit-setup@override ()
+    "Set up `evil' bindings for `magit'."
+
+    (evil-collection-define-key 'normal 'magit-blame-mode-map
+      "q" 'magit-blame-quit)
+    (evil-collection-define-key 'normal 'magit-blame-read-only-mode-map
+      "q" 'magit-blame-quit)
+
+    (require 'forge)
+    (evil-collection-magit-init))
+  (advice-add 'evil-collection-magit-setup :override #'evil-collection-magit-setup@override))
 
 (use-package transient
   :ensure t
-  :after magit
+  :defer t
   :config (transient-bind-q-to-quit))
 
 (use-package browse-at-remote
