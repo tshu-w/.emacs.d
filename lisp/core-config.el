@@ -85,8 +85,8 @@
 ;; autosave each change
 (setq bookmark-save-flag 1)
 
-;; disable bookmark fontify
-(setq bookmark-fontify nil)
+;; don't set a fringe mark at bookmarked lines
+(setq bookmark-set-fringe-mark nil)
 
 ;; keep focus while navigating help buffers
 (setq help-window-select t)
