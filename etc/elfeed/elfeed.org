@@ -39,6 +39,7 @@
 *** [[https://macademic.org/feed][Academic workflows on a Mac]]
 *** [[https://ruder.io/rss/][Sebastian Ruder]]
 *** [[https://spaces.ac.cn/feed][科学空间|Scientific Spaces]]
+*** [[http://ai.stanford.edu/blog/feed.xml][The Stanford AI Lab Blog]]
 ** [[http://0x100.club][V for Vendetta]]
 ** [[http://azeril.com/feed.xml][Microdust]]
 ** [[http://baohaojun.github.io/atom.xml][包昊军的博客]]
@@ -57,10 +58,10 @@
 ** [[http://www.hankcs.com/feed][码农场]]
 ** [[http://www.matrix67.com/blog/feed.asp][Matrix67: The Aha Moments]]
 ** [[http://www.zmonster.me/atom.xml][ZMonster's Blog]]
-** [[http://www.zreading.cn/feed][左岸读书]]                                                            :ignore:
+** [[http://www.zreading.cn/feed][左岸读书]]                           :ignore:
 ** [[http://yangqinyuan.com/feed.xml][杨钦元 | 博客]]
 ** [[https://1byte.io/rss.xml][1 Byte]]
-** [[https://atjason.com/atom.xml][Jason]]                                                               :ignore:
+** [[https://atjason.com/atom.xml][Jason]]                             :ignore:
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
 ** [[https://blanboom.org/feed/][Blanboom]]
 ** [[https://blog.blahgeek.com/feeds/all.rss.xml][BlahGeek's Blog]]
@@ -138,6 +139,7 @@
 ** [[https://xiaohanyu.me/atom.xml][行者无疆 始于足下]]
 ** [[https://xinle.co/feed][Tolecen]]
 ** [[https://yihui.name/cn/index.xml][中文博客 on Yihui Xie | 谢益辉]]
+** [[https://yufree.cn/index.xml][Miao Yu | 于淼]]
 ** [[https://yym6472.github.io/atom.xml][yym6472's Blog]]
 ** [[https://zlbk.net/feed][周良博客 · 喜恶皆在字里行间]]
 ** [[https://zonble.net/feed][zonble]]
@@ -157,15 +159,15 @@
 ** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]]
 ** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]]
 ** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]]
-** [[https://36kr.com/feed][36 氪]]                                                               :ignore:
+** [[https://36kr.com/feed][36 氪]]                                    :ignore:
 * Resources                                                   :elfeed:Resources:
 ** [[http://www.abskoop.com/rss][ahhhhfs-分享快乐]]
 ** [[http://www.salttiger.com/index.php/feed/][SaltTiger]]
 ** [[http://xclient.info/feed][精品 MAC 应用分享]]
 ** [[https://rsshub.app/rsshub/rss][RSSHub 有新的 RSS 支持]]
-* Platform                                                       :elfeed:Platform:
+* Platform                                                     :elfeed:Platform:
 ** [[http://sspai.com/feed][少数派]]
-** [[https://feedx.net/rss/guanzhi.xml][观止]]
+** [[https://feedx.net/rss/guanzhi.xml][观止]]                                                                :ignore:
 ** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]                                                            :ignore:
 ** [[https://hnrss.org/best][Hacker News]]                                                         :ignore:
 ** [[https://liqi.io/index.xml][利器]]
