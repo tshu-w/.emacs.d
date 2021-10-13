@@ -609,15 +609,7 @@ Org Review Transient state
     "xr"    'org-clear
     "xs"    'org-strike-through
     "xu"    'org-underline
-    "xv"    'org-verbatim
-    "L"     'org-shiftright
-    "H"     'org-shiftleft
-    "J"     'org-shiftdown
-    "K"     'org-shiftup
-    "C-S-l" 'org-shiftcontrolright
-    "C-S-h" 'org-shiftcontrolleft
-    "C-S-j" 'org-shiftcontroldown
-    "C-S-k" 'org-shiftcontrolup)
+    "xv"    'org-verbatim)
 
   (general-def 'normal org-mode-map
     "RET"      'org-open-at-point)
