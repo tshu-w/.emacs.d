@@ -140,11 +140,8 @@
     "ta"      'auto-fill-mode
     "td"      'toggle-debug-on-error
     "tf"      'display-fill-column-indicator-mode
-    "th"      'global-hl-line-mode
-    "tH"      'font-lock-mode
     "tl"      'toggle-truncate-lines
     "tn"      'display-line-numbers-mode
-    "tt"      'load-theme
     "tw"      'whitespace-mode
     "tW"      'toggle-word-wrap
 
