@@ -66,10 +66,8 @@
 
 (require 'editor-ui)
 (require 'editor-completion)
-(require 'editor-projectile)
 (require 'editor-checker)
 (require 'editor-vsc)
-(require 'editor-shell)
 (require 'editor-mail)
 (require 'editor-misc)
 

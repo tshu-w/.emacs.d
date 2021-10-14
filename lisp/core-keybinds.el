@@ -125,6 +125,9 @@
     "hPk"     'profiler-stop
     "hPr"     'profiler-report
 
+
+    "p"       '(:keymap project-prefix-map :which-key "projects")
+
     "q"       '(:ignore t :which-key "quit")
     "qd"      'restart-emacs-debug-init
     "qf"      'kill-frame

@@ -703,30 +703,6 @@ Org Review Transient state
         org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"))
 
-(use-package org-projectile
-  :ensure t
-  :init
-  (setq org-link-elisp-confirm-function nil)
-  (with-eval-after-load 'org-capture (require 'org-projectile))
-  :config
-  (setq org-projectile-projects-file org-project-file)
-
-  (add-to-list 'org-capture-templates
-               (org-projectile-project-todo-entry) t)
-  (add-to-list 'org-capture-templates
-               (org-projectile-project-todo-entry
-                :capture-character "lp"
-                :capture-heading "Project Todo with link"
-                :capture-template "* TODO %?\n%a\n") t)
-
-  (defun org-projectile-goto-todos ()
-    (interactive)
-    (if (projectile-project-p)
-        (org-projectile-goto-location-for-project (projectile-project-name))
-      (find-file org-projectile-projects-file)))
-  :general
-  (tyrant-def "po" 'org-projectile-goto-todos))
-
 (use-package org-reverse-datetree
   :ensure t
   :commands (org-datetree-goto-location
