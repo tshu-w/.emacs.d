@@ -233,34 +233,125 @@ the automatic filling of the current paragraph."
   :after evil
   :hook (TeX-mode . evil-tex-mode))
 
+
+(use-package bibtex
+  :defer t
+  :config
+  (setq bibtex-file-path "~/Documents/Bibliography/"
+        bibtex-files '("references.bib")
+        bibtex-notes-path "~/Documents/Org/notes/refs/"
+
+        bibtex-align-at-equal-sign t
+        bibtex-autokey-titleword-separator "-"
+        bibtex-autokey-year-title-separator "-"
+        bibtex-autokey-name-year-separator "-"
+        bibtex-dialect 'biblatex))
+
 (use-package bibtex-completion
+  :ensure t
   :defer t
   :config
   (setq bibtex-autokey-year-length 4
         bibtex-completion-additional-search-fields '(keywords)
-        bibtex-completion-bibliography '("~/Documents/Zotero/references.bib"
-                                         "~/Documents/Zotero/refs.bib")
-        bibtex-completion-notes-path "~/Documents/Org/notes/papers/"
-        bibtex-completion-notes-template-multiple-files
-        "#+title: ${author-or-editor} (${year}): ${title}\n#+roam_key: cite:${=key=}\n#+created: %u\n#+last_modified: %u\n\n"
+        bibtex-completion-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
+        bibtex-completion-library-path (concat bibtex-file-path "files/")
+        bibtex-completion-notes-path bibtex-notes-path
         bibtex-completion-pdf-field "file"
         bibtex-completion-pdf-open-function 'org-open-file))
 
-(use-package ivy-bibtex
+(use-package bibtex-actions
   :ensure t
+  :after bibtex-completion
   :config
-  (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-ignore-order))
-  :general
-  (tyrant-def
-    "sr" '(ivy-bibtex :which-key "search refs")
-    "sR" '(ivy-bibtex-with-notes :which-key "search refs w/ notes")))
+  (with-eval-after-load 'embark
+    (setq bibtex-actions-at-point-function 'embark-act)
 
-(use-package xenops
-  :ensure t
-  :disabled t
-  :hook (LaTeX-mode . xenops-mode)
+    ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
+    (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
+    (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
+    (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))))
+
+(use-package oc-bibtex-actions
+  :ensure citeproc
+  :after oc
   :config
-  (setq xenops-cache-directory (no-littering-expand-var-file-name "xenops")))
+  (setq org-cite-insert-processor 'oc-bibtex-actions
+        org-cite-follow-processor 'oc-bibtex-actions
+        org-cite-activate-processor 'oc-bibtex-actions))
+
+(use-package ebib
+  :ensure t
+  :config
+  (setq ebib-default-directory bibtex-file-path
+        ebib-bib-search-dirs `(,bibtex-file-path)
+        ebib-file-search-dirs `(,(concat bibtex-file-path "files/"))
+        ebib-notes-directory bibtex-notes-path
+        ebib-reading-list-file "~/Documents/Org/reading_list.org"
+
+        ebib-bibtex-dialect bibtex-dialect
+        ebib-file-associations '(("pdf" . "open"))
+        ebib-index-default-sort '("timestamp" . descend)
+        ebib-notes-template ":PROPERTIES:
+:ID:         %K
+:ROAM_REFS: @%K
+:END:
+#+title: %T
+#+description: %D
+#+date: %S
+%%?"
+        ebib-notes-template-specifiers '((?K . ebib-create-key)
+                                         (?T . ebib-create-org-title)
+					                               (?D . ebib-create-org-description)
+                                         (?L . ebib-create-org-link)
+                                         (?S . ebib-create-org-time-stamp))
+        ebib-preload-bib-files bibtex-files
+        ebib-use-timestamp t)
+
+  (defun ebib-create-key (key _db)
+    "Return the KEY in DB for an Org mode note."
+    (format "%s" key))
+
+  (defun ebib-create-org-time-stamp (_key _db)
+    "Create timestamp for an Org mode note."
+    (format "%s" (with-temp-buffer (org-insert-time-stamp nil))))
+
+  (defcustom ebib-zotero-translation-server "https://translate.manubot.org"
+    "The address of Zotero translation server."
+    :group 'ebib
+    :type 'string)
+
+  (defun ebib-zotero-translate (item server-path &optional export-format)
+    "Convert item to EXPORT-FORMAT entry through `ebib-zotero-translation-server'."
+    (let ((export-format (or export-format
+                             (downcase (symbol-name (intern-soft bibtex-dialect))))))
+      (shell-command-to-string
+       (format "curl -s -d '%s' -H 'Content-Type: text/plain' '%s/%s' | curl -s -d @- -H 'Content-Type: application/json' '%s/export?format=%s'" item ebib-zotero-translation-server server-path ebib-zotero-translation-server export-format))))
+
+  (defun ebib-zotero-import-url (url)
+    "Fetch a entry from zotero translation server via a URL.
+The entry is stored in the current database."
+    (interactive "MURL: ")
+    (with-temp-buffer
+      (insert (ebib-zotero-translate url "web"))
+      (ebib-import-entries ebib--cur-db)))
+
+  (defun ebib-zotero-import-identifier (identifier)
+    "Fetch a entry from zotero translation server via an IDENTIFIER.
+The entry is stored in the current database,
+and the identifier can be DOI, ISBN, PMID, or arXiv ID."
+    (interactive "MIDENTIFIER: ")
+    (with-temp-buffer
+      (insert (ebib-zotero-translate identifier "search"))
+      (ebib-import-entries ebib--cur-db)))
+
+  (general-def ebib-index-mode-map
+    "/" 'ebib-jump-to-entry
+    [remap ebib-quit] 'ebib-force-quit)
+
+  (general-def '(ebib-index-mode-map ebib-entry-mode-map)
+    [remap save-buffer] 'ebib-save-current-database)
+  :general
+  (tyrant-def "ab" 'ebib))
 
 
 (provide 'lang-latex)

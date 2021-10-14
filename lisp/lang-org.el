@@ -60,11 +60,6 @@
                           `(lambda (c) (if (char-equal c ?<) t
                                     (,electric-pair-inhibit-predicate c))))
 
-              ;; auto update modified time-stamp when saving
-              (setq-local time-stamp-pattern "^#\\+last_modified:[ \t]%%$"
-                          time-stamp-format "[%Y-%m-%d %a]")
-              (add-hook 'before-save-hook 'time-stamp nil t)
-
               (setq imenu-create-index-function #'org-imenu-get-tree)))
 
   (defun open-org-inbox-file ()
@@ -236,6 +231,12 @@
       (when org-inline-image-overlays
         (org-redisplay-inline-images)))
     (add-hook 'org-babel-after-execute-hook #'ob-fix-inline-images))
+
+  (use-package oc
+    :defer t
+    :config
+    (setq org-cite-activate-processor nil
+          org-cite-global-bibliography '("~/Documents/Bibliography/references.bib")))
 
   (use-package org-capture
     :defer t
@@ -531,6 +532,7 @@ Org Review Transient state
     "i"     '(:ignore t :which-key "insert")
     "ia"    'org-attach
     "ib"    'org-insert-structure-template
+    "ic"    'org-cite-insert
     "id"    'org-insert-drawer
     "ie"    'org-set-effort
     "if"    'org-footnote-new
@@ -743,159 +745,28 @@ go to `org-journal-file-format' file based on TIME."
            (file (format-time-string org-datetree-file-format time)))
       (org-reverse-datetree-refile-to-file file time :ask-always ask-always :prefer prefer))))
 
-(use-package org-ref
+(use-package org-roam
   :ensure t
   :defer t
   :init
-  (setq org-ref-completion-library 'org-ref-ivy-cite)
+  (setq org-roam-capture-templates
+        '(("d" "default" plain "%?" :target
+           (file+head "${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
+           :unnarrowed t))
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
+        org-roam-directory org-note-directory
+        org-roam-v2-ack t)
   :config
-  (setq org-ref-default-bibliography '("~/Documents/Zotero/references.bib"
-                                       "~/Documents/Zotero/refs.bib")
-        org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-        org-ref-notes-function 'org-ref-notes-function-many-files
-        org-ref-notes-directory (concat org-directory "notes/papers/")
-        orhc-bibtex-cache-file (no-littering-expand-var-file-name ".orhc-bibtex-cache"))
+  (org-roam-db-autosync-mode))
 
-  (defun org-ref-open-zotero-at-point ()
-    "Open the Zotero item for bibtex key under point."
-    (interactive)
-    (let ((thekey (org-ref-get-bibtex-key-under-cursor)))
-      (open-file-in-external-app (format "zotero://select/items/@%s" thekey))))
-
-  (defun org-ref-open-in-zotero ()
-    "Open the Zotero item for a bibtex entry, if it exists."
-    (interactive)
-    (save-excursion
-      (bibtex-beginning-of-entry)
-      (let* ((bibtex-expand-strings t)
-             (entry (bibtex-parse-entry t))
-             (thekey (reftex-get-bib-field "=key=" entry)))
-        (open-file-in-external-app (format "zotero://select/items/@%s" thekey)))))
-
-  (general-def org-ref-cite-keymap
-    "<tab>" nil
-    "H-z"  'org-ref-open-zotero-at-point)
-
-  (defhydra org-ref-cite-hydra (:color blue :hint nil)
-    "
-_p_: Open pdf     _w_: WOS          _g_: Google Scholar _K_: Copy citation to clipboard
-_u_: Open url     _r_: WOS related  _P_: Pubmed         _k_: Copy key to clipboard
-_n_: Open notes   _c_: WOS citing   _C_: Crossref       _f_: Copy formatted entry
-_o_: Open entry   _e_: Email entry  ^ ^                 _q_: quit
-_z_: Open zotero  _i_: Insert cite  _h_: change type
-"
-    ("o" org-ref-open-citation-at-point nil)
-    ("p" (funcall org-ref-open-pdf-function) nil)
-    ("n" org-ref-open-notes-at-point nil)
-    ("u" org-ref-open-url-at-point nil)
-    ("z" org-ref-open-zotero-at-point nil)
-    ("w" org-ref-wos-at-point nil)
-    ("r" org-ref-wos-related-at-point nil)
-    ("c" org-ref-wos-citing-at-point nil)
-    ("g" org-ref-google-scholar-at-point nil)
-    ("P" org-ref-pubmed-at-point nil)
-    ("C" org-ref-crossref-at-point nil)
-    ("K" org-ref-copy-entry-as-summary nil)
-    ("k" (progn
-           (kill-new
-            (car (org-ref-get-bibtex-key-and-file))))
-     nil)
-    ("f" (kill-new
-          (org-ref-format-entry (org-ref-get-bibtex-key-under-cursor)))
-     nil)
-
-    ("e" (kill-new (save-excursion
-                     (org-ref-open-citation-at-point)
-                     (org-ref-email-bibtex-entry)))
-     nil)
-    ("i" (funcall org-ref-insert-cite-function))
-    ("h" org-ref-change-cite-type)
-    ("q" nil))
-
-  (defhydra org-ref-bibtex-hydra (:color blue :hint nil)
-    "
-_p_: Open pdf     _y_: Copy key               _N_: New entry            _w_: WOS
-_b_: Open url     _f_: Copy formatted entry   _o_: Copy entry           _c_: WOS citing
-_r_: Refile entry _k_: Add keywords           _d_: delete entry         _a_: WOS related
-_e_: Email entry  _K_: Edit keywords          _L_: clean entry          _P_: Pubmed
-_U_: Update entry _N_: New entry              _R_: Crossref             _g_: Google Scholar
-_s_: Sort entry   _a_: Remove nonascii        _h_: helm-bibtex          _q_: quit
-_u_: Update field _F_: file funcs             _A_: Assoc pdf with entry
-_n_: Open notes   ^ ^                         _T_: Title case
-_z_: Open Zotero  ^ ^                         _S_: Sentence case
-"
-    ("p" org-ref-open-bibtex-pdf)
-    ("P" org-ref-bibtex-pubmed)
-    ("w" org-ref-bibtex-wos)
-    ("c" org-ref-bibtex-wos-citing)
-    ("a" org-ref-bibtex-wos-related)
-    ("R" org-ref-bibtex-crossref)
-    ("g" org-ref-bibtex-google-scholar)
-    ("N" org-ref-bibtex-new-entry/body)
-    ("n" org-ref-open-bibtex-notes)
-    ("z" org-ref-open-in-zotero)
-    ("o" (lambda ()
-           (interactive)
-           (bibtex-copy-entry-as-kill)
-           (message "Use %s to paste the entry"
-                    (substitute-command-keys (format "\\[bibtex-yank]")))))
-    ("d" bibtex-kill-entry)
-    ("L" org-ref-clean-bibtex-entry)
-    ("y" (save-excursion
-           (bibtex-beginning-of-entry)
-           (when (looking-at bibtex-entry-maybe-empty-head)
-             (kill-new (bibtex-key-in-head)))))
-    ("f" (progn
-           (bibtex-beginning-of-entry)
-           (kill-new
-            (org-ref-format-entry
-             (cdr (assoc "=key=" (bibtex-parse-entry t)))))))
-    ("k" helm-tag-bibtex-entry)
-    ("K" (lambda ()
-           (interactive)
-           (org-ref-set-bibtex-keywords
-            (read-string "Keywords: "
-                         (bibtex-autokey-get-field "keywords"))
-            t)))
-    ("b" org-ref-open-in-browser)
-    ("r" (lambda ()
-           (interactive)
-           (bibtex-beginning-of-entry)
-           (bibtex-kill-entry)
-           (find-file (completing-read
-                       "Bibtex file: "
-                       (f-entries "." (lambda (f) (f-ext? f "bib")))))
-           (goto-char (point-max))
-           (bibtex-yank)
-           (save-buffer)
-           (kill-buffer)))
-    ("e" org-ref-email-bibtex-entry)
-    ("U" (doi-utils-update-bibtex-entry-from-doi (org-ref-bibtex-entry-doi)))
-    ("u" doi-utils-update-field)
-    ("F" org-ref-bibtex-file/body)
-    ("h" helm-bibtex)
-    ("A" org-ref-bibtex-assoc-pdf-with-entry)
-    ("a" org-ref-replace-nonascii)
-    ("s" org-ref-sort-bibtex-entry)
-    ("T" org-ref-title-case-article)
-    ("S" org-ref-sentence-case-article)
-    ("q" nil))
-
-  (despot-def org-mode-map "ic" 'org-ref-insert-link)
-
-  (general-def 'normal bibtex-mode-map
-    "RET"      'org-ref-bibtex-hydra/body
-    "C-j"      'org-ref-bibtex-next-entry
-    "C-k"      'org-ref-bibtex-previous-entry
-    "gj"       'org-ref-bibtex-next-entry
-    "gk"       'org-ref-bibtex-previous-entry)
-
-  (despot-def bibtex-mode-map
-    "," 'org-ref-bibtex-file/body
-    "a" 'arxiv-add-bibtex-entry
-    "c" 'crossref-add-bibtex-entry
-    "d" 'doi-add-bibtex-entry
-    "i" 'isbn-to-bibtex))
+(use-package org-roam-protocol
+  :after org-protocol
+  :config
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain "%?" :target
+           (file+head "refs/${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
+           :unnarrowed t))))
 
 (use-package org-superstar
   :ensure t
