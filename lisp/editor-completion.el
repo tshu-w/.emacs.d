@@ -8,38 +8,47 @@
 
 ;;; Code:
 
-(use-package ivy
+(use-package vertico
   :ensure t
-  :hook (after-init . ivy-mode)
+  :hook (after-init . vertico-mode)
   :config
-  (setq ivy-height 15
-        ivy-initial-inputs-alist nil ;; it will change after counsel load
-        ivy-use-selectable-prompt t
-        ivy-use-virtual-buffers t
-        ivy-wrap t
+  (setq vertico-cycle t)
 
-        ivy-re-builders-alist '((t . ivy--cregex-plus))
-        ivy-preferred-re-builders '((ivy--cregex-plus . "ivy")
-                                    (ivy--cregex-ignore-order . "order")
-                                    (ivy--regex-fuzzy . "fuzzy")))
-  (defun ivy-tab ()
-    (interactive)
-    (let ((dir ivy--directory))
-      (ivy-partial-or-done)
-      (when (string= dir ivy--directory)
-        (ivy-insert-current)
-        (when (and (eq (ivy-state-collection ivy-last) #'read-file-name-internal)
-                   (setq dir (ivy-expand-file-if-directory (ivy-state-current ivy-last))))
-          (ivy--cd dir)
-          (setq this-command 'ivy-cd)))))
+  (use-package vertico-directory
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
+    :general
+    (vertico-map
+     "RET"   'vertico-directory-enter
+     "DEL"   'vertico-directory-delete-char
+     "M-DEL" 'vertico-directory-delete-word))
 
-  (defun ivy-c-h ()
-    (interactive)
-    (if (eq (ivy-state-collection ivy-last) #'read-file-name-internal)
-        (if (string-equal (ivy--input) "")
-            (counsel-up-directory)
-          (delete-minibuffer-contents))
-      (ivy-backward-delete-char)))
+  (use-package vertico-quick
+    :general
+    (vertico-map "C-q" 'vertico-quick-exit)))
+
+(use-package marginalia
+  :ensure t
+  :hook (after-init . marginalia-mode))
+
+(use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil)
+  :config
+  (setq orderless-style-dispatchers '(flex-if-twiddle
+                                      without-if-bang))
+
+  (defun flex-if-twiddle (pattern _index _total)
+    (when (string-suffix-p "~" pattern)
+      `(orderless-flex . ,(substring pattern 0 -1))))
+
+  (defun without-if-bang (pattern _index _total)
+    (cond
+     ((equal "!" pattern)
+      '(orderless-literal . ""))
+     ((string-prefix-p "!" pattern)
+      `(orderless-without-literal . ,(substring pattern 1)))))
 
   (use-package pyim
     :ensure t
@@ -47,231 +56,90 @@
     :config
     (setq pyim-default-scheme 'xiaohe-shuangpin))
 
-  (defun ivy--cregex-plus (str)
-    (let ((x (ivy--regex-plus str))
-          (case-fold-search nil))
-      (if (listp x)
-          (mapcar (lambda (y)
-                    (cons (pyim-cregexp-build (car y))
-                          (cdr y)))
-                  x)
-        (if (string= "" x) x (pyim-cregexp-build x)))))
+  (defun orderless-pinyin-regexp (func component)
+    (let ((result (funcall func component)))
+      (pyim-cregexp-build result)))
 
-  (defun ivy--cregex-ignore-order (str)
-    (let ((x (ivy--regex-ignore-order str))
-          (case-fold-search nil))
-      (if (listp x)
-          (mapcar (lambda (y)
-                    (cons (pyim-cregexp-build (car y))
-                          (cdr y)))
-                  x)
-        (if (string= "" x) x (pyim-cregexp-build x)))))
+  (advice-add 'orderless-regexp :around #'orderless-pinyin-regexp)
 
-  (general-def '(ivy-minibuffer-map ivy-switch-buffer-map)
-    "<tab>"    'ivy-tab
-    "C-h"      'ivy-c-h
-    "C-S-h"    help-map))
+  (advice-add 'company-capf
+              :around
+              (lambda (capf-fn &rest args)
+                (let ((completion-styles '(basic partial-completion substring)))
+                  (apply capf-fn args)))))
 
-(use-package ivy-hydra :ensure t :defer t)
-
-(use-package ivy-rich
+(use-package consult
   :ensure t
-  ;; if `counsel' loads after `ivy-rich', it overrides some of `ivy-rich''s
-  ;; transformers
-  :hook ((counsel-mode . ivy-rich-mode)
-         (ivy-rich-mode . ivy-rich-project-root-cache-mode))
+  :init
+  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   :config
-  (setq ivy-rich-path-style 'abbrev
-        ivy-virtual-abbreviate 'abbreviate
-        ivy-rich-parse-remote-buffer nil)
+  (setq consult-narrow-key "<"
+        consult-project-root-function (lambda () (when-let (project (project-current))
+                                              (car (project-roots project)))))
 
-  (plist-put ivy-rich-display-transformers-list 'package-reinstall 'ivy-rich--package-install-transformer)
-  (plist-put ivy-rich-display-transformers-list 'describe-package 'ivy-rich--package-install-transformer)
-
-  (defun ivy-rich-describe-variable-transformer (cand)
-    "Previews the value of the variable in the minibuffer"
-    (let* ((sym (intern cand))
-           (val (and (boundp sym) (symbol-value sym)))
-           (print-level 3))
-      (replace-regexp-in-string
-       "[\n\t\^[\^M\^@\^G]" " "
-       (cond ((booleanp val)
-              (propertize (format "%s" val) 'face
-                          (if (null val)
-                              'font-lock-comment-face
-                            'font-lock-function-name-face)))
-             ((symbolp val)
-              (propertize (format "'%s" val)
-                          'face 'font-lock-keyword-face))
-             ((keymapp val)
-              (propertize "<keymap>" 'face 'font-lock-constant-face))
-             ((listp val)
-              (prin1-to-string val))
-             ((stringp val)
-              (propertize (format "%S" val) 'face 'font-lock-string-face))
-             ((numberp val)
-              (propertize (format "%s" val) 'face 'font-lock-doc-face))
-             ((format "%s" val)))
-       t)))
-
-  (ivy-rich-set-columns 'counsel-describe-variable
-                        '((counsel-describe-variable-transformer (:width 0.3)) ; the original transformer
-                          (ivy-rich-describe-variable-transformer (:width 15))
-                          (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))
-
-  (defun ivy-rich-file-group (candidate)
-    "Displays the file group of the candidate for ivy-rich"
-    (let ((candidate (expand-file-name candidate ivy--directory)))
-      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
-          ""
-        (let* ((group-id (file-attribute-group-id (file-attributes candidate)))
-               (group-function (if (fboundp #'group-name) #'group-name #'identity))
-               (group-name (funcall group-function group-id)))
-          (format "%s" group-name)))))
-
-  (defun ivy-rich-file-modes (candidate)
-    "Displays the file mode of the candidate for ivy-rich."
-    (let ((candidate (expand-file-name candidate ivy--directory)))
-      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
-          ""
-        (format "%s" (file-attribute-modes (file-attributes candidate))))))
-
-  (defun ivy-rich-file-size (candidate)
-    "Displays the file size of the candidate for ivy-rich."
-    (let ((candidate (expand-file-name candidate ivy--directory)))
-      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
-          ""
-        (let ((size (file-attribute-size (file-attributes candidate))))
-          (cond
-           ((> size 1000000) (format "%.1fM " (/ size 1000000.0)))
-           ((> size 1000) (format "%.1fk " (/ size 1000.0)))
-           (t (format "%d " size)))))))
-
-  (defun ivy-rich-file-user (candidate)
-    "Displays the file user of the candidate for ivy-rich."
-    (let ((candidate (expand-file-name candidate ivy--directory)))
-      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
-          ""
-        (let* ((user-id (file-attribute-user-id (file-attributes candidate)))
-               (user-name (user-login-name user-id)))
-          (format "%s" user-name)))))
-
-  (defun ivy-rich-file-last-modified-time (candidate)
-    (let ((candidate (expand-file-name candidate ivy--directory)))
-      (if (or (not (file-exists-p candidate)) (file-remote-p candidate))
-          ""
-        (format-time-string "%Y-%m-%d %H:%M:%S" (nth 5 (file-attributes candidate))))))
-
-  (ivy-rich-set-columns 'counsel-find-file
-                        '((ivy-rich-candidate               (:width 0.35))
-                          (ivy-rich-file-user               (:width 11 :face font-lock-doc-face))
-                          (ivy-rich-file-group              (:width 11 :face font-lock-doc-face))
-                          (ivy-rich-file-modes              (:width 10 :face font-lock-doc-face))
-                          (ivy-rich-file-size               (:width 8  :face font-lock-doc-face))
-                          (ivy-rich-file-last-modified-time (:width 20 :face font-lock-doc-face))))
-
-  ;; https://github.com/Yevgnen/ivy-rich/issues/87#issuecomment-689581896
-  (progn
-    (defvar ivy-rich-cache
-      (make-hash-table :test 'equal))
-
-    (defun ivy-rich-cache-lookup (delegate candidate)
-      (let ((result (gethash candidate ivy-rich-cache)))
-        (unless result
-          (setq result (funcall delegate candidate))
-          (puthash candidate result ivy-rich-cache))
-        result))
-
-    (defun ivy-rich-cache-reset ()
-      (clrhash ivy-rich-cache))
-
-    (defun ivy-rich-cache-rebuild ()
-      (mapc (lambda (buffer)
-              (ivy-rich--ivy-switch-buffer-transformer (buffer-name buffer)))
-            (buffer-list)))
-
-    (defun ivy-rich-cache-rebuild-trigger ()
-      (ivy-rich-cache-reset)
-      (run-with-idle-timer 1 nil 'ivy-rich-cache-rebuild))
-
-    (advice-add 'ivy-rich--ivy-switch-buffer-transformer :around 'ivy-rich-cache-lookup)
-    (advice-add 'ivy-switch-buffer :after 'ivy-rich-cache-rebuild-trigger)))
-
-(use-package ivy-posframe
-  :ensure t
-  :hook (ivy-mode . ivy-posframe-mode)
-  :custom-face (fringe ((t (:background nil))))
-  :config
-  (setq ivy-posframe-parameters '((left-fringe . 8)
-                                  (right-fringe . 8))
-        ivy-posframe-display-functions-alist
-        '((complete-symbol . ivy-posframe-display-at-point)
-          (swiper . ivy-display-function-fallback)
-          (swiper-all . ivy-display-function-fallback)
-          (t . ivy-posframe-display-at-frame-center))))
-
-(use-package counsel
-  :ensure t
-  :hook (after-init . counsel-mode)
-  :config
-  (setq ivy-height-alist '((counsel-evil-registers . 20)))
-
-  (defun counsel-rg-region-or-symbol ()
-    "Use `counsel-rg' to search for
-    the selected region or the symbol around point in the current
-    directory."
-    (interactive)
-    (counsel-rg (if (region-active-p)
-                    (buffer-substring-no-properties
-                     (region-beginning) (region-end))
-                  (thing-at-point 'symbol t))))
+  (consult-customize consult-theme
+                     :preview-key '(:debounce 0.2 any)
+                     consult-ripgrep consult-git-grep consult-grep
+                     consult-bookmark consult-recent-file consult-xref
+                     consult--source-file consult--source-project-file consult--source-bookmark
+                     :preview-key (kbd "M-."))
   :general
+  ([remap switch-to-buffer] 'consult-buffer
+   [remap imenu] 'consult-imenu)
   (tyrant-def
-    "fL" '(counsel-locate :which-key "locate-file")
-    "sd" '(counsel-rg :which-key "search dir")
-    "sD" '(counsel-rg-region-or-symbol :which-key "search dir w/ input")))
+    "sI" '(consult-imenu-multi :which-key "imenu-multi")
+    "sf" '(consult-find :which-key "locate files")
+    "ss" '(consult-line :which-key "search lines")
+    "sS" '(consult-line-multi :which-key "search lines a/ buffers")
+    "/"  '(consult-ripgrep :which-key "search w/ regex")
+    "tt" 'consult-minor-mode-menu))
 
-(use-package swiper
+(use-package embark
   :ensure t
   :config
-  (defun counsel-current-region-or-symbol ()
-    "Return contents of the region or symbol at point.
+  (with-eval-after-load 'which-key
+    (defun embark-which-key-indicator ()
+      "An embark indicator that displays keymaps using which-key.
+The which-key help message will show the type and value of the
+current target followed by an ellipsis if there are further
+targets."
+      (lambda (&optional keymap targets prefix)
+        (if (null keymap)
+            (which-key--hide-popup-ignore-command)
+          (which-key--show-keymap
+           (if (eq (caar targets) 'embark-become)
+               "Become"
+             (format "Act on %s '%s'%s"
+                     (plist-get (car targets) :type)
+                     (embark--truncate-target (plist-get (car targets) :target))
+                     (if (cdr targets) "…" "")))
+           (if prefix
+               (pcase (lookup-key keymap prefix 'accept-default)
+                 ((and (pred keymapp) km) km)
+                 (_ (key-binding prefix 'accept-default)))
+             keymap)
+           nil nil t (lambda (binding)
+                       (not (string-suffix-p "-argument" (cdr binding))))))))
 
-If region is active, mark will be deactivated in order to prevent region
-expansion when jumping around the buffer with counsel. See `deactivate-mark'."
-    (if (region-active-p)
-        (prog1
-            (buffer-substring-no-properties (region-beginning) (region-end))
-          (deactivate-mark))
-      (thing-at-point 'symbol t)))
+    (setq embark-indicators '(embark-which-key-indicator
+                              embark-highlight-indicator
+                              embark-isearch-highlight-indicator)))
 
-  (defun swiper-region-or-symbol ()
-    "Run `swiper' with the selected region or the symbol
-around point as the initial input."
-    (interactive)
-    (let ((input (counsel-current-region-or-symbol)))
-      (swiper input)))
+  (with-eval-after-load 'vertico
+    (defun embark-vertico-indicator ()
+      (let ((fr face-remapping-alist))
+        (lambda (&optional keymap _targets prefix)
+          (when (bound-and-true-p vertico--input)
+            (setq-local face-remapping-alist
+                        (if keymap
+                            (cons '(vertico-current . embark-target) fr)
+                          fr))))))
 
-  (defun swiper-all-region-or-symbol ()
-    "Run `swiper-all' with the selected region or the symbol
-around point as the initial input."
-    (interactive)
-    (let ((input (counsel-current-region-or-symbol)))
-      (swiper-all input)))
+    (add-to-list 'embark-indicators #'embark-vertico-indicator))
   :general
-  (tyrant-def
-    "ss"  '(swiper :which-key "search buffer")
-    "sS"  '(swiper-region-or-symbol :which-key "search buffer w/ input")
-    "sb"  '(swiper-all :which-key "search buffers")
-    "sB"  '(swiper-all-region-or-symbol :which-key "search buffers w/ input")))
-
-(use-package counsel-tramp
-  :ensure t
-  :general
-  (tyrant-def "ft" '(counsel-tramp :which-key "tramp-file")))
-
-(use-package wgrep :ensure t :defer t)
-
+  ("C-." 'embark-act
+   "M-." 'embark-dwim)
+  (embark-file-map "s" 'sudo-edit))
 
 (use-package company
   :ensure t
@@ -353,13 +221,6 @@ around point as the initial input."
   :ensure t
   :hook (after-init . prescient-persist-mode)
   :init
-  (use-package ivy-prescient
-    :ensure t
-    :after counsel
-    :hook (ivy-mode . ivy-prescient-mode)
-    :config
-    (setq ivy-prescient-enable-filtering nil))
-
   (use-package company-prescient
     :ensure t
     :hook (company-mode . company-prescient-mode))

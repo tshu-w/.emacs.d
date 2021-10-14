@@ -50,7 +50,7 @@
   :defer t
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  (setq dumb-jump-selector 'ivy))
+  (setq dumb-jump-selector 'completing-read))
 
 (use-package editorconfig
   :disabled t
@@ -75,11 +75,6 @@
 
 (use-package helpful
   :ensure t
-  :init
-  (with-eval-after-load 'counsel
-    (setq counsel-describe-function-function #'helpful-callable
-          counsel-describe-variable-function #'helpful-variable
-          counsel-descbinds-function         #'helpful-callable))
   :config
   (defun helpful-reuse-window (buffer-or-name)
     "Switch to helpful BUFFER-OR-NAME.
@@ -93,6 +88,9 @@ reuse it's window, otherwise create new one."
   (setq helpful-max-buffers 3
         helpful-switch-buffer-function #'helpful-reuse-window)
   :general
+  ([remap describe-variable] 'helpful-variable
+   [remap describe-function] 'helpful-callable
+   [remap describe-symbol]   'helpful-symbol)
   (tyrant-def "hk" '(helpful-key :which-key "describe-key")))
 
 (use-package link-hint
