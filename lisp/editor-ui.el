@@ -83,10 +83,10 @@
                        modus-operandi)
   "Light themes to switch.")
 
-(defvar dark-themes '(doom-1337
+(defvar dark-themes '(;; doom-1337
                       ;; doom-acario-dark
                       ;; doom-ayu-mirage
-                      doom-badger
+                      ;; doom-badger
                       doom-challenger-deep
                       doom-city-lights
                       doom-dark+
@@ -99,7 +99,7 @@
                       doom-horizon
                       doom-Iosvkem
                       ;; doom-ir-black
-                      doom-laserwave
+                      ;; doom-laserwave
                       ;; doom-manegarm
                       doom-material
                       ;; doom-miramare
