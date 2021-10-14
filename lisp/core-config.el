@@ -249,6 +249,25 @@
         (comment-or-uncomment-region
          (line-beginning-position) (line-end-position))))))
 
+(use-package project
+  :defer t
+  :config
+  (setq project-current-inhibit-prompt t
+        project-vc-merge-submodules nil)
+
+  (defun project-vc-dir ()
+    "Run VC-Dir in the current project's root."
+    (interactive)
+    (let ((project-root (project-root (project-current t))))
+      (if (file-exists-p (expand-file-name ".git" project-root))
+          (cond ((fboundp 'magit-status-internal)
+                 (magit-status-internal project-root))
+                ((fboundp 'magit-status)
+                 (with-no-warnings (magit-status project-root)))
+                (t
+                 (vc-dir project-root)))
+        (vc-dir project-root)))))
+
 (use-package recentf
   :defer t
   :config

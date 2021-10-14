@@ -74,8 +74,7 @@
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   :config
   (setq consult-narrow-key "<"
-        consult-project-root-function (lambda () (when-let (project (project-current))
-                                              (car (project-roots project)))))
+        consult-project-root-function (lambda () (project-root (project-current t))))
 
   (consult-customize consult-theme
                      :preview-key '(:debounce 0.2 any)
@@ -298,7 +297,7 @@ returns the command to execute."
     (lsp))
 
   (tyrant-def lsp-mode :definer 'minor-mode
-    "l" lsp-command-map
+    "l"  '(:keymap lsp-command-map)
     "lR" '(lsp-restart :which-key "restart")))
 
 
