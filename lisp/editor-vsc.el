@@ -161,6 +161,7 @@
 
 (use-package gist
   :ensure t
+  :disabled t
   :config
   (evil-set-initial-state 'gist-list-mode 'motion)
   (general-def 'motion 'gist-list-menu-mode-map
