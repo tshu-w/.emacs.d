@@ -81,17 +81,22 @@
                      consult-ripgrep consult-git-grep consult-grep
                      consult-bookmark consult-recent-file consult-xref
                      consult--source-file consult--source-project-file consult--source-bookmark
+                     consult-org-heading consult-org-agenda
                      :preview-key (kbd "M-."))
   :general
-  ([remap switch-to-buffer] 'consult-buffer
-   [remap imenu] 'consult-imenu)
+  ([remap switch-to-buffer]    'consult-buffer
+   [remap goto-line]           'consult-goto-line
+   [remap imenu]               'consult-imenu
+   [remap project-find-regexp] 'consult-ripgrep)
   (tyrant-def
-    "sI" '(consult-imenu-multi :which-key "imenu-multi")
-    "sf" '(consult-find :which-key "locate files")
-    "ss" '(consult-line :which-key "search lines")
-    "sS" '(consult-line-multi :which-key "search lines a/ buffers")
-    "/"  '(consult-ripgrep :which-key "search w/ regex")
-    "tt" 'consult-minor-mode-menu))
+    "jI" '(consult-imenu-multi :which-key "imenu-multi")
+    "fl" '(consult-find :which-key "locate-files")
+    "jj" '(consult-line :which-key "search lines")
+    "jJ" '(consult-line-multi :which-key "search lines a/ buffers")
+    "tt" 'consult-minor-mode-menu)
+  (org-mode-map
+   [remap consult-imenu]       'consult-org-heading
+   [remap consult-imenu-multi] 'consult-org-agenda))
 
 (use-package embark
   :ensure t

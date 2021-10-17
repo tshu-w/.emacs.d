@@ -57,11 +57,8 @@
     "bB"      'switch-to-buffer-other-window
     "bd"      'kill-current-buffer
     "bh"      'switch-to-help-buffer
-    "bj"      'bookmark-jump
-    "bJ"      'bookmark-jump-other-window
     "bm"      'switch-to-messages-buffer
     "bs"      'switch-to-scratch-buffer
-    "bS"      'bookmark-set
     "bu"      'reopen-killed-buffer
     "bx"      'kill-buffer-and-window
     "b C-d"   'kill-other-buffers
@@ -85,8 +82,6 @@
     "fE"      'sudo-edit
     "ff"      'find-file
     "fj"      'dired-jump
-    "fJ"      'dired-jump-other-window
-    "fl"      'find-file-literally
     "fo"      'open-file-or-directory-in-external-app
     "fr"      'read-only-mode
     "fR"      'rename-current-buffer-file
@@ -125,6 +120,10 @@
     "hPk"     'profiler-stop
     "hPr"     'profiler-report
 
+    "j"       '(:ignore t :which-key "jump")
+    "ji"      'imenu
+    "jb"      'bookmark-jump
+    "js"      'bookmark-set
 
     "p"       '(:keymap project-prefix-map :which-key "projects")
 
@@ -135,9 +134,6 @@
     "qR"      'restart-emacs-without-desktop
     "qq"      'save-buffers-kill-terminal
     "qQ"      'kill-emacs
-
-    "s"       '(:ignore t :which-key "search")
-    "si"      'imenu
 
     "t"       '(:ignore t :which-key "toggles")
     "ta"      'auto-fill-mode
