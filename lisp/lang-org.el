@@ -13,7 +13,7 @@
   :init
   (setq org-directory "~/Documents/Org/"
         org-note-directory (concat org-directory "notes/")
-        org-journal-directory (concat org-directory "journals/")
+        org-log-directory (concat org-directory "logs/")
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file
@@ -82,14 +82,14 @@
     "Get the list of `org-mode' file in `org-note-directory'."
     (find-lisp-find-files org-note-directory "\.org$"))
 
-  (defun org-journal-files ()
-    "Get the list of `org-mode' file in `org-journal-directory'."
-    (find-lisp-find-files org-journal-directory "\.org$"))
+  (defun org-log-files ()
+    "Get the list of `org-mode' file in `org-log-directory'."
+    (find-lisp-find-files org-log-directory "\.org$"))
 
   (use-package org-agenda
     :defer t
     :init
-    (setq org-agenda-files `(,org-directory ,org-journal-directory))
+    (setq org-agenda-files `(,org-directory ,org-log-directory))
     :config
     (require 'org-habit)
 
@@ -244,8 +244,6 @@
     (setq org-capture-templates
           '(("i" "Inbox" entry (file org-inbox-file) "* %?\n%i\n")
             ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
-            ("j" "Journal" entry (function org-datetree-goto-location)
-             "* %<%H:%M> %?\n" :clock-in t :clock-keep t)
             ("l" "Link")
             ("ll" "Web link" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
@@ -253,6 +251,8 @@
              "* %?\n%a\n%i\n")
             ("lt" "Todo with link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n")
+            ("L" "Log" entry (function org-datetree-goto-location)
+             "* %<%H:%M> %?\n" :clock-in t :clock-keep t)
             ("r" "Review")
             ("ry" "Yesterday" entry (function
                                      (lambda ()
@@ -713,7 +713,7 @@ Org Review Transient state
   :init
   (setq-default org-reverse-datetree-level-formats '("%Y" "%Y-%m %B" "%Y W%W" "%Y-%m-%d %A"))
   :config
-  (setq org-datetree-file-format (concat org-journal-directory "%Y.org"))
+  (setq org-datetree-file-format (concat org-log-directory "%Y.org"))
 
   (defun org-datetree-goto-location (&optional time)
     "wrapper for `org-reverse-datetree-goto-date-in-file'.
@@ -726,7 +726,7 @@ go to `org-datetree-file-format' file based on TIME."
 
   (defun org-datetree-goto-read-date-location (&optional time)
     "wrapper for `org-reverse-datetree-goto-read-date-in-file'.
-go to `org-journal-file-format' file based on TIME."
+go to `org-datetree-file-format' file based on TIME."
     (interactive)
     (let* ((time (or time (org-read-date nil t nil)))
            (file (format-time-string org-datetree-file-format time)))
@@ -736,7 +736,7 @@ go to `org-journal-file-format' file based on TIME."
 
   (defun org-datetree-refile (ask-always &optional time prefer)
     "wrapper for `org-reverse-datetree-refile-to-file'.
-go to `org-journal-file-format' file based on TIME."
+go to `org-datetree-file-format' file based on TIME."
     (interactive "P")
     (let* ((prefer (or prefer '("CLOSED")))
            (time (or time (org-reverse-datetree--get-entry-time
