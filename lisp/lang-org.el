@@ -774,12 +774,6 @@ go to `org-journal-file-format' file based on TIME."
   :config
   (org-superstar-configure-like-org-bullets))
 
-(use-package toc-org
-  :ensure t
-  :after org
-  :general
-  (despot-def org-mode-map "TT" 'toc-org-mode))
-
 
 (provide 'lang-org)
 ;;; lang-org.el ends here

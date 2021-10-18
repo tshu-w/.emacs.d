@@ -34,17 +34,6 @@
 
     (setq alert-default-style 'notifier)))
 
-(use-package calibredb
-  :ensure t
-  :config
-  (setq calibredb-root-dir "~/Documents/Calibre"
-        calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir)
-        calibredb-library-alist '(("~/Documents/Calibre")))
-  (evil-set-initial-state 'calibredb-search-mode 'motion)
-  (general-def 'motion calibredb-search-mode-map "/" 'calibredb-search-live-filter)
-  :general
-  (tyrant-def "aC" 'calibredb))
-
 (use-package dumb-jump
   :ensure t
   :defer t
@@ -72,6 +61,13 @@
   :config
   (elfeed-org)
   (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
+
+(use-package fcitx
+  :ensure t
+  :after exec-path-from-shell
+  :init
+  (fcitx-aggressive-setup)
+  (fcitx-prefix-keys-turn-off))
 
 (use-package helpful
   :ensure t
@@ -169,12 +165,15 @@ reuse it's window, otherwise create new one."
     "M-j"   'rime-force-enable
     "C-`"   'rime-send-keybinding))
 
-(use-package fcitx
+(use-package terminal-here
   :ensure t
-  :after exec-path-from-shell
-  :init
-  (fcitx-aggressive-setup)
-  (fcitx-prefix-keys-turn-off))
+  :config
+  (setq terminal-here-mac-terminal-command 'iterm2
+        terminal-here-project-root-function (lambda () (project-root (project-current t))))
+  :general
+  (tyrant-def
+    "\""   'terminal-here-launch
+    "p \"" 'terminal-here-project-launch))
 
 (use-package undohist
   :ensure t

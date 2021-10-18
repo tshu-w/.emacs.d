@@ -10,7 +10,6 @@
 
 (use-package dockerfile-mode :ensure t :defer t)
 
-
 (use-package js
   :defer t
   :mode ("\\.json\\'" . json-mode)
@@ -37,13 +36,6 @@
 (use-package web-mode :ensure t :defer t)
 
 (use-package yaml-mode :ensure t :defer t)
-
-(use-package sparql-mode
-  :ensure t
-  :mode ("\\.sparql\\'" "\\.rq\\'")
-  :init
-  (use-package ob-sparql
-    :commands (org-babel-execute:sparql)))
 
 (provide 'lang-misc)
 ;;; lang-misc.el ends here

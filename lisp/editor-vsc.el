@@ -159,25 +159,6 @@
 
 (use-package gitignore-mode :ensure t :defer t)
 
-(use-package gist
-  :ensure t
-  :disabled t
-  :config
-  (evil-set-initial-state 'gist-list-mode 'motion)
-  (general-def 'motion 'gist-list-menu-mode-map
-    "K"   'gist-kill-current
-    "o"   'gist-browse-current-url
-    "gr"  'gist-list-reload
-    "RET" 'gist-fetch-current)
-  :general
-  (tyrant-def
-    "gg"  '(:ignore t :which-key "github gist")
-    "ggb" 'gist-buffer
-    "ggB" 'gist-buffer-private
-    "ggl" 'gist-list
-    "ggr" 'gist-region
-    "ggR" 'gist-region-private))
-
 (use-package github-stars :ensure t :defer t)
 
 
