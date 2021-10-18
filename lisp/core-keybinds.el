@@ -412,13 +412,6 @@
   :ensure t
   :hook (after-init . evil-indent-plus-default-bindings))
 
-(use-package evil-matchit
-  :ensure t
-  :hook ((prog-mode LaTeX-mode) . turn-on-evil-matchit-mode)
-  :config
-  (setq evilmi-forward-chars (string-to-list "[{(<")
-        evilmi-backward-chars (string-to-list "]})>")))
-
 (use-package evil-owl
   :ensure t
   :hook (after-init . evil-owl-mode)
