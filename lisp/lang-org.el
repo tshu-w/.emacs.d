@@ -382,7 +382,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
 
   (use-package ox-latex
     :defer t
-    :config
+    :init
     (setq org-latex-compiler "xelatex"
           org-latex-packages-alist '(("" "mathspec" t))
           org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -bibtex -f %f"
