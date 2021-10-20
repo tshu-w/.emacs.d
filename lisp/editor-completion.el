@@ -36,9 +36,6 @@
   (setq completion-styles '(orderless)
         completion-category-defaults nil)
   :config
-  (setq orderless-style-dispatchers '(flex-if-twiddle
-                                      without-if-bang))
-
   (defun flex-if-twiddle (pattern _index _total)
     (when (string-suffix-p "~" pattern)
       `(orderless-flex . ,(substring pattern 0 -1))))
@@ -56,11 +53,17 @@
     :config
     (setq pyim-default-scheme 'xiaohe-shuangpin))
 
-  (defun orderless-pinyin-regexp (func component)
-    (let ((result (funcall func component)))
-      (pyim-cregexp-build result)))
+  (defun orderless-pinyin-regexp (component)
+    "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
+    (pyim-cregexp-build (orderless-regexp component)))
 
-  (advice-add 'orderless-regexp :around #'orderless-pinyin-regexp)
+  (defun pinyin-if-bang (pattern _index _total)
+    (when (string-suffix-p "!" pattern)
+      `(orderless-pinyin-regexp . ,(substring pattern 0 -1))))
+
+  (setq orderless-style-dispatchers '(flex-if-twiddle
+                                      without-if-bang
+                                      pinyin-if-bang))
 
   (advice-add 'company-capf
               :around
@@ -142,8 +145,12 @@ targets."
     (add-to-list 'embark-indicators #'embark-vertico-indicator))
   :general
   ("C-." 'embark-act
-   "M-." 'embark-dwim)
-  (embark-file-map "s" 'sudo-edit))
+   "M-." 'embark-dwim))
+
+(use-package embark-consult
+  :ensure t
+  :after (consult embark))
+
 
 (use-package company
   :ensure t
@@ -182,10 +189,9 @@ targets."
         "Enable `yasnippet' in `company'."
         (setq company-backends
               (mapcar #'company-backend-with-yas company-backends)))
-
       (company-enable-yas)
 
-      (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
+      (defun company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
         "Enable yasnippet but disable it inline."
         (if (eq command 'prefix)
             (when-let ((prefix (funcall fun 'prefix)))
@@ -193,7 +199,7 @@ targets."
                 prefix))
           (funcall fun command arg)))
 
-      (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline))))
+      (advice-add #'company-yasnippet :around #'company-yasnippet-disable-inline))))
 
 (use-package company-box
   :ensure t
@@ -206,8 +212,7 @@ targets."
 (use-package company-try-hard
   :ensure t
   :general
-  (general-def "C-;" 'company-try-hard)
-  (general-def company-active-map "C-;" 'company-try-hard))
+  ("C-;" 'company-try-hard))
 
 (use-package company-tabnine
   :ensure t
@@ -260,7 +265,7 @@ targets."
         lsp-signature-render-documentation nil
         lsp-keymap-prefix "SPC l")
 
-  (defun lsp-tramp-connection (local-command &optional generate-error-file-fn)
+  (defun lsp-tramp-connection@override (local-command &optional generate-error-file-fn)
     "Create LSP stdio connection named name.
 LOCAL-COMMAND is either list of strings, string or function which
 returns the command to execute."
@@ -293,6 +298,7 @@ returns the command to execute."
                        (cons proc proc)))
           :test? (lambda () (-> local-command lsp-resolve-final-function
                            lsp-server-present?))))
+  (advice-add 'lsp-tramp-connection :override #'lsp-tramp-connection@override)
 
   ;; https://github.com/emacs-lsp/lsp-mode/issues/2932
   (defun lsp-restart ()
@@ -312,13 +318,8 @@ returns the command to execute."
   :config
   (setq yas-triggers-in-field t
         yas-wrap-around-region t)
-
   ;; disable yas minor mode map
   (setq yas-minor-mode-map (make-sparse-keymap)))
-
-(use-package yasnippet-snippets
-  :ensure t
-  :after yasnippet)
 
 
 (provide 'editor-completion)

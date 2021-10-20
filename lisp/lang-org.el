@@ -48,7 +48,7 @@
         org-track-ordered-property-with-tag t
         org-use-property-inheritance t
         org-use-sub-superscripts '{}
-        org-export-with-sub-superscripts org-use-sub-superscripts
+        org-export-with-sub-superscripts '{}
         org-yank-adjusted-subtrees t)
 
   (add-hook 'org-mode-hook
@@ -166,7 +166,7 @@
               (org-agenda-span 1)
               (org-deadline-warning-days 30)))))
 
-    (advice-add 'org-agenda-quit :before #'org-save-all-org-buffers)
+    (advice-add 'org-agenda-exit :before #'org-save-all-org-buffers)
 
     (setq org-priority-get-priority-function
           (defun org-inherited-priority (s)
@@ -659,10 +659,10 @@ Org Review Transient state
   :config
   (defun surround-drawer ()
     (let ((dname (read-from-minibuffer "" "")))
-      (cons (format ":%s:" (upcase (or dname ""))) ":END:")))
+      (cons (format ":%s:" (upcase (or dname ""))) ":end:")))
   (defun surround-code ()
     (let ((dname (read-from-minibuffer "" "")))
-      (cons (format "#+BEGIN_SRC %s" (or dname "")) "#+END_SRC")))
+      (cons (format "#+begin_src %s" (or dname "")) "#+end_src")))
 
   (with-eval-after-load 'evil-surround
     (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
@@ -671,16 +671,18 @@ Org Review Transient state
 (use-package appt
   :after org
   :config
-  (appt-activate 1)
+  (let ((inhibit-message t))
+    (appt-activate 1))
 
   (fset 'diary-list-entries 'ignore)
 
-  (defun appt-disp-alert (min-to-appt current-time appt-msg)
+  (defun appt-disp-alert (min-to-appt current-time _appt-msg)
     (alert (format "Appointment in %s minutes" min-to-appt)
            :title (format "%s" appt-msg)))
 
   (defun org-agenda-to-appt-refresh ()
-    (org-agenda-to-appt t))
+    (let ((inhibit-message t))
+      (org-agenda-to-appt t)))
 
   (setq appt-display-diary nil
         appt-display-interval 5

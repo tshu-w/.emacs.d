@@ -13,46 +13,43 @@
 (setq package-archives '(("melpa"        . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("gnu"          . "https://elpa.gnu.org/packages/")
-                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/"))
-      package-user-dir (concat user-emacs-directory "elpa/"
-                               (format "%d%s%d"
-                                       emacs-major-version
-                                       version-separator
-                                       emacs-minor-version)))
+                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")))
 
 ;; initialize packages
-(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
-  (setq package-enable-at-startup nil)          ; To prevent initializing twice
-  (setq package-check-signature nil)
-  (package-initialize))
+(setq package-quickstart t
+      package-quickstart-file (concat user-emacs-directory "var/package-quickstart.el"))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-;; setup `use-package'
+;; bootstrap `use-package'
 (unless (package-installed-p 'use-package)
-  (when (not package-archive-contents)
-    (package-refresh-contents))
   (package-install 'use-package))
-
-(eval-when-compile
-  (setq use-package-expand-minimally t)
+(eval-and-compile
   (if init-file-debug
       (setq use-package-verbose t
             use-package-minimum-reported-time 0
-            use-package-expand-minimally nil
             use-package-compute-statistics t
             use-package-inject-hooks t
-            debug-on-error t))
-
+            debug-on-error t)))
+(eval-when-compile
   (require 'use-package))
+
 
 (use-package auto-package-update
   :ensure t
-  :defer t
-  :init
-  (defalias 'package-upgrade #'auto-package-update-now
-    "Update installed Emacs packages.")
+  :commands package-upgrade
   :config
   (setq auto-package-update-delete-old-versions t
-        auto-package-update-hide-results t))
+        auto-package-update-hide-results t)
+
+  (defun package-upgrade ()
+    "Update installed Emacs packages."
+    (interactive)
+    (auto-package-update-now)
+    (package-quickstart-refresh))
+
+  (fset 'apu--write-current-day 'ignore))
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -61,33 +58,23 @@
   :init
   (setq exec-path-from-shell-arguments '("-l")
         exec-path-from-shell-variables '("PATH" "MANPATH"
-                                         "DOCKER_CONFIG"
                                          "GNUPGHOME"
-                                         "MACHINE_STORAGE_PATH"
-                                         "NPM_CONFIG_USERCONFIG"
-                                         "VIMINIT"
                                          "WAKATIME_HOME"
                                          "SSH_AUTH_SOCK"))
   (exec-path-from-shell-initialize))
 
-(use-package benchmark-init
-  :ensure t
-  :disabled t
-  :init (benchmark-init/activate)
-  ;; To disable collection of benchmark data after init is done.
-  :hook (after-init . benchmark-init/deactivate))
-
 (use-package no-littering :ensure t :defer t)
+
+(use-package esup :ensure t :defer t)
 
 (use-package restart-emacs
   :ensure t
-  :commands (restart-emacs restart-emacs-debug-init)
+  :commands restart-emacs-debug-init
   :config
   (defun restart-emacs-debug-init (&optional args)
     "Restart emacs and enable debug-init."
     (interactive)
     (restart-emacs (cons "--debug-init" args))))
-
 
 (provide 'core-packages)
 ;;; core-packages.el ends here

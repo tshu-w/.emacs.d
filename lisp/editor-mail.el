@@ -39,7 +39,6 @@
         mu4e-completing-read-function 'completing-read
         mu4e-compose-complete-only-personal t
         mu4e-compose-dont-reply-to-self t
-        mu4e-compose-format-flowed nil
         mu4e-compose-reply-ignore-address '("not?\\(?:_-\\)?reply")
         mu4e-confirm-quit nil
         mu4e-headers-fields '((:account . 10)
@@ -52,7 +51,7 @@
         mu4e-view-prefer-html nil
         mu4e-view-show-addresses t
         mu4e-view-show-images t
-        mu4e-view-image-max-width 800)
+        mu4e-view-image-max-width 700)
 
   ;; Add a column to display what email account the email belongs to.
   (add-to-list 'mu4e-header-info-custom
@@ -193,11 +192,6 @@
   :general
   (tyrant-def "am" 'mu4e))
 
-(use-package mu4e-org
-  :commands (org-mu4e-compose-org-mode)
-  :config
-  (evil-set-initial-state 'mu4e-compose-mode 'normal)
-  (setq mu4e-org-link-query-in-headers-mode nil))
 
 (provide 'editor-mail)
 ;;; editor-mail.el ends here

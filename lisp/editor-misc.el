@@ -69,6 +69,12 @@
   (fcitx-aggressive-setup)
   (fcitx-prefix-keys-turn-off))
 
+(use-package gcmh
+  :ensure t
+  :hook (after-init . gcmh-mode)
+  :config
+  (setq gcmh-high-cons-threshold #x6400000))
+
 (use-package helpful
   :ensure t
   :config
@@ -86,8 +92,8 @@ reuse it's window, otherwise create new one."
   :general
   ([remap describe-variable] 'helpful-variable
    [remap describe-function] 'helpful-callable
-   [remap describe-symbol]   'helpful-symbol)
-  (tyrant-def "hk" '(helpful-key :which-key "describe-key")))
+   [remap describe-symbol]   'helpful-symbol
+   [remap describe-key]      'helpful-key))
 
 (use-package link-hint
   :ensure t
@@ -108,9 +114,9 @@ reuse it's window, otherwise create new one."
     "o"      'link-hint-open-link)
 
   (tyrant-def
-    "xo" 'link-hint-open-link
-    "xl" 'link-hint-open-multiple-links
-    "xy" 'link-hint-copy-link))
+    "jl" 'link-hint-open-link
+    "jL" 'link-hint-open-multiple-links
+    "jy" 'link-hint-copy-link))
 
 (use-package nov
   :ensure t
@@ -149,9 +155,6 @@ reuse it's window, otherwise create new one."
   :ensure t
   :defer t
   :custom-face (rime-preedit-face ((t nil)))
-  :hook ((kill-emacs . (lambda ()
-                         (when (fboundp 'rime-lib-sync-user-data)
-                           (ignore-errors (rime-sync))))))
   :init
   (setq default-input-method "rime")
   :config
@@ -161,9 +164,11 @@ reuse it's window, otherwise create new one."
         rime-show-preedit 'inline
         rime-posframe-properties (list :internal-border-width 2))
 
-  (general-def rime-mode-map
-    "M-j"   'rime-force-enable
-    "C-`"   'rime-send-keybinding))
+  (add-hook 'kill-emacs-hook (lambda ()
+                               (when (fboundp 'rime-lib-sync-user-data)
+                                 (ignore-errors (rime-sync)))))
+
+  (general-def rime-mode-map "C-`" 'rime-send-keybinding))
 
 (use-package terminal-here
   :ensure t
@@ -185,8 +190,9 @@ reuse it's window, otherwise create new one."
   :ensure t
   :hook (after-init . winum-mode)
   :config
-  (setq winum-auto-assign-0-to-minibuffer nil
-        winum-auto-setup-mode-line t)
+  (setq winum-auto-assign-0-to-minibuffer t
+        winum-auto-setup-mode-line t
+        winum-scope 'frame-local)
 
   (defun move-buffer-to-window (windownum follow-focus-p)
     "Moves a buffer to a window. follow-focus-p controls
