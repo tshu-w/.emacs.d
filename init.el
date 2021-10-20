@@ -22,42 +22,34 @@
 ;;; Code:
 
 (setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
-(defvar default-file-name-handler-alist file-name-handler-alist)
-(setq file-name-handler-alist nil)
-
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq file-name-handler-alist default-file-name-handler-alist)
-            (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1)
+            (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1)))
 
-            (defun minibuffer-setup ()
-              (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6))
-
-            (defun minibuffer-exit ()
-              (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1))
-
-            (add-hook 'minibuffer-setup-hook #'minibuffer-setup)
-            (add-hook 'minibuffer-exit-hook  #'minibuffer-exit)))
+;; optimize: set the file-name-handler to nil since regexing is cpu intensive.
+(unless (or (daemonp) noninteractive)
+  (let ((default-file-name-handler-alist file-name-handler-alist))
+    (setq file-name-handler-alist nil)
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                (setq file-name-handler-alist default-file-name-handler-alist)))))
 
 ;;; Load path
 ;; optimize: force "lisp"" and "site-lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
-  (push (expand-file-name "site-lisp" user-emacs-directory) load-path)
-  (push (expand-file-name "lisp" user-emacs-directory) load-path))
+  (dolist (dir '("site-lisp" "lisp"))
+    (push (expand-file-name dir user-emacs-directory) load-path)))
 
 (defun add-subdirs-to-load-path (&rest _)
   "Add subdirectories to `load-path'."
-  (let ((default-directory
-          (expand-file-name "site-lisp" user-emacs-directory)))
+  (let ((default-directory (expand-file-name "site-lisp" user-emacs-directory)))
     (normal-top-level-add-subdirs-to-load-path)))
 
 (advice-add 'package-initialize :after #'update-load-path)
 (advice-add 'package-initialize :after #'add-subdirs-to-load-path)
 
 (update-load-path)
-
-(setq byte-compile-warnings '(cl-functions))
 
 (require 'core-packages)
 (require 'core-config)

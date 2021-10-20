@@ -124,7 +124,7 @@
   generate mmm classes.")
 
   ;; from Jason Blevins http://jblevins.org/log/mmm
-  (defun markdown/mmm-auto-class (lang)
+  (defun markdown-mmm-auto-class (lang)
     (let* ((l (if (listp lang) (car lang) lang))
            (s (if (listp lang) (cadr lang) lang))
            (class (intern (concat "markdown-" l)))
@@ -138,7 +138,7 @@
       (dolist (mode '(markdown-mode gfm-mode))
         (mmm-add-mode-ext-class mode nil class))))
 
-  (mapc 'markdown/mmm-auto-class markdown-mmm-auto-modes))
+  (mapc 'markdown-mmm-auto-class markdown-mmm-auto-modes))
 
 
 (provide 'lang-markdown)

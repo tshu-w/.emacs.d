@@ -16,6 +16,11 @@
   (run-hooks 'after-load-theme-hook))
 (advice-add 'load-theme :after #'load-theme@after)
 
+(add-hook 'after-load-theme-hook
+          (defun bolder-faces ()
+            (set-face-attribute 'font-lock-function-name-face nil :weight 'semi-bold)
+            (set-face-attribute 'font-lock-keyword-face nil :weight 'semi-bold)))
+
 (use-package doom-themes
   :ensure t
   :defer t
@@ -67,7 +72,7 @@
                        doom-nord-light
                        doom-one-light
                        doom-opera-light
-                       doom-plain
+                       ;; doom-plain
                        doom-solarized-light
                        doom-tomorrow-day
                        berrys
@@ -120,7 +125,7 @@
                       ;; doom-outrun-electric
                       doom-palenight
                       doom-peacock
-                      doom-plain-dark
+                      ;; doom-plain-dark
                       doom-rouge
                       ;; doom-shades-of-purple
                       doom-snazzy
@@ -154,10 +159,6 @@
                   ('light (load-theme (seq-random-elt light-themes) t))
                   ('dark (load-theme (seq-random-elt dark-themes) t))))))
 
-(add-hook 'after-load-theme-hook
-          (defun bolder-faces ()
-            (set-face-attribute 'font-lock-function-name-face nil :weight 'semi-bold)
-            (set-face-attribute 'font-lock-keyword-face nil :weight 'semi-bold)))
 
 (use-package doom-modeline
   :ensure t
@@ -168,8 +169,12 @@
 
         doom-modeline-height 1
         doom-modeline-buffer-file-name-style 'auto
+        doom-modeline-project-detection 'project
+
+        doom-modeline-gnus nil
         doom-modeline-icon nil
-        doom-modeline-project-detection 'project)
+        doom-modeline-irc nil
+        doom-modeline-persp-name nil)
 
   (defun smaller-modeline ()
     "Make doom-modeline smaller."
@@ -251,8 +256,7 @@
                                        "IndianRed1"
                                        "IndianRed3"
                                        "IndianRed4"))
-  (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultra-bold)
-  :general (tyrant-def "tp" 'highlight-parentheses-mode))
+  (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultra-bold))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -266,10 +270,6 @@
   :ensure t
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
 
-(use-package hide-comnt
-  :general
-  (tyrant-def "tc" '(hide/show-comments-toggle :which-key "toggle-comments")))
-
 (use-package xterm-color
   :ensure t
   :defer t
@@ -278,15 +278,7 @@
 
   (defun compilation-filter@around (f proc string)
     (funcall f proc (xterm-color-filter string)))
-  (advice-add 'compilation-filter :around #'compilation-filter@around)
-
-  (with-eval-after-load 'eshell
-    (add-hook 'eshell-before-prompt-hook
-              (lambda () (setq xterm-color-preserve-properties t)))
-
-    (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
-    (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions))
-    (setenv "TERM" "xterm-256color")))
+  (advice-add 'compilation-filter :around #'compilation-filter@around))
 
 
 (provide 'editor-ui)

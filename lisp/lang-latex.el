@@ -76,8 +76,8 @@ the automatic filling of the current paragraph."
               (add-hook 'after-save-hook 'TeX-build nil 'local)))
 
   (defun TeX-process-check@around (fun name)
-    (cl-flet ((yes-or-no-p (&rest args) t)
-              (y-or-n-p (&rest args) t))
+    (cl-flet ((yes-or-no-p (&rest _args) t)
+              (y-or-n-p (&rest _args) t))
       (funcall fun name)))
   (advice-add 'TeX-process-check :around #'TeX-process-check@around)
 
@@ -177,8 +177,7 @@ the automatic filling of the current paragraph."
 (use-package reftex
   :hook (TeX-mode . reftex-mode)
   :config
-  (setq reftex-default-bibliography '("~/Documents/Zotero/references.bib"
-                                      "~/Documents/Zotero/refs.bib")
+  (setq reftex-default-bibliography '("~/Documents/Bibliography/references.bib")
         reftex-plug-into-AUCTeX '(nil nil t t t)
         reftex-use-fonts t)
 
@@ -199,19 +198,13 @@ the automatic filling of the current paragraph."
     "rT"    'reftex-toc-recenter
     "rv"    'reftex-view-crossref))
 
-(use-package cdlatex
+(use-package auctex-latexmk
   :ensure t
-  :hook ((LaTeX-mode . turn-on-cdlatex)
-         (org-mode   . turn-on-org-cdlatex))
+  :after tex
   :config
-  (setq cdlatex-command-alist
-        '(("ct" "Insert \\citet" "\\citet{?}" cdlatex-position-cursor nil t nil)
-          ("cp" "Insert \\citep" "\\citep{?}" cdlatex-position-cursor nil t nil)
-          ("eref" "Insert \\eqref" "\\eqref{eq?}" cdlatex-position-cursor nil t nil)
-          ("fref" "Insert \\ref" "\\ref{fig?}" cdlatex-position-cursor nil t nil)
-          ("sref" "Insert \\ref" "\\ref{sec?}" cdlatex-position-cursor nil t nil))
-        cdlatex-make-sub-superscript-roman-if-pressed-twice t
-        cdlatex-sub-super-scripts-outside-math-mode nil))
+  (auctex-latexmk-setup)
+  (setq-default TeX-command-default "LatexMk")
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (use-package aas
   :ensure t
@@ -220,13 +213,6 @@ the automatic filling of the current paragraph."
 (use-package laas
   :ensure t
   :hook (TeX-mode . laas-mode))
-
-(use-package auctex-latexmk
-  :ensure t
-  :after tex
-  :config
-  (auctex-latexmk-setup)
-  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (use-package evil-tex
   :ensure t

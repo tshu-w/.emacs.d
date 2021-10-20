@@ -18,11 +18,9 @@
         flycheck-display-errors-delay 0.25
         flycheck-emacs-lisp-load-path 'inherit)
 
-  (setq flycheck-flake8rc "~/.config/flake8")
-
   ;; Custom fringe indicator
   (when (fboundp 'define-fringe-bitmap)
-    (define-fringe-bitmap 'my-flycheck-fringe-indicator
+    (define-fringe-bitmap 'flycheck-fringe-indicator
       (vector #b00000000
               #b00000000
               #b00000000
@@ -39,26 +37,26 @@
               #b00000000
               #b00000000
               #b00000000
-              #b00000000)))
-  (let ((bitmap 'my-flycheck-fringe-indicator))
-    (flycheck-define-error-level 'error
-      :severity 2
-      :overlay-category 'flycheck-error-overlay
-      :fringe-bitmap bitmap
-      :error-list-face 'flycheck-error-list-error
-      :fringe-face 'flycheck-fringe-error)
-    (flycheck-define-error-level 'warning
-      :severity 1
-      :overlay-category 'flycheck-warning-overlay
-      :fringe-bitmap bitmap
-      :error-list-face 'flycheck-error-list-warning
-      :fringe-face 'flycheck-fringe-warning)
-    (flycheck-define-error-level 'info
-      :severity 0
-      :overlay-category 'flycheck-info-overlay
-      :fringe-bitmap bitmap
-      :error-list-face 'flycheck-error-list-info
-      :fringe-face 'flycheck-fringe-info))
+              #b00000000))
+    (let ((bitmap 'flycheck-fringe-indicator))
+      (flycheck-define-error-level 'error
+        :severity 2
+        :overlay-category 'flycheck-error-overlay
+        :fringe-bitmap bitmap
+        :error-list-face 'flycheck-error-list-error
+        :fringe-face 'flycheck-fringe-error)
+      (flycheck-define-error-level 'warning
+        :severity 1
+        :overlay-category 'flycheck-warning-overlay
+        :fringe-bitmap bitmap
+        :error-list-face 'flycheck-error-list-warning
+        :fringe-face 'flycheck-fringe-warning)
+      (flycheck-define-error-level 'info
+        :severity 0
+        :overlay-category 'flycheck-info-overlay
+        :fringe-bitmap bitmap
+        :error-list-face 'flycheck-error-list-info
+        :fringe-face 'flycheck-fringe-info)))
 
   (defun toggle-flycheck-error-list ()
     "Toggle flycheck's error list window.
@@ -78,11 +76,14 @@ If the error list is visible, hide it.  Otherwise, show it."
         (switch-to-buffer-other-window flycheck-error-list-buffer))))
   :general
   (tyrant-def
+    "e"  '(:ignore t :which-key "errors")
     "eb" 'flycheck-buffer
     "ec" 'flycheck-clear
     "eh" 'flycheck-describe-checker
     "el" 'toggle-flycheck-error-list
     "eL" 'goto-flycheck-error-list
+    "en" 'next-error
+    "ep" 'previous-error
     "es" 'flycheck-select-checker
     "eS" 'flycheck-set-checker-executable
     "ev" 'flycheck-verify-setup
@@ -111,9 +112,7 @@ If the error list is visible, hide it.  Otherwise, show it."
     (add-hook 'flycheck-posframe-inhibit-functions #'evil-insert-state-p)
     (add-hook 'flycheck-posframe-inhibit-functions #'evil-replace-state-p)))
 
-
 (use-package flyspell
-  :after tex
   :init
   (setq flyspell-issue-message-flag nil
         flyspell-issue-welcome-flag nil)
@@ -170,13 +169,6 @@ SCOPE can be:
       (if (consp ispell-filter)
           (setq poss (ispell-parse-output (car ispell-filter))))
       (or (eq poss t) (stringp poss))))
-
-  (use-package flyspell-correct
-    :ensure t
-    :general
-    (tyrant-def
-      "Sc" 'flyspell-correct-wrapper
-      "Ss" 'flyspell-correct-at-point))
   :general
   (tyrant-def
     "S"   '(:ignore t :which-key "spelling")
@@ -188,6 +180,13 @@ SCOPE can be:
     "Sn"  'flyspell-goto-next-error
     "Sr"  'flyspell-region
     "tS"  'flyspell-mode))
+
+(use-package flyspell-correct
+  :ensure t
+  :general
+  (tyrant-def
+    "Sc" 'flyspell-correct-wrapper
+    "Ss" 'flyspell-correct-at-point))
 
 
 (provide 'editor-checker)

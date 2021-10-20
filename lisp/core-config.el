@@ -24,8 +24,7 @@
         mac-option-modifier  'meta)
 
   (setq ns-pop-up-frames nil)
-  (setq insert-directory-program "/usr/local/bin/gls"
-        dired-listing-switches "-aBhl --group-directories-first")
+  (setq dired-listing-switches "-aBhl --group-directories-first")
 
   (let ((spec (font-spec :family "Apple Color Emoji")))
     (set-fontset-font t nil spec nil 'append)
@@ -49,14 +48,10 @@
 (setq initial-scratch-message nil   ;; "make scratch buffer empty"
       inhibit-startup-message t)    ;; "disable splash screen"
 
-(setq-default indent-tabs-mode nil ;; use only spaces and no tabs
-              tab-width 2
-              standard-indent 2)
-
-(setq-default c-basic-offset 4)
-
-;; auto fill breaks line beyond buffer's fill-column
-(setq-default fill-column 80)
+(setq-default indent-tabs-mode nil
+              fill-column 80
+              standard-indent 2
+              tab-width 2)
 
 ;; no beep and visual blinking
 (setq ring-bell-function 'ignore
@@ -64,14 +59,30 @@
 
 (setq frame-resize-pixelwise t)
 
+;; highlight current line
+(global-hl-line-mode 1)
+;; no blink
+(blink-cursor-mode 0)
+;; prettify symbols
+(global-prettify-symbols-mode 1)
+
+;; Single space between sentences is more widespread than double
+(setq sentence-end-double-space nil)
+
+;; smooth scrolling
+(setq scroll-conservatively 101
+      scroll-margin 2)
+
+;; draw underline lower
+(setq x-underline-at-descent-line t)
+
 ;; Highlight and allow to open http link at point in programming buffers
 ;; goto-address-prog-mode only highlights links in strings and comments
 (add-hook 'prog-mode-hook #'goto-address-prog-mode)
 ;; Highlight and follow bug references in comments and strings
 (add-hook 'prog-mode-hook #'bug-reference-prog-mode)
-
-;; important for golden-ratio to better work
-(setq window-combination-resize t)
+;; enable subword-mode in prog-mode
+(add-hook 'prog-mode-hook #'subword-mode)
 
 ;; scroll compilation to first error or end
 (setq compilation-scroll-output 'first-error)
@@ -91,49 +102,21 @@
 ;; keep focus while navigating help buffers
 (setq help-window-select t)
 
-;; highlight current line
-(global-hl-line-mode 1)
-;; no blink
-(blink-cursor-mode 0)
-;; prettify symbols
-(global-prettify-symbols-mode 1)
-
-;; Single space between sentences is more widespread than double
-(setq sentence-end-double-space nil)
-
-;; smooth scrolling
-(setq scroll-conservatively 101
-      scroll-margin 2)
-
-;; draw underline lower
-(setq x-underline-at-descent-line t)
-
 ;; When emacs asks for "yes" or "no", let "y" or "n" suffice
 ;; (fset 'yes-or-no-p 'y-or-n-p)
 (setq use-short-answers t)
+
+;; don't load outdated compiled files.
+(setq load-prefer-newer t)
+
+;; inhibit annoying warnings
+(setq warning-minimum-log-level :error)
 
 (defun server-remove-kill-buffer-hook ()
   "Remove prompt if the file is opened in other clients."
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
 (add-hook 'server-visit-hook #'server-remove-kill-buffer-hook)
 
-;; don't load outdated compiled files.
-(setq load-prefer-newer t)
-
-;; seems pointless to warn. There's always undo.
-(put 'narrow-to-region 'disabled nil)
-(put 'narrow-to-page 'disabled nil)
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)
-
-;; inhibit annoying warnings
-(setq warning-minimum-log-level :error)
-
-;; don't let the cursor go into minibuffer prompt
-;; Tip taken from Xah Lee: http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
-;; (setq minibuffer-prompt-properties
-;;       '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)
@@ -168,7 +151,7 @@
   (advice-add 'desktop-read :around #'desktop-read@override))
 
 (use-package dired
-  :commands (dired dired-jump dired-jump-other-window)
+  :defer t
   :config
   (setq dired-auto-revert-buffer t
         dired-create-destination-dirs 'ask
@@ -176,30 +159,20 @@
         dired-kill-when-opening-new-dired-buffer t
         dired-vc-rename-file t))
 
-(use-package electric
+(use-package elec-pair
   :hook (after-init . electric-pair-mode))
 
 (use-package ediff
   :hook ((ediff-quit . winner-undo)
          (ediff-prepare-buffer . outline-show-all))
   :config
-  ;; first we set some sane defaults
   (setq-default ediff-window-setup-function 'ediff-setup-windows-plain
-                ;; emacs is evil and decrees that vertical shall henceforth be horizontal
                 ediff-split-window-function 'split-window-horizontally
                 ediff-merge-split-window-function 'split-window-horizontally))
 
-(use-package eldoc
-  ;; enable eldoc in `eval-expression' and IELM
-  :hook ((eval-expression-minibuffer-setup ielm-mode) . eldoc-mode))
-
 (use-package files
   :init
-  (setq auto-save-default t
-        auto-save-file-name-transforms `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
-                                          ,(no-littering-expand-var-file-name "auto-save/") t))
-        auto-save-visited-interval 60
-        make-backup-files nil        ;; don't create backup~ files
+  (setq make-backup-files nil        ;; don't create backup~ files
         revert-without-query '(".*") ;; disable revert query
         enable-remote-dir-locals t)
   :config
@@ -327,9 +300,6 @@ the unwritable tidbits."
         ;; save clipboard contents into kill-ring before replace them
         save-interprogram-paste-before-kill t))
 
-(use-package subword
-  :hook (prog-mode . subword-mode))
-
 (use-package tramp
   :defer t
   :config
@@ -342,17 +312,12 @@ the unwritable tidbits."
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (use-package xref
-  :ensure nil
   :defer t
   :config
   (setq xref-prompt-for-identifier '(not xref-find-definitions
                                          xref-find-definitions-other-window
                                          xref-find-definitions-other-frame
-                                         xref-find-references
-                                         jump-to-definition
-                                         jump-to-definition-other-window
-                                         jump-to-reference
-                                         jump-to-reference-other-window))
+                                         xref-find-references))
 
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read
         xref-show-xrefs-function       #'xref-show-definitions-completing-read))

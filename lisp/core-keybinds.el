@@ -25,18 +25,18 @@
   :after evil
   :config
   (general-create-definer tyrant-def
-    :states '(normal insert visual motion emacs)
+    :states '(normal insert motion emacs)
     :keymaps 'override
     :prefix "SPC"
     :non-normal-prefix "M-SPC")
   (tyrant-def "" nil)
 
   (general-create-definer despot-def
-    :states '(normal insert visual motion emacs)
+    :states '(normal insert motion emacs)
     :keymaps 'override
     :major-modes t
-    :prefix ","
-    :non-normal-prefix "M-,")
+    :prefix "SPC m"
+    :non-normal-prefix "M-SPC m")
   (despot-def "" nil)
 
   (general-def universal-argument-map
@@ -54,24 +54,22 @@
 
     "b"       '(:ignore t :which-key "buffers")
     "bb"      'switch-to-buffer
-    "bB"      'switch-to-buffer-other-window
+    "bB"      'ibuffer
     "bd"      'kill-current-buffer
     "bh"      'switch-to-help-buffer
     "bm"      'switch-to-messages-buffer
     "bs"      'switch-to-scratch-buffer
     "bu"      'reopen-killed-buffer
     "bx"      'kill-buffer-and-window
-    "b C-d"   'kill-other-buffers
-    "b C-S-d" 'kill-matching-buffers-rudely
 
     "c"       '(:ignore t :which-key "code")
-    "cb"      'switch-to-compilation-buffer
     "cc"      'compile
     "cn"      'next-error
     "cp"      'previous-error
     "cr"      'recompile
     "ct"      'toggle-compilation-window
     "cx"      'kill-compilation
+    "c="      'indent-region-or-buffer
 
     "f"       '(:ignore t :which-key "files")
     "fC"      '(write-file :which-key "copy-file")
@@ -82,6 +80,7 @@
     "fE"      'sudo-edit
     "ff"      'find-file
     "fj"      'dired-jump
+    "fJ"      'dired-jump-other-window
     "fo"      'open-file-or-directory-in-external-app
     "fr"      'read-only-mode
     "fR"      'rename-current-buffer-file
@@ -97,8 +96,6 @@
     "Fn"      'make-frame
     "Fo"      'other-frame
 
-    "m"       (general-simulate-key "," :which-key "major mode" :state 'normal)
-
     "h"       '(:ignore t :which-key "help")
     "ha"      'apropos-command
     "hb"      'describe-bindings
@@ -108,12 +105,10 @@
     "hi"      'info-lookup-symbol
     "hk"      'describe-key
     "hK"      'describe-keymap
-    "h C-K"   'which-key-show-top-level
     "hm"      'describe-mode
     "hM"      'woman
     "hp"      'describe-package
     "ht"      'describe-text-properties
-    "hT"      'describe-theme
     "hv"      'describe-variable
     "hP"      '(:ignore t :which-key "profiler")
     "hPs"     'profiler-start
@@ -125,11 +120,12 @@
     "jb"      'bookmark-jump
     "js"      'bookmark-set
 
+    "m"       '(:ignore t :which-key "major mode")
+
     "p"       '(:keymap project-prefix-map :which-key "projects")
 
     "q"       '(:ignore t :which-key "quit")
     "qd"      'restart-emacs-debug-init
-    "qf"      'kill-frame
     "qr"      'restart-emacs
     "qR"      'restart-emacs-without-desktop
     "qq"      'save-buffers-kill-terminal
@@ -145,19 +141,6 @@
     "tW"      'toggle-word-wrap
 
     "u"       '(universal-argument :which-key "universal arg")
-
-    "x"       '(:ignore t :which-key "text")
-    "x="      'indent-region-or-buffer
-    "xc"      'count-words-region
-    "xd"      'delete-trailing-whitespace
-    "xs"      'text-scale-adjust
-    "xt"      '(:ignore t :which-key "transpose")
-    "xtc"     'transpose-chars
-    "xte"     'transpose-sexps
-    "xtl"     'transpose-lines
-    "xtp"     'transpose-paragraphs
-    "xts"     'transpose-sentences
-    "xtw"     'transpose-words
 
     "w"       '(:ignore t :which-key "windows")
     "w TAB"   'alternate-window
@@ -183,8 +166,7 @@
     "wu"      'winner-undo
     "wU"      'winner-redo
     "wv"      'split-window-horizontally
-    "wV"      'split-window-horizontally-and-focus
-    "ww"      'other-window)
+    "wV"      'split-window-horizontally-and-focus)
 
   (general-def
     [remap comment-dwim] 'comment-or-uncomment
@@ -245,11 +227,6 @@
         evil-motion-state-cursor  '("plum3" box))
 
   (evil-set-undo-system 'undo-redo)
-
-  ;; override default-jump-handlers
-  (setq default-jump-handlers '(evil-goto-definition))
-  (evil-set-command-property 'jump-to-definition :jump t)
-  (evil-set-command-property 'jump-to-reference :jump t)
 
   (progn
     ;; Thanks to `editorconfig-emacs' for many of these
@@ -384,33 +361,14 @@
 
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
-  (general-def 'normal
-    "C-,"      'evil-repeat-find-char-reverse
-    "zf"       'reposition-window
-    "gd"       'jump-to-definition
-    "gD"       'jump-to-definition-other-window
-    "gr"       'jump-to-reference
-    "gR"       'jump-to-reference-other-window)
-
-  (general-def 'insert [remap evil-complete-previous] 'hippie-expand))
-
-(use-package evil-textobj-syntax
-  :ensure t
-  :general
-  (general-def evil-inner-text-objects-map "h" 'evil-i-syntax)
-  (general-def evil-outer-text-objects-map "h" 'evil-a-syntax))
+  (general-def 'normal "zf" 'reposition-window))
 
 (use-package evil-collection
   :ensure t
   :init
   (evil-collection-init)
   (add-hook 'org-agenda-mode-hook
-            (lambda ()
-              (evil-collection-unimpaired-mode -1))))
-
-(use-package evil-indent-plus
-  :ensure t
-  :hook (after-init . evil-indent-plus-default-bindings))
+            (lambda () (evil-collection-unimpaired-mode -1))))
 
 (use-package evil-owl
   :ensure t
@@ -418,25 +376,13 @@
   :config
   (setq evil-owl-display-method 'posframe
         evil-owl-idle-delay 0.5
-        evil-owl-max-string-length 50))
+        evil-owl-max-string-length 80))
 
 (use-package evil-pinyin
   :ensure t
   :hook (after-init . global-evil-pinyin-mode)
   :init
   (setq evil-pinyin-scheme 'simplified-xiaohe-all))
-
-(use-package evil-snipe
-  :ensure t
-  :hook ((after-init . evil-snipe-mode)
-         (after-init . evil-snipe-override-mode))
-  :config
-  (setq evil-snipe-scope 'buffer
-        evil-snipe-show-prompt t)
-
-  (general-def 'visual evil-snipe-local-mode-map
-    "z" 'evil-snipe-s
-    "Z" 'evil-snipe-S))
 
 (use-package evil-surround
   :ensure t
@@ -449,6 +395,7 @@
   (general-def 'visual evil-surround-mode-map
     "s" 'evil-surround-region
     "S" 'evil-substitute))
+
 
 (provide 'core-keybinds)
 ;;; core-keybinds.el ends here

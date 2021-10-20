@@ -129,33 +129,33 @@ initialized with the current directory instead of filename."
      (if (not (tramp-tramp-file-p fname))
          (concat "/sudo:root@localhost:" fname)
        (with-parsed-tramp-file-name fname parsed
-         (when (equal parsed-user "root")
-           (error "Already root!"))
-         (let* ((new-hop (tramp-make-tramp-file-name
-                          ;; Try to retrieve a tramp method suitable for
-                          ;; multi-hopping
-                          (cond ((tramp-get-method-parameter
-                                  parsed 'tramp-login-program))
-                                ((tramp-get-method-parameter
-                                  parsed 'tramp-copy-program))
-                                (t parsed-method))
-                          parsed-user
-                          parsed-domain
-                          parsed-host
-                          parsed-port
-                          nil
-                          parsed-hop))
-                (new-hop (substring new-hop 1 -1))
-                (new-hop (concat new-hop "|"))
-                (new-fname (tramp-make-tramp-file-name
-                            "sudo"
-                            parsed-user
-                            parsed-domain
-                            parsed-host
-                            parsed-port
-                            parsed-localname
-                            new-hop)))
-           new-fname))))))
+                                    (when (equal parsed-user "root")
+                                      (error "Already root!"))
+                                    (let* ((new-hop (tramp-make-tramp-file-name
+                                                     ;; Try to retrieve a tramp method suitable for
+                                                     ;; multi-hopping
+                                                     (cond ((tramp-get-method-parameter
+                                                             parsed 'tramp-login-program))
+                                                           ((tramp-get-method-parameter
+                                                             parsed 'tramp-copy-program))
+                                                           (t parsed-method))
+                                                     parsed-user
+                                                     parsed-domain
+                                                     parsed-host
+                                                     parsed-port
+                                                     nil
+                                                     parsed-hop))
+                                           (new-hop (substring new-hop 1 -1))
+                                           (new-hop (concat new-hop "|"))
+                                           (new-fname (tramp-make-tramp-file-name
+                                                       "sudo"
+                                                       parsed-user
+                                                       parsed-domain
+                                                       parsed-host
+                                                       parsed-port
+                                                       parsed-localname
+                                                       new-hop)))
+                                      new-fname))))))
 
 (defun open-file-in-external-app (file-path)
   "Open FILE-PATH in external application."
@@ -179,34 +179,6 @@ containing the current file by the default explorer."
       (if file-path
           (open-file-in-external-app file-path)
         (message "No file associated to this buffer.")))))
-
-(defun -delete-file (filename &optional ask-user)
-  "Remove specified file or directory.
-
-Also kills associated buffer (if any exists) and invalidates
-projectile cache when it's possible.
-
-When ASK-USER is non-nil, user will be asked to confirm file
-removal."
-  (interactive "f")
-  (when (and filename (file-exists-p filename))
-    (let ((buffer (find-buffer-visiting filename)))
-      (when buffer
-        (kill-buffer buffer)))
-    (when (or (not ask-user)
-              (yes-or-no-p "Are you sure you want to delete this file? "))
-      (message filename)
-      (delete-file filename)
-      (when (and (require 'projectile nil 'noerror)
-                 (projectile-project-p))
-        (call-interactively #'projectile-invalidate-cache)))))
-
-(defun delete-file-confirm (filename)
-  "Remove specified file or directory after users approval.
-
-FILENAME is deleted using `-delete-file' function.."
-  (interactive "f")
-  (funcall-interactively #'-delete-file filename t))
 
 
 ;; ---------------------------------------------------------------------------
@@ -238,7 +210,7 @@ if prefix argument ARG is given, `untabify' first."
           (message "Indented selected region."))
       (progn
         (when arg
-            (untabify (region-beginning) (region-end)))
+          (untabify (region-beginning) (region-end)))
         (indent-region (point-min) (point-max))
         (message "Indented buffer.")))
     (whitespace-cleanup)))
@@ -274,13 +246,6 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
   (when (active-minibuffer-window)
     (select-window (active-minibuffer-window))))
 
-(defun switch-to-compilation-buffer ()
-  "Go to last compilation buffer."
-  (interactive)
-  (if compilation-last-buffer
-      (pop-to-buffer compilation-last-buffer)
-    (user-error "There is no compilation buffer?")))
-
 (defun toggle-compilation-window ()
   "Show/Hide the window containing the '*compilation*' buffer."
   (interactive)
@@ -315,48 +280,6 @@ If the universal prefix argument is used then kill also the window."
     (if (equal '(4) arg)
         (kill-buffer-and-window)
       (kill-buffer))))
-
-;; from http://emacswiki.org/emacs/KillingBuffers
-(defun kill-other-buffers (&optional arg)
-  "Kill all other buffers.
-If the universal prefix argument is used then kill the windows too."
-  (interactive "P")
-  (when (yes-or-no-p (format "Killing all buffers except \"%s\"? "
-                             (buffer-name)))
-    (let* ((buffers-to-kill (if (bound-and-true-p persp-mode)
-                                (persp-buffer-list)
-                              (buffer-list))))
-      (mapc 'kill-buffer (delq (current-buffer) buffers-to-kill)))
-    (when (equal '(4) arg) (delete-other-windows))
-    (message "Buffers deleted!")))
-
-;; from https://github.com/gempesaw/dotemacs/blob/emacs/dg-elisp/dg-defun.el
-(defun rudekill-matching-buffers (regexp &optional internal-too)
-  "Kill - WITHOUT ASKING - buffers whose name matches the specified REGEXP. See
-the `kill-matching-buffers` for grateful killing. The optional 2nd argument
-indicates whether to kill internal buffers too.
-
-Returns the count of killed buffers."
-  (let* ((buffers (remove-if-not
-                   (lambda (buffer)
-                     (let ((name (buffer-name buffer)))
-                       (and name (not (string-equal name ""))
-                            (or internal-too (/= (aref name 0) ?\s))
-                            (string-match regexp name))))
-                   (buffer-list))))
-    (mapc 'kill-buffer buffers)
-    (length buffers)))
-
-(defun kill-matching-buffers-rudely (regexp &optional internal-too)
-  "Kill - WITHOUT ASKING - buffers whose name matches the specified REGEXP. See
-the `kill-matching-buffers` for grateful killing. The optional 2nd argument
-indicates whether to kill internal buffers too.
-
-Returns a message with the count of killed buffers."
-  (interactive "sKill buffers matching this regular expression: \nP")
-  (message
-   (format "%d buffer(s) killed."
-           (rudekill-matching-buffers regexp internal-too))))
 
 (defun alternate-buffer (&optional window)
   "Switch back and forth between current and last buffer in the current WINDOW."
@@ -435,19 +358,13 @@ a dedicated window."
   "Split the window vertically and focus the new window."
   (interactive)
   (split-window-vertically)
-  (windmove-down)
-  (when (and (boundp 'golden-ratio-mode)
-             (symbol-value golden-ratio-mode))
-    (golden-ratio)))
+  (windmove-down))
 
 (defun split-window-horizontally-and-focus ()
   "Split the window horizontally and focus the new window."
   (interactive)
   (split-window-horizontally)
-  (windmove-right)
-  (when (and (boundp 'golden-ratio-mode)
-             (symbol-value golden-ratio-mode))
-    (golden-ratio)))
+  (windmove-right))
 
 (defun alternate-window ()
   "Switch back and forth between current and last window in the current frame."
@@ -457,135 +374,6 @@ a dedicated window."
     ;; Check window was not found successfully
     (unless prev-window (user-error "Last window not found"))
     (select-window prev-window)))
-
-
-;; ---------------------------------------------------------------------------
-;; Frame
-;; ---------------------------------------------------------------------------
-
-(defun kill-frame ()
-  "Kill server buffer and hide the main Emacs window."
-  (interactive)
-  (condition-case nil
-      (delete-frame nil 1)
-    (error
-     (iconify-frame))))
-
-
-;; ---------------------------------------------------------------------------
-;; Jump Handlers
-;; ---------------------------------------------------------------------------
-
-(defvar default-jump-handlers '(xref-find-definitions)
-  "List of jump handlers available in every mode.")
-
-(defvar-local jump-handlers '()
-  "List of jump handlers local to this buffer.")
-
-(defvar default-reference-handlers '(xref-find-references)
-  "List of reference handlers available in every mode.")
-
-(defvar-local reference-handlers '()
-  "List of reference handlers local to this buffer.")
-
-(defmacro define-jump-handlers (mode &rest handlers)
-  "Defines jump HANDLERS for the given MODE.
-This defines a variable `jump-handlers-MODE' to which
-handlers can be added, and a function added to MODE-hook which
-sets `jump-handlers' in buffers of that mode."
-  (let ((mode-hook (intern (format "%S-hook" mode)))
-        (func (intern (format "init-jump-handlers-%S" mode)))
-        (handlers-list (intern (format "jump-handlers-%S" mode))))
-    `(progn
-       (defvar ,handlers-list ',handlers
-         ,(format (concat "List of mode-specific jump handlers for %S. "
-                          "These take priority over those in "
-                          "`default-jump-handlers'.")
-                  mode))
-       (defun ,func ()
-         (setq jump-handlers
-               (append ,handlers-list
-                       default-jump-handlers)))
-       (add-hook ',mode-hook ',func))))
-
-(defmacro define-reference-handlers (mode &rest handlers)
-  "Defines reference HANDLERS for the given MODE.
-This defines a variable `reference-handlers-MODE' to which
-handlers can be added, and a function added to MODE-hook which
-sets `reference-handlers' in buffers of that mode."
-  (let ((mode-hook (intern (format "%S-hook" mode)))
-        (func (intern (format "init-reference-handlers-%S" mode)))
-        (handlers-list (intern (format "reference-handlers-%S" mode))))
-    `(progn
-       (defvar ,handlers-list ',handlers
-         ,(format (concat "List of mode-specific reference handlers for %S. "
-                          "These take priority over those in "
-                          "`default-reference-handlers'.")
-                  mode))
-       (defun ,func ()
-         (setq reference-handlers
-               (append ,handlers-list
-                       default-reference-handlers)))
-       (add-hook ',mode-hook ',func))))
-
-(defun jump-to-definition ()
-  "Jump to definition around point using the best tool for this action."
-  (interactive)
-  (catch 'done
-    (let ((old-buffer (current-buffer))
-          (old-point (point)))
-      (dolist (-handler (or jump-handlers default-jump-handlers))
-        (let ((handler (if (listp -handler) (car -handler) -handler))
-              (async (when (listp -handler)
-                       (plist-get (cdr -handler) :async))))
-          (ignore-errors
-            (call-interactively handler))
-          (when (or (eq async t)
-                    (and (fboundp async) (funcall async))
-                    (not (eq old-point (point)))
-                    (not (equal old-buffer (current-buffer))))
-            (throw 'done t)))))
-    (message "No jump handler was able to find this symbol.")))
-
-(defun jump-to-definition-other-window ()
-  "Jump to definition around point in other window."
-  (interactive)
-  (let ((pos (point)))
-    ;; since `jump-to-definition' can be asynchronous we cannot use
-    ;; `save-excursion' here, so we have to bear with the jumpy behavior.
-    (switch-to-buffer-other-window (current-buffer))
-    (goto-char pos)
-    (jump-to-definition)))
-
-(defun jump-to-reference ()
-  "Jump to reference around point using the best tool for this action."
-  (interactive)
-  (catch 'done
-    (let ((old-window (selected-window))
-          (old-buffer (current-buffer))
-          (old-point (point)))
-      (dolist (-handler (or reference-handlers default-reference-handlers))
-        (let ((handler (if (listp -handler) (car -handler) -handler))
-              (async (when (listp -handler)
-                       (plist-get (cdr -handler) :async))))
-          (ignore-errors
-            (call-interactively handler))
-          (when (or (eq async t)
-                    (and (fboundp async) (funcall async))
-                    (not (eq old-point (point)))
-                    (not (equal old-buffer (window-buffer old-window))))
-            (throw 'done t)))))
-    (message "No reference handler was able to find this symbol.")))
-
-(defun jump-to-reference-other-window ()
-  "Jump to reference around point in other window."
-  (interactive)
-  (let ((pos (point)))
-    ;; since `jump-to-reference' can be asynchronous we cannot use
-    ;; `save-excursion' here, so we have to bear with the jumpy behavior.
-    (switch-to-buffer-other-window (current-buffer))
-    (goto-char pos)
-    (jump-to-reference)))
 
 
 ;; ---------------------------------------------------------------------------
@@ -619,15 +407,6 @@ sets `reference-handlers' in buffers of that mode."
     (set-file-modes buffer-file-name
                     (logior (file-modes buffer-file-name) #o100))
     (message (concat "Made " buffer-file-name " executable"))))
-
-(defun iso-week-to-time (year week day)
-  "Convert ISO year, week, day to elisp time value."
-  (apply #'encode-time
-         (append '(0 0 0)
-                 (-select-by-indices
-                  '(1 0 2)
-                  (calendar-gregorian-from-absolute (calendar-iso-to-absolute
-                                                     (list week day year)))))))
 
 
 (provide 'core-funcs)

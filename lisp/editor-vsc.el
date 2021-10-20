@@ -41,8 +41,6 @@
     :config
     (setq magit-wip-merge-branch t)
     (magit-wip-mode))
-
-  (general-def 'normal magit-log-select-mode-map "q" 'magit-log-select-quit)
   :general
   (tyrant-def
     "g"   '(:ignore t :which-key "git")
@@ -57,16 +55,11 @@
     "gS"  'magit-stage-file
     "gU"  'magit-unstage-file))
 
-(use-package magit-gitflow
-  :disabled t
-  :ensure t
-  :hook (magit-mode . turn-on-magit-gitflow)
-  :config (general-def magit-mode-map "%" 'magit-gitflow-popup))
-
 (use-package forge
   :ensure t
   :defer t
   :init
+  ;; HACK: https://github.com/emacs-evil/evil-collection/issues/543
   (defun evil-collection-magit-setup@override ()
     "Set up `evil' bindings for `magit'."
 
@@ -82,7 +75,9 @@
 (use-package transient
   :ensure t
   :defer t
-  :config (transient-bind-q-to-quit))
+  :config
+  (general-def transient-base-map   "q" 'transient-quit-one)
+  (general-def transient-sticky-map "q" 'transient-quit-seq))
 
 (use-package browse-at-remote
   :ensure t
@@ -99,13 +94,9 @@
     (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
-  (with-eval-after-load 'evil
-    (evil-set-command-property 'diff-hl-previous-hunk :jump t)
-    (evil-set-command-property 'diff-hl-next-hunk :jump t))
-
   (general-def 'normal
-    "[ h" 'diff-hl-previous-hunk
-    "] h" 'diff-hl-next-hunk))
+    "[ h" '(diff-hl-previous-hunk :jump t)
+    "] h" '(diff-hl-next-hunk :jump t)))
 
 (use-package git-auto-commit-mode :ensure t :defer t)
 
@@ -144,9 +135,6 @@
 
 (use-package gitignore-templates
   :ensure t
-  :config
-  (despot-def gitignore-mode-map
-    "i" 'gitignore-templates-insert)
   :general
   (tyrant-def
     "gI"  '(:ignore t :which-key "gitignore")
