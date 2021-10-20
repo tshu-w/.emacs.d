@@ -656,6 +656,12 @@ Org Review Transient state
   (with-eval-after-load 'org-agenda
     (autoload #'evil-org-agenda-set-keys "evil-org-agenda" nil t)
     (evil-org-agenda-set-keys))
+
+  (with-eval-after-load 'org-capture
+    (general-def org-capture-mode-map
+      "ZZ" 'org-capture-finalize
+      "ZQ" 'org-capture-kill
+      "ZR" 'org-capture-refile))
   :config
   (defun surround-drawer ()
     (let ((dname (read-from-minibuffer "" "")))
@@ -676,7 +682,7 @@ Org Review Transient state
 
   (fset 'diary-list-entries 'ignore)
 
-  (defun appt-disp-alert (min-to-appt current-time _appt-msg)
+  (defun appt-disp-alert (min-to-appt _current-time _appt-msg)
     (alert (format "Appointment in %s minutes" min-to-appt)
            :title (format "%s" appt-msg)))
 
