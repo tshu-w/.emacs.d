@@ -100,6 +100,8 @@
 
 (use-package git-auto-commit-mode :ensure t :defer t)
 
+(use-package git-modes :ensure t :defer t)
+
 (use-package git-timemachine
   :ensure t
   :config
@@ -140,12 +142,6 @@
     "gI"  '(:ignore t :which-key "gitignore")
     "gIn" 'gitignore-templates-new-file
     "gIi" 'gitignore-templates-insert))
-
-(use-package gitattributes-mode :ensure t :defer t)
-
-(use-package gitconfig-mode :ensure t :defer t)
-
-(use-package gitignore-mode :ensure t :defer t)
 
 (use-package github-stars :ensure t :defer t)
 
