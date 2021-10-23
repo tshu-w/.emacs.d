@@ -278,27 +278,33 @@ the automatic filling of the current paragraph."
         ebib-file-associations '(("pdf" . "open"))
         ebib-index-default-sort '("timestamp" . descend)
         ebib-notes-template ":PROPERTIES:
-:ID:         %K
-:ROAM_REFS: @%K
+:ID:       %i
+:ROAM_REFS: @%k
 :END:
-#+title: %T
-#+description: %D
-#+date: %S
+#+title: %t
+#+description: %d
+#+date: %s
+
 %%?"
-        ebib-notes-template-specifiers '((?K . ebib-create-key)
-                                         (?T . ebib-create-org-title)
-					                               (?D . ebib-create-org-description)
-                                         (?L . ebib-create-org-link)
-                                         (?S . ebib-create-org-time-stamp))
+        ebib-notes-template-specifiers '((?k . ebib-create-key)
+                                         (?i . ebib-create-id)
+                                         (?t . ebib-create-org-title)
+					                               (?d . ebib-create-org-description)
+                                         (?l . ebib-create-org-link)
+                                         (?s . ebib-create-org-time-stamp))
         ebib-preload-bib-files bibtex-files
         ebib-use-timestamp t)
 
   (defun ebib-create-key (key _db)
-    "Return the KEY in DB for an Org mode note."
+    "Return the KEY in DB for the Org mode note."
     (format "%s" key))
 
+  (defun ebib-create-id (_key _db)
+    "Create an ID for the Org mode note."
+    (org-id-new))
+
   (defun ebib-create-org-time-stamp (_key _db)
-    "Create timestamp for an Org mode note."
+    "Create timestamp for the Org mode note."
     (format "%s" (with-temp-buffer (org-insert-time-stamp nil))))
 
   (defcustom ebib-zotero-translation-server "https://translate.manubot.org"
