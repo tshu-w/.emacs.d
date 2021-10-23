@@ -641,10 +641,11 @@ Org Review Transient state
   (setq org-mac-grab-devonthink-app-p nil
         org-mac-grab-Acrobat-app-p nil
         org-mac-grab-Brave-app-p nil
+        org-mac-grab-Chrome-app-p nil
         org-mac-grab-Evernote-app-p nil
-        org-mac-grab-Firefox-app-p nil
         org-mac-grab-Mail-app-p nil
-        org-mac-grab-Outlook-app-p nil))
+        org-mac-grab-Outlook-app-p nil
+        org-mac-grab-qutebrowser-app-p nil))
 
 (use-package evil-org
   :ensure t
