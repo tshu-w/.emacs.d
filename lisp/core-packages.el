@@ -17,7 +17,8 @@
 
 ;; initialize packages
 (setq package-quickstart t
-      package-quickstart-file (concat user-emacs-directory "var/package-quickstart.el"))
+      package-quickstart-file (concat user-emacs-directory "var/package-quickstart.el")
+      package-check-signature nil)
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
