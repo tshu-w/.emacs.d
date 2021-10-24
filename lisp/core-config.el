@@ -117,6 +117,10 @@
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
 (add-hook 'server-visit-hook #'server-remove-kill-buffer-hook)
 
+;; Do not allow the cursor in the minibuffer prompt
+(setq minibuffer-prompt-properties
+      '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)

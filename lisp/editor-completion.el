@@ -9,10 +9,17 @@
 ;;; Code:
 
 (use-package vertico
-  :ensure t
   :hook (after-init . vertico-mode)
   :config
+  ;; Hide commands in M-x which do not work in the current mode.
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
+
   (setq vertico-cycle t)
+
+  (use-package vertico-buffer
+    :defer t
+    :hook (vertico-mode . vertico-buffer-mode))
 
   (use-package vertico-directory
     :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
@@ -34,7 +41,8 @@
   :ensure t
   :init
   (setq completion-styles '(orderless)
-        completion-category-defaults nil)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion))))
   :config
   (defun flex-if-twiddle (pattern _index _total)
     (when (string-suffix-p "~" pattern)
@@ -130,7 +138,18 @@ targets."
 
     (setq embark-indicators '(embark-which-key-indicator
                               embark-highlight-indicator
-                              embark-isearch-highlight-indicator)))
+                              embark-isearch-highlight-indicator))
+
+    (defun embark-hide-which-key-indicator (fn &rest args)
+      "Hide the which-key indicator immediately when using the completing-read prompter."
+      (when-let ((win (get-buffer-window which-key--buffer
+                                         'visible)))
+        (quit-window 'kill-buffer win)
+        (let ((embark-indicators (delq #'embark-which-key-indicator embark-indicators)))
+          (apply fn args))))
+
+    (advice-add #'embark-completing-read-prompter
+                :around #'embark-hide-which-key-indicator))
 
   (with-eval-after-load 'vertico
     (defun embark-vertico-indicator ()
