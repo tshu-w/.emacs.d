@@ -140,7 +140,7 @@
                       doom-zenburn
                       ;; flucui-dark
                       humanoid-dark
-                      kaolin-blossom
+                      ;; kaolin-blossom
                       kaolin-bubblegum
                       kaolin-galaxy
                       kaolin-ocean
