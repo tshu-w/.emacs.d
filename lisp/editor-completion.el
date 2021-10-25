@@ -84,7 +84,7 @@
   :init
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   :config
-  (setq consult-narrow-key "<"
+  (setq consult-narrow-key "?"
         consult-project-root-function (lambda () (project-root (project-current t))))
 
   (consult-customize consult-theme
