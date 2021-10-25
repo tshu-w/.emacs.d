@@ -242,8 +242,7 @@ the automatic filling of the current paragraph."
         bibtex-completion-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
         bibtex-completion-library-path (concat bibtex-file-path "files/")
         bibtex-completion-notes-path bibtex-notes-path
-        bibtex-completion-pdf-field "file"
-        bibtex-completion-pdf-open-function 'org-open-file))
+        bibtex-completion-pdf-field "file"))
 
 (use-package bibtex-actions
   :ensure t

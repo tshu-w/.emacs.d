@@ -146,6 +146,19 @@ reuse it's window, otherwise create new one."
   :config
   (setq pangu-spacing-real-insert-separtor t))
 
+(use-package pdf-tools
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :hook (pdf-view-mode . pdf-tools-enable-minor-modes)
+  :config
+  (setq pdf-view-use-scaling nil)
+  (pdf-tools-install :no-query)
+
+  (general-def pdf-view-mode-map
+    [remap consult-line] 'pdf-occur
+    [remap occur]        'pdf-occur
+    [remap evil-yank]    'pdf-view-kill-ring-save))
+
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
   :ensure t
