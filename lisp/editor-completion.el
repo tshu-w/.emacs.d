@@ -174,6 +174,9 @@ targets."
                           fr))))))
 
     (add-to-list 'embark-indicators #'embark-vertico-indicator))
+
+  (with-eval-after-load 'evil
+    (evil-set-initial-state 'embark-collect-mode 'motion))
   :general
   ("C-." 'embark-act
    "M-." 'embark-dwim))
