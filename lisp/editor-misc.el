@@ -89,6 +89,9 @@ reuse it's window, otherwise create new one."
 
   (setq helpful-max-buffers 3
         helpful-switch-buffer-function #'helpful-reuse-window)
+
+  (with-eval-after-load 'ibuffer
+    (add-to-list 'ibuffer-help-buffer-modes 'helpful-mode))
   :general
   ([remap describe-variable] 'helpful-variable
    [remap describe-function] 'helpful-callable
