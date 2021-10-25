@@ -87,6 +87,18 @@
   (setq consult-narrow-key "?"
         consult-project-root-function (lambda () (project-root (project-current t))))
 
+  (use-package affe
+    :ensure t
+    :defer t
+    :init
+    (fset 'consult-ripgrep 'affe-grep)
+    (fset 'consult-find    'affe-find)
+    (with-eval-after-load 'orderless
+      (defun affe-orderless-regexp-compiler (input _type)
+        (setq input (orderless-pattern-compiler input))
+        (cons input (lambda (str) (orderless--highlight input str))))
+      (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)))
+
   (consult-customize consult-theme
                      :preview-key '(:debounce 0.2 any)
                      consult-ripgrep consult-git-grep consult-grep
