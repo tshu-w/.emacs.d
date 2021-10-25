@@ -246,7 +246,7 @@
         (vc-dir project-root)))))
 
 (use-package recentf
-  :defer t
+  :hook (after-init . recentf-mode)
   :config
   (setq recentf-max-saved-items 100
         recentf-auto-cleanup 'never)
