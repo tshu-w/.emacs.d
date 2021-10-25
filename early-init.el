@@ -25,7 +25,8 @@
 (setq gc-cons-threshold most-positive-fixnum)
 
 ;; make sure native-comp-eln-load-path under `user-emacs-directory'
-(setq native-comp-eln-load-path `(,(concat user-emacs-directory "eln-cache/")))
+(setq native-comp-eln-load-path `(,(concat user-emacs-directory "eln-cache/"))
+      native-comp-deferred-compilation-deny-list '("org\\.el"))
 
 ;; Package initialize occurs automatically, before `user-init-file' is
 ;; loaded, but after `early-init-file'. We handle package
