@@ -28,6 +28,7 @@
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 *** [[https://www.reddit.com/r/emacs/.rss][M-x emacs-reddit]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
+*** [[https://karthinks.com/index.xml][Karthinks]]
 ** Research                                                          :Research:
 *** [[http://cos.name/feed/][统计之都]]
 *** [[http://gradientscience.org/feed.xml][gradient science]]
