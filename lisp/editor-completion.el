@@ -177,6 +177,9 @@ targets."
 
   (with-eval-after-load 'evil
     (evil-set-initial-state 'embark-collect-mode 'motion))
+
+  ;; disable `embark-collect-live' as I don't need it
+  (general-def embark-general-map "L" nil)
   :general
   ("C-." 'embark-act
    "M-." 'embark-dwim))
