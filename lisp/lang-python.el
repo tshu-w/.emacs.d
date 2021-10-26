@@ -21,7 +21,7 @@
                     tab-width 4))))
 
 (use-package blacken
-  :ensure t
+  :straight t
   :after python
   :config
   (setq blacken-fast-unsafe t
@@ -30,14 +30,14 @@
 
 ;; TODO: PR for https://github.com/purcell/emacs-reformatter/issues/32
 (use-package python-isort
-  :ensure t
+  :straight t
   :after python
   :config
   (setq python-isort-arguments '("--ca" "--cs" "--stdout" "-"))
   (despot-def python-mode-map "i" 'python-isort))
 
 (use-package lsp-pyright
-  :ensure t
+  :straight t
   :after python
   :config
   (lsp-register-client

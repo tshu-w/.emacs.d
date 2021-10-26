@@ -9,7 +9,6 @@
 ;;; Code:
 
 (use-package org
-  :ensure t
   :init
   (setq org-directory "~/Documents/Org/"
         org-note-directory (concat org-directory "notes/")
@@ -212,7 +211,6 @@
                  org-babel-expand-body:latex
                  org-babel-prep-session:latex))
     (use-package ob-shell
-      :ensure nil
       :commands (org-babel-execute:sh
                  org-babel-expand-body:sh
                  org-babel-execute:shell
@@ -635,7 +633,7 @@ Org Review Transient state
     "ov"     '(org-review/body :which-key "org-review")))
 
 (use-package org-mac-link
-  :ensure org-contrib
+  :straight t
   :defer t
   :config
   (setq org-mac-grab-devonthink-app-p nil
@@ -648,7 +646,7 @@ Org Review Transient state
         org-mac-grab-qutebrowser-app-p nil))
 
 (use-package evil-org
-  :ensure t
+  :straight t
   :after evil
   :hook (org-mode . evil-org-mode)
   :init
@@ -709,7 +707,7 @@ Org Review Transient state
     (run-at-time nil 6000 #'org-agenda-to-appt-refresh)))
 
 (use-package org-download
-  :ensure t
+  :straight t
   :after org
   :config
   (defun +org-download-method (link)
@@ -721,7 +719,7 @@ Org Review Transient state
         org-download-screenshot-method "screencapture -i %s"))
 
 (use-package org-reverse-datetree
-  :ensure t
+  :straight t
   :commands (org-datetree-goto-location
              org-datetree-goto-read-date-location
              org-datetree-refile)
@@ -761,7 +759,7 @@ go to `org-datetree-file-format' file based on TIME."
       (org-reverse-datetree-refile-to-file file time :ask-always ask-always :prefer prefer))))
 
 (use-package org-roam
-  :ensure t
+  :straight t
   :defer t
   :init
   (setq org-roam-capture-templates
@@ -784,7 +782,7 @@ go to `org-datetree-file-format' file based on TIME."
            :unnarrowed t))))
 
 (use-package org-superstar
-  :ensure t
+  :straight t
   :hook (org-mode . org-superstar-mode)
   :config
   (org-superstar-configure-like-org-bullets))

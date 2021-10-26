@@ -9,6 +9,7 @@
 ;;; Code:
 
 (use-package vertico
+  :straight (:files (:defaults "extensions/*.el"))
   :hook (after-init . vertico-mode)
   :config
   ;; Hide commands in M-x which do not work in the current mode.
@@ -34,11 +35,11 @@
     (vertico-map "C-q" 'vertico-quick-exit)))
 
 (use-package marginalia
-  :ensure t
+  :straight t
   :hook (after-init . marginalia-mode))
 
 (use-package orderless
-  :ensure t
+  :straight t
   :defer t
   :init
   (setq completion-styles '(orderless)
@@ -57,7 +58,7 @@
       `(orderless-without-literal . ,(substring pattern 1)))))
 
   (use-package pyim
-    :ensure t
+    :straight t
     :commands pyim-cregexp-build
     :config
     (setq pyim-default-scheme 'xiaohe-shuangpin))
@@ -81,24 +82,12 @@
                   (apply capf-fn args)))))
 
 (use-package consult
-  :ensure t
+  :straight t
   :init
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   :config
   (setq consult-narrow-key "?"
         consult-project-root-function (lambda () (project-root (project-current t))))
-
-  (use-package affe
-    :ensure t
-    :defer t
-    :init
-    (fset 'consult-ripgrep 'affe-grep)
-    (fset 'consult-find    'affe-find)
-    (with-eval-after-load 'orderless
-      (defun affe-orderless-regexp-compiler (input _type)
-        (setq input (orderless-pattern-compiler input))
-        (cons input (lambda (str) (orderless--highlight input str))))
-      (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)))
 
   (consult-customize consult-theme
                      :preview-key '(:debounce 0.2 any)
@@ -122,8 +111,22 @@
    [remap consult-imenu]       'consult-org-heading
    [remap consult-imenu-multi] 'consult-org-agenda))
 
+(use-package affe
+  :straight t
+  :defer t
+  :init
+  (with-eval-after-load 'consult
+    (fset 'consult-ripgrep 'affe-grep)
+    (fset 'consult-find    'affe-find))
+  :config
+  (with-eval-after-load 'orderless
+    (defun affe-orderless-regexp-compiler (input _type)
+      (setq input (orderless-pattern-compiler input))
+      (cons input (lambda (str) (orderless--highlight input str))))
+    (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)))
+
 (use-package embark
-  :ensure t
+  :straight t
   :config
   (with-eval-after-load 'which-key
     (defun embark-which-key-indicator ()
@@ -186,12 +189,12 @@ targets."
    "M-." 'embark-dwim))
 
 (use-package embark-consult
-  :ensure t
+  :straight t
   :after (consult embark))
 
 
 (use-package company
-  :ensure t
+  :straight t
   :custom-face (company-tooltip-mouse ((t (:background nil))))
   :hook (after-init . global-company-mode)
   :init
@@ -240,7 +243,7 @@ targets."
       (advice-add #'company-yasnippet :around #'company-yasnippet-disable-inline))))
 
 (use-package company-box
-  :ensure t
+  :straight t
   :hook (company-mode . company-box-mode)
   :config
   (setq company-box-backends-colors nil
@@ -248,12 +251,12 @@ targets."
         company-box-scrollbar nil))
 
 (use-package company-try-hard
-  :ensure t
+  :straight t
   :general
   ("C-;" 'company-try-hard))
 
 (use-package company-tabnine
-  :ensure t
+  :straight t
   :defer t
   :init
   (setq company-backends '(company-files
@@ -265,11 +268,11 @@ targets."
 
 
 (use-package prescient
-  :ensure t
+  :straight t
   :hook (after-init . prescient-persist-mode)
   :init
   (use-package company-prescient
-    :ensure t
+    :straight t
     :hook (company-mode . company-prescient-mode))
   :config
   (setq prescient-sort-full-matches-first t
@@ -277,7 +280,7 @@ targets."
 
 
 (use-package lsp-mode
-  :ensure t
+  :straight t
   :hook ((prog-mode . (lambda ()
                         (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
                           (lsp))))
@@ -351,7 +354,7 @@ returns the command to execute."
 
 
 (use-package yasnippet
-  :ensure t
+  :straight t
   :hook (after-init . yas-global-mode)
   :config
   (setq yas-triggers-in-field t

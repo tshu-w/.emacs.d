@@ -9,7 +9,7 @@
 ;;; Code:
 
 (use-package tex
-  :ensure auctex
+  :straight auctex
   :defer t
   :mode ("\\.[tT]e[xX]\\'" . TeX-tex-mode)
   :config
@@ -199,7 +199,7 @@ the automatic filling of the current paragraph."
     "rv"    'reftex-view-crossref))
 
 (use-package auctex-latexmk
-  :ensure t
+  :straight t
   :after tex
   :config
   (auctex-latexmk-setup)
@@ -207,15 +207,15 @@ the automatic filling of the current paragraph."
   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (use-package aas
-  :ensure t
+  :straight t
   :hook ((TeX-mode org-mode) . aas-activate-for-major-mode))
 
 (use-package laas
-  :ensure t
+  :straight t
   :hook (TeX-mode . laas-mode))
 
 (use-package evil-tex
-  :ensure t
+  :straight t
   :after evil
   :hook (TeX-mode . evil-tex-mode))
 
@@ -234,7 +234,7 @@ the automatic filling of the current paragraph."
         bibtex-dialect 'biblatex))
 
 (use-package bibtex-completion
-  :ensure t
+  :straight (:files ("bibtex-completion.el"))
   :defer t
   :config
   (setq bibtex-autokey-year-length 4
@@ -245,8 +245,8 @@ the automatic filling of the current paragraph."
         bibtex-completion-pdf-field "file"))
 
 (use-package bibtex-actions
-  :ensure t
-  :after bibtex-completion
+  :straight (:includes oc-bibtex-actions)
+  :defer t
   :config
   (with-eval-after-load 'embark
     (setq bibtex-actions-at-point-function 'embark-act)
@@ -257,7 +257,7 @@ the automatic filling of the current paragraph."
     (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))))
 
 (use-package oc-bibtex-actions
-  :ensure citeproc
+  :straight citeproc
   :after oc
   :config
   (setq org-cite-insert-processor 'oc-bibtex-actions
@@ -265,7 +265,7 @@ the automatic filling of the current paragraph."
         org-cite-activate-processor 'oc-bibtex-actions))
 
 (use-package ebib
-  :ensure t
+  :straight t
   :config
   (setq ebib-default-directory bibtex-file-path
         ebib-bib-search-dirs `(,bibtex-file-path)

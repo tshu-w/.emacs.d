@@ -10,7 +10,7 @@
 ;;; Code:
 
 (use-package flycheck
-  :ensure t
+  :straight t
   :hook (prog-mode . flycheck-mode)
   :custom-face (flycheck-info ((t (:underline nil))))
   :config
@@ -92,7 +92,7 @@ If the error list is visible, hide it.  Otherwise, show it."
     "ts" 'flycheck-mode))
 
 (use-package flycheck-posframe
-  :ensure t
+  :straight t
   :if (display-graphic-p)
   :custom-face (flycheck-posframe-border-face ((t (:inherit default))))
   :hook (flycheck-mode . flycheck-posframe-mode)
@@ -182,7 +182,7 @@ SCOPE can be:
     "tS"  'flyspell-mode))
 
 (use-package flyspell-correct
-  :ensure t
+  :straight t
   :general
   (tyrant-def
     "Sc" 'flyspell-correct-wrapper

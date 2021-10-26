@@ -9,7 +9,7 @@
 ;;; Code:
 
 (use-package markdown-mode
-  :ensure t
+  :straight t
   :defer t
   :config
   (despot-def markdown-mode-map
@@ -101,7 +101,7 @@
     "M-l"      'markdown-demote))
 
 (use-package mmm-mode
-  :ensure t
+  :straight t
   :hook (markdown-mode . mmm-mode)
   :config
   (defvar markdown-mmm-auto-modes

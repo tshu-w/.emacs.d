@@ -29,6 +29,9 @@ tramp
 # quelpa packages
 /quelpa/
 
+# straight packages
+/straight/
+
 # reftex files
 *.rel
 
@@ -54,16 +57,13 @@ flycheck_*.el
 # network security
 /network-security.data
 
-
-# End of https://www.gitignore.io/api/emacs
-
 # no-littering
 var/
+
+# native-comp
+/eln-cache/
 
 # Rime
 build/
 *.userdb/
 user.yaml
-
-# native-comp
-eln-cache/
