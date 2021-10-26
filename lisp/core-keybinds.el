@@ -377,12 +377,6 @@
         evil-owl-idle-delay 0.5
         evil-owl-max-string-length 80))
 
-(use-package evil-pinyin
-  :straight t
-  :hook (after-init . global-evil-pinyin-mode)
-  :init
-  (setq evil-pinyin-scheme 'simplified-xiaohe-all))
-
 (use-package evil-surround
   :straight t
   :hook (after-init . global-evil-surround-mode)
