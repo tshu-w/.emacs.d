@@ -706,18 +706,6 @@ Org Review Transient state
   (with-eval-after-load 'org-agenda
     (run-at-time nil 6000 #'org-agenda-to-appt-refresh)))
 
-(use-package org-download
-  :straight t
-  :after org
-  :config
-  (defun +org-download-method (link)
-    (org-download--fullname (org-link-unescape link)))
-  (setq org-download-method '+org-download-method)
-
-  (setq org-download-annotate-function (lambda (_link) "")
-        org-download-method 'attach
-        org-download-screenshot-method "screencapture -i %s"))
-
 (use-package org-reverse-datetree
   :straight t
   :commands (org-datetree-goto-location
