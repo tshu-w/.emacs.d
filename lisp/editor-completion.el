@@ -39,6 +39,7 @@
 
 (use-package orderless
   :ensure t
+  :defer t
   :init
   (setq completion-styles '(orderless)
         completion-category-defaults nil
