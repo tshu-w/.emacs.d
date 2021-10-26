@@ -193,42 +193,36 @@
   (use-package ob
     :defer t
     :init
-    (setq org-confirm-babel-evaluate nil
+    (setq org-babel-load-languages nil
+          org-confirm-babel-evaluate nil
           org-edit-src-content-indentation 0
           org-src-fontify-natively t
           org-src-preserve-indentation t
           org-src-tab-acts-natively nil)
-
-    (use-package ob-python
-      :commands (org-babel-execute:python))
-    (use-package ob-emacs-lisp
-      :commands (org-babel-execute:elisp
-                 org-babel-expand-body:elisp
-                 org-babel-execute:emacs-lisp
-                 org-babel-expand-body:emacs_lisp))
-    (use-package ob-latex
-      :commands (org-babel-execute:latex
-                 org-babel-expand-body:latex
-                 org-babel-prep-session:latex))
-    (use-package ob-shell
-      :commands (org-babel-execute:sh
-                 org-babel-expand-body:sh
-                 org-babel-execute:shell
-                 org-babel-expand-body:shell))
-    (use-package ob-C
-      :commands (org-babel-execute:C
-                 org-babel-expand-body:C
-                 org-babel-execute:C++
-                 org-babel-expand-body:C++)
-      :config
-      (setq org-babel-C-compiler "gcc -std=c++17"
-            org-babel-C++-compiler "g++ -std=c++17"))
     :config
     (defun ob-fix-inline-images ()
       "Fix redisplay of inline images after a code block evaluation."
       (when org-inline-image-overlays
         (org-redisplay-inline-images)))
-    (add-hook 'org-babel-after-execute-hook #'ob-fix-inline-images))
+    (add-hook 'org-babel-after-execute-hook #'ob-fix-inline-images)
+
+    (defun org-babel-execute-src-block@before (&optional _arg info _params)
+      "Load language if needed"
+      (let* ((lang (nth 0 info))
+             (sym (if (member (downcase lang) '("c" "cpp" "c++")) 'C (intern lang)))
+             (backup-languages org-babel-load-languages))
+        ;; - (LANG . nil) forbidden languages that are not loaded.
+        ;; - (LANG . t) The loaded language is not repeated.
+        (unless (assoc sym backup-languages)
+          (condition-case err
+              (progn
+                (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
+                (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
+            (file-missing
+             (setq-default org-babel-load-languages backup-languages)
+             err)))))
+
+    (advice-add 'org-babel-execute-src-block :before #'org-babel-execute-src-block@before))
 
   (use-package oc
     :defer t
