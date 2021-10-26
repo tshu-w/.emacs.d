@@ -192,6 +192,8 @@ targets."
   :straight t
   :after (consult embark))
 
+(use-package wgrep :straight t :defer t)
+
 
 (use-package company
   :straight t
