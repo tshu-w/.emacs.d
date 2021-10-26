@@ -311,8 +311,8 @@
   the boundaries of the text object."
       `(progn
          (define-text-object-regexp ,key ,name
-           ,(regexp-quote start)
-           ,(regexp-quote end))
+                                    ,(regexp-quote start)
+                                    ,(regexp-quote end))
          (with-eval-after-load 'evil-surround
            (add-to-list 'evil-surround-pairs-alist
                         (cons (string-to-char ,key)
@@ -330,10 +330,6 @@
     (define-text-object "-" "hyphen" "-" "-")
     (define-text-object "~" "tilde" "~" "~")
     (define-text-object "=" "equal" "=" "=")
-    (define-text-object "«" "double-angle-bracket" "«" "»")
-    (define-text-object "｢" "corner-bracket" "｢" "｣")
-    (define-text-object "‘" "single-quotation-mark" "‘" "’")
-    (define-text-object "“" "double-quotation-mark" "“" "”")
     (define-text-object ";" "elisp-comment" ";; " "")
 
     (evil-define-text-object evil-pasted (count &rest args)
