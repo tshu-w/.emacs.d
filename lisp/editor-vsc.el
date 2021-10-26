@@ -14,7 +14,7 @@
   (setq vc-follow-symlinks t))
 
 (use-package magit
-  :ensure t
+  :straight t
   :init
   (setq magit-define-global-key-bindings nil)
   :config
@@ -56,7 +56,7 @@
     "gU"  'magit-unstage-file))
 
 (use-package forge
-  :ensure t
+  :straight t
   :defer t
   :init
   ;; HACK: https://github.com/emacs-evil/evil-collection/issues/543
@@ -73,19 +73,19 @@
   (advice-add 'evil-collection-magit-setup :override #'evil-collection-magit-setup@override))
 
 (use-package transient
-  :ensure t
+  :straight t
   :defer t
   :config
   (general-def transient-base-map   "q" 'transient-quit-one)
   (general-def transient-sticky-map "q" 'transient-quit-seq))
 
 (use-package browse-at-remote
-  :ensure t
+  :straight t
   :general
   (tyrant-def "go" 'browse-at-remote))
 
 (use-package diff-hl
-  :ensure t
+  :straight t
   :hook (after-init . global-diff-hl-mode)
   :config
   (setq diff-hl-side 'right)
@@ -98,12 +98,12 @@
     "[ h" '(diff-hl-previous-hunk :jump t)
     "] h" '(diff-hl-next-hunk :jump t)))
 
-(use-package git-auto-commit-mode :ensure t :defer t)
+(use-package git-auto-commit-mode :straight t :defer t)
 
-(use-package git-modes :ensure t :defer t)
+(use-package git-modes :straight t :defer t)
 
 (use-package git-timemachine
-  :ensure t
+  :straight t
   :config
   (general-def git-timemachine-mode-map
     "gt" '(:ignore t :which-key "git-timemachine"))
@@ -111,7 +111,7 @@
   (tyrant-def "gt" 'git-timemachine))
 
 (use-package git-link
-  :ensure t
+  :straight t
   :config
   (setq git-link-open-in-browser t)
 
@@ -136,14 +136,14 @@
     "gLh" 'git-link-homepage))
 
 (use-package gitignore-templates
-  :ensure t
+  :straight t
   :general
   (tyrant-def
     "gI"  '(:ignore t :which-key "gitignore")
     "gIn" 'gitignore-templates-new-file
     "gIi" 'gitignore-templates-insert))
 
-(use-package github-stars :ensure t :defer t)
+(use-package github-stars :straight t :defer t)
 
 
 (provide 'editor-vsc)

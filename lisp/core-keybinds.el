@@ -9,7 +9,7 @@
 ;;; Code:
 
 (use-package which-key
-  :ensure t
+  :straight t
   :hook (after-init . which-key-mode)
   :config
   (setq echo-keystrokes 0.02)
@@ -21,7 +21,7 @@
         which-key-allow-evil-operators t))
 
 (use-package general
-  :ensure t
+  :straight t
   :after evil
   :config
   (general-create-definer tyrant-def
@@ -125,7 +125,6 @@
     "p"       '(:keymap project-prefix-map :which-key "projects")
 
     "q"       '(:ignore t :which-key "quit")
-    "qd"      'restart-emacs-debug-init
     "qr"      'restart-emacs
     "qR"      'restart-emacs-without-desktop
     "qq"      'save-buffers-kill-terminal
@@ -201,7 +200,7 @@
                           (indent-according-to-mode))))))
 
 (use-package evil
-  :ensure t
+  :straight t
   :hook (prog-mode . hs-minor-mode)
   :init
   (setq evil-want-keybinding nil
@@ -364,14 +363,14 @@
   (general-def 'normal "zf" 'reposition-window))
 
 (use-package evil-collection
-  :ensure t
+  :straight t
   :init
   (evil-collection-init)
   (add-hook 'org-agenda-mode-hook
             (lambda () (evil-collection-unimpaired-mode -1))))
 
 (use-package evil-owl
-  :ensure t
+  :straight t
   :hook (after-init . evil-owl-mode)
   :config
   (setq evil-owl-display-method 'posframe
@@ -379,13 +378,13 @@
         evil-owl-max-string-length 80))
 
 (use-package evil-pinyin
-  :ensure t
+  :straight t
   :hook (after-init . global-evil-pinyin-mode)
   :init
   (setq evil-pinyin-scheme 'simplified-xiaohe-all))
 
 (use-package evil-surround
-  :ensure t
+  :straight t
   :hook (after-init . global-evil-surround-mode)
   :config
   (add-hook 'emacs-lisp-mode-hook

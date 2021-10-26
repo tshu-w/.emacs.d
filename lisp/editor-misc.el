@@ -9,7 +9,7 @@
 ;;; Code:
 
 (use-package aggressive-indent
-  :ensure t
+  :straight t
   :hook (emacs-lisp-mode . aggressive-indent-mode)
   :config
   (add-hook 'diff-auto-refine-mode-hook (lambda () (aggressive-indent-mode -1)))
@@ -17,7 +17,7 @@
   (tyrant-def "tA" 'aggressive-indent-mode))
 
 (use-package alert
-  :ensure t
+  :straight t
   :defer t
   :config
   (when (memq window-system '(mac ns))
@@ -35,7 +35,7 @@
     (setq alert-default-style 'notifier)))
 
 (use-package dumb-jump
-  :ensure t
+  :straight t
   :defer t
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
@@ -43,11 +43,11 @@
 
 (use-package editorconfig
   :disabled t
-  :ensure t
+  :straight t
   :init (editorconfig-mode))
 
 (use-package elfeed
-  :ensure t
+  :straight t
   :init
   (with-eval-after-load 'writeroom-mode
     (add-to-list 'writeroom-major-modes 'elfeed-search-mode)
@@ -56,27 +56,27 @@
   (tyrant-def "ae" 'elfeed))
 
 (use-package elfeed-org
-  :ensure t
+  :straight t
   :after elfeed
   :config
   (elfeed-org)
   (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
 
 (use-package fcitx
-  :ensure t
+  :straight t
   :after exec-path-from-shell
   :init
   (fcitx-aggressive-setup)
   (fcitx-prefix-keys-turn-off))
 
 (use-package gcmh
-  :ensure t
+  :straight t
   :hook (after-init . gcmh-mode)
   :config
   (setq gcmh-high-cons-threshold #x6400000))
 
 (use-package helpful
-  :ensure t
+  :straight t
   :config
   (defun helpful-reuse-window (buffer-or-name)
     "Switch to helpful BUFFER-OR-NAME.
@@ -99,7 +99,7 @@ reuse it's window, otherwise create new one."
    [remap describe-key]      'helpful-key))
 
 (use-package link-hint
-  :ensure t
+  :straight t
   :config
   (setq link-hint-restore nil)
   :general
@@ -122,7 +122,7 @@ reuse it's window, otherwise create new one."
     "jy" 'link-hint-copy-link))
 
 (use-package nov
-  :ensure t
+  :straight t
   :commands (nov-org-link-follow nov-org-link-store)
   :mode ("\\.epub\\'" . nov-mode)
   :init
@@ -132,7 +132,7 @@ reuse it's window, otherwise create new one."
                              :store 'nov-org-link-store)))
 
 (use-package pandoc-mode
-  :ensure t
+  :straight t
   :hook (pandoc-mode . pandoc-load-default-settings)
   :commands pandoc
   :config
@@ -144,13 +144,13 @@ reuse it's window, otherwise create new one."
     (pandoc-main-hydra/body)))
 
 (use-package pangu-spacing
-  :ensure t
+  :straight t
   :hook (org-mode . pangu-spacing-mode)
   :config
   (setq pangu-spacing-real-insert-separtor t))
 
 (use-package pdf-tools
-  :ensure t
+  :straight t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :hook (pdf-view-mode . pdf-tools-enable-minor-modes)
   :config
@@ -164,11 +164,11 @@ reuse it's window, otherwise create new one."
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
-  :ensure t
+  :straight t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
 
 (use-package rime
-  :ensure t
+  :straight t
   :defer t
   :custom-face (rime-preedit-face ((t nil)))
   :init
@@ -187,7 +187,7 @@ reuse it's window, otherwise create new one."
   (general-def rime-mode-map "C-`" 'rime-send-keybinding))
 
 (use-package terminal-here
-  :ensure t
+  :straight t
   :config
   (setq terminal-here-mac-terminal-command 'iterm2
         terminal-here-project-root-function (lambda () (project-root (project-current t))))
@@ -197,13 +197,13 @@ reuse it's window, otherwise create new one."
     "p \"" 'terminal-here-project-launch))
 
 (use-package undohist
-  :ensure t
+  :straight t
   :hook (after-init . undohist-initialize)
   :config
   (setq undohist-ignored-files '("EDITMSG")))
 
 (use-package winum
-  :ensure t
+  :straight t
   :hook (after-init . winum-mode)
   :config
   (setq winum-auto-assign-0-to-minibuffer t
@@ -270,7 +270,7 @@ stays on current"
     "b9" '(buffer-to-window-9           :which-key t)))
 
 (use-package wakatime-mode
-  :ensure t
+  :straight t
   :hook (prog-mode . wakatime-mode)
   :config
   (setq wakatime-cli-path (executable-find "wakatime"))

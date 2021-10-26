@@ -22,7 +22,7 @@
             (set-face-attribute 'font-lock-keyword-face nil :weight 'semi-bold)))
 
 (use-package doom-themes
-  :ensure t
+  :straight t
   :defer t
   :custom-face
   ;; fix doom-theme diff-hl face
@@ -30,39 +30,39 @@
   (diff-hl-delete ((t (:background nil))))
   (diff-hl-insert ((t (:background nil)))))
 
-(use-package berrys-theme :ensure t :defer t)
+(use-package berrys-theme :straight t :defer t)
 
-(use-package flucui-themes :ensure t :defer t)
+(use-package flucui-themes :straight t :defer t)
 
 (use-package humanoid-themes
-  :ensure t
+  :straight t
   :defer t
   :config
   (setq humanoid-org-height nil
         humanoid-org-bold nil))
 
 (use-package kaolin-themes
-  :ensure t
+  :straight t
   :defer t
   :config
   (setq kaolin-themes-org-scale-headings nil
         kaolin-themes-modeline-border nil))
 
 (use-package lab-themes
-  :ensure t
+  :straight t
   :defer t
   :custom-face
   (font-lock-keyword-face ((t (:slant normal))))
   (font-lock-constant-face ((t (:slant normal)))))
 
 (use-package spacemacs-common
-  :ensure spacemacs-theme
+  :straight spacemacs-theme
   :defer t
   :init
   (setq spacemacs-theme-org-height nil
         spacemacs-theme-comment-bg nil))
 
-(use-package solo-jazz-theme :ensure t :defer t)
+(use-package solo-jazz-theme :straight t :defer t)
 
 (defvar light-themes '(doom-acario-light
                        ;; doom-ayu-light
@@ -161,7 +161,7 @@
 
 
 (use-package doom-modeline
-  :ensure t
+  :straight t
   :hook ((after-load-theme . doom-modeline-mode)
          (after-load-theme . smaller-modeline))
   :config
@@ -186,15 +186,15 @@
                           :height 120 :fontset "fontset-modeline"))))
 
 (use-package tree-sitter
-  :ensure t
+  :straight t
   :hook ((python-mode . tree-sitter-hl-mode)))
 
 (use-package tree-sitter-langs
-  :ensure t
+  :straight t
   :after tree-sitter)
 
 (use-package writeroom-mode
-  :ensure t
+  :straight t
   :hook (emacs-startup . global-writeroom-mode)
   :config
   (setq split-width-threshold 120
@@ -214,7 +214,7 @@
     "wC" 'global-writeroom-mode))
 
 (use-package popwin
-  :ensure t
+  :straight t
   :hook (after-init . popwin-mode)
   :config
   ;; don't use default value but manage it ourselves
@@ -243,13 +243,13 @@
     "wx" '(popwin:close-popup-window :which-key "close-popup-window")))
 
 (use-package hl-todo
-  :ensure t
+  :straight t
   ;; global hook activates hl-todo-mode for prog-mode, text-mode
   ;; mode can be explicitly defined using hl-todo-activate-in-modes variable
   :hook (after-init . global-hl-todo-mode))
 
 (use-package highlight-parentheses
-  :ensure t
+  :straight t
   :hook (prog-mode . highlight-parentheses-mode)
   :config
   (setq highlight-parentheses-colors '("Springgreen3"
@@ -259,19 +259,19 @@
   (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultra-bold))
 
 (use-package rainbow-delimiters
-  :ensure t
+  :straight t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package highlight-numbers
-  :ensure t
+  :straight t
   :hook (prog-mode . highlight-numbers-mode))
 
 (use-package eval-sexp-fu
-  :ensure t
+  :straight t
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
 
 (use-package xterm-color
-  :ensure t
+  :straight t
   :defer t
   :init
   (setq compilation-environment '("TERM=xterm-256color"))
