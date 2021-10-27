@@ -201,14 +201,15 @@
 
 (use-package evil
   :straight t
-  :hook (prog-mode . hs-minor-mode)
+  :demand t
+  :hook ((after-init . evil-mode)
+         (prog-mode . hs-minor-mode))
   :init
   (setq evil-want-keybinding nil
         evil-ex-search-vim-style-regexp t
         evil-search-module 'evil-search
         evil-symbol-word-search t
         evil-magic 'very-magic)
-  (evil-mode)
   :config
   (setq evil-cross-lines t
         evil-kill-on-visual-paste nil
@@ -320,8 +321,8 @@
 
 (use-package evil-collection
   :straight t
+  :hook (after-init . evil-collection-init)
   :init
-  (evil-collection-init)
   (add-hook 'org-agenda-mode-hook
             (lambda () (evil-collection-unimpaired-mode -1))))
 
