@@ -292,46 +292,6 @@
     (add-hook 'after-change-major-mode-hook #'set-evil-shift-width 'append))
 
   (progn
-    (defmacro define-text-object-regexp (key name start-regexp end-regexp)
-      "Define a text object.
-  START-REGEXP and END-REGEXP are the boundaries of the text object."
-      (let ((inner-name (make-symbol (concat "evil-inner-" name)))
-            (outer-name (make-symbol (concat "evil-outer-" name))))
-        `(progn
-           (evil-define-text-object ,inner-name (count &optional beg end type)
-             (evil-select-paren ,start-regexp ,end-regexp beg end type count nil))
-           (evil-define-text-object ,outer-name (count &optional beg end type)
-             (evil-select-paren ,start-regexp ,end-regexp beg end type count t))
-           (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
-           (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
-
-    (defmacro define-text-object (key name start end)
-      "Define a text object and a surround pair.
-  START and END are strings (not regular expressions) that define
-  the boundaries of the text object."
-      `(progn
-         (define-text-object-regexp ,key ,name
-                                    ,(regexp-quote start)
-                                    ,(regexp-quote end))
-         (with-eval-after-load 'evil-surround
-           (add-to-list 'evil-surround-pairs-alist
-                        (cons (string-to-char ,key)
-                              (if ,end
-                                  (cons ,start ,end)
-                                ,start))))))
-
-    (define-text-object "$" "dollar" "$" "$")
-    (define-text-object "*" "star" "*" "*")
-    (define-text-object "8" "block-star" "/*" "*/")
-    (define-text-object "|" "bar" "|" "|")
-    (define-text-object "%" "percent" "%" "%")
-    (define-text-object "/" "slash" "/" "/")
-    (define-text-object "_" "underscore" "_" "_")
-    (define-text-object "-" "hyphen" "-" "-")
-    (define-text-object "~" "tilde" "~" "~")
-    (define-text-object "=" "equal" "=" "=")
-    (define-text-object ";" "elisp-comment" ";; " "")
-
     (evil-define-text-object evil-pasted (count &rest args)
       (list (save-excursion (evil-goto-mark ?\[) (point))
             (save-excursion (evil-goto-mark ?\]) (1+ (point)))))
