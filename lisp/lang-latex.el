@@ -259,7 +259,19 @@ the automatic filling of the current paragraph."
 (use-package oc-bibtex-actions
   :straight citeproc
   :after oc
-  :config
+  :defer t
+  :commands (oc-bibtex-actions-insert
+             oc-bibtex-actions-select-style
+             oc-bibtex-actions-follow
+             oc-bibtex-actions-activate)
+  :init
+  (org-cite-register-processor 'oc-bibtex-actions
+    :insert (org-cite-make-insert-processor
+             #'oc-bibtex-actions-insert
+             #'oc-bibtex-actions-select-style)
+    :follow #'oc-bibtex-actions-follow
+    :activate #'oc-bibtex-actions-activate)
+
   (setq org-cite-insert-processor 'oc-bibtex-actions
         org-cite-follow-processor 'oc-bibtex-actions
         org-cite-activate-processor 'oc-bibtex-actions))
