@@ -179,9 +179,6 @@ targets."
 
     (add-to-list 'embark-indicators #'embark-vertico-indicator))
 
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'embark-collect-mode 'motion))
-
   ;; disable `embark-collect-live' as I don't need it
   (general-def embark-general-map "L" nil)
   :general
