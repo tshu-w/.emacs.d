@@ -449,23 +449,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     (+org-emphasize org-underline ?_)
     (+org-emphasize org-verbatim ?=))
 
-  (progn
-    (defun org-review (key)
-      "Org review with org capture and agenda."
-      (org-capture nil key)
-      (org-agenda nil key)
-      (other-window 1))
-
-    (defhydra org-review (:hint nil :exit t)
-      "
-Org Review Transient state
-[_y_] yesterday    [_w_] last week
-[_t_] today        [_W_] this week"
-      ("y" (lambda () (interactive) (org-review "ry")))
-      ("t" (lambda () (interactive) (org-review "rt")))
-      ("W" (lambda () (interactive) (org-review "rW")))
-      ("w" (lambda () (interactive) (org-review "rw")))))
-
   (despot-def org-mode-map
     "'"     'org-edit-special
     ","     'org-ctrl-c-ctrl-c
@@ -623,8 +606,7 @@ Org Review Transient state
     "od"     'open-org-default-notes-file
     "ol"     'org-store-link
     "oo"     'org-agenda
-    "op"     'open-org-project-file
-    "ov"     '(org-review/body :which-key "org-review")))
+    "op"     'open-org-project-file))
 
 (use-package org-mac-link
   :straight t
