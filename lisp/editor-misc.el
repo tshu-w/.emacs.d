@@ -62,12 +62,12 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
 
+(use-package esup :straight t :defer t)
+
 (use-package fcitx
   :straight t
   :after exec-path-from-shell
-  :init
-  (fcitx-aggressive-setup)
-  (fcitx-prefix-keys-turn-off))
+  :hook (after-init . fcitx-aggressive-setup))
 
 (use-package gcmh
   :straight t
@@ -111,6 +111,7 @@ reuse it's window, otherwise create new one."
                help-mode-map
                helpful-mode-map
                Info-mode-map
+               mu4e-view-mode-map
                xref--xref-buffer-mode-map
                woman-mode-map)
     :states  'normal
