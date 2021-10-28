@@ -167,6 +167,8 @@ reuse it's window, otherwise create new one."
   :straight t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
 
+(use-package reformatter :straight t :defer t)
+
 (use-package rime
   :straight t
   :defer t

@@ -18,23 +18,19 @@
               "Stuff to do when opening `python-mode' files."
               (set (make-local-variable 'comment-inline-offset) 2)
               (setq fill-column 88
-                    tab-width 4))))
+                    tab-width 4)))
 
-(use-package blacken
-  :straight t
-  :after python
-  :config
-  (setq blacken-fast-unsafe t
-        blacken-line-length 'fill)
-  (despot-def python-mode-map "=" 'blacken-buffer))
+  (reformatter-define python-isort
+    :program "isort"
+    :args '("--combine-as" "--combine-star" "--atomic" "--stdout" "-"))
 
-;; TODO: PR for https://github.com/purcell/emacs-reformatter/issues/32
-(use-package python-isort
-  :straight t
-  :after python
-  :config
-  (setq python-isort-arguments '("--ca" "--cs" "--stdout" "-"))
-  (despot-def python-mode-map "i" 'python-isort))
+  (reformatter-define python-blacken
+    :program "black"
+    :args '("--fast" "-"))
+
+  (despot-def python-mode-map
+    "i" 'python-isort
+    "=" 'python-blacken))
 
 (use-package lsp-pyright
   :straight t
