@@ -67,7 +67,6 @@
 (require 'lang-latex)
 (require 'lang-python)
 (require 'lang-emacs-lisp)
-(require 'lang-markdown)
 (require 'lang-misc)
 
 (defun display-startup-echo-area-message ()
