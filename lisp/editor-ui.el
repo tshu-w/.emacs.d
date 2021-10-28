@@ -266,10 +266,6 @@
   :straight t
   :hook (prog-mode . highlight-numbers-mode))
 
-(use-package eval-sexp-fu
-  :straight t
-  :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
-
 (use-package xterm-color
   :straight t
   :defer t
