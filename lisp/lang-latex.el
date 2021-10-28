@@ -29,38 +29,7 @@
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
-  (defvar latex-nofill-env '("equation"
-                             "equation*"
-                             "align"
-                             "align*"
-                             "tabular"
-                             "tabular*"
-                             "tabu"
-                             "tabu*"
-                             "tikzpicture")
-    "List of environment names in which `auto-fill-mode' will be inhibited.")
-
-  (defun latex-autofill ()
-    "Check whether the pointer is currently inside one of the
-environments described in `latex-nofill-env' and if so, inhibits
-the automatic filling of the current paragraph."
-    (let ((do-auto-fill t)
-          (current-environment "")
-          (level 0))
-      (while (and do-auto-fill (not (string= current-environment "document")))
-        (setq level (1+ level)
-              current-environment (LaTeX-current-environment level)
-              do-auto-fill (not (member current-environment latex-nofill-env))))
-      (when do-auto-fill
-        (do-auto-fill))))
-
-  (defun latex-auto-fill-mode ()
-    "Toggle auto-fill-mode using the custom auto-fill function."
-    (interactive)
-    (auto-fill-mode)
-    (setq auto-fill-function #'latex-autofill))
-
-  (add-hook 'LaTeX-mode-hook 'latex-auto-fill-mode)
+  (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
@@ -70,16 +39,6 @@ the automatic filling of the current paragraph."
     (interactive)
     (TeX-save-document (TeX-master-file))
     (TeX-command TeX-command-default 'TeX-master-file -1))
-
-  (add-hook 'LaTeX-mode-hook
-            (lambda ()
-              (add-hook 'after-save-hook 'TeX-build nil 'local)))
-
-  (defun TeX-process-check@around (fun name)
-    (cl-flet ((yes-or-no-p (&rest _args) t)
-              (y-or-n-p (&rest _args) t))
-      (funcall fun name)))
-  (advice-add 'TeX-process-check :around #'TeX-process-check@around)
 
   ;; Rebindings for TeX-font
   (defun font-bold () (interactive) (TeX-font nil ?\C-b))
