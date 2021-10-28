@@ -43,8 +43,6 @@
 
 (use-package no-littering :straight t :defer t)
 
-(use-package esup :straight t :defer t)
-
 (use-package restart-emacs :straight t :defer t)
 
 (provide 'core-packages)

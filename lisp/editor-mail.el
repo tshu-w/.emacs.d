@@ -182,10 +182,6 @@
                         ;; IMAP-deleted:
                         (mu4e~proc-move docid (mu4e~mark-check-target target) "+S-u-N"))))
 
-  (general-def 'normal mu4e-view-mode-map
-    "o"        'link-hint-open-link
-    "C-o"      'mu4e-view-open-attachment)
-
   (general-def 'normal mu4e-headers-mode-map
     "e"        'mu4e-headers-mark-thread
     "E"        'mu4e-headers-mark-subthread)
