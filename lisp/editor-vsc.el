@@ -98,8 +98,6 @@
     "[ h" '(diff-hl-previous-hunk :jump t)
     "] h" '(diff-hl-next-hunk :jump t)))
 
-(use-package git-auto-commit-mode :straight t :defer t)
-
 (use-package git-modes :straight t :defer t)
 
 (use-package git-timemachine
