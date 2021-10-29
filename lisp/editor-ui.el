@@ -179,11 +179,8 @@
   (defun smaller-modeline ()
     "Make doom-modeline smaller."
     (when window-system
-      (create-fontset-from-ascii-font "Source Code Pro:medium" nil "modeline")
-      (set-face-attribute 'mode-line nil
-                          :height 120 :fontset "fontset-modeline")
-      (set-face-attribute 'mode-line-inactive nil
-                          :height 120 :fontset "fontset-modeline"))))
+      (set-face-attribute 'mode-line nil :height 120)
+      (set-face-attribute 'mode-line-inactive nil :height 120))))
 
 (use-package tree-sitter
   :straight t
