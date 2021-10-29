@@ -10,6 +10,10 @@
 
 ;;; Code:
 
+(setq package-archives '(("melpa"        . "https://melpa.org/packages/")
+                         ("gnu"          . "https://elpa.gnu.org/packages/")
+                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")))
+
 ;; bootstrap `straight.el'
 (defvar bootstrap-version)
 (setq straight-check-for-modifications '(find-when-checking)
