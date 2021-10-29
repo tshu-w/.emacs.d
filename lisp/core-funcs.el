@@ -12,12 +12,6 @@
 ;; File
 ;; ---------------------------------------------------------------------------
 
-;; from http://emacsredux.com/blog/2013/05/18/instant-access-to-init-dot-el/
-(defun find-user-init-file ()
-  "Edit the `user-init-file', in the current window."
-  (interactive)
-  (find-file (concat user-emacs-directory "init.el")))
-
 (defun rename-current-buffer-file (&optional arg)
   "Rename the current buffer and the file it is visiting.
 If the buffer isn't visiting a file, ask if it should
