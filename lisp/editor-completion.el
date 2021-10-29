@@ -104,8 +104,8 @@
   (tyrant-def
     "jI" '(consult-imenu-multi :which-key "imenu-multi")
     "fl" '(consult-find :which-key "locate-files")
-    "jj" '(consult-line :which-key "search lines")
-    "jJ" '(consult-line-multi :which-key "search lines a/ buffers")
+    "js" '(consult-line :which-key "search lines")
+    "jS" '(consult-line-multi :which-key "search lines a/ buffers")
     "tt" 'consult-minor-mode-menu)
   (org-mode-map
    [remap consult-imenu]       'consult-org-heading
@@ -127,6 +127,17 @@
 
 (use-package embark
   :straight t
+  :init
+  (with-eval-after-load 'avy
+    (defun avy-action-embark (pt)
+      (unwind-protect
+          (save-excursion
+            (goto-char pt)
+            (embark-act))
+        (select-window
+         (cdr (ring-ref avy-ring 0))))
+      t)
+    (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
   :config
   (with-eval-after-load 'which-key
     (defun embark-which-key-indicator ()

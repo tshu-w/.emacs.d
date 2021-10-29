@@ -117,8 +117,9 @@
 
     "j"       '(:ignore t :which-key "jump")
     "ji"      'imenu
+    "jj"      'avy-goto-char-2
     "jb"      'bookmark-jump
-    "js"      'bookmark-set
+    "jB"      'bookmark-set
 
     "m"       '(:ignore t :which-key "major mode")
 
@@ -316,6 +317,9 @@
     (eldoc-add-command #'evil-cp-append))
 
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
+
+  (general-def '(normal motion) "s" 'evil-avy-goto-char-2)
+  (general-def 'operator "z" 'evil-avy-goto-char-2)
 
   (general-def 'normal "zf" 'reposition-window))
 
