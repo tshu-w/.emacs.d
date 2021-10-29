@@ -323,6 +323,9 @@
   :straight t
   :hook (after-init . evil-collection-init)
   :init
+  (setq evil-collection-mode-list
+        '(apropos arc-mode bookmark (buff-menu "buff-menu") calc calendar cmake-mode comint company compile consult (custom cus-edit) cus-theme debug dictionary diff-mode dired doc-view ebib edebug ediff explain-pause-mode elfeed elisp-mode elisp-refs embark epa ert eshell eval-sexp-fu eww finder flycheck flymake git-timemachine gnus grep help helpful ibuffer image image-dired imenu (indent "indent") info log-edit log-view man magit markdown-mode mu4e newsticker nov (occur replace) org outline (package-menu package) (pdf pdf-view) popup proced (process-menu simple) profiler python reftex ruby-mode scroll-lock sh-script shortdoc simple speedbar tab-bar tablist tabulated-list tar-mode (term term ansi-term multi-term) tetris thread timer-list vc-annotate vc-dir vc-git vertico view wdired wgrep which-key woman xref xwidget yaml-mode))
+
   (add-hook 'org-agenda-mode-hook
             (lambda () (evil-collection-unimpaired-mode -1))))
 
