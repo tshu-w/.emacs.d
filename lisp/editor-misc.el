@@ -276,7 +276,7 @@ stays on current"
   :straight t
   :hook (prog-mode . wakatime-mode)
   :config
-  (setq wakatime-cli-path (executable-find "wakatime"))
+  (setq wakatime-cli-path "wakatime-cli")
 
   (defun wakatime-dashboard ()
     (interactive)
