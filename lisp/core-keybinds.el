@@ -74,9 +74,7 @@
     "f"       '(:ignore t :which-key "files")
     "fC"      '(write-file :which-key "copy-file")
     "fD"      'delete-current-buffer-file
-    "fe"      '(:ignore t :which-key "emacs")
-    "fed"     'find-user-init-file
-    "fel"     'find-library
+    "fe"      'find-library
     "fE"      'sudo-edit
     "ff"      'find-file
     "fj"      'dired-jump
