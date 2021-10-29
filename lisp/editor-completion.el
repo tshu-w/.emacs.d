@@ -57,23 +57,7 @@
      ((string-prefix-p "!" pattern)
       `(orderless-without-literal . ,(substring pattern 1)))))
 
-  (use-package pyim
-    :straight t
-    :commands pyim-cregexp-build
-    :config
-    (setq pyim-default-scheme 'xiaohe-shuangpin))
-
-  (defun orderless-pinyin-regexp (component)
-    "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
-    (pyim-cregexp-build (orderless-regexp component)))
-
-  (defun pinyin-if-bang (pattern _index _total)
-    (when (string-suffix-p "!" pattern)
-      `(orderless-pinyin-regexp . ,(substring pattern 0 -1))))
-
-  (setq orderless-style-dispatchers '(flex-if-twiddle
-                                      without-if-bang
-                                      pinyin-if-bang))
+  (setq orderless-style-dispatchers '(flex-if-twiddle without-if-bang))
 
   (advice-add 'company-capf
               :around

@@ -163,6 +163,29 @@ reuse it's window, otherwise create new one."
     [remap occur]        'pdf-occur
     [remap evil-yank]    'pdf-view-kill-ring-save))
 
+(use-package pyim
+  :straight t
+  :commands pyim-cregexp-build
+  :init
+  (with-eval-after-load 'orderless
+    (defun orderless-pinyin-regexp (component)
+      "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
+      (pyim-cregexp-build (orderless-regexp component)))
+
+    (defun pinyin-if-bang (pattern _index _total)
+      (when (string-suffix-p "!" pattern)
+        `(orderless-pinyin-regexp . ,(substring pattern 0 -1))))
+
+    (add-to-list 'orderless-style-dispatchers 'pinyin-if-bang))
+
+  (with-eval-after-load 'avy
+    (defun avy--regex-candidates@around (fun regex &optional beg end pred group)
+      (let ((regex (pyim-cregexp-build regex)))
+        (funcall fun regex beg end pred group)))
+    (advice-add 'avy--regex-candidates :around #'avy--regex-candidates@around))
+  :config
+  (setq pyim-default-scheme 'xiaohe-shuangpin))
+
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
   :straight t
