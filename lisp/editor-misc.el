@@ -163,6 +163,21 @@ reuse it's window, otherwise create new one."
     [remap occur]        'pdf-occur
     [remap evil-yank]    'pdf-view-kill-ring-save))
 
+(use-package popper
+  :straight t
+  :hook ((after-init . popper-mode)
+         (after-init . popper-echo-mode))
+  :config
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          helpful-mode
+          compilation-mode))
+  :general
+  (tyrant-def ";" 'popper-toggle-latest))
+
 (use-package pyim
   :straight t
   :commands pyim-cregexp-build
