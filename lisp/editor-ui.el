@@ -182,6 +182,20 @@
       (set-face-attribute 'mode-line nil :height 120)
       (set-face-attribute 'mode-line-inactive nil :height 120))))
 
+(use-package shackle
+  :straight t
+  :hook (after-init . shackle-mode)
+  :config
+  (setq shackle-default-ratio 0.4
+        shackle-rules '((help-mode                :select t :align t)
+                        (helpful-mode             :select t :align t)
+                        ("*Messages*"             :select t :align t)
+                        (process-menu-mode        :align t)
+                        (compilation-mode         :align t)
+                        (flycheck-error-list-mode :align t)
+                        ("*Shell Command Output*" :align t)
+                        ("*Async Shell Command*"  :align t))))
+
 (use-package tree-sitter
   :straight t
   :hook ((python-mode . tree-sitter-hl-mode)))
@@ -209,35 +223,6 @@
   (tyrant-def
     "wc" 'writeroom-mode
     "wC" 'global-writeroom-mode))
-
-(use-package popwin
-  :straight t
-  :hook (after-init . popwin-mode)
-  :config
-  ;; don't use default value but manage it ourselves
-  (setq popwin:popup-window-height 0.4
-        popwin:special-display-config
-        '((help-mode
-           :dedicated t :position bottom :stick nil :noselect nil)
-          (helpful-mode
-           :dedicated t :position bottom :stick t   :noselect nil)
-          (process-menu-mode
-           :dedicated t :position bottom :stick t   :noselect t)
-          (compilation-mode
-           :dedicated t :position bottom :stick t   :noselect t)
-          (flycheck-error-list-mode
-           :dedicated t :position bottom :stick t   :noselect t)
-          ("*eshell*"
-           :dedicated t :position bottom :stick t   :noselect nil)
-          ("*Shell Command Output*"
-           :dedicated t :position bottom :stick t   :noselect nil)
-          ("*Async Shell Command*"
-           :dedicated t :position bottom :stick t   :noselect nil)))
-  :general
-  (tyrant-def
-    "bm" '(popwin:messages :which-key "messages-buffer")
-    "bM" 'switch-to-messages-buffer
-    "wx" '(popwin:close-popup-window :which-key "close-popup-window")))
 
 (use-package hl-todo
   :straight t
