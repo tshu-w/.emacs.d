@@ -209,13 +209,6 @@ if prefix argument ARG is given, `untabify' first."
         (message "Indented buffer.")))
     (whitespace-cleanup)))
 
-(defun switch-to-help-buffer ()
-  "Open or select the `*Help*' buffer, if it exists."
-  (interactive)
-  (if (get-buffer "*Help*")
-      (switch-to-buffer (help-buffer))
-    (message "No previous Help buffer found")))
-
 (defun switch-to-scratch-buffer (&optional arg)
   "Switch to the `*scratch*' buffer, creating it first if needed.
 if prefix argument ARG is given, switch to it in an other, possibly new window."

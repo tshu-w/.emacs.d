@@ -56,7 +56,6 @@
     "bb"      'switch-to-buffer
     "bB"      'ibuffer
     "bd"      'kill-current-buffer
-    "bh"      'switch-to-help-buffer
     "bm"      'switch-to-messages-buffer
     "bs"      'switch-to-scratch-buffer
     "bu"      'reopen-killed-buffer
