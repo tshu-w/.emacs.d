@@ -177,8 +177,9 @@ targets."
   ;; disable `embark-collect-live' as I don't need it
   (general-def embark-general-map "L" nil)
   :general
-  ("C-." 'embark-act
-   "M-." 'embark-dwim))
+  (:keymaps '(global normal)
+            "C-." 'embark-act
+            "M-." 'embark-dwim))
 
 (use-package embark-consult
   :straight t
