@@ -682,6 +682,26 @@ Create at the end of the FILE if HEADLINE doesn't exist."
   (with-eval-after-load 'org-agenda
     (run-at-time nil 6000 #'org-agenda-to-appt-refresh)))
 
+(use-package org-download
+  :straight t
+  :after org
+  :commands (org-download-dnd org-download-dnd-base64)
+  :init
+  (unless (eq (cdr (assoc "^\\(https?\\|ftp\\|file\\|nfs\\):" dnd-protocol-alist))
+              'org-download-dnd)
+    (setq dnd-protocol-alist
+          `(("^\\(https?\\|ftp\\|file\\|nfs\\):" . org-download-dnd)
+            ("^data:" . org-download-dnd-base64)
+            ,@dnd-protocol-alist)))
+  :config
+  (defun +org-download-method (link)
+    (org-download--fullname (org-link-unescape link)))
+  (setq org-download-method '+org-download-method)
+
+  (setq org-download-annotate-function (lambda (_link) "")
+        org-download-method 'attach
+        org-download-screenshot-method "screencapture -i %s"))
+
 (use-package org-reverse-datetree
   :straight t
   :commands (org-datetree-goto-location
