@@ -66,7 +66,6 @@
 
 (use-package fcitx
   :straight t
-  :after exec-path-from-shell
   :hook (after-init . fcitx-aggressive-setup))
 
 (use-package gcmh
