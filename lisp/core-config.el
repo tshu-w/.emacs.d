@@ -230,7 +230,12 @@
   :defer t
   :config
   (setq project-current-inhibit-prompt t
-        project-vc-merge-submodules nil)
+        project-vc-merge-submodules nil
+        project-switch-commands '((project-find-file "Find file")
+                                  (project-find-regexp "Find regexp")
+                                  (project-find-dir "Find directory")
+                                  (project-vc-dir "VC-Dir"))
+        project-switch-use-entire-map t)
 
   (defun project-vc-dir ()
     "Run VC-Dir in the current project's root."
