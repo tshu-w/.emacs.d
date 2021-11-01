@@ -219,13 +219,6 @@
   :after oc
   :defer t
   :init
-  (org-cite-register-processor 'citar
-                               :insert (org-cite-make-insert-processor
-                                        #'citar-org-insert
-                                        #'citar-org-select-style)
-                               :follow #'citar-org-follow
-                               :activate #'citar-org-activate)
-
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
         org-cite-activate-processor 'citar))
