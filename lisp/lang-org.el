@@ -184,6 +184,11 @@
 
   (use-package org-attach
     :defer t
+    :commands (org-attach-follow org-attach-complete-link)
+    :init
+    (org-link-set-parameters "attachment"
+			                       :follow #'org-attach-follow
+                             :complete #'org-attach-complete-link)
     :config
     (setq org-attach-archive-delete 'query
           org-attach-id-dir (concat org-directory "attach/")
