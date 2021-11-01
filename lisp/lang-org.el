@@ -228,6 +228,8 @@
     :defer t
     :config
     (setq org-cite-activate-processor nil
+          org-cite-export-processors '((latex biblatex)
+                                       (t csl))
           org-cite-global-bibliography '("~/Documents/Bibliography/references.bib")))
 
   (use-package org-capture
@@ -329,7 +331,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
                     (save-window-excursion
                       (with-current-buffer base
                         (org-with-point-at pos
-                          (org-refile-to file headline)))))
+                                           (org-refile-to file headline)))))
                   (throw 'break t)))))))
 
       (add-hook 'org-capture-before-finalize-hook #'org-capture-auto-refile)
