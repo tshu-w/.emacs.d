@@ -203,32 +203,32 @@
         bibtex-completion-notes-path bibtex-notes-path
         bibtex-completion-pdf-field "file"))
 
-(use-package bibtex-actions
-  :straight (:includes oc-bibtex-actions)
+(use-package citar
+  :straight (:includes citar-org)
   :defer t
   :config
   (with-eval-after-load 'embark
-    (setq bibtex-actions-at-point-function 'embark-act)
+    (setq citar-at-point-function 'embark-act)
 
-    ;; Make the 'bibtex-actions' bindings and targets available to `embark'.
-    (add-to-list 'embark-target-finders 'bibtex-actions-citation-key-at-point)
-    (add-to-list 'embark-keymap-alist '(bib-reference . bibtex-actions-map))
-    (add-to-list 'embark-keymap-alist '(citation-key . bibtex-actions-buffer-map))))
+    ;; Make the 'citar' bindings and targets available to `embark'.
+    (add-to-list 'embark-target-finders 'citar-citation-key-at-point)
+    (add-to-list 'embark-keymap-alist '(bib-reference . citar-map))
+    (add-to-list 'embark-keymap-alist '(citation-key . citar-buffer-map))))
 
-(use-package oc-bibtex-actions
+(use-package citar-org
   :after oc
   :defer t
   :init
-  (org-cite-register-processor 'oc-bibtex-actions
-    :insert (org-cite-make-insert-processor
-             #'oc-bibtex-actions-insert
-             #'oc-bibtex-actions-select-style)
-    :follow #'oc-bibtex-actions-follow
-    :activate #'oc-bibtex-actions-activate)
+  (org-cite-register-processor 'citar
+                               :insert (org-cite-make-insert-processor
+                                        #'citar-org-insert
+                                        #'citar-org-select-style)
+                               :follow #'citar-org-follow
+                               :activate #'citar-org-activate)
 
-  (setq org-cite-insert-processor 'oc-bibtex-actions
-        org-cite-follow-processor 'oc-bibtex-actions
-        org-cite-activate-processor 'oc-bibtex-actions))
+  (setq org-cite-insert-processor 'citar
+        org-cite-follow-processor 'citar
+        org-cite-activate-processor 'citar))
 
 (use-package ebib
   :straight t
