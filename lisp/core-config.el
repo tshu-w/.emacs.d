@@ -253,11 +253,11 @@
 (use-package recentf
   :hook (after-init . recentf-mode)
   :config
-  (setq recentf-max-saved-items 100
-        recentf-auto-cleanup 'never)
+  (setq recentf-auto-cleanup 'never
+        recentf-max-saved-items 50
+        recentf-initialize-file-name-history nil)
 
-  (add-to-list 'recentf-exclude (recentf-expand-file-name package-user-dir))
-  (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))
+  (add-to-list 'recentf-exclude `(recentf-expand-file-name ,(straight--emacs-dir "straight"))))
 
 (use-package savehist
   :hook (after-init . savehist-mode)
