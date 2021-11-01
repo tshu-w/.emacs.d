@@ -26,14 +26,8 @@
   (setq ns-pop-up-frames nil)
   (setq dired-listing-switches "-aBhl --group-directories-first")
 
-  (let ((spec (font-spec :family "Apple Color Emoji")))
-    (set-fontset-font t nil spec nil 'append)
-    ;; Work around lots of font lookups in emoji compositions.
-    (set-fontset-font t #xFE0E spec)	; Variation Selector 15
-    (set-fontset-font t #xFE0F spec)	; Variation Selector 16
-    (set-fontset-font t '(#x1F1E6 . #x1F1FF) spec) ; Regional Indicator Syms
-    (set-fontset-font t '(#x1F3FB . #x1F3FF) spec)) ; Emoji Modifiers
-  )
+  (set-fontset-font t 'emoji "Apple Color Emoji")
+  (set-fontset-font t 'symbol "Apple Symbols"))
 
 (defun set-monospaced-font (english chinese english-size chinese-size)
   "Set the monospaced font size when mixed CHINESE and ENGLISH words."
@@ -42,6 +36,7 @@
   (dolist (charset '(kana han cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font) charset
                       (font-spec :family chinese :size chinese-size))))
+
 (when window-system
   (set-monospaced-font "Source Code Pro" "PingFang SC" 14 16))
 
