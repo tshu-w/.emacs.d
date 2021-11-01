@@ -16,7 +16,7 @@
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file
-        org-modules-loaded t)
+        org-modules '(ol-docview ol-info))
 
   (defadvice server-execute (before enable-org-protocol activate)
     (unless (featurep 'org-protocol) (require 'org-protocol)))
