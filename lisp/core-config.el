@@ -158,6 +158,11 @@
         dired-kill-when-opening-new-dired-buffer t
         dired-vc-rename-file t))
 
+(use-package doc-view
+  :defer t
+  :config
+  (setq doc-view-resolution 400))
+
 (use-package elec-pair
   :hook (after-init . electric-pair-mode))
 
