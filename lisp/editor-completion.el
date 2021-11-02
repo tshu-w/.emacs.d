@@ -351,11 +351,11 @@ returns the command to execute."
 (use-package yasnippet
   :straight t
   :hook (after-init . yas-global-mode)
+  :init
+  (setq yas-minor-mode-map nil)
   :config
   (setq yas-triggers-in-field t
-        yas-wrap-around-region t)
-  ;; disable yas minor mode map
-  (setq yas-minor-mode-map (make-sparse-keymap)))
+        yas-wrap-around-region t))
 
 
 (provide 'editor-completion)
