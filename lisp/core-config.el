@@ -362,6 +362,8 @@ the unwritable tidbits."
 (use-package winner
   :commands (winner-undo winner-redo)
   :hook (after-init . winner-mode)
+  :init
+  (setq winner-dont-bind-my-keys t)
   :config
   (setq winner-boring-buffers '("*Completions*"
                                 "*Compile-Log*"

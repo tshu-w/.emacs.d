@@ -11,10 +11,10 @@
 (use-package aggressive-indent
   :straight t
   :hook (emacs-lisp-mode . aggressive-indent-mode)
+  :init
+  (setq aggressive-indent-mode-map nil)
   :config
-  (add-hook 'diff-auto-refine-mode-hook (lambda () (aggressive-indent-mode -1)))
-  :general
-  (tyrant-def "tA" 'aggressive-indent-mode))
+  (add-hook 'diff-auto-refine-mode-hook (lambda () (aggressive-indent-mode -1))))
 
 (use-package alert
   :straight t

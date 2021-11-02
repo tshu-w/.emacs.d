@@ -13,6 +13,8 @@
   :straight t
   :hook (prog-mode . flycheck-mode)
   :custom-face (flycheck-info ((t (:underline nil))))
+  :init
+  (setq flycheck-keymap-prefix "")
   :config
   (setq flycheck-check-syntax-automatically '(save mode-enabled)
         flycheck-display-errors-delay 0.25
@@ -57,43 +59,26 @@
         :fringe-bitmap bitmap
         :error-list-face 'flycheck-error-list-info
         :fringe-face 'flycheck-fringe-info)))
-
-  (defun toggle-flycheck-error-list ()
-    "Toggle flycheck's error list window.
-If the error list is visible, hide it.  Otherwise, show it."
-    (interactive)
-    (-if-let (window (flycheck-get-error-list-window))
-        (quit-window nil window)
-      (flycheck-list-errors)))
-
-  (defun goto-flycheck-error-list ()
-    "Open and go to the error list buffer."
-    (interactive)
-    (if (flycheck-get-error-list-window)
-        (switch-to-buffer flycheck-error-list-buffer)
-      (progn
-        (flycheck-list-errors)
-        (switch-to-buffer-other-window flycheck-error-list-buffer))))
   :general
   (tyrant-def
     "e"  '(:ignore t :which-key "errors")
     "eb" 'flycheck-buffer
     "ec" 'flycheck-clear
-    "eh" 'flycheck-describe-checker
-    "el" 'toggle-flycheck-error-list
-    "eL" 'goto-flycheck-error-list
+    "eC" 'flycheck-compile
+    "eh" 'flycheck-display-error-at-point
+    "el" 'flycheck-list-errors
     "en" 'next-error
     "ep" 'previous-error
     "es" 'flycheck-select-checker
-    "eS" 'flycheck-set-checker-executable
     "ev" 'flycheck-verify-setup
     "ey" 'flycheck-copy-errors-as-kill
-    "ex" 'flycheck-explain-error-at-point
+    "ex" 'flycheck-disable-checker
+    "e?" 'flycheck-describe-checker
     "ts" 'flycheck-mode))
 
 (use-package flycheck-posframe
   :straight t
-  :if (display-graphic-p)
+  :if window-system
   :custom-face (flycheck-posframe-border-face ((t (:inherit default))))
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config
