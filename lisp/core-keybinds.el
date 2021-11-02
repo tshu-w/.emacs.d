@@ -205,10 +205,7 @@
          (prog-mode . hs-minor-mode))
   :init
   (setq evil-want-keybinding nil
-        evil-ex-search-vim-style-regexp t
-        evil-search-module 'evil-search
-        evil-symbol-word-search t
-        evil-magic 'very-magic)
+        evil-symbol-word-search t)
   :config
   (setq evil-cross-lines t
         evil-kill-on-visual-paste nil
