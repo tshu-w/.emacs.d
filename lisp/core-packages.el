@@ -31,6 +31,13 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(if init-file-debug
+    (setq use-package-verbose t
+          use-package-minimum-reported-time 0
+          use-package-compute-statistics t
+          use-package-inject-hooks t
+          debug-on-error t)
+  (setq use-package-expand-minimally t))
 (straight-use-package 'use-package)
 
 (use-package exec-path-from-shell
@@ -47,7 +54,14 @@
 
 (use-package no-littering :straight t :defer t)
 
-(use-package restart-emacs :straight t :defer t)
+(use-package restart-emacs
+  :straight t
+  :commands restart-emacs-debug-init
+  :config
+  (defun restart-emacs-debug-init (&optional args)
+    "Restart emacs and enable debug-init."
+    (interactive)
+    (restart-emacs (cons "--debug-init" args))))
 
 (provide 'core-packages)
 ;;; core-packages.el ends here

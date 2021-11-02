@@ -123,6 +123,7 @@
     "p"       '(:keymap project-prefix-map :which-key "projects")
 
     "q"       '(:ignore t :which-key "quit")
+    "qd"      'restart-emacs-debug-init
     "qr"      'restart-emacs
     "qR"      'restart-emacs-without-desktop
     "qq"      'save-buffers-kill-terminal
