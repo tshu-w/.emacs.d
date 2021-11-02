@@ -160,7 +160,8 @@ reuse it's window, otherwise create new one."
           "\\*Async Shell Command\\*"
           help-mode
           helpful-mode
-          compilation-mode))
+          compilation-mode
+          "\\*Flycheck errors\\*"))
   :general
   (tyrant-def ";" 'popper-toggle-latest))
 
