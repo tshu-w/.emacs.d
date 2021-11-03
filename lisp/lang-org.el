@@ -662,33 +662,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
   (evil-define-key 'motion 'evil-org-mode
     (kbd "0") 'evil-org-beginning-of-line))
 
-(use-package appt
-  :after org
-  :config
-  (let ((inhibit-message t))
-    (appt-activate 1))
-
-  (fset 'diary-list-entries 'ignore)
-
-  (defun appt-disp-alert (min-to-appt _current-time _appt-msg)
-    (alert (format "Appointment in %s minutes" min-to-appt)
-           :title (format "%s" appt-msg)))
-
-  (defun org-agenda-to-appt-refresh ()
-    (let ((inhibit-message t))
-      (org-agenda-to-appt t)))
-
-  (setq appt-display-diary nil
-        appt-display-interval 5
-        appt-message-warning-time 15
-        appt-disp-window-function 'appt-disp-alert)
-
-  (with-eval-after-load 'org-capture
-    (add-hook 'org-capture-after-finalize-hook #'org-agenda-to-appt-refresh))
-
-  (with-eval-after-load 'org-agenda
-    (run-at-time nil 6000 #'org-agenda-to-appt-refresh)))
-
 (use-package org-download
   :straight t
   :after org
