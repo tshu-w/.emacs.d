@@ -186,9 +186,9 @@
   :straight t
   :hook (after-init . shackle-mode)
   :config
-  (setq shackle-default-ratio 0.4
-        shackle-rules '((help-mode                :select t :align t)
-                        (helpful-mode             :select t :align t)
+  (setq shackle-default-size 0.4
+        shackle-rules `((help-mode                :select t :align right :size ,fill-column)
+                        (helpful-mode             :select t :align right :size ,fill-column)
                         ("*Messages*"             :select t :align t)
                         (process-menu-mode        :align t)
                         (compilation-mode         :align t)
