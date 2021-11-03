@@ -26,17 +26,16 @@
   (setq ns-pop-up-frames nil)
   (setq dired-listing-switches "-aBhl --group-directories-first")
 
-  (set-fontset-font t 'emoji "Apple Color Emoji")
-  (set-fontset-font t 'symbol "Apple Symbols"))
+  (set-fontset-font t 'emoji "Apple Color Emoji" nil 'prepend)
+  (set-fontset-font t 'symbol "Apple Symbols" nil 'prepend))
 
 (defun set-monospaced-font (english chinese english-size chinese-size)
   "Set the monospaced font size when mixed CHINESE and ENGLISH words."
   (set-face-attribute 'default nil :font
                       (format "%s:pixelsize=%d" english english-size))
   (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font) charset
+    (set-fontset-font t charset
                       (font-spec :family chinese :size chinese-size))))
-
 (when window-system
   (set-monospaced-font "Source Code Pro" "PingFang SC" 14 16))
 
