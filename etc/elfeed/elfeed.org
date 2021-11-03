@@ -143,6 +143,7 @@
 ** [[https://xiaohanyu.me/atom.xml][行者无疆 始于足下]]
 ** [[https://xinle.co/feed][Tolecen]]
 ** [[https://yihui.name/cn/index.xml][中文博客 on Yihui Xie | 谢益辉]]
+** [[https://yqrashawn.com/feed.rss][infin]]
 ** [[https://yufree.cn/index.xml][Miao Yu | 于淼]]
 ** [[https://yym6472.github.io/atom.xml][yym6472's Blog]]
 ** [[https://zlbk.net/feed][周良博客 · 喜恶皆在字里行间]]
