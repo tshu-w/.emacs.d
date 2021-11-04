@@ -71,15 +71,12 @@
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   :config
   (setq consult-narrow-key "?"
+        consult-preview-key (kbd "M-.")
         consult-project-root-function (lambda () (project-root (project-current t))))
 
-  (consult-customize consult-theme
-                     :preview-key '(:debounce 0.2 any)
-                     consult-ripgrep consult-git-grep consult-grep
-                     consult-bookmark consult-recent-file consult-xref
-                     consult--source-file consult--source-project-file consult--source-bookmark
-                     consult-org-heading consult-org-agenda
-                     :preview-key (kbd "M-."))
+  (consult-customize consult-theme :preview-key '(:debounce 0.2 any)
+                     consult-goto-line consult-imenu consult-line
+                     :preview-key 'any)
   :general
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
