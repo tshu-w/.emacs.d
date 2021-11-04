@@ -114,7 +114,7 @@
 
     "j"       '(:ignore t :which-key "jump")
     "ji"      'imenu
-    "jj"      'avy-goto-char-2
+    "jg"      'avy-goto-char-2
     "jb"      'bookmark-jump
     "jB"      'bookmark-set
 

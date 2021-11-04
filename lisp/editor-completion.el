@@ -85,8 +85,8 @@
   (tyrant-def
     "jI" '(consult-imenu-multi :which-key "imenu-multi")
     "fl" '(consult-find :which-key "locate-files")
-    "js" '(consult-line :which-key "search lines")
-    "jS" '(consult-line-multi :which-key "search lines a/ buffers")
+    "jj" '(consult-line :which-key "search lines")
+    "jJ" '(consult-line-multi :which-key "search lines a/ buffers")
     "tt" 'consult-minor-mode-menu)
   (org-mode-map
    [remap consult-imenu]       'consult-org-heading
