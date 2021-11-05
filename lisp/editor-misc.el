@@ -64,6 +64,15 @@
 
 (use-package esup :straight t :defer t)
 
+(use-package explain-pause-mode
+  :straight t
+  :hook (after-init . explain-pause-mode)
+  :config
+  (with-eval-after-load 'shackle
+    (add-to-list 'shackle-rules '("*explain-pause-top*" :align right)))
+  (with-eval-after-load 'popper
+    (add-to-list 'popper-reference-buffers '("\\*explain-pause-top\\*"))))
+
 (use-package fcitx
   :straight t
   :hook (after-init . fcitx-aggressive-setup))
