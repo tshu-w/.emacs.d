@@ -205,7 +205,8 @@
          (prog-mode . hs-minor-mode))
   :init
   (setq evil-want-keybinding nil
-        evil-symbol-word-search t)
+        evil-symbol-word-search t
+        hs-minor-mode-map nil)
   :config
   (setq evil-cross-lines t
         evil-kill-on-visual-paste nil
