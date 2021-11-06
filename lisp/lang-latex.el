@@ -192,36 +192,18 @@
         bibtex-autokey-name-year-separator "-"
         bibtex-dialect 'biblatex))
 
-(use-package bibtex-completion
-  :straight (:files ("bibtex-completion.el"))
-  :defer t
-  :config
-  (setq bibtex-autokey-year-length 4
-        bibtex-completion-additional-search-fields '(keywords)
-        bibtex-completion-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
-        bibtex-completion-library-path (concat bibtex-file-path "files/")
-        bibtex-completion-notes-path bibtex-notes-path
-        bibtex-completion-pdf-field "file"))
-
 (use-package citar
-  :straight (:includes citar-org)
-  :defer t
-  :config
-  (with-eval-after-load 'embark
-    (setq citar-at-point-function 'embark-act)
-
-    ;; Make the 'citar' bindings and targets available to `embark'.
-    (add-to-list 'embark-target-finders 'citar-citation-key-at-point)
-    (add-to-list 'embark-keymap-alist '(bib-reference . citar-map))
-    (add-to-list 'embark-keymap-alist '(citation-key . citar-buffer-map))))
-
-(use-package citar-org
-  :after oc
+  :straight t
   :defer t
   :init
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
-        org-cite-activate-processor 'citar))
+        org-cite-activate-processor 'citar)
+  :config
+  (setq citar-at-point-function 'embark-act
+        citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
+        citar-library-paths `(,(concat bibtex-file-path "files/"))
+        citar-notes-paths `(,bibtex-notes-path)))
 
 (use-package ebib
   :straight t
