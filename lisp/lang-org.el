@@ -350,11 +350,11 @@ Create at the end of the FILE if HEADLINE doesn't exist."
         (add-hook 'org-capture-after-finalize-hook #'org-capture-after-finalize))))
 
   (use-package org-clock
-    :defer 3
-    :config
+    :defer t
+    :init
     (org-clock-persistence-insinuate)
     (org-clock-auto-clockout-insinuate)
-
+    :config
     (setq org-clock-auto-clockout-timer 3600
           org-clock-auto-clock-resolution 'when-no-clock-is-running
           org-clock-history-length 10
