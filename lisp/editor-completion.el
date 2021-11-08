@@ -180,7 +180,10 @@ targets."
 
 (use-package embark-consult
   :straight t
-  :after (consult embark))
+  :demand t
+  :after (consult embark)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package wgrep :straight t :defer t)
 
