@@ -55,22 +55,7 @@
     "gS"  'magit-stage-file
     "gU"  'magit-unstage-file))
 
-(use-package forge
-  :straight t
-  :defer t
-  :init
-  ;; HACK: https://github.com/emacs-evil/evil-collection/issues/543
-  (defun evil-collection-magit-setup@override ()
-    "Set up `evil' bindings for `magit'."
-
-    (evil-collection-define-key 'normal 'magit-blame-mode-map
-      "q" 'magit-blame-quit)
-    (evil-collection-define-key 'normal 'magit-blame-read-only-mode-map
-      "q" 'magit-blame-quit)
-
-    (require 'forge)
-    (evil-collection-magit-init))
-  (advice-add 'evil-collection-magit-setup :override #'evil-collection-magit-setup@override))
+(use-package forge :straight t :after magit)
 
 (use-package transient
   :straight t
