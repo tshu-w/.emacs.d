@@ -21,19 +21,6 @@
 
 ;;; Code:
 
-(setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1)))
-
-;; optimize: set the file-name-handler to nil since regexing is cpu intensive.
-(unless (or (daemonp) noninteractive)
-  (let ((default-file-name-handler-alist file-name-handler-alist))
-    (setq file-name-handler-alist nil)
-    (add-hook 'emacs-startup-hook
-              (lambda ()
-                (setq file-name-handler-alist default-file-name-handler-alist)))))
-
 ;;; Load path
 ;; optimize: force "lisp"" and "site-lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)

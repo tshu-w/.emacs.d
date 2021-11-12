@@ -22,7 +22,18 @@
 ;;; Code:
 
 ;; Defer garbage collection further back in the startup process
-(setq gc-cons-threshold most-positive-fixnum)
+(setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold 100000000 gc-cons-percentage 0.1)))
+
+;; optimize: set the file-name-handler to nil since regexing is cpu intensive.
+(unless (or (daemonp) noninteractive)
+  (let ((default-file-name-handler-alist file-name-handler-alist))
+    (setq file-name-handler-alist nil)
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                (setq file-name-handler-alist default-file-name-handler-alist)))))
 
 ;; make sure native-comp-eln-load-path under `user-emacs-directory'
 (setq native-comp-eln-load-path `(,(concat user-emacs-directory "eln-cache/"))
