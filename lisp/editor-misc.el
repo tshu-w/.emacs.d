@@ -66,7 +66,15 @@
 
 (use-package fcitx
   :straight t
-  :hook (after-init . fcitx-aggressive-setup))
+  :hook (after-init . fcitx-setup)
+  :config
+  (defun fcitx-setup ()
+    "Setup for `fcitx'."
+    (interactive)
+    (when (fcitx-check-status)
+      (fcitx-read-funcs-turn-on)
+      (fcitx-evil-turn-on)
+      (fcitx-aggressive-minibuffer-turn-on))))
 
 (use-package gcmh
   :straight t
