@@ -36,6 +36,7 @@
         org-global-properties '(("STYLE_ALL" . "habit")
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
+        org-hide-leading-stars t
         org-image-actual-width '(700)
         org-imenu-depth 3
         org-log-done 'time
@@ -742,9 +743,13 @@ go to `org-datetree-file-format' file based on TIME."
 
 (use-package org-superstar
   :straight t
+  :after org
   :hook (org-mode . org-superstar-mode)
   :config
-  (org-superstar-configure-like-org-bullets))
+  (setq org-superstar-headline-bullets-list '(?◉ ?○ ?✸ ?●)
+        org-superstar-item-bullet-alist '((?* . ?▷)
+                                          (?+ . ?●)
+                                          (?- . ?○))))
 
 
 (provide 'lang-org)
