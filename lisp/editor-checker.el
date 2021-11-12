@@ -74,7 +74,7 @@
     "ey" 'flycheck-copy-errors-as-kill
     "ex" 'flycheck-disable-checker
     "e?" 'flycheck-describe-checker
-    "ts" 'flycheck-mode))
+    "Ts" 'flycheck-mode))
 
 (use-package flycheck-posframe
   :straight t
@@ -164,7 +164,7 @@ SCOPE can be:
     "Sb"  'flyspell-buffer
     "Sn"  'flyspell-goto-next-error
     "Sr"  'flyspell-region
-    "tS"  'flyspell-mode))
+    "TS"  'flyspell-mode))
 
 (use-package flyspell-correct
   :straight t
