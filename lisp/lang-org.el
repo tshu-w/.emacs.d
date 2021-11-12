@@ -645,8 +645,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
       "ZZ" 'org-capture-finalize
       "ZQ" 'org-capture-kill
       "ZR" 'org-capture-refile))
-
-  (fset 'evil-redirect-digit-argument 'ignore)
   :config
   (defun surround-drawer ()
     (let ((dname (read-from-minibuffer "" "")))
@@ -657,11 +655,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
 
   (with-eval-after-load 'evil-surround
     (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
-    (add-to-list 'evil-surround-pairs-alist '(?# . surround-code)))
-
-  (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
-  (evil-define-key 'motion 'evil-org-mode
-    (kbd "0") 'evil-org-beginning-of-line))
+    (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
 (use-package org-download
   :straight t
