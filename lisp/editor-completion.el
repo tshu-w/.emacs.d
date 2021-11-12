@@ -87,7 +87,7 @@
     "fl" '(consult-find :which-key "locate-files")
     "jj" '(consult-line :which-key "search lines")
     "jJ" '(consult-line-multi :which-key "search lines a/ buffers")
-    "tt" 'consult-minor-mode-menu)
+    "Tt" 'consult-minor-mode-menu)
   (org-mode-map
    [remap consult-imenu]       'consult-org-heading
    [remap consult-imenu-multi] 'consult-org-agenda))

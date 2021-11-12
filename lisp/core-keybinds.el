@@ -129,14 +129,14 @@
     "qq"      'save-buffers-kill-terminal
     "qQ"      'kill-emacs
 
-    "t"       '(:ignore t :which-key "toggles")
-    "ta"      'auto-fill-mode
-    "td"      'toggle-debug-on-error
-    "tf"      'display-fill-column-indicator-mode
-    "tl"      'toggle-truncate-lines
-    "tn"      'display-line-numbers-mode
-    "tw"      'whitespace-mode
-    "tW"      'toggle-word-wrap
+    "T"       '(:ignore t :which-key "toggles")
+    "Ta"      'auto-fill-mode
+    "Td"      'toggle-debug-on-error
+    "Tf"      'display-fill-column-indicator-mode
+    "Tl"      'toggle-truncate-lines
+    "Tn"      'display-line-numbers-mode
+    "Tw"      'whitespace-mode
+    "TW"      'toggle-word-wrap
 
     "u"       '(universal-argument :which-key "universal arg")
 
