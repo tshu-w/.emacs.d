@@ -16,7 +16,7 @@
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file
-        org-modules '(ol-docview ol-info))
+        org-modules '(ol-docview ol-info org-id))
 
   (defadvice server-execute (before enable-org-protocol activate)
     (unless (featurep 'org-protocol) (require 'org-protocol)))
@@ -43,6 +43,7 @@
         org-log-into-drawer t
         org-pretty-entities t
         org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
+        org-special-ctrl-a/e t
         org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
@@ -189,7 +190,7 @@
     :commands (org-attach-follow org-attach-complete-link)
     :init
     (org-link-set-parameters "attachment"
-			                       :follow #'org-attach-follow
+                             :follow #'org-attach-follow
                              :complete #'org-attach-complete-link)
     :config
     (setq org-attach-archive-delete 'query
@@ -245,15 +246,15 @@
     (setq org-capture-templates
           '(("i" "Inbox" entry (file org-inbox-file) "* %?\n%i\n")
             ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
-            ("l" "Link")
-            ("ll" "Web link" plain (file+function org-inbox-file org-capture-goto-link)
-             "%i\n" :empty-lines 1 :immediate-finish t)
-            ("li" "Inbox with link" entry (file org-inbox-file)
-             "* %?\n%a\n%i\n")
-            ("lt" "Todo with link" entry (file org-inbox-file)
-             "* TODO %?\n%a\n%i\n")
-            ("L" "Log" entry (function org-datetree-goto-location)
+            ("l" "Log" entry (function org-datetree-goto-location)
              "* %<%H:%M> %?\n" :clock-in t :clock-keep t)
+            ("L" "Link")
+            ("Ll" "Web link" plain (file+function org-inbox-file org-capture-goto-link)
+             "%i\n" :empty-lines 1 :immediate-finish t)
+            ("Li" "Inbox with link" entry (file org-inbox-file)
+             "* %?\n%a\n%i\n")
+            ("Lt" "Todo with link" entry (file org-inbox-file)
+             "* TODO %?\n%a\n%i\n")
             ("r" "Review")
             ("ry" "Yesterday" entry (function
                                      (lambda ()
@@ -283,7 +284,7 @@
               "#+END:\n"))
 
     (progn ;; web link
-      (setq org-capture-web-link-key "ll"
+      (setq org-capture-web-link-key "Ll"
             org-capture-auto-refile-rules
             `(("https?://arxiv\\.org" ,org-project-file "Daily Papers")
               ("https?://dl\\.acm\\.org" ,org-project-file "Daily Papers")
@@ -413,8 +414,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
           org-refile-allow-creating-parent-nodes 'confirm
           org-refile-use-outline-path 'file
           org-refile-targets '((nil :maxlevel . 4)
-                               (org-agenda-files :maxlevel . 3)
-                               (org-note-files :maxlevel . 2))))
+                               (org-agenda-files :maxlevel . 3))))
 
   (setq org-fast-tag-selection-single-key t
         org-tags-column -80
@@ -635,7 +635,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
   :after evil
   :hook (org-mode . evil-org-mode)
   :init
-  (setq evil-org-key-theme '(navigation insert textobjects additional shift todo heading))
+  (setq evil-org-key-theme '(navigation insert textobjects additional todo heading))
 
   (with-eval-after-load 'org-agenda
     (autoload #'evil-org-agenda-set-keys "evil-org-agenda" nil t)
