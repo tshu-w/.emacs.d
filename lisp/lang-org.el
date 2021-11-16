@@ -730,8 +730,34 @@ go to `org-datetree-file-format' file based on TIME."
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory org-note-directory
         org-roam-v2-ack t)
+  (with-eval-after-load 'org (org-roam-db-autosync-enable))
   :config
-  (org-roam-db-autosync-mode))
+  (defun org-roam-open-refs ()
+    "Open REFs of the node at point."
+    (interactive)
+    (save-excursion
+      (goto-char (org-roam-node-point (org-roam-node-at-point 'assert)))
+      (when-let* ((p (org-entry-get (point) "ROAM_REFS"))
+                  (refs (when p (split-string-and-unquote p)))
+                  (ref (when refs (completing-read "Open: " refs)))
+                  (user-error "No ROAM_REFS found"))
+        (if (string-prefix-p "@" ref)
+            (citar-run-default-action (substring ref 1))
+          (browse-url ref)))))
+
+  (with-eval-after-load 'shackle
+    (add-to-list 'shackle-rules '("*org-roam*" :align right)))
+  :general
+  (tyrant-def
+    "or"  '(:ignore t :which-key "roam")
+    "orb" 'org-roam-buffer-toggle
+    "orf" 'org-roam-node-find
+    "ori" 'org-roam-node-insert
+    "oro" 'org-roam-open-refs
+    "orr" 'org-roam-node-random
+    "ort" 'org-roam-tag-add
+    "orT" 'org-roam-tag-delete)
+  (despot-def org-mode-map "ir" 'org-roam-node-insert))
 
 (use-package org-roam-protocol
   :after org-protocol
@@ -740,6 +766,13 @@ go to `org-datetree-file-format' file based on TIME."
         '(("r" "ref" plain "%?" :target
            (file+head "refs/${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
            :unnarrowed t))))
+
+(use-package org-roam-ui
+  :straight t
+  :defer t
+  :config
+  (with-eval-after-load 'desktop
+    (add-to-list 'desktop-minor-mode-table '(org-roam-ui-mode nil))))
 
 (use-package org-superstar
   :straight t
