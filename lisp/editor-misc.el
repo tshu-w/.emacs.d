@@ -162,7 +162,8 @@ reuse it's window, otherwise create new one."
   :hook ((after-init . popper-mode)
          (after-init . popper-echo-mode))
   :config
-  (setq popper-reference-buffers
+  (setq popper-display-control nil
+        popper-reference-buffers
         '("\\*Messages\\*"
           "Output\\*$"
           "\\*Async Shell Command\\*"
