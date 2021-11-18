@@ -739,11 +739,14 @@ go to `org-datetree-file-format' file based on TIME."
       (goto-char (org-roam-node-point (org-roam-node-at-point 'assert)))
       (when-let* ((p (org-entry-get (point) "ROAM_REFS"))
                   (refs (when p (split-string-and-unquote p)))
-                  (ref (when refs (completing-read "Open: " refs)))
+                  (refs (if (length> refs 1)
+                            (completing-read-multiple "Open: " refs)
+                          refs))
                   (user-error "No ROAM_REFS found"))
-        (if (string-prefix-p "@" ref)
-            (citar-run-default-action (substring ref 1))
-          (browse-url ref)))))
+        (dolist (ref refs)
+          (if (string-prefix-p "@" ref)
+              (citar-run-default-action (substring ref 1))
+            (browse-url ref))))))
 
   (with-eval-after-load 'shackle
     (add-to-list 'shackle-rules '("*org-roam*" :align right)))
