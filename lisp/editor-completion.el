@@ -306,19 +306,16 @@ targets."
 LOCAL-COMMAND is either list of strings, string or function which
 returns the command to execute."
     (defvar tramp-connection-properties)
-    ;; Force a direct asynchronous process.
-    (when (file-remote-p default-directory)
-      (add-to-list 'tramp-connection-properties
-                   (list (regexp-quote (file-remote-p default-directory))
-                         "direct-async-process" t)))
     (list :connect (lambda (filter sentinel name environment-fn)
+                     ;; Force a direct asynchronous process.
+                     (add-to-list 'tramp-connection-properties
+                                  (list (regexp-quote (file-remote-p default-directory))
+                                        "direct-async-process" t))
                      (let* ((final-command (lsp-resolve-final-function
                                             local-command))
-                            (_stderr (or (when generate-error-file-fn
-                                           (funcall generate-error-file-fn name))
-                                         (format "/tmp/%s-%s-stderr" name
-                                                 (cl-incf lsp--stderr-index))))
                             (process-name (generate-new-buffer-name name))
+                            (stderr-buf (format "*%s::stderr*" process-name))
+                            (err-buf (generate-new-buffer stderr-buf))
                             (process-environment
                              (lsp--compute-process-environment environment-fn))
                             (proc (make-process
@@ -330,6 +327,7 @@ returns the command to execute."
                                    :noquery t
                                    :filter filter
                                    :sentinel sentinel
+                                   :stderr err-buf
                                    :file-handler t)))
                        (cons proc proc)))
           :test? (lambda () (-> local-command lsp-resolve-final-function
