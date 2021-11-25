@@ -128,6 +128,7 @@
 ** [[https://tobiaslee.top/atom.xml][Stay Hungry, Stay Foolish.]]
 ** [[https://tw93.github.io/feed.xml][Tw93]]
 ** [[https://type.cyhsu.xyz/feed/][Neverland]]
+** [[https://typeof.net/atom.xml][Typeof.net]]
 ** [[https://unblock256.substack.com/feed][un.Block Weekly]]
 ** [[https://weekly.ecnelises.com/feed][混沌周刊]]
 ** [[https://wizyoung.github.io/atom.xml][CaptainChen]]
