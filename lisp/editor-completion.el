@@ -92,20 +92,6 @@
    [remap consult-imenu]       'consult-org-heading
    [remap consult-imenu-multi] 'consult-org-agenda))
 
-(use-package affe
-  :straight t
-  :defer t
-  :init
-  (with-eval-after-load 'consult
-    (fset 'consult-ripgrep 'affe-grep)
-    (fset 'consult-find    'affe-find))
-  :config
-  (with-eval-after-load 'orderless
-    (defun affe-orderless-regexp-compiler (input _type)
-      (setq input (orderless-pattern-compiler input))
-      (cons input (lambda (str) (orderless--highlight input str))))
-    (setq affe-regexp-compiler #'affe-orderless-regexp-compiler)))
-
 (use-package embark
   :straight t
   :init
