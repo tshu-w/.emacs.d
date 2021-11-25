@@ -194,7 +194,6 @@
 
 (use-package citar
   :straight t
-  :defer t
   :init
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
@@ -203,7 +202,9 @@
   (setq citar-at-point-function 'embark-act
         citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
         citar-library-paths `(,(concat bibtex-file-path "files/"))
-        citar-notes-paths `(,bibtex-notes-path)))
+        citar-notes-paths `(,bibtex-notes-path))
+  :general
+  (tyrant-def "aC" 'citar-open))
 
 (use-package ebib
   :straight t
