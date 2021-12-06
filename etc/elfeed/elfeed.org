@@ -101,6 +101,7 @@
 ** [[https://hypercritical.co/feeds/main][Hypercritical]]
 ** [[https://insights.thoughtworks.cn/feed][Thoughtworks洞见]]
 ** [[https://jhuo.ca/index.xml][HuoJu's BLOG]]
+** [[https://justinyan.me/feed][枫言枫语]]
 ** [[https://kalasearch.cn/rss.xml][卡拉搜索的博客]]
 ** [[https://laike9m.com/blog/rss/][laike9m's blog]]
 ** [[https://leancrew.com/all-this/feed/][And now it’s all this]]
