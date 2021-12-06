@@ -115,6 +115,8 @@
 
 (use-package gitignore-templates
   :straight t
+  :config
+  (setq gitignore-templates-api 'github)
   :general
   (tyrant-def
     "gI"  '(:ignore t :which-key "gitignore")
