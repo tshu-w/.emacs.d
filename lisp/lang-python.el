@@ -36,6 +36,18 @@
   :straight t
   :after python
   :config
+  (defun expand-absolute-name (name)
+    (if (file-name-absolute-p name)
+        (tramp-file-local-name
+         (expand-file-name
+          (concat (file-remote-p default-directory) name)))
+      name))
+
+  (lsp-register-custom-settings
+   `(("python.analysis.stubPath" (lambda () (expand-absolute-name lsp-pyright-stub-path)))
+     ("python.venvPath" (lambda () (if lsp-pyright-venv-path
+                                  (expand-absolute-name lsp-pyright-venv-path) "")))))
+
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
                                                             (cons "pyright-langserver"
