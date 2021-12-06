@@ -37,7 +37,7 @@
                                 ("Effort_ALL" . "0:10 0:15 0:30 0:45 1:00 2:00 3:00 5:00"))
         org-hide-emphasis-markers t
         org-hide-leading-stars t
-        org-image-actual-width '(700)
+        org-image-actual-width '(0.7)
         org-imenu-depth 3
         org-log-done 'time
         org-log-into-drawer t
