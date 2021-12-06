@@ -117,7 +117,7 @@
                       ;; doom-monokai-spectrum
                       doom-moonlight
                       doom-nord
-                      doom-nova
+                      ;; doom-nova
                       doom-oceanic-next
                       ;; doom-old-hope
                       doom-one
