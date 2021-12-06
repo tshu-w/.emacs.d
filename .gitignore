@@ -67,3 +67,4 @@ var/
 build/
 *.userdb/
 user.yaml
+!librime/dist/

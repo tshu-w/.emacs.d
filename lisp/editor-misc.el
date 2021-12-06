@@ -174,29 +174,6 @@ reuse it's window, otherwise create new one."
   :general
   (tyrant-def ";" 'popper-toggle-latest))
 
-(use-package pyim
-  :straight t
-  :commands pyim-cregexp-build
-  :init
-  (with-eval-after-load 'orderless
-    (defun orderless-pinyin-regexp (component)
-      "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
-      (pyim-cregexp-build (orderless-regexp component)))
-
-    (defun pinyin-if-bang (pattern _index _total)
-      (when (string-suffix-p "!" pattern)
-        `(orderless-pinyin-regexp . ,(substring pattern 0 -1))))
-
-    (add-to-list 'orderless-style-dispatchers 'pinyin-if-bang))
-
-  (with-eval-after-load 'avy
-    (defun avy--regex-candidates@around (fun regex &optional beg end pred group)
-      (let ((regex (pyim-cregexp-build regex)))
-        (funcall fun regex beg end pred group)))
-    (advice-add 'avy--regex-candidates :around #'avy--regex-candidates@around))
-  :config
-  (setq pyim-default-scheme 'xiaohe-shuangpin))
-
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
   :straight t
@@ -209,7 +186,8 @@ reuse it's window, otherwise create new one."
   :defer t
   :custom-face (rime-preedit-face ((t nil)))
   :init
-  (setq default-input-method "rime")
+  (setq default-input-method "rime"
+        rime-title "ψ")
   :config
   (setq rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
         rime-user-data-dir (no-littering-expand-etc-file-name "rime/")
@@ -222,6 +200,29 @@ reuse it's window, otherwise create new one."
                                  (ignore-errors (rime-sync)))))
 
   (general-def rime-mode-map "C-`" 'rime-send-keybinding))
+
+(use-package rime-regexp
+  :straight (:host github :repo "colawithsauce/rime-regexp.el")
+  :commands rime-regexp-build-regexp-string
+  :init
+  (with-eval-after-load 'orderless
+    (defun orderless-pinyin-regexp (component)
+      "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
+      (rime-regexp-build-regexp-string (orderless-regexp component)))
+
+    (defun pinyin-if-bang (pattern _index _total)
+      (when (string-suffix-p "!" pattern)
+        `(orderless-pinyin-regexp . ,(substring pattern 0 -1))))
+
+    (add-to-list 'orderless-style-dispatchers 'pinyin-if-bang))
+
+  (with-eval-after-load 'avy
+    (defun avy--regex-candidates@around (fun regex &optional beg end pred group)
+      (let ((regex (rime-regexp-build-regexp-string regex)))
+        (funcall fun regex beg end pred group)))
+    (advice-add 'avy--regex-candidates :around #'avy--regex-candidates@around))
+  :config
+  (rime-regexp-load-rime))
 
 (use-package terminal-here
   :straight t
