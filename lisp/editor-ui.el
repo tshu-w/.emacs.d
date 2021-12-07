@@ -38,8 +38,8 @@
   :straight t
   :defer t
   :config
-  (setq humanoid-org-height nil
-        humanoid-org-bold nil))
+  (setq humanoid-themes-org-height nil
+        humanoid-themes-org-bold nil))
 
 (use-package kaolin-themes
   :straight t
