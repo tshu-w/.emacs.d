@@ -186,8 +186,7 @@ reuse it's window, otherwise create new one."
   :defer t
   :custom-face (rime-preedit-face ((t nil)))
   :init
-  (setq default-input-method "rime"
-        rime-title "ψ")
+  (setq default-input-method "rime")
   :config
   (setq rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
         rime-user-data-dir (no-littering-expand-etc-file-name "rime/")

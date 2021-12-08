@@ -14,30 +14,33 @@
 (setq user-full-name "Tianshu Wang"
       user-mail-address "wang@tianshu.me")
 
+(defvar default-font "Source Code Pro")
+(defvar font-size 14)
+(defvar unicode-font "Noto Sans CJK SC")
+(defvar unicode-scale (/ 16.0 14))
+
+(set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
+(add-hook 'after-init-hook
+          (lambda ()
+            (dolist (charset '(kana han cjk-misc bopomofo))
+              (set-fontset-font t charset (font-spec :family unicode-font)))
+            (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))))
+
 (when (memq window-system '(mac ns))
   (setq url-proxy-services
         '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
           ("http" . "127.0.0.1:6152")
           ("https" . "127.0.0.1:6152")))
 
-  (setq mac-command-modifier 'hyper
-        mac-option-modifier  'meta)
+  (setq ns-command-modifier 'hyper
+        ns-option-modifier  'meta)
 
   (setq ns-pop-up-frames nil)
   (setq dired-listing-switches "-aBhl --group-directories-first")
 
+  (setq unicode-font "PingFang SC")
   (set-fontset-font t 'emoji "Apple Color Emoji" nil 'prepend)
   (set-fontset-font t 'symbol "Apple Symbols" nil 'prepend))
-
-(defun set-monospaced-font (english chinese english-size chinese-size)
-  "Set the monospaced font size when mixed CHINESE and ENGLISH words."
-  (set-face-attribute 'default nil :font
-                      (format "%s:pixelsize=%d" english english-size))
-  (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font t charset
-                      (font-spec :family chinese :size chinese-size))))
-(when window-system
-  (set-monospaced-font "Source Code Pro" "PingFang SC" 14 16))
 
 (setq initial-scratch-message nil   ;; "make scratch buffer empty"
       inhibit-startup-message t)    ;; "disable splash screen"
