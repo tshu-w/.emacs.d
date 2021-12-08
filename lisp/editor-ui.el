@@ -178,9 +178,8 @@
 
   (defun smaller-modeline ()
     "Make doom-modeline smaller."
-    (when window-system
-      (set-face-attribute 'mode-line nil :height 120)
-      (set-face-attribute 'mode-line-inactive nil :height 120))))
+    (set-face-attribute 'mode-line nil :height 120)
+    (set-face-attribute 'mode-line-inactive nil :height 120)))
 
 (use-package shackle
   :straight t
