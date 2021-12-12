@@ -730,9 +730,18 @@ go to `org-datetree-file-format' file based on TIME."
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory org-note-directory
+        org-roam-node-display-template (concat "${hierarchy:*} " (propertize "${tags:20}" 'face 'org-tag))
         org-roam-v2-ack t)
   (with-eval-after-load 'org (org-roam-db-autosync-enable))
   :config
+  ;; https://github.com/org-roam/org-roam/wiki/User-contributed-Tricks#showing-node-hierarchy
+  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+    (let ((level (org-roam-node-level node)))
+      (concat
+       (when (> level 0) (concat (org-roam-node-file-title node) " > "))
+       (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
+       (org-roam-node-title node))))
+
   (defun org-roam-open-refs ()
     "Open REFs of the node at point."
     (interactive)
