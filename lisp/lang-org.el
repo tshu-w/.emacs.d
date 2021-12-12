@@ -768,6 +768,8 @@ go to `org-datetree-file-format' file based on TIME."
 
   (with-eval-after-load 'shackle
     (add-to-list 'shackle-rules '("*org-roam*" :align right)))
+
+  (define-key magit-section-mode-map "SPC" nil)
   :general
   (tyrant-def
     "or"  '(:ignore t :which-key "roam")
