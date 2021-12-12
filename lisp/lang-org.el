@@ -659,6 +659,14 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
     (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
 
+(use-package org-appear
+  :straight t
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autolinks t
+        org-appear-autosubmarkers t
+        org-appear-autoentities t))
+
 (use-package org-download
   :straight t
   :after org
