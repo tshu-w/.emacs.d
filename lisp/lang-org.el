@@ -724,7 +724,7 @@ go to `org-datetree-file-format' file based on TIME."
   :defer t
   :init
   (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :target
+        '(("d" "default" entry "* %?\n%i\n" :target
            (file+head "${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
            :unnarrowed t))
         org-roam-db-gc-threshold most-positive-fixnum
@@ -776,7 +776,7 @@ go to `org-datetree-file-format' file based on TIME."
   :after org-protocol
   :config
   (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain "%?" :target
+        '(("r" "ref" entry "* %?\n%i\n" :target
            (file+head "refs/${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
            :unnarrowed t))))
 
