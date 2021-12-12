@@ -209,11 +209,14 @@ reuse it's window, otherwise create new one."
       "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
       (rime-regexp-build-regexp-string (orderless-regexp component)))
 
-    (defun pinyin-if-bang (pattern _index _total)
-      (when (string-suffix-p "!" pattern)
-        `(orderless-pinyin-regexp . ,(substring pattern 0 -1))))
+    (defun pinyin-if-ampersand (pattern _index _total)
+      (cond
+       ((equal "&" pattern)
+        '(orderless-literal . ""))
+       ((string-prefix-p "&" pattern)
+        `(orderless-pinyin-regexp . ,(substring pattern 1)))))
 
-    (add-to-list 'orderless-style-dispatchers 'pinyin-if-bang))
+    (add-to-list 'orderless-style-dispatchers 'pinyin-if-ampersand))
 
   (with-eval-after-load 'avy
     (defun avy--regex-candidates@around (fun regex &optional beg end pred group)
