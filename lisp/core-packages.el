@@ -45,11 +45,10 @@
   :straight t
   :defer t
   :init
-  (setq exec-path-from-shell-arguments '("-l")
+  (setq exec-path-from-shell-arguments nil
         exec-path-from-shell-variables '("PATH" "MANPATH"
-                                         "GNUPGHOME"
-                                         "WAKATIME_HOME"
-                                         "SSH_AUTH_SOCK"))
+                                         "GNUPGHOME" "SSH_AUTH_SOCK"
+                                         "WAKATIME_HOME"))
   (exec-path-from-shell-initialize))
 
 (use-package no-littering :straight t :defer t)
