@@ -278,7 +278,10 @@ and the identifier can be DOI, ISBN, PMID, or arXiv ID."
       (ebib-import-entries ebib--cur-db)))
 
   (general-def ebib-index-mode-map
-    "/" 'ebib-jump-to-entry
+    "i"   'ebib-browse-doi
+    "I"   'ebib-import-file
+    "RET" 'ebib-edit-entry
+    "/"   'ebib-jump-to-entry
     [remap ebib-quit] 'ebib-force-quit)
 
   (general-def '(ebib-index-mode-map ebib-entry-mode-map)
