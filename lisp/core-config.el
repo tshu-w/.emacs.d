@@ -14,33 +14,35 @@
 (setq user-full-name "Tianshu Wang"
       user-mail-address "wang@tianshu.me")
 
+(setq url-proxy-services
+      '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
+        ("http" . "127.0.0.1:6152")
+        ("https" . "127.0.0.1:6152")))
+
 (defvar default-font "Source Code Pro")
 (defvar font-size 14)
 (defvar unicode-font "Noto Sans CJK SC")
 (defvar unicode-scale (/ 16.0 14))
+(defvar emoji-font "Noto Color Emoji")
+(defvar symbol-font "Noto Sans Symbols")
 
 (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
 (add-hook 'after-init-hook
           (lambda ()
             (dolist (charset '(kana han cjk-misc bopomofo))
-              (set-fontset-font t charset (font-spec :family unicode-font)))
-            (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))))
+              (set-fontset-font t charset unicode-font))
+            (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
+
+            (set-fontset-font t 'emoji emoji-font nil 'prepend)
+            (set-fontset-font t 'symbol symbol-font nil 'prepend)))
 
 (when (memq window-system '(mac ns))
-  (setq url-proxy-services
-        '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
-          ("http" . "127.0.0.1:6152")
-          ("https" . "127.0.0.1:6152")))
-
   (setq ns-command-modifier 'hyper
-        ns-option-modifier  'meta)
+        ns-pop-up-frames nil)
 
-  (setq ns-pop-up-frames nil)
-  (setq dired-listing-switches "-aBhl --group-directories-first")
-
-  (setq unicode-font "PingFang SC")
-  (set-fontset-font t 'emoji "Apple Color Emoji" nil 'prepend)
-  (set-fontset-font t 'symbol "Apple Symbols" nil 'prepend))
+  (setq unicode-font "PingFang SC"
+        emoji-font "Apple Color Emoji"
+        symbol-font "Apple Symbols"))
 
 (setq initial-scratch-message nil   ;; "make scratch buffer empty"
       inhibit-startup-message t)    ;; "disable splash screen"
@@ -157,6 +159,7 @@
   (setq dired-auto-revert-buffer t
         dired-create-destination-dirs 'ask
         dired-dwim-target t
+        dired-listing-switches "-aBhl --group-directories-first"
         dired-vc-rename-file t))
 
 (use-package doc-view
