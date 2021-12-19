@@ -50,7 +50,11 @@
     "gS"  'magit-stage-file
     "gU"  'magit-unstage-file))
 
-(use-package forge :straight t :after magit)
+(use-package forge
+  :straight t
+  :after magit
+  :init
+  (setq forge-add-default-bindings nil))
 
 (use-package transient
   :straight t
