@@ -53,7 +53,7 @@
     (add-to-list 'writeroom-major-modes 'elfeed-search-mode)
     (add-to-list 'writeroom-major-modes 'elfeed-show-mode))
   :general
-  (tyrant-def "ae" 'elfeed))
+  (tyrant-def "af" 'elfeed))
 
 (use-package elfeed-org
   :straight t
