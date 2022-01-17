@@ -18,7 +18,12 @@
 (defvar bootstrap-version)
 (setq straight-check-for-modifications '(find-when-checking)
       straight-host-usernames '((github . "tshu-w"))
-      straight-vc-git-default-clone-depth 1)
+      straight-vc-git-default-clone-depth 1
+      straight-build-dir (format "build/%d%s%d"
+                                 emacs-major-version
+                                 version-separator
+                                 emacs-minor-version))
+
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
