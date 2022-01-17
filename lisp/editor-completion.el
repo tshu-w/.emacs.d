@@ -230,7 +230,8 @@ targets."
   :config
   (setq company-box-backends-colors nil
         company-box-enable-icon nil
-        company-box-scrollbar nil))
+        company-box-scrollbar nil
+        company-box-doc-frame-parameters '((internal-border-width . 3))))
 
 (use-package company-try-hard
   :straight t
