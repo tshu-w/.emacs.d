@@ -167,7 +167,7 @@
   :config
   (setq inhibit-compacting-font-caches t
 
-        doom-modeline-height 1
+        doom-modeline-height 0
         doom-modeline-buffer-file-name-style 'auto
         doom-modeline-project-detection 'project
 
@@ -178,8 +178,8 @@
 
   (defun smaller-modeline ()
     "Make doom-modeline smaller."
-    (set-face-attribute 'mode-line nil :height 120)
-    (set-face-attribute 'mode-line-inactive nil :height 120)))
+    (set-face-attribute 'mode-line nil :height 0.85 :inherit 'default)
+    (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)))
 
 (use-package shackle
   :straight t
