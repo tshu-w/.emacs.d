@@ -206,7 +206,7 @@
 
 (use-package writeroom-mode
   :straight t
-  :hook (emacs-startup . global-writeroom-mode)
+  :hook (after-init . global-writeroom-mode)
   :config
   (setq split-width-threshold 120
 

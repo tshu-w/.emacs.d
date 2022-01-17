@@ -139,8 +139,10 @@
         desktop-lazy-verbose nil
         desktop-load-locked-desktop t
         desktop-restore-eager 1
-        desktop-restore-frames nil
         desktop-save t)
+
+  (dolist (param '(foreground-color background-color font cursor-color mouse-color))
+    (push `(,param . :never) frameset-filter-alist))
 
   (defun restart-emacs-without-desktop (&optional args)
     "Restart emacs without desktop."
