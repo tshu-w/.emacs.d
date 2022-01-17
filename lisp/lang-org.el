@@ -761,9 +761,14 @@ go to `org-datetree-file-format' file based on TIME."
                             (completing-read-multiple "Open: " refs)
                           refs))
                   (user-error "No ROAM_REFS found"))
+
+        (when-let ((oc-cites (seq-map
+                              (lambda (ref) (substring ref 1))
+                              (seq-filter (apply-partially #'string-prefix-p "@") refs))))
+          (citar-run-default-action oc-cites))
+
         (dolist (ref refs)
-          (if (string-prefix-p "@" ref)
-              (citar-run-default-action (substring ref 1))
+          (unless (string-prefix-p "@" ref)
             (browse-url ref))))))
 
   (with-eval-after-load 'shackle
