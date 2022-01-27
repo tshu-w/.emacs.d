@@ -333,9 +333,12 @@
   :straight t
   :hook (after-init . evil-owl-mode)
   :config
-  (setq evil-owl-display-method 'posframe
-        evil-owl-idle-delay 0.5
-        evil-owl-max-string-length 80))
+  (add-to-list 'display-buffer-alist
+               '("*evil-owl*"
+                 (display-buffer-in-side-window)
+                 (side . bottom)
+                 (window-height . 0.3)))
+  (setq evil-owl-idle-delay 0.5))
 
 (use-package evil-surround
   :straight t
