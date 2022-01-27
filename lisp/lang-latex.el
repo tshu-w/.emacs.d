@@ -208,6 +208,11 @@
 
 (use-package ebib
   :straight t
+  :commands ebib-zotero-protocol-handler
+  :init
+  (with-eval-after-load 'org-protocol
+    (push '("ebib-zotero" :protocol "ebib-zotero" :function ebib-zotero-protocol-handler)
+          org-protocol-protocol-alist))
   :config
   (setq ebib-default-directory bibtex-file-path
         ebib-bib-search-dirs `(,bibtex-file-path)
@@ -248,6 +253,7 @@
     "Create timestamp for the Org mode note."
     (format "%s" (with-temp-buffer (org-insert-time-stamp nil))))
 
+  ;; ebib-zotero
   (defcustom ebib-zotero-translation-server "https://translate.manubot.org"
     "The address of Zotero translation server."
     :group 'ebib
@@ -266,7 +272,9 @@ The entry is stored in the current database."
     (interactive "MURL: ")
     (with-temp-buffer
       (insert (ebib-zotero-translate url "web"))
-      (ebib-import-entries ebib--cur-db)))
+      (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
+ 				(if (ebib--goto-entry-in-index (car entry-keys))
+ 					  (ebib--update-entry-buffer)))))
 
   (defun ebib-zotero-import-identifier (identifier)
     "Fetch a entry from zotero translation server via an IDENTIFIER.
@@ -275,7 +283,21 @@ and the identifier can be DOI, ISBN, PMID, or arXiv ID."
     (interactive "MIDENTIFIER: ")
     (with-temp-buffer
       (insert (ebib-zotero-translate identifier "search"))
-      (ebib-import-entries ebib--cur-db)))
+      (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
+ 				(if (ebib--goto-entry-in-index (car entry-keys))
+ 					  (ebib--update-entry-buffer)))))
+
+  (defun ebib-zotero-protocol-handler (info)
+    "Process an org-protocol://ebib-zotero?href= style url with INFO.
+Calls `ebib-zotero-import-url' with the provided URI to add a
+new BibTeX entry to the current database.
+Add the following as a browser bookmark to use:
+    javascript:location.href = \\='org-protocol://ebib-zotero?href=\\='+ \\
+            encodeURIComponent(location.href)"
+    (unless (plist-get info :href)
+      (user-error "No URI provided"))
+    (ebib)
+    (ebib-zotero-import-url (plist-get info :href)))
 
   (general-def ebib-index-mode-map
     "i"   'ebib-browse-doi
