@@ -206,6 +206,9 @@
   :init
   (setq evil-want-keybinding nil
         evil-symbol-word-search t
+        evil-ex-search-vim-style-regexp t
+        evil-search-module 'evil-search
+        evil-magic 'very-magic
         hs-minor-mode-map nil)
   :config
   (setq evil-cross-lines t
