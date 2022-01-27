@@ -19,7 +19,7 @@
   (setq magit-define-global-key-bindings nil)
   :config
   (setq magit-diff-refine-hunk t
-        magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1
+        magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
         magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-save-repository-buffers 'dontask)
 
