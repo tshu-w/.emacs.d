@@ -170,6 +170,7 @@ reuse it's window, otherwise create new one."
           help-mode
           helpful-mode
           compilation-mode
+          process-menu-mode
           special-mode
           "\\*Flycheck errors\\*"))
   :general
