@@ -12,7 +12,7 @@
   :init
   (setq org-directory "~/Documents/Org/"
         org-note-directory (concat org-directory "notes/")
-        org-log-directory (concat org-directory "logs/")
+        org-log-directory (concat org-directory "notes/logs/")
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file
@@ -94,11 +94,12 @@
     (setq org-agenda-files `(,org-directory ,org-log-directory))
     :config
     (require 'org-habit)
+    (setq org-agenda-clockreport-parameter-plist '(:maxlevel 5)
 
-    (setq org-agenda-clockreport-parameter-plist '(:maxlevel 5 :scope agenda-with-archives)
           org-agenda-columns-add-appointments-to-effort-sum t
           org-agenda-compact-blocks t
           org-agenda-dim-blocked-tasks t
+          org-agenda-include-diary nil
           org-agenda-persistent-filter t
           org-agenda-restore-windows-after-quit t
           org-agenda-skip-additional-timestamps-same-entry t
@@ -245,47 +246,65 @@
     :defer t
     :init
     (setq org-capture-templates
-          '(("i" "Inbox" entry (file org-inbox-file) "* %?\n%i\n")
-            ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
-            ("l" "Log" entry (function org-datetree-goto-location)
-             "* %<%H:%M> %?\n" :clock-in t :clock-keep t)
-            ("L" "Link")
-            ("Ll" "Web link" plain (file+function org-inbox-file org-capture-goto-link)
-             "%i\n" :empty-lines 1 :immediate-finish t)
-            ("Li" "Inbox with link" entry (file org-inbox-file)
+          '(("i" "Item" entry (file org-inbox-file) "* %?\n%i\n")
+            ("I" "Item w/ link" entry (file org-inbox-file)
              "* %?\n%a\n%i\n")
-            ("Lt" "Todo with link" entry (file org-inbox-file)
+            ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
+            ("T" "Todo w/ link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n")
-            ("r" "Review")
-            ("ry" "Yesterday" entry (function
-                                     (lambda ()
-                                       (org-datetree-goto-location
-                                        (time-add (current-time) (days-to-time -1)))))
-             "* Daily Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
-            ("rt" "Today" entry (function org-datetree-goto-location)
-             "* Daily Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
-            ("rd" "Select a date" entry (function org-datetree-goto-read-date-location)
-             "* Daily Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
-            ("rw" "Last Week" entry (function
-                                     (lambda ()
-                                       (let ((org-reverse-datetree-level-formats
-                                              (butlast org-reverse-datetree-level-formats)))
-                                         (org-datetree-goto-location
-                                          (time-add (current-time) (days-to-time -7))))))
-             "* Weekly Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)
-            ("rW" "This Week" entry (function
-                                     (lambda ()
-                                       (let ((org-reverse-datetree-level-formats
-                                              (butlast org-reverse-datetree-level-formats)))
-                                         (org-datetree-goto-location))))
-             "* Weekly Review\n\n%(org-capture-insert-clock-report)" :immediate-finish t :jump-to-captured t)))
-    :config
-    (defun org-capture-insert-clock-report ()
-      (concat "#+BEGIN: clocktable :scope agenda-with-archives :block \n"
-              "#+END:\n"))
+            ("w" "Web" plain (file+function org-inbox-file org-capture-goto-link)
+             "%i\n" :empty-lines 1 :immediate-finish t)
 
+            ("l" "Log" entry (function org-datetree-goto-location) "* %<%H:%M> %?\n")
+
+            ("r"  "Review")
+            ("ry" "Yesterday" entry
+             (function
+              (lambda () (org-datetree-goto-location
+                     (time-add (current-time) (days-to-time -1)))))
+             "* Daily Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rt" "Today" entry
+             (function
+              (lambda () (org-datetree-goto-location)))
+             "* Daily Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rl" "Last Week" entry
+             (function
+              (lambda () (let ((org-reverse-datetree-level-formats
+                           (butlast org-reverse-datetree-level-formats)))
+                      (org-datetree-goto-location
+                       (time-add (current-time) (days-to-time -7))))))
+             "* Weekly Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rw" "This Week" entry
+             (function
+              (lambda () (let ((org-reverse-datetree-level-formats
+                           (butlast org-reverse-datetree-level-formats)))
+                      (org-datetree-goto-location))))
+             "* Weekly Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rD" "Select a Date" entry
+             (function
+              (lambda () (org-datetree-goto-read-date-location)))
+             "* Daily Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rW" "Select a Week" entry
+             (function
+              (lambda () (let ((org-reverse-datetree-level-formats
+                           (butlast org-reverse-datetree-level-formats)))
+                      (org-datetree-goto-read-date-location))))
+             "* Weekly Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rM" "Select a Month" entry
+             (function
+              (lambda () (let ((org-reverse-datetree-level-formats
+                           (butlast org-reverse-datetree-level-formats 2)))
+                      (org-datetree-goto-read-date-location))))
+             "* Monthly Review\n\n%i" :immediate-finish t :jump-to-captured t)
+            ("rY" "Select a Year" entry
+             (function
+              (lambda () (let ((org-reverse-datetree-level-formats
+                           (butlast org-reverse-datetree-level-formats 3)))
+                      (org-datetree-goto-read-date-location))))
+             "* Yearly Review\n\n%i" :immediate-finish t :jump-to-captured t)))
+    :config
     (progn ;; web link
-      (setq org-capture-web-link-key "Ll"
+      (setq org-capture-web-link-key "w"
             org-capture-auto-refile-rules
             `(("https?://arxiv\\.org" ,org-project-file "Daily Papers")
               ("https?://dl\\.acm\\.org" ,org-project-file "Daily Papers")
@@ -695,10 +714,12 @@ Create at the end of the FILE if HEADLINE doesn't exist."
   :init
   (setq-default org-reverse-datetree-level-formats '("%Y" "%Y-%m %B" "%Y W%W" "%Y-%m-%d %A"))
   :config
-  (setq org-datetree-file-format (concat org-log-directory "%Y.org"))
+  (defcustom org-datetree-file-format (concat org-log-directory "%Y.org")
+    "org-datetree file format."
+    :type 'string)
 
   (defun org-datetree-goto-location (&optional time)
-    "wrapper for `org-reverse-datetree-goto-date-in-file'.
+    "Wrapper for `org-reverse-datetree-goto-date-in-file'.
 go to `org-datetree-file-format' file based on TIME."
     (let* ((time (or time (current-time)))
            (file (format-time-string org-datetree-file-format time)))
@@ -707,7 +728,7 @@ go to `org-datetree-file-format' file based on TIME."
       (org-reverse-datetree-goto-date-in-file time)))
 
   (defun org-datetree-goto-read-date-location (&optional time)
-    "wrapper for `org-reverse-datetree-goto-read-date-in-file'.
+    "Wrapper for `org-reverse-datetree-goto-read-date-in-file'.
 go to `org-datetree-file-format' file based on TIME."
     (interactive)
     (let* ((time (or time (org-read-date nil t nil)))
@@ -716,11 +737,12 @@ go to `org-datetree-file-format' file based on TIME."
                       (find-file-noselect file)))
       (org-reverse-datetree-goto-date-in-file time)))
 
-  (defun org-datetree-refile (ask-always &optional time prefer)
-    "wrapper for `org-reverse-datetree-refile-to-file'.
+  (defun org-datetree-refile (&optional ask-always time prefer)
+    "Wrapper for `org-reverse-datetree-refile-to-file'.
 go to `org-datetree-file-format' file based on TIME."
     (interactive "P")
-    (let* ((prefer (or prefer '("CLOSED")))
+    (let* ((ask-always (equal '(4) ask-always))
+           (prefer (or prefer '("CLOSED")))
            (time (or time (org-reverse-datetree--get-entry-time
                            :ask-always ask-always
                            :prefer prefer)))
