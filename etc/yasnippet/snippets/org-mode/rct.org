@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Review Clock Table
+# key: rct
+# --
+
+#+begin: clocktable :scope agenda-with-archives :block $1
+#+end:
