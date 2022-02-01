@@ -754,9 +754,9 @@ go to `org-datetree-file-format' file based on TIME."
   :defer t
   :init
   (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :target
+        '(("d" "default" plain "" :target
            (file+head "${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
-           :unnarrowed t))
+           :unnarrowed t :immediate-finish t))
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory org-note-directory
