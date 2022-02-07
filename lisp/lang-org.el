@@ -799,10 +799,10 @@ go to `org-datetree-file-format' file based on TIME."
   :after org
   :hook (org-mode . org-superstar-mode)
   :config
-  (setq org-superstar-headline-bullets-list '(?◉ ?○ ?✸ ?●)
-        org-superstar-item-bullet-alist '((?* . ?▷)
-                                          (?+ . ?●)
-                                          (?- . ?○))))
+  (setq org-superstar-headline-bullets-list '(?◉ ?○ ?⁕ ?✽)
+        org-superstar-item-bullet-alist '((?* . ?●)
+                                          (?+ . ?○)
+                                          (?- . ?-))))
 
 
 (provide 'lang-org)
