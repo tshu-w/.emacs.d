@@ -799,8 +799,14 @@ go to `org-datetree-file-format' file based on TIME."
 (use-package org-roam-protocol
   :after org-protocol
   :config
+  (defun quote-initial ()
+    (let ((initial (plist-get org-store-link-plist :initial)))
+      (if (equal initial "") ""
+        (format "#+begin_quote\n%s\n#+end_quote" initial))))
+
   (setq org-roam-capture-ref-templates
-        '(("r" "ref" entry "* %?\n%i\n" :target
+        '(("r" "ref" plain "%?\n%(quote-initial)"
+           :target
            (file+head "refs/${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
            :unnarrowed t))))
 
