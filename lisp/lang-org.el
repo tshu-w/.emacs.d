@@ -399,9 +399,8 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     :defer t
     :init
     (setq org-latex-compiler "xelatex"
-          org-latex-packages-alist '(("" "mathspec" t))
-          org-latex-pdf-process '("latexmk -xelatex -quiet -shell-escape -bibtex -f %f"
-                                  "rm -fr %b.out %b.log %b.tex auto")
+          org-latex-pdf-process '("latexmk -f -pdf -%latex -interaction=nonstopmode -output-directory=%o %f"
+                                  "latexmk -c -bibtex")
           org-latex-prefer-user-labels t
           org-preview-latex-default-process 'dvisvgm
           org-preview-latex-process-alist
