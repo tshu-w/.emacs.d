@@ -689,10 +689,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
             ("^data:" . org-download-dnd-base64)
             ,@dnd-protocol-alist)))
   :config
-  (defun +org-download-method (link)
-    (org-download--fullname (org-link-unescape link)))
-  (setq org-download-method '+org-download-method)
-
   (setq org-download-annotate-function (lambda (_link) "")
         org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"))
