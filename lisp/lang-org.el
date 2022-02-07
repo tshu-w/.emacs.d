@@ -43,7 +43,6 @@
         org-log-into-drawer t
         org-pretty-entities t
         org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
-        org-special-ctrl-a/e t
         org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
@@ -182,9 +181,7 @@
              ((not (org-up-heading-safe))
               (* 1000 (- org-priority-lowest org-priority-default)))
              ;; Look for the parent's priority
-             (t (org-inherited-priority (org-get-heading))))))
-
-    (general-def 'motion org-agenda-mode-map "sd" 'org-agenda-filter-remove-all))
+             (t (org-inherited-priority (org-get-heading)))))))
 
   (use-package org-attach
     :defer t
@@ -528,11 +525,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     "ds"    'org-schedule
     "dt"    'org-time-stamp
     "dT"    'org-time-stamp-inactive
-    "e"     '(:ignore t :which-key "export")
-    "ee"    'org-export-dispatch
-    "f"     '(:ignore t :which-key "feeds")
-    "fi"    'org-feed-goto-inbox
-    "fu"    'org-feed-update-all
+    "e"     'org-export-dispatch
     "i"     '(:ignore t :which-key "insert")
     "ia"    'org-attach
     "ib"    'org-insert-structure-template
@@ -549,7 +542,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     "ip"    'org-set-property
     "is"    'org-insert-subheading
     "it"    'org-set-tags-command
-    "m"     '(:ignore t :which-key "more")
     "p"     'org-priority
     "s"     '(:ignore t :which-key "trees/subtrees")
     "sa"    'org-toggle-archive-tag
@@ -617,8 +609,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     "xu"    'org-underline
     "xv"    'org-verbatim)
 
-  (general-def 'normal org-mode-map
-    "RET"      'org-open-at-point)
+  (general-def 'normal org-mode-map "RET" 'org-open-at-point)
   :general
   (tyrant-def
     "o"      '(:ignore t :which-key "org")
