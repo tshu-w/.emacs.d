@@ -22,12 +22,7 @@
     (unless (featurep 'org-protocol) (require 'org-protocol)))
   :config
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "|" "DONE(d)")
-          (sequence "WAITING(w@)" "SOMEDAY(s)" "|" "CANCELED(c)"))
-        org-todo-keyword-faces
-        '(("CANCELED" . org-done)
-          ("WAITING" . (:foreground "light coral" :weight bold))
-          ("SOMEDAY" . (:foreground "plum" :weight bold))))
+        '((sequence "TODO(t)" "NEXT(n!)" "HOLD(h@/!)" "|" "DONE(d)" "CXLD(c)")))
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
         org-cycle-open-archived-trees t
@@ -121,7 +116,7 @@
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
           org-habit-graph-column 75
-          org-stuck-projects '("+PROJ/-WAITING-SOMEDAY-DONE-CANCELED" ("TODO") nil ""))
+          org-stuck-projects '("+PROJ/-DONE-CXLD" ("NEXT") nil ""))
 
     (setq org-agenda-custom-commands
           '(("r" . "Review")
