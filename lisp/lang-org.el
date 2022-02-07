@@ -656,18 +656,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     (general-def org-capture-mode-map
       "ZZ" 'org-capture-finalize
       "ZQ" 'org-capture-kill
-      "ZR" 'org-capture-refile))
-  :config
-  (defun surround-drawer ()
-    (let ((dname (read-from-minibuffer "" "")))
-      (cons (format ":%s:" (upcase (or dname ""))) ":end:")))
-  (defun surround-code ()
-    (let ((dname (read-from-minibuffer "" "")))
-      (cons (format "#+begin_src %s" (or dname "")) "#+end_src")))
-
-  (with-eval-after-load 'evil-surround
-    (add-to-list 'evil-surround-pairs-alist '(?: . surround-drawer))
-    (add-to-list 'evil-surround-pairs-alist '(?# . surround-code))))
+      "ZR" 'org-capture-refile)))
 
 (use-package org-appear
   :straight t
