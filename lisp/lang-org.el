@@ -429,7 +429,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
                                (org-agenda-files :maxlevel . 3))))
 
   (setq org-fast-tag-selection-single-key t
-        org-tags-column -80
         org-tags-match-list-sublevels 'intented
         org-tags-exclude-from-inheritance '("PROJ")
         org-tag-alist '((:startgroup)
@@ -440,12 +439,6 @@ Create at the end of the FILE if HEADLINE doesn't exist."
                         ("@computer")
                         ("@phone")
                         ("@pad")
-                        (:endgroup)
-                        (:startgroup)
-                        ("daily"    . ?d)
-                        ("weekly"   . ?w)
-                        ("monthly"  . ?m)
-                        ("annually" . ?A)
                         (:endgroup)
                         ("PROJ"     . ?p)
                         ("NOTE"     . ?n)
