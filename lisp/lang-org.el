@@ -239,15 +239,16 @@
     :init
     (setq org-capture-templates
           '(("i" "Item" entry (file org-inbox-file) "* %?\n%i\n")
-            ("I" "Item w/ link" entry (file org-inbox-file)
+            ("I" "Item w/ Link" entry (file org-inbox-file)
              "* %?\n%a\n%i\n")
             ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n")
-            ("T" "Todo w/ link" entry (file org-inbox-file)
+            ("T" "Todo w/ Link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n")
             ("w" "Web" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
 
-            ("l" "Log" entry (function org-datetree-goto-location) "* %<%H:%M> %?\n")
+            ("l" "Log" entry (function org-datetree-goto-location) "* %<%H:%M> %?\n"
+             :clock-in t :clock-resume t)
 
             ("r"  "Review")
             ("ry" "Yesterday" entry
