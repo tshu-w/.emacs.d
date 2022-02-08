@@ -212,7 +212,7 @@
 
         writeroom-width 128
         writeroom-bottom-divider-width 0
-        writeroom-fringes-outside-margins t
+        writeroom-fringes-outside-margins nil
         writeroom-fullscreen-effect nil
         writeroom-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode dired-mode)
         writeroom-major-modes-exceptions '(process-menu-mode proced-mode)
