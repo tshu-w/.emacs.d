@@ -18,8 +18,9 @@
         org-default-notes-file org-inbox-file
         org-modules '(ol-docview ol-info org-id))
 
-  (defadvice server-execute (before enable-org-protocol activate)
-    (unless (featurep 'org-protocol) (require 'org-protocol)))
+  (advice-add 'server-execute :before
+              (defun enable-org-protocol (&rest r)
+                (unless (featurep 'org-protocol) (require 'org-protocol))))
 
   (autoload 'org-super-agenda "org-agenda")
   :config
