@@ -36,8 +36,11 @@
         org-imenu-depth 3
         org-log-done 'time
         org-log-into-drawer t
+        org-log-redeadline nil
+        org-log-reschedule nil
         org-pretty-entities t
         org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
+        org-read-date-prefer-future nil
         org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
