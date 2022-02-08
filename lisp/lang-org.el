@@ -20,6 +20,8 @@
 
   (defadvice server-execute (before enable-org-protocol activate)
     (unless (featurep 'org-protocol) (require 'org-protocol)))
+
+  (autoload 'org-super-agenda "org-agenda")
   :config
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n!)" "HOLD(h@/!)" "|" "DONE(d)" "CXLD(c)")))
@@ -90,27 +92,18 @@
     :init
     (setq org-agenda-files `(,org-directory ,org-log-directory))
     :config
-    (require 'org-habit)
     (setq org-agenda-clockreport-parameter-plist '(:maxlevel 5)
 
           org-agenda-columns-add-appointments-to-effort-sum t
-          org-agenda-compact-blocks t
-          org-agenda-dim-blocked-tasks t
           org-agenda-include-diary nil
           org-agenda-persistent-filter t
           org-agenda-restore-windows-after-quit t
-          org-agenda-skip-additional-timestamps-same-entry t
           org-agenda-skip-deadline-prewarning-if-scheduled t
           org-agenda-skip-scheduled-if-done t
           org-agenda-skip-deadline-if-done t
           org-agenda-skip-timestamp-if-done t
           org-agenda-skip-scheduled-if-deadline-is-shown t
-          org-agenda-sorting-strategy '((agenda time-up priority-down)
-                                        (todo todo-state-up priority-down category-keep)
-                                        (tags todo-state-up priority-down category-keep)
-                                        (search category-keep))
           org-agenda-span 'day
-          org-agenda-start-on-weekday nil
           org-agenda-time-grid nil
           org-agenda-time-leading-zero t
           org-agenda-todo-ignore-scheduled 'all
@@ -118,55 +111,39 @@
           org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
-          org-habit-graph-column 75
-          org-stuck-projects '("+PROJ/-DONE-CXLD" ("NEXT") nil ""))
+          org-stuck-projects '("PROJ/-DONE-CXLD" ("NEXT") nil ""))
 
     (setq org-agenda-custom-commands
-          '(("r" . "Review")
-            ("ry" "Yesterday"
-             ((agenda "" ((org-agenda-span 1))))
-             ((org-agenda-start-day "-1d")
-              (org-agenda-start-with-log-mode '(closed clock state))
-              (org-agenda-start-with-clockreport-mode t)
-              (org-agenda-archives-mode t)))
-            ("rt" "Today"
-             ((agenda "" ((org-agenda-span 1))))
-             ((org-agenda-start-with-log-mode '(closed clock state))
-              (org-agenda-start-with-clockreport-mode t)
-              (org-agenda-archives-mode t)))
-            ("rw" "Last Week"
-             ((agenda "" ((org-agenda-span 7)
-                          (org-agenda-start-on-weekday 1)))
-              (todo "TODO" ((org-agenda-overriding-header "All TODO items without scheduled or deadline")
-                            (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
-                                                           (org-agenda-skip-subtree-if 'regexp "habit")))))
-              (stuck "")
-              (todo "WAITING")
-              (todo "SOMEDAY"))
-             ((org-agenda-start-day "-1w")
-              (org-agenda-start-with-clockreport-mode t)
-              (org-agenda-archives-mode t)
-              (org-agenda-compact-blocks nil)
-              (org-agenda-show-all-dates nil)))
-            ("rW" "This Week"
-             ((agenda "" ((org-agenda-span 7)
-                          (org-agenda-start-on-weekday 1)))
-              (todo "TODO" ((org-agenda-overriding-header "All TODO items without scheduled or deadline")
-                            (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
-                                                           (org-agenda-skip-subtree-if 'regexp "habit")))))
-              (stuck "")
-              (todo "WAITING")
-              (todo "SOMEDAY"))
-             ((org-agenda-start-with-clockreport-mode t)
-              (org-agenda-archives-mode t)
-              (org-agenda-compact-blocks nil)
-              (org-agenda-show-all-dates nil)))
-            ("d" "Upcoming deadlines" agenda ""
-             ((org-agenda-entry-types '(:deadline))
-              (org-agenda-span 1)
-              (org-deadline-warning-days 30)))))
+          `(("o" "Super agenda"
+             ((agenda "")
+              (todo "NEXT" ((org-agenda-overriding-header "\nNext actions")))
+              (todo "TODO" ((org-agenda-overriding-header "\nInbox")
+                            (org-agenda-files `(,org-inbox-file))))
+              (tags "CLOSED>=\"<today>\""
+                    ((org-agenda-overriding-header "\nCompleted today")
+                     (org-agenda-archives-mode t))))
+             ((org-agenda-block-separator nil)))
 
-    (advice-add 'org-agenda-exit :before #'org-save-all-org-buffers)
+            ("r" "Agenda review"
+             ((agenda "" ((org-agenda-span 7)
+                          (org-agenda-day-face-function (lambda (date) 'org-agenda-date))))
+              (stuck "")
+              (todo "NEXT" ((org-agenda-overriding-header "NEXT entries w/o timestamp")
+                            (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
+                                                           (org-agenda-skip-subtree-if 'regexp "habit")))))
+              (todo "TODO" ((org-agenda-overriding-header "TODO entries w/o timestamp")
+                            (org-agenda-skip-function '(or (org-agenda-skip-entry-if 'timestamp)
+                                                           (org-agenda-skip-subtree-if 'regexp "habit")))))
+              (todo "HOLD" ((org-agenda-overriding-header "HOLD entries"))))
+             ((org-agenda-archives-mode t)
+              (org-agenda-compact-blocks nil)
+              (org-agenda-show-all-dates nil)))))
+
+    (defun org-super-agenda (&optional arg)
+      (interactive "P")
+      (org-agenda arg "o"))
+
+    (advice-add 'org-agenda-exit :after #'org-save-all-org-buffers)
 
     (setq org-priority-get-priority-function
           (defun org-inherited-priority (s)
@@ -250,7 +227,7 @@
             ("w" "Web" plain (file+function org-inbox-file org-capture-goto-link)
              "%i\n" :empty-lines 1 :immediate-finish t)
 
-            ("l" "Log" entry (function org-datetree-goto-location) "* %<%H:%M> %?\n"
+            ("l" "Log" entry (function org-datetree-goto-location) "* %?\n"
              :clock-in t :clock-resume t)
 
             ("r"  "Review")
@@ -321,7 +298,7 @@
               (org-capture-put :flag t)
               (goto-char (point-max))
               (or (bolp) (insert "\n"))
-              (insert "* " headline "\n")
+              (insert "* TODO " headline "\n")
               (insert "[[" link "]]\n")
               (point)))))
 
@@ -605,7 +582,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
   (tyrant-def
     "o"      '(:ignore t :which-key "org")
     "o/"     'org-occur-in-agenda-files
-    "oa"     'org-agenda-list
+    "oa"     'org-agenda
     "oc"     'org-capture
     "oC"     '(:ignore t :which-key "clock")
     "oCc"    'org-clock-cancel
@@ -616,7 +593,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     "oCr"    'org-resolve-clocks
     "od"     'open-org-default-notes-file
     "ol"     'org-store-link
-    "oo"     'org-agenda
+    "oo"     'org-super-agenda
     "op"     'open-org-project-file))
 
 (use-package org-mac-link
