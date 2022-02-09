@@ -343,6 +343,8 @@ returns the command to execute."
   :init
   (setq yas-minor-mode-map nil)
   :config
+  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand t)
+
   (setq yas-triggers-in-field t
         yas-wrap-around-region t))
 

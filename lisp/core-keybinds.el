@@ -168,6 +168,7 @@
 
   (general-def
     [remap comment-dwim] 'comment-or-uncomment
+    "M-/" 'hippie-expand
     "M-j" (defun scroll-other-window-next-line (&optional arg)
             (interactive "P")
             (scroll-other-window (or arg 1)))
@@ -320,7 +321,8 @@
   (general-def '(normal motion) "s" 'evil-avy-goto-char-2)
   (general-def 'operator "z" 'evil-avy-goto-char-2)
 
-  (general-def 'normal "zf" 'reposition-window))
+  (general-def 'normal "zf" 'reposition-window)
+  (general-def 'insert [remap evil-complete-previous] 'hippie-expand))
 
 (use-package evil-collection
   :straight t
