@@ -315,6 +315,16 @@ the unwritable tidbits."
         ;; save clipboard contents into kill-ring before replace them
         save-interprogram-paste-before-kill t))
 
+(use-package tab-bar
+  :hook (after-init . tab-bar-mode)
+  :config
+  (setq tab-bar-show nil
+        tab-bar-close-button-show nil
+        tab-bar-new-button-show nil
+        tab-bar-tab-hints t
+        tab-bar-new-tab-choice "*scratch*"
+        tab-bar-select-tab-modifiers '(hyper)))
+
 (use-package tramp
   :defer t
   :config
