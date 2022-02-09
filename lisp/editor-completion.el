@@ -20,15 +20,18 @@
 
   (use-package vertico-buffer
     :defer t
-    :hook (vertico-mode . vertico-buffer-mode))
+    :hook (vertico-mode . vertico-buffer-mode)
+    :config
+    (setq vertico-buffer-display-action `(display-buffer-in-side-window
+                                          (window-height . ,(+ 3 vertico-count))
+                                          (side . top))))
 
   (use-package vertico-directory
     :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
     :general
-    (vertico-map
-     "RET"   'vertico-directory-enter
-     "DEL"   'vertico-directory-delete-char
-     "M-DEL" 'vertico-directory-delete-word))
+    (vertico-map "RET"   'vertico-directory-enter
+                 "DEL"   'vertico-directory-delete-char
+                 "M-DEL" 'vertico-directory-delete-word))
 
   (use-package vertico-quick
     :general
