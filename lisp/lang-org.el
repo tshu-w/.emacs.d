@@ -351,8 +351,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     (org-clock-persistence-insinuate)
     (org-clock-auto-clockout-insinuate)
     :config
-    (setq org-clock-auto-clockout-timer 3600
-          org-clock-auto-clock-resolution 'when-no-clock-is-running
+    (setq org-clock-auto-clock-resolution 'when-no-clock-is-running
           org-clock-history-length 10
           org-clock-idle-time 10
           org-clock-in-resume t
