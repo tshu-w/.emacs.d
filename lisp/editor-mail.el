@@ -10,19 +10,12 @@
 
 (use-package mu4e
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-  :commands (mu4e-update-mail-and-index
-             mu4e-org-open
-             mu4e-org-store-link)
+  :defer t
   :init
   (setq mu4e-maildir "$XDG_DATA_HOME/mail"
         mu4e-attachment-dir "~/Downloads"
         mu4e-get-mail-command "mbsync -c $XDG_CONFIG_HOME/isync/mbsyncrc -a"
-        mu4e-main-buffer-hide-personal-addresses t
-        mu4e-update-interval (* 6 60 60)
-        mu4e-update-timer (run-with-timer
-                           t mu4e-update-interval
-                           (lambda () (mu4e-update-mail-and-index
-                                  mu4e-index-update-in-background))))
+        mu4e-main-buffer-hide-personal-addresses t)
 
   (with-eval-after-load 'org
     (org-link-set-parameters "mu4e"
