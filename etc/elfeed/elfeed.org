@@ -1,7 +1,7 @@
 #+TITLE: Elfeed
 
-* Blog                                                             :elfeed:Blog:
-** Emacs                                                                :Emacs:
+* Blog                                                          :elfeed:Blog:
+** Emacs                                                             :Emacs:
 *** [[http://blog.binchen.org/rss.xml][Chen's blog]]
 *** [[http://blog.lujun9972.win/emacs-document/rss.xml][EMACS-DOCUMENT]]
 *** [[http://blog.lujun9972.win/rss.xml][暗无天日]]
@@ -13,7 +13,6 @@
 *** [[https://blog.tecosaur.com/tmio/rss.xml][This Month in Org]]
 *** [[https://bzg.fr/index.xml][Free software hacktivist - Bastien Guerry]]
 *** [[https://d12frosted.io/atom.xml][d12frosted]]
-*** [[https://emacs-china.org/latest.rss][Emacs China - 最新主题]]
 *** [[https://emacsair.me][Emacsair]]
 *** [[https://endlessparentheses.com/atom.xml][Endless Parentheses]]
 *** [[https://jherrlin.github.io/index.xml][jherrlin]]
@@ -28,9 +27,8 @@
 *** [[https://updates.orgmode.org/feed/updates][Org-mode updates]]
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
-*** [[https://www.reddit.com/r/emacs/.rss][M-x emacs-reddit]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
-** Research                                                          :Research:
+** Research                                                       :Research:
 *** [[http://cos.name/feed/][统计之都]]
 *** [[http://gradientscience.org/feed.xml][gradient science]]
 *** [[https://deep-and-shallow.com/feed/][Deep & Shallow]]
@@ -62,10 +60,10 @@
 ** [[http://www.hankcs.com/feed][码农场]]
 ** [[http://www.matrix67.com/blog/feed.asp][Matrix67: The Aha Moments]]
 ** [[http://www.zmonster.me/atom.xml][ZMonster's Blog]]
-** [[http://www.zreading.cn/feed][左岸读书]]                           :ignore:
+** [[http://www.zreading.cn/feed][左岸读书]]                        :ignore:
 ** [[http://yangqinyuan.com/feed.xml][杨钦元 | 博客]]
 ** [[https://1byte.io/rss.xml][1 Byte]]
-** [[https://atjason.com/atom.xml][Jason]]                             :ignore:
+** [[https://atjason.com/atom.xml][Jason]]                          :ignore:
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
 ** [[https://blanboom.org/feed/][Blanboom]]
 ** [[https://blog.blahgeek.com/feeds/all.rss.xml][BlahGeek's Blog]]
@@ -89,7 +87,7 @@
 ** [[https://dbarobin.com/feed.xml][区块链罗宾]]
 ** [[https://draveness.me/feed.xml][面向信仰编程]]
 ** [[https://drmingdrmer.github.io/feed.xml][XP的博客]]
-** [[https://droidyue.com/atom.xml][技术小黑屋]]                                                          :ignore:
+** [[https://droidyue.com/atom.xml][技术小黑屋]]                    :ignore:
 ** [[https://endler.dev/rss.xml][Matthias Endler]]
 ** [[https://feeds.feedburner.com/GiantRobotsSmashingIntoOtherGiantRobots][Giant Robots Smashing Into Other Giant Robots]]
 ** [[https://feeds.feedburner.com/bookfere][书伴]]
@@ -104,6 +102,7 @@
 ** [[https://hypercritical.co/feeds/main][Hypercritical]]
 ** [[https://insights.thoughtworks.cn/feed][Thoughtworks洞见]]
 ** [[https://jhuo.ca/index.xml][HuoJu's BLOG]]
+** [[https://junjizhi.com/feed.xml][Junji Zhi - Engineer. Blogger.]]
 ** [[https://justinyan.me/feed][枫言枫语]]
 ** [[https://kalasearch.cn/rss.xml][卡拉搜索的博客]]
 ** [[https://laike9m.com/blog/rss/][laike9m's blog]]
@@ -157,38 +156,49 @@
 ** [[https://zlbk.net/feed][周良博客 · 喜恶皆在字里行间]]
 ** [[https://zonble.net/feed][zonble]]
 ** [[https://ztlevi.github.io/atom.xml][Lady luck is smilin'.]]
-* WeRss                                                           :elfeed:WeRss:
+* WeRss                                                        :elfeed:WeRss:
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/0f012a8e-ce88-48ac-a18d-8c338f228883.xml][夕小瑶的卖萌屋]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/12e4bdba-2aac-43c1-9563-afd326a23ee7.xml][L 先生说]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/b9c3b558-9e54-451b-8a5e-8d225705128d.xml][PaperWeekly]]
-** [[https://cdn.werss.weapp.design/api/v1/feeds/ee4b7196-831c-430f-903e-50e081d40624.xml][宁南山]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/fc2d54a6-bd79-4d9f-b642-9a875ef11b3b.xml][也谈钱]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/619eb415-e6eb-49ed-9d49-8ef2da75bdfc.xml][孟岩]]
-* News                                                             :elfeed:News:
+** [[https://cdn.werss.weapp.design/api/v1/feeds/820b4ade-80ce-4fff-835f-6d1dc01abec9.xml][孤独大脑]]
+** [[https://cdn.werss.weapp.design/api/v1/feeds/ee4b7196-831c-430f-903e-50e081d40624.xml][宁南山]] :ignore:
+* News                                                          :elfeed:News:
 ** [[http://feeds.feedburner.com/solidot][Solidot]]
 ** [[http://wanqu.co/feed][湾区日报]]
 ** [[http://www.ifanr.com/feed][爱范儿 · Beats of Bits]]
 ** [[https://feeds.feedburner.com/letscorp/aDmw][墙外楼]]
-** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]]
-** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]]
-** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]]
-** [[https://36kr.com/feed][36 氪]]                                    :ignore:
-* Resources                                                   :elfeed:Resources:
+** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]] :ignore:
+** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]] :ignore:
+** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]] :ignore:
+** [[https://36kr.com/feed][36 氪]]                                 :ignore:
+* Resources                                                :elfeed:Resources:
 ** [[http://www.abskoop.com/rss][ahhhhfs-分享快乐]]
 ** [[http://www.salttiger.com/index.php/feed/][SaltTiger]]
 ** [[http://xclient.info/feed][精品 MAC 应用分享]]
 ** [[https://rsshub.app/rsshub/rss][RSSHub 有新的 RSS 支持]]
-* Platform                                                     :elfeed:Platform:
+* Platform                                                  :elfeed:Platform:
 ** [[http://sspai.com/feed][少数派]]
-** [[https://feedx.net/rss/guanzhi.xml][观止]]                         :ignore:
-** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]                  :ignore:
-** [[https://hnrss.org/best][Hacker News]]                             :ignore:
 ** [[https://liqi.io/index.xml][利器]]
 ** [[https://rsshub.app/sspai/matrix][SSPAI Matrix]]
 ** [[https://rsshub.app/v2ex/topics/latest][V2EX-最新主题]]
 ** [[https://www.dgtle.com/feed][数字尾巴]]
 ** [[https://www.guokr.com/handpick/rss/][果壳网]]
 ** [[https://www.huxiu.com/rss/0.xml][虎嗅网]]
-** [[https://www.zhihu.com/rss][知乎每日精选]]                         :ignore:
 ** [[https://xueqiu.com/hots/topic/rss][雪球 - 今日话题]]
+** [[https://feedx.net/rss/guanzhi.xml][观止]]                                                             :ignore:
+** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]                                                         :ignore:
+** [[https://www.zhihu.com/rss][知乎每日精选]]                                                     :ignore:
+** [[https://hnrss.org/best][Hacker News]]                                                      :ignore:
+** [[https://emacs-china.org/latest.rss][Emacs China - 最新主题]]
 ** [[https://www.reddit.com/r/zsh.rss][reddit | zsh]]
+** [[https://www.reddit.com/r/emac.rss][reddit | M-x emacs]]
+** [[https://stackoverflow.com/feeds/tag/python][StackOverflow - Python]]
+** [[https://stackoverflow.com/feeds/tag/zsh][StackOverflow - ZSH]]
+** [[https://stackoverflow.com/feeds/tag/algorithm][StackOverflow - Algorithm]]                                        :ignore:
+** [[https://stackoverflow.com/feeds/tag/emacs][StackOverflow - Emacs]]
+** [[https://emacs.stackexchange.com/feeds][StackExchange - Emacs]]
+** [[https://superuser.com/feeds/tag/macos][SuperUser - macOS]]
+** [[https://superuser.com/feeds/tag/zsh][SuperUser - ZSH]]
+
