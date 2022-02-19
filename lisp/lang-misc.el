@@ -1,6 +1,6 @@
 ;;; lang-misc.el --- -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020-2021  Tianshu Wang
+;; Copyright (C) 2020-2022  Tianshu Wang
 
 ;; Author: Tianshu Wang <wang@tianshu.me>
 
