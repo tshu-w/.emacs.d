@@ -94,12 +94,13 @@
     "Fo"      'other-frame
 
     "h"       '(:ignore t :which-key "help")
-    "ha"      'apropos-command
+    "ha"      'apropos
     "hb"      'describe-bindings
     "hc"      'describe-char
     "hf"      'describe-function
     "hF"      'describe-face
-    "hi"      'info-lookup-symbol
+    "hi"      'info-emacs-manual
+    "hI"      'info-display-manual
     "hk"      'describe-key
     "hK"      'describe-keymap
     "hm"      'describe-mode
@@ -115,8 +116,6 @@
     "j"       '(:ignore t :which-key "jump")
     "ji"      'imenu
     "jg"      'avy-goto-char-2
-    "jb"      'bookmark-jump
-    "jB"      'bookmark-set
 
     "m"       '(:ignore t :which-key "major mode")
 
@@ -210,6 +209,8 @@
         evil-ex-search-vim-style-regexp t
         evil-search-module 'evil-search
         evil-magic 'very-magic
+        evil-want-C-u-delete t
+        evil-want-C-u-scroll t
         hs-minor-mode-map nil)
   :config
   (setq evil-cross-lines t

@@ -85,7 +85,8 @@
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
    [remap imenu]               'consult-imenu
-   [remap project-find-regexp] 'consult-ripgrep)
+   [remap project-find-regexp] 'consult-ripgrep
+   [remap apropos]             'consult-apropos)
   (tyrant-def
     "jI" '(consult-imenu-multi :which-key "imenu-multi")
     "fl" '(consult-find :which-key "locate-files")
