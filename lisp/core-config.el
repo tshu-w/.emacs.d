@@ -381,16 +381,7 @@ the unwritable tidbits."
   :init
   (setq winner-dont-bind-my-keys t)
   :config
-  (setq winner-boring-buffers '("*Completions*"
-                                "*Compile-Log*"
-                                "*inferior-lisp*"
-                                "*Fuzzy Completions*"
-                                "*Apropos*"
-                                "*Help*"
-                                "*cvs*"
-                                "*Buffer List*"
-                                "*Ibuffer*"
-                                "*esh command on file*")))
+  (setq winner-boring-buffers-regexp "\\*.*\\*"))
 
 
 (setq-default custom-file (no-littering-expand-var-file-name "custom.el"))
