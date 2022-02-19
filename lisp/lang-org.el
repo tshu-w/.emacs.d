@@ -397,6 +397,19 @@
     (+org-emphasize org-underline ?_)
     (+org-emphasize org-verbatim ?=))
 
+  ;; from org-checklist.el
+  (defun org-reset-checkbox-state-maybe ()
+    "Reset all checkboxes in an entry if the `RESET_CHECK_BOXES' property is set"
+    (interactive "*")
+    (if (org-entry-get (point) "RESET_CHECK_BOXES")
+        (org-reset-checkbox-state-subtree)))
+
+  (defun org-checklist ()
+    (when (member org-state org-done-keywords) ;; org-state dynamically bound in org.el/org-todo
+      (org-reset-checkbox-state-maybe)))
+
+  (add-hook 'org-after-todo-state-change-hook 'org-checklist)
+
   (despot-def org-mode-map
     "'"     'org-edit-special
     ","     'org-ctrl-c-ctrl-c
