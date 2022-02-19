@@ -181,9 +181,11 @@ targets."
 (use-package company
   :straight t
   :custom-face (company-tooltip-mouse ((t (:background nil))))
-  :hook (after-init . global-company-mode)
+  :hook ((after-init . global-company-mode)
+         (after-init . company-tng-mode))
   :init
-  (setq company-idle-delay 0
+  (setq company-abort-on-unique-match t
+        company-idle-delay 0
         company-minimum-prefix-length 1
         company-require-match nil
         company-selection-wrap-around t
