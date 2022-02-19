@@ -30,7 +30,11 @@
   (diff-hl-delete ((t (:background nil))))
   (diff-hl-insert ((t (:background nil)))))
 
-(use-package berrys-theme :straight t :defer t)
+(use-package berrys-theme
+  :straight t
+  :defer t
+  :custom-face
+  (fringe ((t nil))))
 
 (use-package flucui-themes :straight t :defer t)
 
