@@ -220,17 +220,15 @@
 (use-package newcomment
   :commands comment-or-uncomment
   :config
-  (defun comment-or-uncomment ()
-    (interactive)
-    (if (region-active-p)
-        (comment-or-uncomment-region
-         (region-beginning) (region-end))
-      (if (save-excursion
-            (beginning-of-line)
-            (looking-at "\\s-*$"))
-          (call-interactively 'comment-dwim)
-        (comment-or-uncomment-region
-         (line-beginning-position) (line-end-position))))))
+  (defun comment-or-uncomment (n)
+    (interactive "*p")
+    (if (or (region-active-p)
+            (save-excursion
+              (beginning-of-line)
+              (looking-at "\\s-*$")))
+        (call-interactively 'comment-dwim)
+      (comment-or-uncomment-region
+       (line-beginning-position) (line-end-position n)))))
 
 (use-package project
   :defer t
