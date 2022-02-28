@@ -28,6 +28,8 @@
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
+*** [[https://beorg.substack.com/feed][Beorg update]]
+
 ** Research                                                       :Research:
 *** [[http://cos.name/feed/][统计之都]]
 *** [[http://gradientscience.org/feed.xml][gradient science]]
@@ -129,6 +131,7 @@
 ** [[https://taresky.com/feed][TARESKY]]
 ** [[https://tech.meituan.com/feed][美团技术团队]]
 ** [[https://tech.youzan.com/rss/][有赞技术团队]]
+** [[https://thevaluable.dev/index.xml][The Valuable Dev]]
 ** [[https://tobiaslee.top/atom.xml][Stay Hungry, Stay Foolish.]]
 ** [[https://tw93.github.io/feed.xml][Tw93]]
 ** [[https://type.cyhsu.xyz/feed/][Neverland]]
