@@ -196,6 +196,8 @@ reuse it's window, otherwise create new one."
         rime-show-preedit 'inline
         rime-posframe-properties (list :internal-border-width 2))
 
+  (add-to-list 'rime-translate-keybindings "C-`")
+
   (add-hook 'kill-emacs-hook (lambda ()
                                (when (fboundp 'rime-lib-sync-user-data)
                                  (ignore-errors (rime-sync)))))
