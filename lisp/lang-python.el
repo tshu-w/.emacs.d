@@ -20,17 +20,11 @@
               (setq fill-column 88
                     tab-width 4)))
 
-  (reformatter-define python-isort
-    :program "isort"
-    :args '("--combine-as" "--combine-star" "--atomic" "--stdout" "-"))
-
   (reformatter-define python-blacken
     :program "black"
     :args '("--fast" "-"))
 
-  (despot-def python-mode-map
-    "i" 'python-isort
-    "=" 'python-blacken))
+  (despot-def python-mode-map "=" 'python-blacken))
 
 (use-package lsp-pyright
   :straight t
