@@ -335,6 +335,9 @@ returns the command to execute."
     (setq lsp--session nil)
     (lsp))
 
+  (general-def 'normal lsp-mode :definer 'minor-mode
+    "gr" 'xref-find-references)
+
   (tyrant-def lsp-mode :definer 'minor-mode
     "l"  '(:keymap lsp-command-map)
     "lR" '(lsp-restart :which-key "restart")))
