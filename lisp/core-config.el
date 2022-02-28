@@ -28,7 +28,7 @@
 
 (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
 (add-hook 'after-init-hook
-          (lambda ()
+          (defun setup-font ()
             (dolist (charset '(kana han cjk-misc bopomofo))
               (set-fontset-font t charset unicode-font))
             (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
