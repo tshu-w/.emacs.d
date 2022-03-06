@@ -124,9 +124,7 @@
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)
   :config
-  (setq global-auto-revert-non-file-buffers t
-        auto-revert-verbose nil)
-  (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode))
+  (setq global-auto-revert-non-file-buffers t))
 
 (use-package desktop
   :commands restart-emacs-without-desktop
