@@ -348,31 +348,13 @@ the unwritable tidbits."
 
 (use-package whitespace
   :hook ((prog-mode . show-trailing-whitespace)
-         (diff-mode . whitespace-mode)
-         (diff-mode . set-whitespace-style-for-diff))
+         (diff-mode . whitespace-mode))
   :config
-  (set-face-attribute 'whitespace-space nil :background nil)
-  (set-face-attribute 'whitespace-tab nil :background nil)
-  (set-face-attribute 'whitespace-indentation nil :background nil)
-
   (defun show-trailing-whitespace ()
     (set-face-attribute 'trailing-whitespace nil :background
                         (face-attribute 'font-lock-comment-face
                                         :foreground))
-    (setq show-trailing-whitespace t))
-
-  (defun set-whitespace-style-for-diff ()
-    "Whitespace configuration for `diff-mode'"
-    (setq-local whitespace-style '(face
-                                   tabs
-                                   tab-mark
-                                   spaces
-                                   space-mark
-                                   trailing
-                                   indentation::space
-                                   indentation::tab
-                                   newline
-                                   newline-mark))))
+		(setq show-trailing-whitespace t)))
 
 (use-package winner
   :commands (winner-undo winner-redo)
