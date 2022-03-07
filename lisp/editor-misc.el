@@ -76,6 +76,13 @@
       (fcitx-evil-turn-on)
       (fcitx-aggressive-minibuffer-turn-on))))
 
+(use-package flyspell-correct
+  :straight t
+  :general
+  (tyrant-def
+    "sc" 'flyspell-correct-wrapper
+    "ss" 'flyspell-correct-at-point))
+
 (use-package gcmh
   :straight t
   :hook (after-init . gcmh-mode)
@@ -172,7 +179,7 @@ reuse it's window, otherwise create new one."
           compilation-mode
           process-menu-mode
           special-mode
-          "\\*Flycheck errors\\*"))
+          flymake-diagnostics-buffer-mode))
   :general
   (tyrant-def ";" 'popper-toggle-latest))
 

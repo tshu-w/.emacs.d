@@ -45,7 +45,6 @@
 
 (require 'editor-ui)
 (require 'editor-completion)
-(require 'editor-checker)
 (require 'editor-vsc)
 (require 'editor-mail)
 (require 'editor-misc)

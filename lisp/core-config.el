@@ -75,6 +75,8 @@
 ;; draw underline lower
 (setq x-underline-at-descent-line t)
 
+;; enable flymake-mode in prog-mode
+(add-hook 'prog-mode-hook #'flymake-mode)
 ;; Highlight and allow to open http link at point in programming buffers
 ;; goto-address-prog-mode only highlights links in strings and comments
 (add-hook 'prog-mode-hook #'goto-address-prog-mode)

@@ -190,15 +190,15 @@
   :hook (after-init . shackle-mode)
   :config
   (setq shackle-default-size 0.4
-        shackle-rules `((help-mode                :select t :align right :size ,fill-column)
-                        (helpful-mode             :select t :align right :size ,fill-column)
-                        ("*Messages*"             :select t :align t)
-                        (special-mode             :align t)
-                        (process-menu-mode        :align t)
-                        (compilation-mode         :align t)
-                        (flycheck-error-list-mode :align t)
-                        ("*Shell Command Output*" :align t)
-                        ("*Async Shell Command*"  :align t))))
+        shackle-rules `((help-mode                       :select t :align right :size ,fill-column)
+                        (helpful-mode                    :select t :align right :size ,fill-column)
+                        ("*Messages*"                    :select t :align t)
+                        (special-mode                    :align t)
+                        (process-menu-mode               :align t)
+                        (compilation-mode                :align t)
+                        (flymake-diagnostics-buffer-mode :align t)
+                        ("*Shell Command Output*"        :align t)
+                        ("*Async Shell Command*"         :align t))))
 
 (use-package tree-sitter
   :straight t

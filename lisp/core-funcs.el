@@ -233,14 +233,6 @@ if prefix argument ARG is given, switch to it directly."
   (when (active-minibuffer-window)
     (select-window (active-minibuffer-window))))
 
-(defun toggle-compilation-window ()
-  "Show/Hide the window containing the '*compilation*' buffer."
-  (interactive)
-  (when-let ((buffer compilation-last-buffer))
-    (if (get-buffer-window buffer 'visible)
-        (delete-windows-on buffer)
-      (display-buffer buffer))))
-
 (defvar killed-buffer-list nil
   "List of recently killed buffers.")
 
