@@ -11,7 +11,6 @@
 (use-package dockerfile-mode :straight t :defer t)
 
 (use-package js
-  :defer t
   :mode ("\\.json\\'" . json-mode)
   :config
   (defvar json-mode-map
