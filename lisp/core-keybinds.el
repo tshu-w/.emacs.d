@@ -62,11 +62,11 @@
     "bx"      'kill-buffer-and-window
 
     "c"       '(:ignore t :which-key "code")
+    "cb"      'flymake-show-buffer-diagnostics
     "cc"      'compile
     "cn"      'next-error
     "cp"      'previous-error
     "cr"      'recompile
-    "ct"      'toggle-compilation-window
     "cx"      'kill-compilation
     "c="      'indent-region-or-buffer
 
@@ -128,12 +128,19 @@
     "qq"      'save-buffers-kill-terminal
     "qQ"      'kill-emacs
 
+    "s"       '(:ignore t :which-key "spelling")
+    "sb"      'flyspell-buffer
+    "sn"      'flyspell-goto-next-error
+    "sr"      'flyspell-region
+
     "T"       '(:ignore t :which-key "toggles")
     "Ta"      'auto-fill-mode
     "Td"      'toggle-debug-on-error
     "Tf"      'display-fill-column-indicator-mode
     "Tl"      'toggle-truncate-lines
+    "Tm"      'flymake-mode
     "Tn"      'display-line-numbers-mode
+    "Ts"      'flyspell-mode
     "Tw"      'whitespace-mode
     "TW"      'toggle-word-wrap
 
