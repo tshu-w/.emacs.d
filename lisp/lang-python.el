@@ -11,7 +11,8 @@
 (use-package python
   :defer t
   :config
-  (setq python-indent-guess-indent-offset-verbose nil)
+  (setq python-indent-def-block-scale 1
+        python-indent-guess-indent-offset-verbose nil)
 
   (add-hook 'python-mode-hook
             (defun init-python-mode ()
