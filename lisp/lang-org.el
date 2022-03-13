@@ -588,6 +588,7 @@
     (evil-org-agenda-set-keys))
 
   (with-eval-after-load 'org-capture
+    (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (general-def org-capture-mode-map
       "ZZ" 'org-capture-finalize
       "ZQ" 'org-capture-kill
