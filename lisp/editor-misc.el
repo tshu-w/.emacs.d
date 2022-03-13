@@ -181,7 +181,9 @@ reuse it's window, otherwise create new one."
           special-mode
           flymake-diagnostics-buffer-mode))
   :general
-  (tyrant-def ";" 'popper-toggle-latest))
+  (tyrant-def
+    ";" 'popper-toggle-latest
+    ":" 'popper-kill-latest-popup))
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
