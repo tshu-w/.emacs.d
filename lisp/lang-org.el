@@ -649,17 +649,13 @@ go to `org-datetree-file-format' file based on TIME."
                       (find-file-noselect file)))
       (org-reverse-datetree-goto-date-in-file time)))
 
-  (defun org-datetree-refile (&optional ask-always time prefer)
+  (defun org-datetree-refile (&optional time)
     "Wrapper for `org-reverse-datetree-refile-to-file'.
 go to `org-datetree-file-format' file based on TIME."
     (interactive "P")
-    (let* ((ask-always (equal '(4) ask-always))
-           (prefer (or prefer '("CLOSED")))
-           (time (or time (org-reverse-datetree--get-entry-time
-                           :ask-always ask-always
-                           :prefer prefer)))
+    (let* ((time (org-reverse-datetree--entry-time-2 time))
            (file (format-time-string org-datetree-file-format time)))
-      (org-reverse-datetree-refile-to-file file time :ask-always ask-always :prefer prefer))))
+      (org-reverse-datetree-refile-to-file file time))))
 
 (use-package org-roam
   :straight t
