@@ -193,6 +193,7 @@
         shackle-rules `((help-mode                       :select t :align right :size ,fill-column)
                         (helpful-mode                    :select t :align right :size ,fill-column)
                         ("*Messages*"                    :select t :align t)
+                        ("*eldoc*"                       :align t)
                         (special-mode                    :align t)
                         (process-menu-mode               :align t)
                         (compilation-mode                :align t)
