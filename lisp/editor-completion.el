@@ -285,15 +285,10 @@ targets."
           (concat (file-remote-p default-directory) name)))
       name))
 
-  ;; https://github.com/joaotavora/eglot/discussions/876
-  (defun eglot--uri-to-path@around (fun url)
-    (funcall fun (if (equal url "")
-                     (project-root (eglot--project (eglot-current-server))) url)))
-  (advice-add #'eglot--uri-to-path :around #'eglot--uri-to-path@around)
+  (tyrant-def "cE" 'eglot)
 
   (tyrant-def eglot--managed-mode :definer 'minor-mode
     "ce"  '(:ignore t :which-key "eglot")
-    "cE"  'eglot
     "cea" 'eglot-code-actions
     "ceb" 'eglot-events-buffer
     "cer" 'eglot-rename
