@@ -159,10 +159,14 @@
     (add-hook 'ns-system-appearance-change-functions
               (defun load-theme-randomly (appearance)
                 (mapc #'disable-theme custom-enabled-themes)
-                (pcase appearance
-                  ('light (load-theme (seq-random-elt light-themes) t))
-                  ('dark (load-theme (seq-random-elt dark-themes) t))))))
-
+                (let* ((day (string-to-number
+                             (format-time-string "%j" (current-time))))
+                       (themes (pcase appearance
+                                 ('light light-themes)
+                                 ('dark dark-themes)))
+                       (themes-length (length themes))
+                       (theme (nth (% day themes-length) themes)))
+                  (load-theme theme t)))))
 
 (use-package doom-modeline
   :straight t
