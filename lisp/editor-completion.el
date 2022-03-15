@@ -267,81 +267,40 @@ targets."
   (setq prescient-sort-full-matches-first t
         prescient-sort-length-enable nil))
 
-
-(use-package lsp-mode
+(use-package eglot
   :straight t
-  :hook ((prog-mode . (lambda ()
-                        (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
-                          (lsp))))
-         (lsp-mode . lsp-enable-which-key-integration))
+  :commands expand-absolute-name
   :init
   (setq read-process-output-max (* 1024 1024))
   :config
-  (setq lsp-completion-provider :none
-        lsp-diagnostic-clean-after-change t
-        lsp-enable-dap-auto-configure nil
-        lsp-enable-file-watchers nil
-        lsp-enable-folding nil
-        lsp-enable-indentation nil
-        lsp-enable-links nil
-        lsp-enable-on-type-formatting nil
-        lsp-enable-symbol-highlighting nil
-        lsp-semantic-tokens-enable nil
-        lsp-enable-text-document-color t
-        lsp-headerline-breadcrumb-enable nil
-        lsp-keep-workspace-alive nil
-        lsp-modeline-diagnostics-enable nil
-        lsp-modeline-code-actions-enable nil
-        lsp-signature-render-documentation nil
-        lsp-keymap-prefix "SPC l")
+  (setq eglot-stay-out-of '(company))
 
-  (defun lsp-tramp-connection@override (local-command &optional generate-error-file-fn)
-    "Create LSP stdio connection named name.
-LOCAL-COMMAND is either list of strings, string or function which
-returns the command to execute."
-    (defvar tramp-connection-properties)
-    (list :connect (lambda (filter sentinel name environment-fn)
-                     ;; Force a direct asynchronous process.
-                     (add-to-list 'tramp-connection-properties
-                                  (list (regexp-quote (file-remote-p default-directory))
-                                        "direct-async-process" t))
-                     (let* ((final-command (lsp-resolve-final-function
-                                            local-command))
-                            (process-name (generate-new-buffer-name name))
-                            (stderr-buf (format "*%s::stderr*" process-name))
-                            (err-buf (generate-new-buffer stderr-buf))
-                            (process-environment
-                             (lsp--compute-process-environment environment-fn))
-                            (proc (make-process
-                                   :name process-name
-                                   :buffer (format "*%s*" process-name)
-                                   :command final-command
-                                   :connection-type 'pipe
-                                   :coding 'no-conversion
-                                   :noquery t
-                                   :filter filter
-                                   :sentinel sentinel
-                                   :stderr err-buf
-                                   :file-handler t)))
-                       (cons proc proc)))
-          :test? (lambda () (-> local-command lsp-resolve-final-function
-                           lsp-server-present?))))
-  (advice-add 'lsp-tramp-connection :override #'lsp-tramp-connection@override)
+  ;; https://github.com/company-mode/company-mode/discussions/1313
+  (advice-remove #'eglot--snippet-expansion-fn #'ignore)
 
-  ;; https://github.com/emacs-lsp/lsp-mode/issues/2932
-  (defun lsp-restart ()
-    (interactive)
-    (lsp-disconnect)
-    (setq lsp--session nil)
-    (lsp))
+  (defun expand-absolute-name (name)
+    (if (file-name-absolute-p name)
+        (tramp-file-local-name
+         (expand-file-name
+          (concat (file-remote-p default-directory) name)))
+      name))
 
-  (general-def 'normal lsp-mode :definer 'minor-mode
-    "gr" 'xref-find-references)
+  ;; https://github.com/joaotavora/eglot/discussions/876
+  (defun eglot--uri-to-path@around (fun url)
+    (funcall fun (if (equal url "")
+                     (project-root (eglot--project (eglot-current-server))) url)))
+  (advice-add #'eglot--uri-to-path :around #'eglot--uri-to-path@around)
 
-  (tyrant-def lsp-mode :definer 'minor-mode
-    "l"  '(:keymap lsp-command-map)
-    "lR" '(lsp-restart :which-key "restart")))
-
+  (tyrant-def eglot--managed-mode :definer 'minor-mode
+    "ce"  '(:ignore t :which-key "eglot")
+    "cE"  'eglot
+    "cea" 'eglot-code-actions
+    "ceb" 'eglot-events-buffer
+    "cer" 'eglot-rename
+    "ceR" 'eglot-reconnect
+    "cex" 'eglot-shutdown
+    "ceX" 'eglot-shutdown-all
+    "ce=" 'eglot-format))
 
 (use-package yasnippet
   :straight t

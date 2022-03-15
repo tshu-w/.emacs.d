@@ -199,11 +199,10 @@
                         (compilation-mode                :align t)
                         (flymake-diagnostics-buffer-mode :align t)
                         ("*Shell Command Output*"        :align t)
-                        ("*Async Shell Command*"         :align t))))
+                        ("*Async Shell Command*"         :align t)
+                        ("\\*EGLOT.*"                    :select t :align right :size ,fill-column :regexp t))))
 
-(use-package tree-sitter
-  :straight t
-  :hook ((python-mode . tree-sitter-hl-mode)))
+(use-package tree-sitter :straight t :defer t)
 
 (use-package tree-sitter-langs
   :straight t
