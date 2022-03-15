@@ -167,6 +167,7 @@ reuse it's window, otherwise create new one."
           "Output\\*$"
           "\\*Async Shell Command\\*"
           "\\*eldoc\\*"
+          "^\\*EGLOT"
           help-mode
           helpful-mode
           compilation-mode

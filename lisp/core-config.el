@@ -328,9 +328,7 @@ the unwritable tidbits."
   :defer t
   :config
   (setq remote-file-name-inhibit-cache 60
-        tramp-default-method "ssh"
         tramp-verbose 1
-        tramp-use-ssh-controlmaster-options nil
         vc-handled-backends '(SVN Git))
 
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
