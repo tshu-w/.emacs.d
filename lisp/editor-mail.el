@@ -175,6 +175,12 @@
                         ;; IMAP-deleted:
                         (mu4e~proc-move docid (mu4e~mark-check-target target) "+S-u-N"))))
 
+  ;; TEMP: https://github.com/djcb/mu/issues/2193
+  (defun mu4e~proc-start@around (fun)
+    (let ((default-directory temporary-file-directory))
+      (funcall fun)))
+  (advice-add 'mu4e~proc-start :around #'mu4e~proc-start@around)
+
   (general-def 'normal mu4e-headers-mode-map
     "e"        'mu4e-headers-mark-thread
     "E"        'mu4e-headers-mark-subthread)
