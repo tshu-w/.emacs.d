@@ -126,14 +126,14 @@
              ((org-agenda-block-separator nil)))
 
             ("r" "Agenda review"
-             ((agenda "" ((org-agenda-span 7)
-                          (org-agenda-day-face-function (lambda (date) 'org-agenda-date))))
+             ((agenda "" ((org-agenda-span 7)))
               (stuck "")
               (todo "NEXT")
               (todo "TODO")
               (todo "HOLD"))
              ((org-agenda-archives-mode t)
               (org-agenda-compact-blocks nil)
+              (org-agenda-start-with-log-mode 'clockcheck)
               (org-agenda-show-all-dates nil)))))
 
     (defun org-super-agenda (&optional arg)
