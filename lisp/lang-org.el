@@ -16,7 +16,7 @@
         org-inbox-file (concat org-directory "inbox.org")
         org-project-file (concat org-directory "projects.org")
         org-default-notes-file org-inbox-file
-        org-modules '(ol-docview ol-info org-id))
+        org-modules '(ol-docview ol-info org-id org-habit))
 
   (advice-add 'server-execute :before
               (defun enable-org-protocol (&rest r)
