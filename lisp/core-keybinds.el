@@ -184,21 +184,21 @@
 
   (when (memq window-system '(mac ns))
     (general-def
-      "H-`"   'other-frame
-      "H-a"   'mark-whole-buffer
-      "H-c"   'evil-yank
-      "H-n"   'make-frame
-      "H-m"   'iconify-frame
-      "H-q"   'save-buffers-kill-terminal
-      "H-v"   'yank
-      "H-x"   'kill-region
-      "H-w"   'delete-window
-      "H-W"   'delete-frame
-      "H-z"   'evil-undo
-      "H-Z"   'evil-redo
-      "H-C-F" 'toggle-frame-fullscreen
-      "H-s"   'save-buffer
-      "H-<backspace>" (defun delete-line-before-point ()
+      "s-`"   'other-frame
+      "s-a"   'mark-whole-buffer
+      "s-c"   'evil-yank
+      "s-n"   'make-frame
+      "s-m"   'iconify-frame
+      "s-q"   'save-buffers-kill-terminal
+      "s-v"   'yank
+      "s-x"   'kill-region
+      "s-w"   'delete-window
+      "s-W"   'delete-frame
+      "s-z"   'evil-undo
+      "s-Z"   'evil-redo
+      "s-C-F" 'toggle-frame-fullscreen
+      "s-s"   'save-buffer
+      "s-<backspace>" (defun delete-line-before-point ()
                         (interactive)
                         (let ((prev-pos (point)))
                           (forward-visible-line 0)
