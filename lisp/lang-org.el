@@ -105,7 +105,9 @@
           org-agenda-skip-timestamp-if-done t
           org-agenda-skip-scheduled-if-deadline-is-shown t
           org-agenda-span 'day
-          org-agenda-time-grid nil
+          org-agenda-time-grid '((daily require-timed)
+                                 (800 1000 1200 1400 1600 1800 2000)
+                                 "......" "----------------")
           org-agenda-time-leading-zero t
           org-agenda-todo-ignore-scheduled 'all
           org-agenda-todo-ignore-deadlines 'near
