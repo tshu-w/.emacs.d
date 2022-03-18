@@ -71,6 +71,7 @@
   :straight t
   :init
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+  (advice-add #'project-find-regexp :override #'consult-ripgrep)
   :config
   (setq consult-narrow-key "?"
         consult-preview-key (kbd "M-.")
@@ -85,7 +86,6 @@
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
    [remap imenu]               'consult-imenu
-   [remap project-find-regexp] 'consult-ripgrep
    [remap apropos]             'consult-apropos)
   (tyrant-def
     "jI" '(consult-imenu-multi :which-key "imenu-multi")
