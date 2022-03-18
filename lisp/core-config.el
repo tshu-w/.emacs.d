@@ -37,8 +37,7 @@
             (set-fontset-font t 'symbol symbol-font nil 'prepend)))
 
 (when (memq window-system '(mac ns))
-  (setq ns-command-modifier 'hyper
-        ns-pop-up-frames nil)
+  (setq ns-pop-up-frames nil)
 
   (setq unicode-font "PingFang SC"
         emoji-font "Apple Color Emoji"
