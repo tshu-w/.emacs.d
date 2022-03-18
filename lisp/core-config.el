@@ -191,9 +191,12 @@
     (let* ((filename (buffer-file-name))
            (size (nth 7 (file-attributes filename))))
       (when (and
-             (not (memq major-mode '(archive-mode tar-mode jka-compr git-commit-mode image-mode
-                                                  doc-view-mode doc-view-mode-maybe ebrowse-tree-mode
-                                                  pdf-view-mode tags-table-mode fundamental-mode)))
+             (not (memq major-mode
+                        '(archive-mode doc-view-mode doc-view-mode-maybe
+                                       ebrowse-tree-mode emacs-lisp-mode
+                                       fundamental-mode git-commit-mode
+                                       image-mode jka-compr pdf-view-mode
+                                       tags-table-mode tar-mode)))
              size (> size (* 1024 1024 1))
              (y-or-n-p (format (concat "%s is a large file, open literally to "
                                        "avoid performance issues?")
