@@ -93,8 +93,8 @@
     :init
     (setq org-agenda-files `(,org-directory ,org-log-directory))
     :config
-    (setq org-agenda-clockreport-parameter-plist '(:maxlevel 5)
-
+    (setq org-agenda-bulk-custom-functions '((?R org-datetree-refile))
+          org-agenda-clockreport-parameter-plist '(:maxlevel 5)
           org-agenda-columns-add-appointments-to-effort-sum t
           org-agenda-include-diary nil
           org-agenda-persistent-filter t
@@ -656,9 +656,14 @@ go to `org-datetree-file-format' file based on TIME."
     "Wrapper for `org-reverse-datetree-refile-to-file'.
 go to `org-datetree-file-format' file based on TIME."
     (interactive "P")
-    (let* ((time (org-reverse-datetree--entry-time-2 time))
-           (file (format-time-string org-datetree-file-format time)))
-      (org-reverse-datetree-refile-to-file file time))))
+    (pcase (derived-mode-p 'org-mode 'org-agenda-mode)
+      ('org-mode
+       (let* ((time (or time (org-reverse-datetree--entry-time-2 time)))
+              (file (format-time-string org-datetree-file-format time)))
+         (org-reverse-datetree-refile-to-file file time)))
+      ('org-agenda-mode
+       (let ((file (format-time-string org-datetree-file-format (or time (current-time)))))
+         (org-reverse-datetree-refile-to-file file time))))))
 
 (use-package org-roam
   :straight t
