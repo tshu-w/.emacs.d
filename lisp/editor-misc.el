@@ -54,8 +54,6 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
 
-(use-package esup :straight t :defer t)
-
 (use-package fcitx
   :straight t
   :hook (after-init . fcitx-setup)
@@ -99,10 +97,11 @@ reuse it's window, otherwise create new one."
   (with-eval-after-load 'ibuffer
     (add-to-list 'ibuffer-help-buffer-modes 'helpful-mode))
   :general
-  ([remap describe-variable] 'helpful-variable
+  ([remap describe-command]  'helpful-command
    [remap describe-function] 'helpful-callable
+   [remap describe-key]      'helpful-key
    [remap describe-symbol]   'helpful-symbol
-   [remap describe-key]      'helpful-key))
+   [remap describe-variable] 'helpful-variable))
 
 (use-package link-hint
   :straight t

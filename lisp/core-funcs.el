@@ -206,8 +206,7 @@ if prefix argument ARG is given, `untabify' first."
         (when arg
           (untabify (region-beginning) (region-end)))
         (indent-region (point-min) (point-max))
-        (message "Indented buffer.")))
-    (whitespace-cleanup)))
+        (message "Indented buffer.")))))
 
 (defun switch-to-scratch-buffer (&optional arg)
   "Switch to the `*scratch*' buffer, creating it first if needed.
