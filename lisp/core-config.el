@@ -46,10 +46,11 @@
 (setq initial-scratch-message nil   ;; "make scratch buffer empty"
       inhibit-startup-message t)    ;; "disable splash screen"
 
-(setq-default indent-tabs-mode nil
-              fill-column 80
-              standard-indent 2
-              tab-width 2)
+;; use spaces instead of tabs
+(setq-default indent-tabs-mode nil)
+
+;; widen `fill-column'
+(setq-default fill-column 80)
 
 ;; no beep and visual blinking
 (setq ring-bell-function 'ignore
@@ -109,8 +110,8 @@
 ;; don't load outdated compiled files.
 (setq load-prefer-newer t)
 
-;; inhibit annoying warnings
-(setq warning-minimum-log-level :error)
+;; don't save duplicates in kill-ring
+(setq kill-do-not-save-duplicates t)
 
 (defun server-remove-kill-buffer-hook ()
   "Remove prompt if the file is opened in other clients."
@@ -180,6 +181,8 @@
                 ediff-merge-split-window-function 'split-window-horizontally))
 
 (use-package files
+  :hook ((before-save . delete-trailing-whitespace)
+         (after-save . executable-make-buffer-file-executable-if-script-p))
   :init
   (setq make-backup-files nil        ;; don't create backup~ files
         revert-without-query '(".*") ;; disable revert query
@@ -307,7 +310,6 @@ the unwritable tidbits."
   :hook (after-init . server-mode))
 
 (use-package simple
-  :hook (before-save . delete-trailing-whitespace)
   :config
   (setq column-number-mode t
         delete-trailing-lines nil
@@ -354,7 +356,7 @@ the unwritable tidbits."
     (set-face-attribute 'trailing-whitespace nil :background
                         (face-attribute 'font-lock-comment-face
                                         :foreground))
-		(setq show-trailing-whitespace t)))
+    (setq show-trailing-whitespace t)))
 
 (use-package winner
   :commands (winner-undo winner-redo)
