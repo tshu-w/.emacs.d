@@ -230,50 +230,50 @@
              :clock-in t :clock-resume t :empty-lines 1)
 
             ("r"  "Review")
-            ("ry" "Yesterday" entry
+            ("ry" "Yesterday" plain
              (function
               (lambda () (org-datetree-goto-location
                      (time-add (current-time) (days-to-time -1)))))
-             "* Daily Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rt" "Today" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rt" "Today" plain
              (function
               (lambda () (org-datetree-goto-location)))
-             "* Daily Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rl" "Last Week" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rl" "Last Week" plain
              (function
               (lambda () (let ((org-reverse-datetree-level-formats
                            (butlast org-reverse-datetree-level-formats)))
                       (org-datetree-goto-location
                        (time-add (current-time) (days-to-time -7))))))
-             "* Weekly Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rw" "This Week" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rw" "This Week" plain
              (function
               (lambda () (let ((org-reverse-datetree-level-formats
                            (butlast org-reverse-datetree-level-formats)))
                       (org-datetree-goto-location))))
-             "* Weekly Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rD" "Select a Date" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rD" "Select a Date" plain
              (function
               (lambda () (org-datetree-goto-read-date-location)))
-             "* Daily Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rW" "Select a Week" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rW" "Select a Week" plain
              (function
               (lambda () (let ((org-reverse-datetree-level-formats
                            (butlast org-reverse-datetree-level-formats)))
                       (org-datetree-goto-read-date-location))))
-             "* Weekly Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rM" "Select a Month" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rM" "Select a Month" plain
              (function
               (lambda () (let ((org-reverse-datetree-level-formats
                            (butlast org-reverse-datetree-level-formats 2)))
                       (org-datetree-goto-read-date-location))))
-             "* Monthly Review\n\n%i" :immediate-finish t :jump-to-captured t)
-            ("rY" "Select a Year" entry
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+            ("rY" "Select a Year" plain
              (function
               (lambda () (let ((org-reverse-datetree-level-formats
                            (butlast org-reverse-datetree-level-formats 3)))
                       (org-datetree-goto-read-date-location))))
-             "* Yearly Review\n\n%i" :immediate-finish t :jump-to-captured t)))
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)))
     :config
     (defun org-capture-goto-link ()
       (let ((file (nth 1 (org-capture-get :target)))
