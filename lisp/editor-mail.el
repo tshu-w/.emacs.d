@@ -181,10 +181,6 @@
     (let ((default-directory temporary-file-directory))
       (funcall fun)))
   (advice-add 'mu4e~proc-start :around #'mu4e~proc-start@around)
-
-  (general-def 'normal mu4e-headers-mode-map
-    "e"        'mu4e-headers-mark-thread
-    "E"        'mu4e-headers-mark-subthread)
   :general
   (tyrant-def "am" 'mu4e))
 
