@@ -668,6 +668,7 @@ go to `org-datetree-file-format' file based on TIME."
 (use-package org-roam
   :straight t
   :defer t
+  :hook (org-mode . org-roam-db-autosync-mode)
   :init
   (setq org-roam-capture-templates
         '(("d" "default" plain "" :target
@@ -678,7 +679,6 @@ go to `org-datetree-file-format' file based on TIME."
         org-roam-directory org-note-directory
         org-roam-node-display-template (concat "${hierarchy:*} " (propertize "${tags:20}" 'face 'org-tag))
         org-roam-v2-ack t)
-  (with-eval-after-load 'org (org-roam-db-autosync-enable))
   :config
   ;; https://github.com/org-roam/org-roam/wiki/User-contributed-Tricks#showing-node-hierarchy
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
