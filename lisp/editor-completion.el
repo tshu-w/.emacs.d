@@ -185,8 +185,7 @@ targets."
   :hook ((after-init . global-company-mode)
          (after-init . company-tng-mode))
   :init
-  (setq company-abort-on-unique-match t
-        company-idle-delay 0
+  (setq company-idle-delay 0
         company-minimum-prefix-length 1
         company-require-match nil
         company-selection-wrap-around t
