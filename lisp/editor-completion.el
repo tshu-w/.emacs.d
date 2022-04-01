@@ -161,9 +161,6 @@ targets."
                           fr))))))
 
     (add-to-list 'embark-indicators #'embark-vertico-indicator))
-
-  ;; disable `embark-collect-live' as I don't need it
-  (general-def embark-general-map "L" nil)
   :general
   (:keymaps '(global normal)
             "C-." 'embark-act
