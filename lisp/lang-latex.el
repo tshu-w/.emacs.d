@@ -198,6 +198,19 @@
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
         org-cite-activate-processor 'citar)
+
+  (with-eval-after-load 'embark
+    (defun bibtex-key-embark ()
+      (save-excursion
+        (bibtex-beginning-of-entry)
+        (when (looking-at bibtex-entry-maybe-empty-head)
+          (cons 'bibtex-key
+                (bibtex-key-in-head)))))
+    (embark-define-keymap bibtex-key-embark-map
+                          "Embark keymap for Zetteldeft links"
+                          ("f" 'citar-open)
+                          ("n" 'citar-open-notes))
+    (add-to-list 'embark-keymap-alist '(bibtex-key . bibtex-key-embark-map)))
   :config
   (setq citar-at-point-function 'embark-act
         citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
@@ -235,7 +248,7 @@
         ebib-notes-template-specifiers '((?k . ebib-create-key)
                                          (?i . ebib-create-id)
                                          (?t . ebib-create-org-title)
-					                               (?d . ebib-create-org-description)
+					 (?d . ebib-create-org-description)
                                          (?l . ebib-create-org-link)
                                          (?s . ebib-create-org-time-stamp))
         ebib-preload-bib-files bibtex-files
@@ -273,8 +286,8 @@ The entry is stored in the current database."
     (with-temp-buffer
       (insert (ebib-zotero-translate url "web"))
       (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
- 				(if (ebib--goto-entry-in-index (car entry-keys))
- 					  (ebib--update-entry-buffer)))))
+ 	(if (ebib--goto-entry-in-index (car entry-keys))
+ 	    (ebib--update-entry-buffer)))))
 
   (defun ebib-zotero-import-identifier (identifier)
     "Fetch a entry from zotero translation server via an IDENTIFIER.
@@ -284,8 +297,8 @@ and the identifier can be DOI, ISBN, PMID, or arXiv ID."
     (with-temp-buffer
       (insert (ebib-zotero-translate identifier "search"))
       (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
- 				(if (ebib--goto-entry-in-index (car entry-keys))
- 					  (ebib--update-entry-buffer)))))
+ 	(if (ebib--goto-entry-in-index (car entry-keys))
+ 	    (ebib--update-entry-buffer)))))
 
   (defun ebib-zotero-protocol-handler (info)
     "Process an org-protocol://ebib-zotero?href= style url with INFO.
