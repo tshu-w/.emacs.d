@@ -364,7 +364,7 @@ a dedicated window."
   (let ((message-log-max nil))
     (apply 'message msg args)))
 
-(defun macos-switch-back-to-previous-application ()
+(defun ns-switch-back-to-previous-application ()
   "Switch back to previous application on macOS."
   (interactive)
   (do-applescript
@@ -377,6 +377,7 @@ a dedicated window."
       "  end tell"
       "end tell")
     "\n")))
+(defalias #'mac-switch-back-to-previous-application #'ns-switch-back-to-previous-application)
 
 (defun set-file-executable ()
   "Add executable permissions on current file."
