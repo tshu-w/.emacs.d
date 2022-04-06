@@ -297,7 +297,7 @@
     (when (memq window-system '(mac ns))
       (defun org-capture-after-finalize ()
         (when (string= (org-capture-get :key) "w")
-          (run-at-time 0.25 nil #'macos-switch-back-to-previous-application)))
+          (run-at-time 0.25 nil #'ns-switch-back-to-previous-application)))
 
       (add-hook 'org-capture-after-finalize-hook #'org-capture-after-finalize)))
 
