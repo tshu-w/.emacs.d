@@ -106,7 +106,7 @@
 ** [[https://laike9m.com/blog/rss/][laike9m's blog]]
 ** [[https://leancrew.com/all-this/feed/][And now it’s all this]]
 ** [[https://liam.page/atom.xml][始终]]
-** [[https://linux.cn/rss.xml][Linux 中国]]
+** [[https://linux.cn/rss.xml][Linux 中国]]                                                       :ignore:
 ** [[https://linuxtoy.org/feeds/all.atom.xml][LinuxTOY]]
 ** [[https://liujiacai.net/atom.xml][Keep Coding]]
 ** [[https://lutaonan.com/rss.xml][Randy's Blog]]
