@@ -14,11 +14,6 @@
 (setq user-full-name "Tianshu Wang"
       user-mail-address "wang@tianshu.me")
 
-(setq url-proxy-services
-      '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
-        ("http" . "127.0.0.1:6152")
-        ("https" . "127.0.0.1:6152")))
-
 (defvar default-font "Source Code Pro")
 (defvar font-size 14)
 (defvar unicode-font "Noto Sans CJK SC")
