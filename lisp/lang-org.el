@@ -25,7 +25,7 @@
   (autoload 'org-super-agenda "org-agenda")
   :config
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n!)" "HOLD(h@/!)" "|" "DONE(d)" "CXLD(c)")))
+        '((sequence "TODO(t)" "NEXT(n!)" "HOLD(h!)" "|" "DONE(d)" "CXLD(c)")))
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
         org-cycle-open-archived-trees t
