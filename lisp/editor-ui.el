@@ -111,6 +111,8 @@
                       ;; doom-laserwave
                       ;; doom-manegarm
                       doom-material
+                      doom-material-dark
+                      ;; doom-meltbus
                       ;; doom-miramare
                       ;; doom-molokai
                       ;; doom-monokai-classic
@@ -137,6 +139,7 @@
                       doom-solarized-dark-high-contrast
                       doom-sourcerer
                       doom-spacegrey
+                      doom-tokyo-night
                       doom-tomorrow-night
                       doom-vibrant
                       doom-wilmersdorf
