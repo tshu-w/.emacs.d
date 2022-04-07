@@ -45,7 +45,7 @@
   :straight t
   :defer t
   :init
-  (setq completion-styles '(orderless)
+  (setq completion-styles '(orderless basic)
         completion-category-defaults nil)
   :config
   (defun flex-if-twiddle (pattern _index _total)
