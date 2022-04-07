@@ -243,7 +243,12 @@ reuse it's window, otherwise create new one."
   :straight t
   :hook (after-init . undohist-initialize)
   :config
-  (setq undohist-ignored-files '("EDITMSG")))
+  (setq undohist-ignored-files '("EDITMSG"))
+
+  (defun undohist-recover-safe@around (fun)
+    (cl-letf (((symbol-function 'yes-or-no-p) (lambda (p) nil)))
+      (funcall fun)))
+  (advice-add #'undohist-recover-safe :around #'undohist-recover-safe@around))
 
 (use-package winum
   :straight t
