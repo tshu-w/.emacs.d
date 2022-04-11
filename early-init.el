@@ -41,10 +41,7 @@
   (setq native-comp-async-report-warnings-errors nil)
 
   ;; Set the right directory to store the native compilation cache
-  (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
-
-  ;; Excluded org.el from native compilation
-  (setq native-comp-deferred-compilation-deny-list '("org\\.el")))
+  (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory)))
 
 ;; Inhibit package initialize
 (setq package-enable-at-startup nil)
