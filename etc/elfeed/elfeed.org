@@ -62,6 +62,7 @@
 ** [[http://www.zmonster.me/atom.xml][ZMonster's Blog]]
 ** [[http://www.zreading.cn/feed][左岸读书]]                        :ignore:
 ** [[http://yangqinyuan.com/feed.xml][杨钦元 | 博客]]
+** [[https://0792z.blogspot.com/feeds/posts/default][核电站]]
 ** [[https://1byte.io/rss.xml][1 Byte]]
 ** [[https://atjason.com/atom.xml][Jason]]                          :ignore:
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
