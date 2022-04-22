@@ -422,7 +422,7 @@
     "M-RET" 'org-meta-return
     "a"     'org-agenda
     "A"     'org-attach
-    "b"     '(:ignore t :which-key "babel")
+    "b"     (cons "babel" (make-sparse-keymap))
     "ba"    'org-babel-sha1-hash
     "bb"    'org-babel-execute-buffer
     "bc"    'org-babel-check-src-block
@@ -446,7 +446,7 @@
     "bz"    'org-babel-switch-to-session
     "bZ"    'org-babel-switch-to-session-with-code
     "c"     'org-capture
-    "C"     '(:ignore t :which-key "clocks")
+    "C"     (cons "clocks" (make-sparse-keymap))
     "Cc"    'org-clock-cancel
     "Cd"    'org-clock-display
     "Ce"    'org-evaluate-time-range
@@ -457,13 +457,13 @@
     "Co"    'org-clock-out
     "CR"    'org-clock-report
     "Cr"    'org-resolve-clocks
-    "d"     '(:ignore t :which-key "dates")
+    "d"     (cons "dates" (make-sparse-keymap))
     "dd"    'org-deadline
     "ds"    'org-schedule
     "dt"    'org-time-stamp
     "dT"    'org-time-stamp-inactive
     "e"     'org-export-dispatch
-    "i"     '(:ignore t :which-key "insert")
+    "i"     (cons "insert" (make-sparse-keymap))
     "ia"    'org-attach
     "ib"    'org-insert-structure-template
     "ic"    'org-cite-insert
@@ -480,7 +480,7 @@
     "is"    'org-insert-subheading
     "it"    'org-set-tags-command
     "p"     'org-priority
-    "s"     '(:ignore t :which-key "trees/subtrees")
+    "s"     (cons "trees/subtrees" (make-sparse-keymap))
     "sa"    'org-toggle-archive-tag
     "sA"    'org-archive-to-archive-sibling
     "s$"    'org-archive-subtree-default
@@ -496,11 +496,11 @@
     "sR"    'org-datetree-refile
     "ss"    'org-sparse-tree
     "sS"    'org-sort
-    "t"     '(:ignore t :which-key "tables")
+    "t"     (cons "tables" (make-sparse-keymap))
     "ta"    'org-table-align
     "tb"    'org-table-blank-field
     "tc"    'org-table-convert
-    "td"    '(:ignore t :which-key "delete")
+    "td"    (cons "delete" (make-sparse-keymap))
     "tdc"   'org-table-delete-column
     "tdr"   'org-table-kill-row
     "te"    'org-table-eval-formula
@@ -508,7 +508,7 @@
     "tf"    'org-table-field-info
     "th"    'org-table-previous-field
     "tH"    'org-table-move-column-left
-    "ti"    '(:ignore t :which-key "insert")
+    "ti"    (cons "insert" (make-sparse-keymap))
     "tic"   'org-table-insert-column
     "tih"   'org-table-insert-hline
     "tiH"   'org-table-hline-and-move
@@ -524,11 +524,11 @@
     "tp"    'org-plot/gnuplot
     "tr"    'org-table-recalculate
     "ts"    'org-table-sort-lines
-    "tt"    '(:ignore t :which-key "toggle")
+    "tt"    (cons "toggles" (make-sparse-keymap))
     "ttf"   'org-table-toggle-formula-debugger
     "tto"   'org-table-toggle-coordinate-overlays
     "tw"    'org-table-wrap-region
-    "T"     '(:ignore t :which-key "toggles")
+    "T"     (cons "toggles" (make-sparse-keymap))
     "Tc"    'org-toggle-checkbox
     "Te"    'org-toggle-pretty-entities
     "Ti"    'org-toggle-inline-images
@@ -536,7 +536,7 @@
     "Tt"    'org-show-todo-tree
     "TV"    'space-doc-mode
     "Tx"    'org-latex-preview
-    "x"     '(:ignore t :which-key "text")
+    "x"     (cons "text" (make-sparse-keymap))
     "xb"    'org-bold
     "xc"    'org-code
     "xi"    'org-italic
@@ -549,11 +549,11 @@
   (general-def 'normal org-mode-map "RET" 'org-open-at-point)
   :general
   (tyrant-def
-    "o"      '(:ignore t :which-key "org")
+    "o"      (cons "org" (make-sparse-keymap))
     "o/"     'org-occur-in-agenda-files
     "oa"     'org-agenda
     "oc"     'org-capture
-    "oC"     '(:ignore t :which-key "clock")
+    "oC"     (cons "clock" (make-sparse-keymap))
     "oCc"    'org-clock-cancel
     "oCg"    'org-clock-goto
     "oCi"    'org-clock-in-last
@@ -715,7 +715,7 @@ go to `org-datetree-file-format' file based on TIME."
   (define-key magit-section-mode-map "SPC" nil)
   :general
   (tyrant-def
-    "or"  '(:ignore t :which-key "roam")
+    "or"  (cons "roam" (make-sparse-keymap))
     "orb" 'org-roam-buffer-toggle
     "orf" 'org-roam-node-find
     "ori" 'org-roam-node-insert

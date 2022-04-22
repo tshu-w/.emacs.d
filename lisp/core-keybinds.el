@@ -24,11 +24,16 @@
   :straight t
   :after evil
   :config
-  (general-create-definer tyrant-def
-    :states '(normal insert motion emacs)
-    :keymaps 'override
-    :prefix "SPC"
-    :non-normal-prefix "M-SPC")
+  (setq general-emit-autoloads nil)
+
+  (general-define-key
+   :states '(normal insert motion emacs)
+   :keymaps 'override
+   :prefix-map 'tyrant-map
+   :prefix "SPC"
+   :non-normal-prefix "M-SPC")
+
+  (general-create-definer tyrant-def :keymaps 'tyrant-map)
   (tyrant-def "" nil)
 
   (general-create-definer despot-def
@@ -43,16 +48,16 @@
     "SPC u" 'universal-argument-more)
 
   (tyrant-def
-    "SPC"     '(execute-extended-command :which-key "M-x")
-    "TAB"     '(alternate-buffer :whick-key "last buffer")
-    "!"       '(shell-command :which-key "shell cmd")
+    "SPC"     '("M-x" . execute-extended-command)
+    "TAB"     '("last buffer" . alternate-buffer)
+    "!"       '("shell cmd" . shell-command)
 
-    "a"       '(:ignore t :which-key "applications")
+    "a"       (cons "applications" (make-sparse-keymap))
     "ac"      'calc-dispatch
     "ap"      'list-processes
     "aP"      'proced
 
-    "b"       '(:ignore t :which-key "buffers")
+    "b"       (cons "buffers" (make-sparse-keymap))
     "bb"      'switch-to-buffer
     "bB"      'ibuffer
     "bd"      'kill-current-buffer
@@ -61,7 +66,7 @@
     "bu"      'reopen-killed-buffer
     "bx"      'kill-buffer-and-window
 
-    "c"       '(:ignore t :which-key "code")
+    "c"       (cons "code" (make-sparse-keymap))
     "cb"      'flymake-show-buffer-diagnostics
     "cc"      'compile
     "cn"      'next-error
@@ -70,8 +75,8 @@
     "cx"      'kill-compilation
     "c="      'indent-region-or-buffer
 
-    "f"       '(:ignore t :which-key "files")
-    "fC"      '(write-file :which-key "copy-file")
+    "f"       (cons "files" (make-sparse-keymap))
+    "fC"      '("copy-file" . write-file)
     "fD"      'delete-current-buffer-file
     "fe"      'find-library
     "fE"      'sudo-edit
@@ -82,18 +87,18 @@
     "fr"      'read-only-mode
     "fR"      'rename-current-buffer-file
     "fs"      'save-buffer
-    "fv"      '(:ignore t :which-key "variables")
+    "fv"      (cons "variables" (make-sparse-keymap))
     "fvd"     'add-dir-local-variable
     "fvf"     'add-file-local-variable
     "fvp"     'add-file-local-variable-prop-line
 
-    "F"       '(:ignore t :which-key "frame")
+    "F"       (cons "frame" (make-sparse-keymap))
     "Fd"      'delete-frame
     "FD"      'delete-other-frames
     "Fn"      'make-frame
     "Fo"      'other-frame
 
-    "h"       '(:ignore t :which-key "help")
+    "h"       (cons "help" (make-sparse-keymap))
     "ha"      'apropos
     "hb"      'describe-bindings
     "hc"      'describe-char
@@ -108,32 +113,32 @@
     "hp"      'describe-package
     "ht"      'describe-text-properties
     "hv"      'describe-variable
-    "hP"      '(:ignore t :which-key "profiler")
+    "hP"      (cons "profiler" (make-sparse-keymap))
     "hPs"     'profiler-start
     "hPk"     'profiler-stop
     "hPr"     'profiler-report
 
-    "j"       '(:ignore t :which-key "jump")
+    "j"       (cons "jump" (make-sparse-keymap))
     "ji"      'imenu
     "jg"      'avy-goto-char-2
 
-    "m"       '(:ignore t :which-key "major mode")
+    "m"       (cons "major mode" (make-sparse-keymap))
 
-    "p"       '(:keymap project-prefix-map :which-key "projects")
+    "p"       (cons "projects" project-prefix-map)
 
-    "q"       '(:ignore t :which-key "quit")
+    "q"       (cons "quit" (make-sparse-keymap))
     "qd"      'restart-emacs-debug-init
     "qr"      'restart-emacs
     "qR"      'restart-emacs-without-desktop
     "qq"      'save-buffers-kill-terminal
     "qQ"      'kill-emacs
 
-    "s"       '(:ignore t :which-key "spelling")
+    "s"       (cons "spelling" (make-sparse-keymap))
     "sb"      'flyspell-buffer
     "sn"      'flyspell-goto-next-error
     "sr"      'flyspell-region
 
-    "T"       '(:ignore t :which-key "toggles")
+    "T"       (cons "toggles" (make-sparse-keymap))
     "Ta"      'auto-fill-mode
     "Td"      'toggle-debug-on-error
     "Tf"      'display-fill-column-indicator-mode
@@ -144,9 +149,9 @@
     "Tw"      'whitespace-mode
     "TW"      'toggle-word-wrap
 
-    "u"       '(universal-argument :which-key "universal arg")
+    "u"       '("universal arg" . universal-argument)
 
-    "w"       '(:ignore t :which-key "windows")
+    "w"       (cons "windows" (make-sparse-keymap))
     "w TAB"   'alternate-window
     "w+"      'window-layout-toggle
     "wb"      'switch-to-minibuffer-window

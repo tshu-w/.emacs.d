@@ -10,7 +10,8 @@
 
 (use-package mu4e
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-  :commands (mu4e-org-open
+  :commands (mu4e
+             mu4e-org-open
              mu4e-org-store-link)
   :init
   (setq mu4e-maildir "$XDG_DATA_HOME/mail"

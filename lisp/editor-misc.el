@@ -253,6 +253,10 @@ reuse it's window, otherwise create new one."
 (use-package winum
   :straight t
   :hook (after-init . winum-mode)
+  :init
+  (with-eval-after-load 'which-key
+    (push '((nil . "winum-select-window-[1-9]") . t) which-key-replacement-alist)
+    (push '((nil . "buffer-to-window-[1-9]") . t) which-key-replacement-alist))
   :config
   (setq winum-auto-assign-0-to-minibuffer t
         winum-auto-setup-mode-line t
@@ -297,25 +301,25 @@ stays on current"
                  (swap-buffers-to-window ,n t))))))
   :general
   (tyrant-def
-    "0" '(winum-select-window-0-or-10   :which-key "select window 0 or 10")
-    "1" '(winum-select-window-1         :which-key ("1\.\.9" . "select window 1..9"))
-    "2" '(winum-select-window-2         :which-key t)
-    "3" '(winum-select-window-3         :which-key t)
-    "4" '(winum-select-window-4         :which-key t)
-    "5" '(winum-select-window-5         :which-key t)
-    "6" '(winum-select-window-6         :which-key t)
-    "7" '(winum-select-window-7         :which-key t)
-    "8" '(winum-select-window-8         :which-key t)
-    "9" '(winum-select-window-9         :which-key t)
-    "b1" '(buffer-to-window-1           :which-key ("1\.\.9" . "Move buffer to window 1..9"))
-    "b2" '(buffer-to-window-2           :which-key t)
-    "b3" '(buffer-to-window-3           :which-key t)
-    "b4" '(buffer-to-window-4           :which-key t)
-    "b5" '(buffer-to-window-5           :which-key t)
-    "b6" '(buffer-to-window-6           :which-key t)
-    "b7" '(buffer-to-window-7           :which-key t)
-    "b8" '(buffer-to-window-8           :which-key t)
-    "b9" '(buffer-to-window-9           :which-key t)))
+    "0"  '("select window 0 or 10" . winum-select-window-0-or-10)
+    "1"  '("select window 1..9" . winum-select-window-1)
+    "2"  'winum-select-window-2
+    "3"  'winum-select-window-3
+    "4"  'winum-select-window-4
+    "5"  'winum-select-window-5
+    "6"  'winum-select-window-6
+    "7"  'winum-select-window-7
+    "8"  'winum-select-window-8
+    "9"  'winum-select-window-9
+    "b1" '("Move buffer to window 1..9" . buffer-to-window-1)
+    "b2" 'buffer-to-window-2
+    "b3" 'buffer-to-window-3
+    "b4" 'buffer-to-window-4
+    "b5" 'buffer-to-window-5
+    "b6" 'buffer-to-window-6
+    "b7" 'buffer-to-window-7
+    "b8" 'buffer-to-window-8
+    "b9" 'buffer-to-window-9))
 
 (use-package wakatime-mode
   :straight t

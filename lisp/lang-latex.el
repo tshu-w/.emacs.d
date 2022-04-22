@@ -68,7 +68,7 @@
     "a"             'TeX-command-run-all                       ;; C-c C-a
     "b"             'TeX-build
     ;; TeX-doc is a very slow function
-    "h"             '(:ignore t :which-key "help")
+    "h"             (cons "help" (make-sparse-keymap))
     "hd"            'TeX-doc
     "k"             'TeX-kill-job                              ;; C-c C-k
     "l"             'TeX-recenter-output-buffer                ;; C-c C-l
@@ -76,18 +76,18 @@
     "n"             'TeX-next-error                            ;; C-c `
     "N"             'TeX-previous-error                        ;; M-g p
     "v"             'TeX-view                                  ;; C-c C-v
-    "x"             '(:ignore t :which-key "text/fonts")
+    "x"             (cons "text/fonts" (make-sparse-keymap))
     "xb"            'font-bold
     "xc"            'font-code
     "xe"            'font-emphasis
     "xi"            'font-italic
     "xr"            'font-clear
     "xo"            'font-oblique
-    "xf"            '(:ignore t :which-key "fonts")
+    "xf"            (cons "fonts" (make-sparse-keymap))
     "xfc"           'font-small-caps
     "xff"           'font-sans-serif
     "xfr"           'font-serif
-    "z"             '(:ignore t :which-key "fold")
+    "z"             (cons "fold" (make-sparse-keymap))
     "z="            'TeX-fold-math
     "zb"            'TeX-fold-buffer
     "zB"            'TeX-fold-clearout-buffer
@@ -106,14 +106,14 @@
     "."                'LaTeX-mark-environment              ;; C-c .
     "c"                'LaTeX-close-environment             ;; C-c ]
     "e"                'LaTeX-environment                   ;; C-c C-e
-    "f"                '(:ignore t :which-key "fill")
+    "f"                (cons "fill" (make-sparse-keymap))
     "fe"               'LaTeX-fill-environment              ;; C-c C-q C-e
     "fp"               'LaTeX-fill-paragraph                ;; C-c C-q C-p
     "fr"               'LaTeX-fill-region                   ;; C-c C-q C-r
     "fs"               'LaTeX-fill-section                  ;; C-c C-q C-s
-    "i"                '(:ignore t :which-key "insert")
+    "i"                (cons "insert" (make-sparse-keymap))
     "ii"               'LaTeX-insert-item                   ;; C-c C-j
-    "p"                '(:ignore t :which-key "preview")
+    "p"                (cons "preview" (make-sparse-keymap))
     "pb"               'preview-buffer
     "pc"               'preview-clearout
     "pd"               'preview-document
@@ -123,9 +123,9 @@
     "pr"               'preview-region
     "ps"               'preview-section
     "s"                'LaTeX-section                       ;; C-c C-s
-    "x"                '(:ignore t :which-key "text/fonts")
+    "x"                (cons "text/fonts" (make-sparse-keymap))
     "xB"               'font-medium
-    "xf"               '(:ignore t :which-key "fonts")
+    "xf"               (cons "fonts" (make-sparse-keymap))
     "xfa"              'font-calligraphic
     "xfn"              'font-normal
     "xfu"              'font-upright
@@ -142,7 +142,7 @@
 
   (despot-def (TeX-mode-map LaTeX-mode-map)
     :major-modes '(tex-mode latex-mode)
-    "r"     '(:ignore t :which-key "reftex")
+    "r"     (cons "reftex" (make-sparse-keymap))
     "rc"    'reftex-citation
     "rg"    'reftex-grep-document
     "ri"    'reftex-index-selection-or-word

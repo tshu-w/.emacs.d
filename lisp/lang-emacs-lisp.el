@@ -12,14 +12,14 @@
   :config
   (despot-def :keymaps '(emacs-lisp-mode-map lisp-interaction-mode-map)
     "'"  'ielm
-    "c"  '(:ignore t :which-key "compile")
+    "c"  (cons "compile" (make-sparse-keymap))
     "cc" 'emacs-lisp-byte-compile
-    "e"  '(:ignore t :which-key "eval")
+    "e"  (cons "eval" (make-sparse-keymap))
     "eb" 'eval-buffer
     "ee" 'eval-last-sexp
     "er" 'eval-region
     "ef" 'eval-defun
-    "t"  '(:ignore t :which-key "tests")
+    "t"  (cons "tests" (make-sparse-keymap))
     "tb" 'ert-run-tests-buffer
     "tq" 'ert))
 
