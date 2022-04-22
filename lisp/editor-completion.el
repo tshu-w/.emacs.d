@@ -88,10 +88,10 @@
    [remap imenu]               'consult-imenu
    [remap apropos]             'consult-apropos)
   (tyrant-def
-    "jI" '(consult-imenu-multi :which-key "imenu-multi")
-    "fl" '(consult-find :which-key "locate-files")
-    "jj" '(consult-line :which-key "search lines")
-    "jJ" '(consult-line-multi :which-key "search lines a/ buffers")
+    "jI" '("imenu-multi" . consult-imenu-multi)
+    "fl" '("locate-files" . consult-find)
+    "jj" '("search lines" . consult-line)
+    "jJ" '("search lines a/ buffers" . consult-line-multi)
     "Tt" 'consult-minor-mode-menu)
   (org-mode-map
    [remap consult-imenu]       'consult-org-heading

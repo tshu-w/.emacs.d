@@ -52,7 +52,7 @@
     ">"     'markdown-indent-region
     "<"     'markdown-outdent-region
     "-"     'markdown-insert-hr
-    "c"     '(:ignore t :which-key "command")
+    "c"     (cons "command" (make-sparse-keymap))
     "c]"    'markdown-complete-buffer
     "cc"    'markdown-check-refs
     "ce"    'markdown-export
@@ -63,7 +63,7 @@
     "cv"    'markdown-export-and-preview
     "cw"    'markdown-kill-ring-save
     "f"     'markdown-follow-thing-at-point
-    "h"     '(:ignore t :which-key "header")
+    "h"     (cons "header" (make-sparse-keymap))
     "hi"    'markdown-insert-header-dwim
     "hI"    'markdown-insert-header-setext-dwim
     "h1"    'markdown-insert-header-atx-1
@@ -74,7 +74,7 @@
     "h6"    'markdown-insert-header-atx-6
     "h!"    'markdown-insert-header-setext-1
     "h@"    'markdown-insert-header-setext-2
-    "i"     '(:ignore t :which-key "insert")
+    "i"     (cons "insert" (make-sparse-keymap))
     "if"    'markdown-insert-footnote
     "ii"    'markdown-insert-image
     "il"    'markdown-insert-link
@@ -82,10 +82,10 @@
     "iu"    'markdown-insert-uri
     "k"     'markdown-kill-thing-at-point
     "N"     'markdown-next-link
-    "l"     '(:ignore t :which-key "lists")
+    "l"     (cons "lists" (make-sparse-keymap))
     "li"    'markdown-insert-list-item
     "P"     'markdown-previous-link
-    "t"     '(:ignore t :which-key "table")
+    "t"     (cons "table" (make-sparse-keymap))
     "tp"    'markdown-table-move-row-up
     "tn"    'markdown-table-move-row-down
     "tf"    'markdown-table-move-column-right
@@ -97,13 +97,13 @@
     "ts"    'markdown-table-sort-lines
     "td"    'markdown-table-convert-region
     "tt"    'markdown-table-transpose
-    "T"     '(:ignore t :which-key "toggle")
+    "T"     (cons "toggles" (make-sparse-keymap))
     "Ti"    'markdown-toggle-inline-images
     "Tl"    'markdown-toggle-url-hiding
     "Tm"    'markdown-toggle-markup-hiding
     "Tt"    'markdown-toggle-gfm-checkbox
     "Tw"    'markdown-toggle-wiki-links
-    "x"     '(:ignore t :which-key "text")
+    "x"     (cons "text" (make-sparse-keymap))
     "xb"    'markdown-insert-bold
     "xB"    'markdown-insert-gfm-checkbox
     "xc"    'markdown-insert-code

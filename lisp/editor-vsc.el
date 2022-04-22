@@ -38,7 +38,7 @@
   (advice-add 'magit-diff-visit-worktree-file :after #'org-reveal-advice)
   :general
   (tyrant-def
-    "g"   '(:ignore t :which-key "git")
+    "g"   (cons "git" (make-sparse-keymap))
     "gb"  'magit-blame
     "gc"  'magit-clone
     "gd"  'magit-diff
@@ -110,7 +110,7 @@
       (call-interactively 'git-link-commit)))
   :general
   (tyrant-def
-    "gL"  '(:ignore t :which-key "links")
+    "gL"  (cons "links" (make-sparse-keymap))
     "gLc" 'git-link-commit
     "gLC" 'git-link-commit-copy-url-only
     "gLl" 'git-link
@@ -123,7 +123,7 @@
   (setq gitignore-templates-api 'github)
   :general
   (tyrant-def
-    "gI"  '(:ignore t :which-key "gitignore")
+    "gI"  (cons "gitignore" (make-sparse-keymap))
     "gIn" 'gitignore-templates-new-file
     "gIi" 'gitignore-templates-insert))
 
