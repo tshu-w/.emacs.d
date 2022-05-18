@@ -117,9 +117,6 @@
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
 
-  (add-to-list 'mu4e-view-actions
-               '("View in browser" . mu4e-action-view-in-browser) t)
-
   (add-hook 'mu4e-compose-mode-hook
             (lambda () (use-hard-newlines t 'guess)))
 
