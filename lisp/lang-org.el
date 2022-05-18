@@ -470,7 +470,7 @@
     "id"    'org-insert-drawer
     "ie"    'org-set-effort
     "if"    'org-footnote-new
-    "ig"    'org-mac-grab-link
+    "ig"    'org-mac-link-link
     "ih"    'org-insert-heading
     "iH"    'org-insert-heading-after-current
     "ii"    'org-insert-item
@@ -569,14 +569,14 @@
   :straight t
   :defer t
   :config
-  (setq org-mac-grab-devonthink-app-p nil
-        org-mac-grab-Acrobat-app-p nil
-        org-mac-grab-Brave-app-p nil
-        org-mac-grab-Chrome-app-p nil
-        org-mac-grab-Evernote-app-p nil
-        org-mac-grab-Mail-app-p nil
-        org-mac-grab-Outlook-app-p nil
-        org-mac-grab-qutebrowser-app-p nil))
+  (setq org-mac-link-devonthink-app-p nil
+        org-mac-link-acrobat-app-p nil
+        org-mac-link-brave-app-p nil
+        org-mac-link-chrome-app-p nil
+        org-mac-link-evernote-app-p nil
+        org-mac-link-mail-app-p nil
+        org-mac-link-outlook-app-p nil
+        org-mac-link-qutebrowser-app-p nil))
 
 (use-package evil-org
   :straight t
