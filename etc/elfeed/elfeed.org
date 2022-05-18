@@ -44,7 +44,7 @@
 *** [[http://ai.stanford.edu/blog/feed.xml][The Stanford AI Lab Blog]]
 ** [[feed://eugene-wei.squarespace.com/blog?format=rss][Remains of the Day]]
 ** [[http://0x100.club][V for Vendetta]]
-** [[http://azeril.com/feed.xml][Microdust]]                        :ignore:
+** [[http://azeril.com/feed.xml][Microdust]]                                                        :ignore:
 ** [[http://baohaojun.github.io/atom.xml][包昊军的博客]]
 ** [[http://blog.cnbang.net/feed][bang's blog]]
 ** [[http://blog.devtang.com/atom.xml][唐巧的博客]]
@@ -60,11 +60,11 @@
 ** [[http://www.hankcs.com/feed][码农场]]
 ** [[http://www.matrix67.com/blog/feed.asp][Matrix67: The Aha Moments]]
 ** [[http://www.zmonster.me/atom.xml][ZMonster's Blog]]
-** [[http://www.zreading.cn/feed][左岸读书]]                        :ignore:
+** [[http://www.zreading.cn/feed][左岸读书]]                                                         :ignore:
 ** [[http://yangqinyuan.com/feed.xml][杨钦元 | 博客]]
 ** [[https://0792z.blogspot.com/feeds/posts/default][核电站]]
 ** [[https://1byte.io/rss.xml][1 Byte]]
-** [[https://atjason.com/atom.xml][Jason]]                          :ignore:
+** [[https://atjason.com/atom.xml][Jason]]                                                            :ignore:
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
 ** [[https://blanboom.org/feed/][Blanboom]]
 ** [[https://blog.blahgeek.com/feeds/all.rss.xml][BlahGeek's Blog]]
@@ -84,9 +84,10 @@
 ** [[https://crispgm.com/feed.xml][CrispDev]]
 ** [[https://daimajia.com/feed][代码家]]
 ** [[https://daringfireball.net/feeds/main][Daring Fireball]]
+** [[https://diygod.me/atom.xml][DIYgod]]
 ** [[https://draveness.me/feed.xml][面向信仰编程]]
 ** [[https://drmingdrmer.github.io/feed.xml][XP的博客]]
-** [[https://droidyue.com/atom.xml][技术小黑屋]]                    :ignore:
+** [[https://droidyue.com/atom.xml][技术小黑屋]]                                                       :ignore:
 ** [[https://endler.dev/rss.xml][Matthias Endler]]
 ** [[https://feeds.feedburner.com/GiantRobotsSmashingIntoOtherGiantRobots][Giant Robots Smashing Into Other Giant Robots]]
 ** [[https://feeds.feedburner.com/bookfere][书伴]]
@@ -167,6 +168,7 @@
 ** [[http://wanqu.co/feed][湾区日报]]
 ** [[http://www.ifanr.com/feed][爱范儿 · Beats of Bits]]
 ** [[https://feeds.feedburner.com/letscorp/aDmw][墙外楼]]
+** [[https://chinafactcheck.com/?feed=rss][有据 | 国际新闻事实核查]]
 ** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]] :ignore:
@@ -185,16 +187,16 @@
 ** [[https://www.guokr.com/handpick/rss/][果壳网]]
 ** [[https://www.huxiu.com/rss/0.xml][虎嗅网]]
 ** [[https://xueqiu.com/hots/topic/rss][雪球 - 今日话题]]
-** [[https://feedx.net/rss/guanzhi.xml][观止]]                                                             :ignore:
-** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]                                                         :ignore:
-** [[https://www.zhihu.com/rss][知乎每日精选]]                                                     :ignore:
-** [[https://hnrss.org/best][Hacker News]]                                                      :ignore:
+** [[https://feedx.net/rss/guanzhi.xml][观止]]                      :ignore:
+** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]]               :ignore:
+** [[https://www.zhihu.com/rss][知乎每日精选]]                      :ignore:
+** [[https://hnrss.org/best][Hacker News]]                          :ignore:
 ** [[https://emacs-china.org/latest.rss][Emacs China - 最新主题]]
 ** [[https://www.reddit.com/r/zsh.rss][reddit | zsh]]
 ** [[https://www.reddit.com/r/emac.rss][reddit | M-x emacs]]
-** [[https://stackoverflow.com/feeds/tag/python][StackOverflow - Python]]                                           :ignore:
+** [[https://stackoverflow.com/feeds/tag/python][StackOverflow - Python]] :ignore:
 ** [[https://stackoverflow.com/feeds/tag/zsh][StackOverflow - ZSH]]
-** [[https://stackoverflow.com/feeds/tag/algorithm][StackOverflow - Algorithm]]                                        :ignore:
+** [[https://stackoverflow.com/feeds/tag/algorithm][StackOverflow - Algorithm]] :ignore:
 ** [[https://stackoverflow.com/feeds/tag/emacs][StackOverflow - Emacs]]
 ** [[https://emacs.stackexchange.com/feeds][StackExchange - Emacs]]
 ** [[https://superuser.com/feeds/tag/macos][SuperUser - macOS]]
