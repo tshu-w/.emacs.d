@@ -54,18 +54,6 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
 
-(use-package fcitx
-  :straight t
-  :hook (after-init . fcitx-setup)
-  :config
-  (defun fcitx-setup ()
-    "Setup for `fcitx'."
-    (interactive)
-    (when (fcitx-check-status)
-      (fcitx-read-funcs-turn-on)
-      (fcitx-evil-turn-on)
-      (fcitx-aggressive-minibuffer-turn-on))))
-
 (use-package flyspell-correct
   :straight t
   :general
