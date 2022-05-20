@@ -153,7 +153,7 @@
                       kaolin-ocean
                       kaolin-temple
                       kaolin-valley-dark
-                      lab-dark
+                      ;; lab-dark
                       spacemacs-dark
                       modus-vivendi)
   "Dark themes to switch.")
