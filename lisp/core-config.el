@@ -123,6 +123,11 @@
   :config
   (setq global-auto-revert-non-file-buffers t))
 
+(use-package dabbrev
+  :defer t
+  :config
+  (setq dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
+
 (use-package desktop
   :commands restart-emacs-without-desktop
   :init (desktop-save-mode)

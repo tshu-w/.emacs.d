@@ -175,104 +175,82 @@ targets."
 
 (use-package wgrep :straight t :defer t)
 
-
-(use-package company
-  :straight t
-  :custom-face (company-tooltip-mouse ((t (:background nil))))
-  :hook ((after-init . global-company-mode)
-         (after-init . company-tng-mode))
+(use-package corfu
+  :straight (:files (:defaults "extensions/*.el"))
+  :hook (after-init . global-corfu-mode)
   :init
-  (setq company-idle-delay 0
-        company-minimum-prefix-length 1
-        company-require-match nil
-        company-selection-wrap-around t
-        company-show-quick-access t
-        company-tooltip-align-annotations t
-        company-transformers '(delete-dups company-sort-prefer-same-case-prefix)
-        company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil
-        company-dabbrev-char-regexp "[A-Za-z-_]"
-        company-dabbrev-ignore-buffers "\\`[ *]\\|\\.pdf\\'"
-        company-backends '(company-files
-                           company-capf
-                           (company-dabbrev-code company-keywords)
-                           company-dabbrev
-                           company-ispell)
-        company-global-modes '(not erc-mode message-mode help-mode gud-mode eshell-mode shell-mode))
+  (setq completion-cycle-threshold 3
+        tab-always-indent 'complete
+
+        corfu-auto t
+        corfu-bar-width 0.5
+        corfu-cycle t
+        corfu-on-exact-match nil
+        corfu-preselect-first nil)
   :config
-  ;; `yasnippet' integration
-  (with-no-warnings
-    (with-eval-after-load 'yasnippet
-      (defun company-backend-with-yas (backend)
-        "Add `yasnippet' to company backend."
-        (if (and (listp backend) (member 'company-yasnippet backend))
-            backend
-          (append (if (consp backend) backend (list backend))
-                  '(:with company-yasnippet))))
+  (use-package corfu-history
+    :hook (global-corfu-mode . corfu-history-mode))
 
-      (defun company-enable-yas (&rest _)
-        "Enable `yasnippet' in `company'."
-        (setq company-backends
-              (mapcar #'company-backend-with-yas company-backends)))
-      (company-enable-yas)
-
-      (defun company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
-        "Enable yasnippet but disable it inline."
-        (if (eq command 'prefix)
-            (when-let ((prefix (funcall fun 'prefix)))
-              (unless (memq (char-before (- (point) (length prefix))) '(?. ?> ?\())
-                prefix))
-          (funcall fun command arg)))
-
-      (advice-add #'company-yasnippet :around #'company-yasnippet-disable-inline))))
-
-(use-package company-box
-  :straight t
-  :hook (company-mode . company-box-mode)
-  :config
-  (setq company-box-backends-colors nil
-        company-box-enable-icon nil
-        company-box-scrollbar nil
-        company-box-doc-frame-parameters '((internal-border-width . 3))))
-
-(use-package company-try-hard
-  :straight t
+  (with-eval-after-load 'evil-collection
+    (advice-add 'evil-collection-corfu-setup :after
+                (defun resert-corfu-esc ()
+                  (general-def 'insert corfu-map "<escape>" 'nil))))
   :general
-  ("C-;" 'company-try-hard))
+  (general-def corfu-map
+    "RET"    nil
+    "M-RET"  'corfu-quick-insert
+    "S-SPC"  'corfu-insert-separator))
 
-(use-package company-tabnine
+(use-package cape
   :straight t
   :defer t
   :init
-  (setq company-backends '(company-files
-                           (company-capf :with company-tabnine :separate)
-                           (company-dabbrev-code company-keywords)
-                           company-dabbrev
-                           company-tabnine
-                           company-ispell)))
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
-
-(use-package prescient
-  :straight t
-  :hook (after-init . prescient-persist-mode)
+(use-package tabnine-capf
+  :straight (:host github :repo "50ways2sayhard/tabnine-capf" :files ("*.el" "*.sh"))
+  :hook (kill-emacs . tabnine-capf-kill-process)
   :init
-  (use-package company-prescient
-    :straight t
-    :hook (company-mode . company-prescient-mode))
+  (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point))
+
+(use-package tempel
+  :straight t
+  :hook ((text-mode prog-mode) . tempel-setup-capf)
+  :init
+  (setq tempel-trigger-prefix "<"
+        tempel-path (no-littering-expand-etc-file-name "templates"))
   :config
-  (setq prescient-sort-full-matches-first t
-        prescient-sort-length-enable nil))
+  (defun tempel-setup-capf ()
+    (setq-local completion-at-point-functions
+                (cons #'tempel-complete
+                      completion-at-point-functions)))
+
+  (defun tempel-hippie-try-expand (old)
+    "Integrate with hippie expand.
+Just put this function in `hippie-expand-try-functions-list'."
+    (if (not old)
+        (tempel-expand t)
+      (undo 1)))
+  (add-to-list 'hippie-expand-try-functions-list #'tempel-hippie-try-expand t))
 
 (use-package eglot
   :straight t
   :commands expand-absolute-name
+  :hook (eglot-managed-mode .  yas-minor-mode)
   :init
   (setq read-process-output-max (* 1024 1024))
-  :config
-  (setq eglot-stay-out-of '(company))
 
-  ;; https://github.com/company-mode/company-mode/discussions/1313
-  (advice-remove #'eglot--snippet-expansion-fn #'ignore)
+  ;; HOLD: https://github.com/joaotavora/eglot/issues/884
+  (use-package yasnippet
+    :straight t
+    :init
+    (setq yas-minor-mode-map nil))
+  :config
+  (setq eglot-stay-out-of '(company)
+        eglot-connect-timeout 10
+        eglot-events-buffer-size 0
+        eglot-ignored-server-capabilities nil)
 
   (defun expand-absolute-name (name)
     (if (file-name-absolute-p name)
@@ -281,10 +259,26 @@ targets."
           (concat (file-remote-p default-directory) name)))
       name))
 
+  (when (fboundp #'tabnine-completion-at-point)
+    (add-hook 'eglot-managed-mode-hook
+              (defun merge-eglot-with-tabnine ()
+                (remove-hook 'completion-at-point-functions #'eglot-completion-at-point t)
+                (add-hook 'completion-at-point-functions
+                          (cape-super-capf
+                           #'eglot-completion-at-point
+                           #'tabnine-completion-at-point) nil t))))
+
+  ;; TODO: https://github.com/joaotavora/eglot/discussions/876
+  (defun eglot--uri-to-path@around (fun url)
+    (funcall fun (if (equal url "")
+                     (project-root (eglot--project (eglot-current-server))) url)))
+  (advice-add #'eglot--uri-to-path :around #'eglot--uri-to-path@around)
+
   (tyrant-def "cE" 'eglot)
 
+  ;; FIXME https://github.com/noctuid/general.el/pull/503#issuecomment-1132573090
   (tyrant-def eglot--managed-mode :definer 'minor-mode
-    "ce"  '(:ignore t :which-key "eglot")
+    "ce"  (cons "eglot" (make-sparse-keymap))
     "cea" 'eglot-code-actions
     "ceb" 'eglot-events-buffer
     "cer" 'eglot-rename
@@ -292,18 +286,6 @@ targets."
     "cex" 'eglot-shutdown
     "ceX" 'eglot-shutdown-all
     "ce=" 'eglot-format))
-
-(use-package yasnippet
-  :straight t
-  :hook (after-init . yas-global-mode)
-  :init
-  (setq yas-minor-mode-map nil)
-  :config
-  (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand t)
-
-  (setq yas-triggers-in-field t
-        yas-wrap-around-region t))
-
 
 (provide 'editor-completion)
 ;;; editor-completion.el ends here
