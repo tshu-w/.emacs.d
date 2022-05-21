@@ -173,8 +173,7 @@
   :hook (after-init . electric-pair-mode))
 
 (use-package ediff
-  :hook ((ediff-quit . winner-undo)
-         (ediff-prepare-buffer . outline-show-all))
+  :hook (ediff-prepare-buffer . outline-show-all)
   :config
   (setq-default ediff-window-setup-function 'ediff-setup-windows-plain
                 ediff-split-window-function 'split-window-horizontally
