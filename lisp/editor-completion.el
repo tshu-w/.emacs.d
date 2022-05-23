@@ -276,8 +276,13 @@ Just put this function in `hippie-expand-try-functions-list'."
 
   (tyrant-def "cE" 'eglot)
 
-  ;; FIXME https://github.com/noctuid/general.el/pull/503#issuecomment-1132573090
-  (tyrant-def eglot--managed-mode :definer 'minor-mode
+  (general-def eglot--managed-mode
+    :states '(normal insert motion emacs)
+    :keymaps 'override
+    :prefix-map 'tyrant-eglot-map
+    :definer 'minor-mode
+    :prefix "SPC"
+    :non-normal-prefix "S-SPC"
     "ce"  (cons "eglot" (make-sparse-keymap))
     "cea" 'eglot-code-actions
     "ceb" 'eglot-events-buffer
