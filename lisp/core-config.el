@@ -126,7 +126,8 @@
 (use-package dabbrev
   :defer t
   :config
-  (setq dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
+  (setq dabbrev-abbrev-char-regexp "[A-Za-z-_]"
+        dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
 
 (use-package desktop
   :commands restart-emacs-without-desktop
