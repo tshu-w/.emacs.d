@@ -209,12 +209,6 @@
                         ("*Async Shell Command*"         :align t)
                         ("\\*EGLOT.*"                    :select t :align right :size ,fill-column :regexp t))))
 
-(use-package tree-sitter :straight t :defer t)
-
-(use-package tree-sitter-langs
-  :straight t
-  :after tree-sitter)
-
 (use-package writeroom-mode
   :straight t
   :hook (after-init . global-writeroom-mode)
