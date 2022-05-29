@@ -70,13 +70,10 @@
 (use-package consult
   :straight t
   :init
-  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
   (advice-add #'project-find-regexp :override #'consult-ripgrep)
   :config
   (setq consult-narrow-key "?"
         consult-preview-key (kbd "M-.")
-        consult-project-root-function (lambda () (project-root (project-current t)))
-
         consult-ripgrep-args "rg --hidden --glob \"!.git/\" --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --line-number .")
 
   (consult-customize consult-theme :preview-key '(:debounce 0.2 any)
