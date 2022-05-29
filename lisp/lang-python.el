@@ -9,8 +9,7 @@
 ;;; Code:
 
 (use-package python
-  :hook ((python-mode . eglot-ensure)
-         (python-mode . tree-sitter-hl-mode))
+  :hook (python-mode . eglot-ensure)
   :config
   (setq python-indent-def-block-scale 1
         python-indent-guess-indent-offset-verbose nil)
