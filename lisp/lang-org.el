@@ -473,7 +473,8 @@
     "ig"    'org-mac-link-link
     "ih"    'org-insert-heading
     "iH"    'org-insert-heading-after-current
-    "ii"    'org-insert-item
+    "ii"    'org-id-get-create
+    "iI"    'org-insert-item
     "il"    'org-insert-link
     "in"    'org-add-note
     "ip"    'org-set-property
