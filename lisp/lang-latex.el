@@ -215,7 +215,8 @@
   (setq citar-at-point-function 'embark-act
         citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
         citar-library-paths `(,(concat bibtex-file-path "files/"))
-        citar-notes-paths `(,bibtex-notes-path))
+        citar-notes-paths `(,bibtex-notes-path)
+        citar-file-open-function 'org-open-file)
   :general
   (tyrant-def "aC" 'citar-open))
 
