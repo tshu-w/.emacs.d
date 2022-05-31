@@ -668,7 +668,6 @@ go to `org-datetree-file-format' file based on TIME."
 
 (use-package org-roam
   :straight t
-  :defer t
   :hook (org-mode . org-roam-db-autosync-mode)
   :init
   (setq org-roam-capture-templates
@@ -713,6 +712,8 @@ go to `org-datetree-file-format' file based on TIME."
   (with-eval-after-load 'shackle
     (add-to-list 'shackle-rules '("*org-roam*" :align right)))
 
+  (despot-def org-mode-map "ir" 'org-roam-node-insert)
+
   (define-key magit-section-mode-map "SPC" nil)
   :general
   (tyrant-def
@@ -723,8 +724,7 @@ go to `org-datetree-file-format' file based on TIME."
     "oro" 'org-roam-open-refs
     "orr" 'org-roam-node-random
     "ort" 'org-roam-tag-add
-    "orT" 'org-roam-tag-delete)
-  (despot-def org-mode-map "ir" 'org-roam-node-insert))
+    "orT" 'org-roam-tag-delete))
 
 (use-package org-roam-protocol
   :after org-protocol
