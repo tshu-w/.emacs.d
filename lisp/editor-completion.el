@@ -16,6 +16,15 @@
   (setq read-extended-command-predicate
         #'command-completion-default-include-p)
 
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (if (string-match "\\*\\(.\\)" crm-separator)
+                      (match-string 1 crm-separator)
+                    "")
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
   (setq vertico-cycle t)
 
   (use-package vertico-buffer
