@@ -716,8 +716,7 @@ go to `org-datetree-file-format' file based on TIME."
     (add-to-list 'popper-reference-buffers '(org-roam-mode)))
 
   (despot-def org-mode-map "ir" 'org-roam-node-insert)
-
-  (define-key magit-section-mode-map "SPC" nil)
+  (general-def magit-section-mode-map "SPC" nil)
   :general
   (tyrant-def
     "or"  (cons "roam" (make-sparse-keymap))
