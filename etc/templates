@@ -83,14 +83,6 @@ sh-mode
 
 (env "#!/usr/bin/env bash" n)
 
-rst-mode
-
-(title (make-string (length title) ?=) n (p "Title: " title) n (make-string (length title) ?=) n)
-
-java-mode
-
-(class "public class " (p (file-name-base (or (buffer-file-name) (buffer-name)))) " {" n> r> n "}")
-
 c-mode :when (re-search-backward "^\\S-*$" (line-beginning-position) 'noerror)
 
 (inc "#include <" (p (concat (file-name-base (or (buffer-file-name) (buffer-name))) ".h")) ">")
