@@ -9,6 +9,7 @@
 *** [[http://feeds.feedburner.com/SanityInc][sanity, inc.]]
 *** [[http://pragmaticemacs.com/feed][Pragmatic Emacs]]
 *** [[https://archive.casouri.cat/note/rss.xml][BHL0388]]
+*** [[https://beorg.substack.com/feed][Beorg update]]
 *** [[https://blog.aaronbieber.com/posts/index.xml][The Chronicle]]
 *** [[https://blog.tecosaur.com/tmio/rss.xml][This Month in Org]]
 *** [[https://bzg.fr/index.xml][Free software hacktivist - Bastien Guerry]]
@@ -24,10 +25,10 @@
 *** [[https://planet.emacslife.com/atom.xml][Planet Emacsen]]
 *** [[https://ruzkuku.com/all.atom][Webpresence of Philip K.]]
 *** [[https://updates.orgmode.org/feed/updates][Org-mode updates]]
+*** [[https://with-emacs.com/rss.xml][with-emacs]]
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
-*** [[https://beorg.substack.com/feed][Beorg update]]
 
 ** Research                                                       :Research:
 *** [[http://cos.name/feed/][统计之都]]
