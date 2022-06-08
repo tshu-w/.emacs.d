@@ -111,6 +111,7 @@
           org-agenda-time-leading-zero t
           org-agenda-todo-ignore-scheduled 'all
           org-agenda-todo-ignore-deadlines 'near
+          org-agenda-window-setup 'only-window
           org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
