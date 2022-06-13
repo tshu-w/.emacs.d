@@ -98,7 +98,7 @@ org-mode
 (verse "#+begin_verse" n> r> n> "#+end_verse")
 (src "#+begin_src " p n> r> n> "#+end_src" :post (org-edit-src-code))
 (elisp "#+begin_src emacs-lisp" n> r> n "#+end_src" :post (org-edit-src-code))
-(rct "#+begin: clocktable :scope agenda-with-archives :block " (format-time-string "%Y-") p n "#+end")
+(clocktable "#+begin: clocktable :scope agenda-with-archives :block " (format-time-string "%Y-") p n "#+end")
 (equation "\\begin{equation*}" n> r> n> "\\end{equation*}")
 
 ;; Local Variables:
