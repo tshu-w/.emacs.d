@@ -188,6 +188,7 @@ targets."
         tab-always-indent 'complete
 
         corfu-auto t
+        corfu-auto-prefix 1
         corfu-bar-width 0.5
         corfu-cycle t
         corfu-on-exact-match nil
