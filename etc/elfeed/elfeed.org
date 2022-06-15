@@ -29,7 +29,7 @@
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
-
+*** [[https://kristofferbalintona.me/index.xml][Kristoffer Balintona]]
 ** Research                                                       :Research:
 *** [[http://cos.name/feed/][统计之都]]
 *** [[http://gradientscience.org/feed.xml][gradient science]]
