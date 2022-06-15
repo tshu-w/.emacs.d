@@ -196,6 +196,13 @@ targets."
   (use-package corfu-history
     :hook (global-corfu-mode . corfu-history-mode))
 
+  (defun corfu-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+    (when (where-is-internal #'completion-at-point (list (current-local-map)))
+      ;; (setq-local corfu-auto nil) Enable/disable auto completion
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+
   (with-eval-after-load 'evil-collection
     (advice-add 'evil-collection-corfu-setup :after
                 (defun resert-corfu-esc ()
