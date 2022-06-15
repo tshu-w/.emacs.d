@@ -194,6 +194,7 @@
 
 (use-package citar
   :straight t
+  :hook ((org-mode latex-mode) . citar-setup-capf)
   :init
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
@@ -217,6 +218,10 @@
         citar-library-paths `(,(concat bibtex-file-path "files/"))
         citar-notes-paths `(,bibtex-notes-path)
         citar-file-open-function 'org-open-file)
+
+  (defun citar-setup-capf ()
+    "add `citar-capf' to `completion-at-point-functions'"
+    (add-to-list 'completion-at-point-functions #'citar-capf))
   :general
   (tyrant-def "aC" 'citar-open))
 
