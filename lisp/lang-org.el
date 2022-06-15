@@ -208,8 +208,7 @@
   (use-package oc
     :defer t
     :config
-    (setq org-cite-activate-processor nil
-          org-cite-export-processors '((beamer natbib)
+    (setq org-cite-export-processors '((beamer natbib)
                                        (latex biblatex)
                                        (t csl))
           org-cite-global-bibliography '("~/Documents/Bibliography/references.bib")))
