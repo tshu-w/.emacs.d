@@ -12,6 +12,8 @@
   :straight (:files (:defaults "extensions/*.el"))
   :hook (after-init . vertico-mode)
   :config
+  (setq vertico-cycle t)
+
   ;; Hide commands in M-x which do not work in the current mode.
   (setq read-extended-command-predicate
         #'command-completion-default-include-p)
@@ -25,10 +27,7 @@
           (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-  (setq vertico-cycle t)
-
   (use-package vertico-buffer
-    :defer t
     :hook (vertico-mode . vertico-buffer-mode)
     :config
     (setq vertico-buffer-display-action `(display-buffer-in-side-window
@@ -44,7 +43,7 @@
 
   (use-package vertico-quick
     :general
-    (vertico-map "C-q" 'vertico-quick-exit)))
+    (vertico-map "C-<return>" 'vertico-quick-exit)))
 
 (use-package marginalia
   :straight t
