@@ -37,8 +37,13 @@
 
   (defun TeX-build ()
     (interactive)
-    (TeX-save-document (TeX-master-file))
-    (TeX-command TeX-command-default 'TeX-master-file -1))
+    (let* ((master (TeX-master-file))
+           (process (and (stringp master) (TeX-process master))))
+      (TeX-save-document master)
+      (when (and (processp process)
+                 (eq (process-status process) 'run))
+        (delete-process process))
+      (TeX-command TeX-command-default 'TeX-master-file -1)))
 
   ;; Rebindings for TeX-font
   (defun font-bold () (interactive) (TeX-font nil ?\C-b))
