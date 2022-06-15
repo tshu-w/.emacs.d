@@ -158,7 +158,7 @@
     "rv"    'reftex-view-crossref))
 
 (use-package auctex-latexmk
-  :straight t
+  :straight (auctex-latexmk :type git :host github :repo "tshu-w/auctex-latexmk")
   :after tex
   :config
   (auctex-latexmk-setup)
