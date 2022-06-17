@@ -277,7 +277,9 @@
     :config
     (defun org-capture-goto-link ()
       (let ((file (nth 1 (org-capture-get :target)))
-            (headline (plist-get org-store-link-plist :description))
+            (headline (replace-regexp-in-string
+                       "|\s*" ""
+                       (plist-get org-store-link-plist :description)))
             (link (plist-get org-store-link-plist :link)))
         (org-capture-put :target (list 'file+headline file headline))
         (widen)
