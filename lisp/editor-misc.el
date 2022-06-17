@@ -238,6 +238,8 @@ reuse it's window, otherwise create new one."
       (funcall fun)))
   (advice-add #'undohist-recover-safe :around #'undohist-recover-safe@around))
 
+(use-package xr :straight t :defer t)
+
 (use-package winum
   :straight t
   :hook (after-init . winum-mode)
