@@ -222,7 +222,7 @@
         citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
         citar-library-paths `(,(concat bibtex-file-path "files/"))
         citar-notes-paths `(,bibtex-notes-path)
-        citar-file-open-function 'org-open-file)
+        citar-file-open-function 'citar-file-open-external)
 
   (defun citar-setup-capf ()
     "add `citar-capf' to `completion-at-point-functions'"
