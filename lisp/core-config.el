@@ -70,8 +70,6 @@
 ;; draw underline lower
 (setq x-underline-at-descent-line t)
 
-;; enable flymake-mode in prog-mode
-(add-hook 'prog-mode-hook #'flymake-mode)
 ;; Highlight and allow to open http link at point in programming buffers
 ;; goto-address-prog-mode only highlights links in strings and comments
 (add-hook 'prog-mode-hook #'goto-address-prog-mode)
@@ -221,6 +219,11 @@
             (make-directory dir t)
           (keyboard-quit)))))
   (add-to-list 'find-file-not-found-functions 'make-directory-maybe nil #'eq))
+
+(use-package flymake
+  :hook (prog-mode . flymake-mode)
+  :config
+  (setq flymake-no-changes-timeout nil))
 
 (use-package newcomment
   :commands comment-or-uncomment
