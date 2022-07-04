@@ -32,7 +32,8 @@
             (set-fontset-font t 'symbol symbol-font nil 'prepend)))
 
 (when (memq window-system '(mac ns))
-  (setq ns-pop-up-frames nil)
+  (setq ns-pop-up-frames nil
+        frame-resize-pixelwise t)
 
   (setq unicode-font "PingFang SC"
         emoji-font "Apple Color Emoji"
@@ -50,8 +51,6 @@
 ;; no beep and visual blinking
 (setq ring-bell-function 'ignore
       visible-bell nil)
-
-(setq frame-resize-pixelwise t)
 
 ;; highlight current line
 (global-hl-line-mode 1)
@@ -329,7 +328,7 @@ the unwritable tidbits."
         tab-bar-new-button-show nil
         tab-bar-tab-hints t
         tab-bar-new-tab-choice "*scratch*"
-        tab-bar-select-tab-modifiers '(hyper)))
+        tab-bar-select-tab-modifiers '(super)))
 
 (use-package tramp
   :defer t
