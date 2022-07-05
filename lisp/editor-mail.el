@@ -134,7 +134,7 @@
     ;; This workaroud breaks any CJK words longer than 2 characters into
     ;; combines of bi-grams. Example: 我爱你 -> (我爱 爱你)
     ;; from https://github.com/panjie/mu4e-goodies/blob/master/mu4e-goodies-hacks.el
-    (defun mu4e-goodies~break-cjk-word (word)
+    (defun mu4e-goodies-break-cjk-word (word)
       "Break CJK word into list of bi-grams like: 我爱你 -> 我爱 爱你"
       (if (or (<= (length word) 2)
               (equal (length word) (string-bytes word))) ; only ascii chars
@@ -144,7 +144,7 @@
               (br-word nil))
           (if (setq pos (string-match ":" word))     ; like: "s:abc"
               (concat (substring word 0 (+ 1 pos))
-                      (mu4e-goodies~break-cjk-word (substring word (+ 1 pos))))
+                      (mu4e-goodies-break-cjk-word (substring word (+ 1 pos))))
             (if (memq 'ascii (find-charset-string word)) ; ascii mixed with others like: abc你好
                 word
               (progn
@@ -154,31 +154,25 @@
                   (setq char-list (cdr char-list)))
                 br-word))))))
 
-    (defun mu4e-goodies~break-cjk-query (expr)
+    (defun mu4e-goodies-break-cjk-query (expr)
       "Break CJK strings into bi-grams in query."
       (let ((word-list (split-string expr " " t))
             (new ""))
         (dolist (word word-list new)
-          (setq new (concat new (mu4e-goodies~break-cjk-word word) " ")))))
+          (setq new (concat new (mu4e-goodies-break-cjk-word word) " ")))))
 
-    (setq mu4e-query-rewrite-function 'mu4e-goodies~break-cjk-query))
+    (setq mu4e-query-rewrite-function 'mu4e-goodies-break-cjk-query))
 
   (setf (alist-get 'trash mu4e-marks)
         (list :char '("d" . "▼")
               :prompt "dtrash"
-              :dyn-target (lambda (target msg)
-                            (mu4e-get-trash-folder msg))
+              :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
               :action (lambda (docid msg target)
                         ;; Here's the main difference to the regular trash mark,
                         ;; no +T before -N so the message is not marked as
                         ;; IMAP-deleted:
-                        (mu4e~proc-move docid (mu4e~mark-check-target target) "+S-u-N"))))
-
-  ;; TEMP: https://github.com/djcb/mu/issues/2193
-  (defun mu4e~proc-start@around (fun)
-    (let ((default-directory temporary-file-directory))
-      (funcall fun)))
-  (advice-add 'mu4e~proc-start :around #'mu4e~proc-start@around)
+	                (mu4e--server-move docid
+                                           (mu4e--mark-check-target target) "+S-u-N"))))
   :general
   (tyrant-def "am" 'mu4e))
 
