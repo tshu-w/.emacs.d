@@ -42,7 +42,7 @@
                               (:from . 22)
                               (:subject))
         mu4e-hide-index-messages t
-        mu4e-use-fancy-chars nil
+        mu4e-use-fancy-chars t
         mu4e-view-prefer-html nil
         mu4e-view-show-addresses t
         mu4e-view-show-images t
