@@ -206,6 +206,7 @@
         (fundamental-mode))))
   (add-hook 'find-file-hook #'check-large-file)
 
+  ;; see document of `move-file-to-trash'
   (defun system-move-file-to-trash (filename)
     (process-file-shell-command
      (format "trash %S" (file-local-name filename))))
