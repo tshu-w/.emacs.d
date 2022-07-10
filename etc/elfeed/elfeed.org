@@ -24,7 +24,7 @@
 *** [[https://oremacs.com][(or emacs irrelevant)]]
 *** [[https://planet.emacslife.com/atom.xml][Planet Emacsen]]
 *** [[https://ruzkuku.com/all.atom][Webpresence of Philip K.]]
-*** [[https://updates.orgmode.org/feed/updates][Org-mode updates]]
+*** [[https://updates.orgmode.org/feed/updates][Org-mode updates]]                                               :ignore:
 *** [[https://with-emacs.com/rss.xml][with-emacs]]
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
@@ -45,6 +45,7 @@
 *** [[http://ai.stanford.edu/blog/feed.xml][The Stanford AI Lab Blog]]
 *** [[https://wandb.ai/fully-connected/rss.xml][Weights & Biases]]
 *** [[https://wandb.ai/public-reports/rss.xml][Weights & Biases]]                                               :ignore:
+*** [[https://www.zeta-alpha.com/blog-feed.xml][Zeta Alpha]]
 ** [[feed://eugene-wei.squarespace.com/blog?format=rss][Remains of the Day]]
 ** [[http://0x100.club][V for Vendetta]]
 ** [[http://azeril.com/feed.xml][Microdust]]                                                        :ignore:
@@ -69,7 +70,6 @@
 ** [[https://1byte.io/rss.xml][1 Byte]]
 ** [[https://atjason.com/atom.xml][Jason]]                                                            :ignore:
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
-** [[https://tw93.fun/feed.xml][Tw93]]
 ** [[https://blanboom.org/feed/][Blanboom]]
 ** [[https://blog.blahgeek.com/feeds/all.rss.xml][BlahGeek's Blog]]
 ** [[https://blog.codinghorror.com/rss][Coding Horror]]
@@ -134,10 +134,12 @@
 ** [[https://tech.youzan.com/rss/][有赞技术团队]]
 ** [[https://thevaluable.dev/index.xml][The Valuable Dev]]
 ** [[https://tobiaslee.top/atom.xml][Stay Hungry, Stay Foolish.]]
+** [[https://tw93.fun/feed.xml][Tw93]]
 ** [[https://tw93.github.io/feed.xml][Tw93]]
 ** [[https://type.cyhsu.xyz/feed.xml][Neverland]]
 ** [[https://typeof.net/atom.xml][Typeof.net]]
 ** [[https://unblock256.substack.com/feed][un.Block Weekly]]
+** [[https://vim0.com/index.xml][咸糖]]
 ** [[https://weekly.ecnelises.com/feed][混沌周刊]]
 ** [[https://wizyoung.github.io/atom.xml][CaptainChen]]
 ** [[https://www.bmpi.dev/index.xml][构建我的被动收入]]
