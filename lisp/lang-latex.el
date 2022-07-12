@@ -189,7 +189,7 @@
   :config
   (setq bibtex-file-path "~/Documents/Bibliography/"
         bibtex-files '("references.bib")
-        bibtex-notes-path "~/Documents/Org/notes/refs/"
+        bibtex-notes-path "~/Documents/Org/roam/refs/"
 
         bibtex-align-at-equal-sign t
         bibtex-autokey-titleword-separator "-"
