@@ -31,18 +31,19 @@
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
 *** [[https://kristofferbalintona.me/index.xml][Kristoffer Balintona]]
 ** Research                                                       :Research:
+*** [[http://ai.stanford.edu/blog/feed.xml][The Stanford AI Lab Blog]]
 *** [[http://cos.name/feed/][统计之都]]
 *** [[http://gradientscience.org/feed.xml][gradient science]]
 *** [[https://deep-and-shallow.com/feed/][Deep & Shallow]]
 *** [[https://feeds.feedburner.com/MachineLearningMastery][Machine Learning Mastery]]
 *** [[https://hanxiao.io/atom.xml][Han Xiao Tech Blog - Neural Search & AI Engineering]]
+*** [[https://jalammar.github.io/feed.xml][Jay Alammar - Visualizing machine learning one concept at a time.]]
 *** [[https://jbarrow.ai/feed.xml][Joe Barrow]]
 *** [[https://jrzaurin.github.io/infinitoml/feed.xml][infinitoml]]
 *** [[https://lilianweng.github.io/lil-log/feed.xml][Lil’Log]]
 *** [[https://macademic.org/feed][Academic workflows on a Mac]]
 *** [[https://ruder.io/rss/][Sebastian Ruder]]
 *** [[https://spaces.ac.cn/feed][科学空间|Scientific Spaces]]
-*** [[http://ai.stanford.edu/blog/feed.xml][The Stanford AI Lab Blog]]
 *** [[https://wandb.ai/fully-connected/rss.xml][Weights & Biases]]
 *** [[https://wandb.ai/public-reports/rss.xml][Weights & Biases]]                                               :ignore:
 *** [[https://www.zeta-alpha.com/blog-feed.xml][Zeta Alpha]]
@@ -174,6 +175,7 @@
 ** [[http://wanqu.co/feed][湾区日报]]
 ** [[http://www.ifanr.com/feed][爱范儿 · Beats of Bits]]
 ** [[https://feeds.feedburner.com/letscorp/aDmw][墙外楼]]
+** [[https://rsshub.app/houxu][后续]]
 ** [[https://chinafactcheck.com/?feed=rss][有据 | 国际新闻事实核查]]
 ** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]] :ignore:
