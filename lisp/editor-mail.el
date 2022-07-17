@@ -9,7 +9,6 @@
 ;;; Code:
 
 (use-package mu4e
-  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :commands (mu4e
              mu4e-org-open
              mu4e-org-store-link)
