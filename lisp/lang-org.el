@@ -472,7 +472,7 @@
     "id"    'org-insert-drawer
     "ie"    'org-set-effort
     "if"    'org-footnote-new
-    "ig"    'org-mac-link-link
+    "ig"    'org-mac-link-get-link
     "ih"    'org-insert-heading
     "iH"    'org-insert-heading-after-current
     "ii"    'org-id-get-create
