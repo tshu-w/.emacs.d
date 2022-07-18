@@ -182,6 +182,7 @@ reuse it's window, otherwise create new one."
   :config
   (setq rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
         rime-user-data-dir (no-littering-expand-etc-file-name "rime/")
+        rime-emacs-module-header-root (expand-file-name "include" (locate-dominating-file invocation-directory "include"))
         rime-show-candidate 'posframe
         rime-show-preedit 'inline
         rime-posframe-properties (list :internal-border-width 2))
