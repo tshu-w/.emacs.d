@@ -10,7 +10,6 @@
 
 (use-package tex
   :straight auctex
-  :defer t
   :mode ("\\.[tT]e[xX]\\'" . TeX-tex-mode)
   :config
   (setq TeX-auto-save t
