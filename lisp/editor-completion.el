@@ -281,12 +281,6 @@ Just put this function in `hippie-expand-try-functions-list'."
                            #'eglot-completion-at-point
                            #'tabnine-completion-at-point) nil t))))
 
-  ;; TODO: https://github.com/joaotavora/eglot/discussions/876
-  (defun eglot--uri-to-path@around (fun url)
-    (funcall fun (if (equal url "")
-                     (project-root (eglot--project (eglot-current-server))) url)))
-  (advice-add #'eglot--uri-to-path :around #'eglot--uri-to-path@around)
-
   (tyrant-def "cE" 'eglot)
 
   (general-def eglot--managed-mode
