@@ -43,6 +43,7 @@
 *** [[https://lilianweng.github.io/lil-log/feed.xml][Lil’Log]]
 *** [[https://macademic.org/feed][Academic workflows on a Mac]]
 *** [[https://ruder.io/rss/][Sebastian Ruder]]
+*** [[https://sebastianraschka.com/rss_feed.xml][sebastianraschka]]
 *** [[https://spaces.ac.cn/feed][科学空间|Scientific Spaces]]
 *** [[https://wandb.ai/fully-connected/rss.xml][Weights & Biases]]
 *** [[https://wandb.ai/public-reports/rss.xml][Weights & Biases]]                                               :ignore:
