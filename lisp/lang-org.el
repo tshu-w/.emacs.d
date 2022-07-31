@@ -123,7 +123,7 @@
               (todo "NEXT" ((org-agenda-overriding-header "\nNext actions")))
               (todo "TODO" ((org-agenda-overriding-header "\nInbox")
                             (org-agenda-files `(,org-inbox-file))))
-              (tags "CLOSED>=\"<today>\""
+              (tags "CLOSED>=<today>"
                     ((org-agenda-overriding-header "\nCompleted today")
                      (org-agenda-archives-mode t))))
              ((org-agenda-block-separator nil)))
