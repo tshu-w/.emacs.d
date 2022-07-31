@@ -45,8 +45,8 @@
         org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
         org-read-date-prefer-future nil
         org-startup-folded t
-        org-startup-indented t
         org-startup-with-inline-images t
+        org-tags-column 0
         org-track-ordered-property-with-tag t
         org-use-property-inheritance t
         org-use-sub-superscripts '{}
@@ -624,6 +624,18 @@
         org-download-method 'attach
         org-download-screenshot-method "screencapture -i %s"))
 
+(use-package org-modern
+  :straight t
+  :hook (org-mode . org-modern-mode)
+  :config
+  (setq org-modern-star '("◉" "○" "⁕" "✽")
+        org-modern-todo nil
+        org-modern-priority nil
+        org-modern-statistics nil
+        org-modern-tag nil
+        org-modern-table-vertical 1
+        org-modern-timestamp nil))
+
 (use-package org-reverse-datetree
   :straight t
   :commands (org-datetree-goto-location
@@ -750,16 +762,6 @@ go to `org-datetree-file-format' file based on TIME."
   :config
   (with-eval-after-load 'desktop
     (add-to-list 'desktop-minor-mode-table '(org-roam-ui-mode nil))))
-
-(use-package org-superstar
-  :straight t
-  :after org
-  :hook (org-mode . org-superstar-mode)
-  :config
-  (setq org-superstar-headline-bullets-list '(?◉ ?○ ?⁕ ?✽)
-        org-superstar-item-bullet-alist '((?* . ?●)
-                                          (?+ . ?○)
-                                          (?- . ?-))))
 
 
 (provide 'lang-org)
