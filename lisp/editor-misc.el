@@ -12,7 +12,7 @@
   :straight t
   :defer t
   :config
-  (when (memq window-system '(mac ns))
+  (when (eq system-type 'darwin)
     (defun alert-notifier-notify (info)
       (if alert-notifier-command
           (let ((args
@@ -167,7 +167,7 @@ reuse it's window, otherwise create new one."
     ":" 'popper-kill-latest-popup))
 
 (use-package reveal-in-osx-finder
-  :if (memq window-system '(mac ns))
+  :if (eq system-type 'darwin)
   :straight t
   :general (tyrant-def "bf" 'reveal-in-osx-finder))
 

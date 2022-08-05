@@ -293,7 +293,7 @@
             (insert "[[" link "]]\n")
             (point)))))
 
-    (when (memq window-system '(mac ns))
+    (when (eq system-type 'darwin)
       (defun org-capture-after-finalize ()
         (when (string= (org-capture-get :key) "w")
           (run-at-time 0.25 nil #'ns-switch-back-to-previous-application)))

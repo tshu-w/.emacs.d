@@ -46,7 +46,7 @@
 (straight-use-package 'use-package)
 
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  :if (eq system-type 'darwin)
   :straight t
   :defer t
   :init

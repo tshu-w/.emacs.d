@@ -21,23 +21,25 @@
 (defvar emoji-font "Noto Color Emoji")
 (defvar symbol-font "Noto Sans Symbols")
 
-(set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
-(add-hook 'after-init-hook
-          (defun setup-font ()
-            (dolist (charset '(kana han cjk-misc bopomofo))
-              (set-fontset-font t charset unicode-font))
-            (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
-
-            (set-fontset-font t 'emoji emoji-font nil 'prepend)
-            (set-fontset-font t 'symbol symbol-font nil 'prepend)))
-
-(when (memq window-system '(mac ns))
+(when (eq system-type 'darwin)
   (setq ns-pop-up-frames nil
         frame-resize-pixelwise t)
 
   (setq unicode-font "PingFang SC"
         emoji-font "Apple Color Emoji"
         symbol-font "Apple Symbols"))
+
+(defun setup-font ()
+  (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
+
+  (dolist (charset '(kana han cjk-misc bopomofo))
+    (set-fontset-font t charset unicode-font))
+  (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
+
+  (set-fontset-font t 'emoji emoji-font nil 'prepend)
+  (set-fontset-font t 'symbol symbol-font nil 'prepend))
+
+(add-hook 'after-init-hook #'setup-font)
 
 (setq initial-scratch-message nil   ;; "make scratch buffer empty"
       inhibit-startup-message t)    ;; "disable splash screen"
@@ -221,9 +223,7 @@
   (add-to-list 'find-file-not-found-functions 'make-directory-maybe nil #'eq))
 
 (use-package flymake
-  :hook (prog-mode . flymake-mode)
-  :config
-  (setq flymake-no-changes-timeout nil))
+  :hook (prog-mode . flymake-mode))
 
 (use-package newcomment
   :commands comment-or-uncomment
