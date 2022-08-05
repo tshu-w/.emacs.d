@@ -187,7 +187,7 @@
             (interactive "P")
             (scroll-other-window (- (or arg 1)))))
 
-  (when (memq window-system '(mac ns))
+  (when (eq system-type 'darwin)
     (general-def
       "s-`"   'other-frame
       "s-a"   'mark-whole-buffer
