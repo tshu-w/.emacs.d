@@ -130,8 +130,9 @@
     "qd"      'restart-emacs-debug-init
     "qr"      'restart-emacs
     "qR"      'restart-emacs-without-desktop
+    "qf"      'delete-frame
     "qq"      'save-buffers-kill-terminal
-    "qQ"      'kill-emacs
+    "qQ"      'save-buffers-kill-emacs
 
     "s"       (cons "spelling" (make-sparse-keymap))
     "sb"      'flyspell-buffer
