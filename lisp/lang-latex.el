@@ -197,7 +197,7 @@
         bibtex-dialect 'biblatex))
 
 (use-package citar
-  :straight t
+  :straight (:files (:defaults))
   :hook ((org-mode latex-mode) . citar-setup-capf)
   :init
   (setq org-cite-insert-processor 'citar
@@ -217,6 +217,8 @@
                           ("n" 'citar-open-notes))
     (add-to-list 'embark-keymap-alist '(bibtex-key . bibtex-key-embark-map)))
   :config
+  (citar-embark-mode)
+
   (setq citar-at-point-function 'embark-act
         citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
         citar-library-paths `(,(concat bibtex-file-path "files/"))
