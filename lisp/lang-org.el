@@ -51,6 +51,7 @@
         org-use-property-inheritance t
         org-use-sub-superscripts '{}
         org-export-with-sub-superscripts '{}
+        org-export-backends '(beamer html icalendar latex md confluence)
         org-yank-adjusted-subtrees t)
 
   (add-hook 'org-mode-hook
