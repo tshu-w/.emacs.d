@@ -229,25 +229,25 @@
             ("r"  "Review")
             ("ry" "Yesterday" plain
              (file+function org-log-file
-              (lambda () (org-reverse-datetree-goto-date-in-file
-                     (time-add (current-time) (days-to-time -1)))))
+                            (lambda () (org-reverse-datetree-goto-date-in-file
+                                   (time-add (current-time) (days-to-time -1)))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rt" "Today" plain
              (file+function org-log-file
-              (lambda () (org-reverse-datetree-goto-date-in-file)))
+                            (lambda () (org-reverse-datetree-goto-date-in-file)))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rl" "Last Week" plain
              (file+function org-log-file
-              (lambda () (let ((org-reverse-datetree-level-formats
-                           (butlast org-reverse-datetree-level-formats)))
-                      (org-reverse-datetree-goto-date-in-file
-                       (time-add (current-time) (days-to-time -7))))))
+                            (lambda () (let ((org-reverse-datetree-level-formats
+                                         (butlast org-reverse-datetree-level-formats)))
+                                    (org-reverse-datetree-goto-date-in-file
+                                     (time-add (current-time) (days-to-time -7))))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rw" "This Week" plain
              (file+function org-log-file
-              (lambda () (let ((org-reverse-datetree-level-formats
-                           (butlast org-reverse-datetree-level-formats)))
-                      (org-reverse-datetree-goto-date-in-file))))
+                            (lambda () (let ((org-reverse-datetree-level-formats
+                                         (butlast org-reverse-datetree-level-formats)))
+                                    (org-reverse-datetree-goto-date-in-file))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rD" "Select a Date" plain
              (file+function org-log-file
@@ -255,21 +255,21 @@
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rW" "Select a Week" plain
              (file+function org-log-file
-              (lambda () (let ((org-reverse-datetree-level-formats
-                           (butlast org-reverse-datetree-level-formats)))
-                      (org-reverse-datetree-goto-read-date-in-file))))
+                            (lambda () (let ((org-reverse-datetree-level-formats
+                                         (butlast org-reverse-datetree-level-formats)))
+                                    (org-reverse-datetree-goto-read-date-in-file))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rM" "Select a Month" plain
              (file+function org-log-file
-              (lambda () (let ((org-reverse-datetree-level-formats
-                           (butlast org-reverse-datetree-level-formats 2)))
-                      (org-reverse-datetree-goto-read-date-in-file))))
+                            (lambda () (let ((org-reverse-datetree-level-formats
+                                         (butlast org-reverse-datetree-level-formats 2)))
+                                    (org-reverse-datetree-goto-read-date-in-file))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rY" "Select a Year" plain
              (file+function org-log-file
-              (lambda () (let ((org-reverse-datetree-level-formats
-                           (butlast org-reverse-datetree-level-formats 3)))
-                      (org-reverse-datetree-goto-read-date-in-file))))
+                            (lambda () (let ((org-reverse-datetree-level-formats
+                                         (butlast org-reverse-datetree-level-formats 3)))
+                                    (org-reverse-datetree-goto-read-date-in-file))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)))
     :config
     (defun org-capture-goto-link ()
