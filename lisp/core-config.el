@@ -149,10 +149,10 @@
     (interactive)
     (restart-emacs (cons "--no-desktop" args)))
 
-  (defun desktop-read@override (desktop-read)
+  (defun desktop-read@override (fn)
     "Inhibit `desktop-read' message"
     (let ((inhibit-message t))
-      (funcall desktop-read)))
+      (funcall fn)))
   (advice-add 'desktop-read :around #'desktop-read@override))
 
 (use-package dired
