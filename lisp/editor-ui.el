@@ -253,8 +253,8 @@
   :init
   (setq compilation-environment '("TERM=xterm-256color"))
 
-  (defun compilation-filter@around (f proc string)
-    (funcall f proc (xterm-color-filter string)))
+  (defun compilation-filter@around (fn proc string)
+    (funcall fn proc (xterm-color-filter string)))
   (advice-add 'compilation-filter :around #'compilation-filter@around))
 
 

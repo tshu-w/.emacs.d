@@ -211,9 +211,9 @@ reuse it's window, otherwise create new one."
     (add-to-list 'orderless-style-dispatchers 'pinyin-if-ampersand))
 
   (with-eval-after-load 'avy
-    (defun avy--regex-candidates@around (fun regex &optional beg end pred group)
+    (defun avy--regex-candidates@around (fn regex &optional beg end pred group)
       (let ((regex (rime-regexp-build-regexp-string regex)))
-        (funcall fun regex beg end pred group)))
+        (funcall fn regex beg end pred group)))
     (advice-add 'avy--regex-candidates :around #'avy--regex-candidates@around))
   :config
   (rime-regexp-load-rime))
@@ -234,9 +234,9 @@ reuse it's window, otherwise create new one."
   :config
   (setq undohist-ignored-files '("EDITMSG"))
 
-  (defun undohist-recover-safe@around (fun)
+  (defun undohist-recover-safe@around (fn)
     (cl-letf (((symbol-function 'yes-or-no-p) (lambda (p) nil)))
-      (funcall fun)))
+      (funcall fn)))
   (advice-add #'undohist-recover-safe :around #'undohist-recover-safe@around))
 
 (use-package xr :straight t :defer t)
