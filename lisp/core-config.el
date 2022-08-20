@@ -331,7 +331,23 @@ the unwritable tidbits."
         tab-bar-new-button-show nil
         tab-bar-tab-hints t
         tab-bar-new-tab-choice "*scratch*"
-        tab-bar-select-tab-modifiers '(super)))
+        tab-bar-select-tab-modifiers '(super)
+        tab-prefix-map (make-sparse-keymap))
+
+  (defun tab-bar-switch-to-tab@override (name)
+    "Like `tab-bar-switch-to-tab', but allow for the creation of a new, named tab on the fly."
+    (interactive
+     (let* ((recent-tabs (mapcar (lambda (tab)
+                                   (alist-get 'name tab))
+                                 (tab-bar--tabs-recent))))
+       (list (completing-read (format-prompt "Switch to tab by name"
+                                             (car recent-tabs))
+                              recent-tabs nil nil nil nil recent-tabs))))
+    (if-let ((tab-number (tab-bar--tab-index-by-name name)))
+        (tab-bar-select-tab (1+ tab-number))
+      (tab-bar-new-tab)
+      (tab-bar-rename-tab name)))
+  (advice-add #'tab-bar-switch-to-tab :override #'tab-bar-switch-to-tab@override))
 
 (use-package tramp
   :defer t
