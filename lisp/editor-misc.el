@@ -218,6 +218,41 @@ reuse it's window, otherwise create new one."
   :config
   (rime-regexp-load-rime))
 
+(use-package tab-bar-echo-area
+  :straight t
+  :hook (tab-bar-mode . tab-bar-echo-area-mode)
+  :config
+  (with-eval-after-load 'which-key
+    (defvar tab-bar-prefix "SPC l")
+    (defun which-key--full-prefix@around (fn prefix-keys &optional -prefix-arg dont-prop-keys)
+      "Concat tab names to `prefix-keys'."
+      (let ((full-prefix (funcall fn prefix-keys -prefix-arg dont-prop-keys)))
+        (if (not (string= prefix-keys tab-bar-prefix))
+            prefix-keys
+          (let* ((tab-bar-format (or tab-bar-echo-area-format (and (boundp 'tab-bar-format) tab-bar-format)))
+                 (keymap (funcall tab-bar-echo-area-make-keymap-function))
+                 (keymap-elements (seq-filter #'tab-bar-echo-area--keymap-element-type (cdr keymap))))
+            (if-let ((tab-names (tab-bar-echo-area--processed-tab-names keymap-elements))
+                     (format-string (cond ((functionp tab-bar-echo-area-display-tab-names-format-string)
+                                           (funcall tab-bar-echo-area-display-tab-names-format-string keymap-elements))
+                                          ((stringp tab-bar-echo-area-display-tab-names-format-string)
+                                           tab-bar-echo-area-display-tab-names-format-string)
+                                          (t "%s"))))
+                (format format-string (string-join tab-names)))))))
+    (advice-add 'which-key--full-prefix :around #'which-key--full-prefix@around)
+
+    (push '((nil . "tab-bar-select-tab") . t) which-key-replacement-alist))
+  :general
+  (tyrant-def
+    "l1" '("select tab 1..8" . tab-bar-select-tab)
+    "l2" 'tab-bar-select-tab
+    "l3" 'tab-bar-select-tab
+    "l4" 'tab-bar-select-tab
+    "l5" 'tab-bar-select-tab
+    "l6" 'tab-bar-select-tab
+    "l7" 'tab-bar-select-tab
+    "l8" 'tab-bar-select-tab))
+
 (use-package terminal-here
   :straight t
   :config
@@ -312,15 +347,15 @@ stays on current"
     "b8" 'buffer-to-window-8
     "b9" 'buffer-to-window-9))
 
-(use-package wakatime-mode
-  :straight t
-  :hook (prog-mode . wakatime-mode)
-  :config
-  (setq wakatime-cli-path "wakatime-cli")
+;; (use-package wakatime-mode
+;;   :straight t
+;;   :hook (prog-mode . wakatime-mode)
+;;   :config
+;;   (setq wakatime-cli-path "wakatime-cli")
 
-  (defun wakatime-dashboard ()
-    (interactive)
-    (browse-url "https://wakatime.com/dashboard")))
+;;   (defun wakatime-dashboard ()
+;;     (interactive)
+;;     (browse-url "https://wakatime.com/dashboard")))
 
 
 (provide 'editor-misc)

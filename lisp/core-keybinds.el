@@ -120,9 +120,21 @@
     "ji"      'imenu
     "jg"      'avy-goto-char-2
 
+    "l"       (cons "layouts" tab-prefix-map)
+    "ld"      'tab-bar-close-tab
+    "lD"      'tab-bar-close-other-tabs
+    "lg"      'tab-bar-change-tab-group
+    "lm"      'tab-bar-move-tab-to
+    "lM"      'tab-bar-move-tab-to-group
+    "ll"      'tab-bar-switch-to-tab
+    "lR"      'tab-bar-rename-tab
+    "lt"      'other-tab-prefix
+    "lu"      'tab-bar-undo-close-tab
+
     "m"       (cons "major mode" (make-sparse-keymap))
 
     "p"       (cons "projects" project-prefix-map)
+    "pt"      'project-other-tab-command
 
     "q"       (cons "quit" (make-sparse-keymap))
     "qd"      'restart-emacs-debug-init
