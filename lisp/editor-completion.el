@@ -247,80 +247,57 @@ Just put this function in `hippie-expand-try-functions-list'."
       (undo 1)))
   (add-to-list 'hippie-expand-try-functions-list #'tempel-hippie-try-expand t))
 
-(use-package lsp-mode
+(use-package eglot
   :straight t
-  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :commands expand-absolute-name
+  :hook (eglot-managed-mode .  yas-minor-mode)
   :init
   (setq read-process-output-max (* 1024 1024))
+
+  ;; HOLD: https://github.com/joaotavora/eglot/issues/884
+  (use-package yasnippet
+    :straight t
+    :init
+    (setq yas-minor-mode-map nil))
   :config
-  (setq lsp-completion-provider :none
-        lsp-diagnostic-clean-after-change t
-        lsp-enable-file-watchers nil
-        lsp-enable-symbol-highlighting nil
-        lsp-headerline-breadcrumb-enable nil
-        lsp-keep-workspace-alive nil
-        lsp-log-io nil
-        lsp-modeline-diagnostics-enable nil
-        lsp-modeline-code-actions-enable nil
-        lsp-signature-render-documentation nil
-        lsp-keymap-prefix "SPC c l")
+  (setq eglot-stay-out-of '(company)
+        eglot-connect-timeout 10
+        eglot-events-buffer-size 0
+        eglot-ignored-server-capabilities nil)
 
-  ;; https://github.com/emacs-lsp/lsp-mode/pull/2531
-  (defun lsp-tramp-connection@override (local-command &optional generate-error-file-fn)
-    "Create LSP stdio connection named name.
-LOCAL-COMMAND is either list of strings, string or function which
-returns the command to execute."
-    (defvar tramp-connection-properties)
-    (list :connect (lambda (filter sentinel name environment-fn)
-                     ;; Force a direct asynchronous process.
-                     (add-to-list 'tramp-connection-properties
-                                  (list (regexp-quote (file-remote-p default-directory))
-                                        "direct-async-process" t))
-                     (let* ((final-command (lsp-resolve-final-function
-                                            local-command))
-                            (process-name (generate-new-buffer-name name))
-                            (stderr-buf (format "*%s::stderr*" process-name))
-                            (err-buf (generate-new-buffer stderr-buf))
-                            (process-environment
-                             (lsp--compute-process-environment environment-fn))
-                            (proc (make-process
-                                   :name process-name
-                                   :buffer (format "*%s*" process-name)
-                                   :command final-command
-                                   :connection-type 'pipe
-                                   :coding 'no-conversion
-                                   :noquery t
-                                   :filter filter
-                                   :sentinel sentinel
-                                   :stderr err-buf
-                                   :file-handler t)))
-                       (cons proc proc)))
-          :test? (lambda () (-> local-command lsp-resolve-final-function
-                           lsp-server-present?))))
-  (advice-add 'lsp-tramp-connection :override #'lsp-tramp-connection@override)
+  (defun expand-absolute-name (name)
+    (if (file-name-absolute-p name)
+        (tramp-file-local-name
+         (expand-file-name
+          (concat (file-remote-p default-directory) name)))
+      name))
 
-  ;; https://github.com/emacs-lsp/lsp-mode/issues/2932
-  (defun lsp-restart ()
-    (interactive)
-    (lsp-disconnect)
-    (setq lsp--session nil)
-    (lsp))
+  (when (fboundp #'tabnine-completion-at-point)
+    (add-hook 'eglot-managed-mode-hook
+              (defun merge-eglot-with-tabnine ()
+                (remove-hook 'completion-at-point-functions #'eglot-completion-at-point t)
+                (add-hook 'completion-at-point-functions
+                          (cape-super-capf
+                           #'eglot-completion-at-point
+                           #'tabnine-completion-at-point) nil t))))
 
-  (general-def 'normal lsp-mode :definer 'minor-mode
-    "gr" 'xref-find-references)
+  (tyrant-def "cE" 'eglot)
 
-  (general-def lsp-mode
+  (general-def eglot--managed-mode
     :states '(normal insert motion emacs)
     :keymaps 'override
     :prefix-map 'tyrant-eglot-map
     :definer 'minor-mode
     :prefix "SPC"
     :non-normal-prefix "S-SPC"
-    "cl"  '(:keymap lsp-command-map)
-    "clR" '(lsp-restart :which-key "restart"))
-  :general
-  (tyrant-def "cL" 'lsp))
-
+    "ce"  (cons "eglot" (make-sparse-keymap))
+    "cea" 'eglot-code-actions
+    "ceb" 'eglot-events-buffer
+    "cer" 'eglot-rename
+    "ceR" 'eglot-reconnect
+    "cex" 'eglot-shutdown
+    "ceX" 'eglot-shutdown-all
+    "ce=" 'eglot-format))
 
 (provide 'editor-completion)
 ;;; editor-completion.el ends here
