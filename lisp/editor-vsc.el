@@ -85,7 +85,7 @@
 (use-package git-modes :straight t :defer t)
 
 (use-package git-timemachine
-  :straight t
+  :straight (git-timemachine :type git :repo "https://codeberg.org/pidu/git-timemachine" :files (:defaults))
   :config
   (general-def git-timemachine-mode-map
     "gt" '(:ignore t :which-key "git-timemachine"))
