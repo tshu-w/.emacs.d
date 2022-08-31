@@ -239,10 +239,9 @@
   (setq evil-cross-lines t
         evil-kill-on-visual-paste nil
         evil-move-beyond-eol t
-        evil-shift-width 2
         evil-want-C-i-jump t
         evil-want-fine-undo t
-        evil-want-visual-char-semi-exclusive t)
+        evil-v$-excludes-newline t)
 
   (setq evil-normal-state-cursor  '("DarkGoldenrod2" box)
         evil-insert-state-cursor  '("chartreuse3" (bar . 2))
