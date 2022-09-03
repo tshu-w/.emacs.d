@@ -634,6 +634,23 @@
         org-modern-table-vertical 1
         org-modern-timestamp nil))
 
+(use-package org-project
+  :straight (org-project :type git :host github :repo "delehef/org-project")
+  :init
+  (setq org-project-prompt-for-project t
+        org-project-todos-file org-project-file)
+  :config
+  (defun org-project-open ()
+    (interactive)
+    (if (project-current)
+      (org-project-open-todos)
+      (open-org-project-file)))
+  :general
+  (tyrant-def "op" 'org-project-open)
+  (general-def project-prefix-map
+    "o" 'org-project-quick-capture
+    "O" 'org-project-capture))
+
 (use-package org-reverse-datetree
   :straight t
   :commands (org-datetree-refile)
