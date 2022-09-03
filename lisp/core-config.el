@@ -241,8 +241,7 @@
 (use-package project
   :defer t
   :config
-  (setq project-current-inhibit-prompt t
-        project-vc-merge-submodules nil
+  (setq project-vc-merge-submodules nil
         project-switch-commands '((project-find-file "Find file")
                                   (project-find-regexp "Find regexp")
                                   (project-find-dir "Find directory")
