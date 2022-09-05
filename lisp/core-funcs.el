@@ -48,9 +48,6 @@ initialized with the current directory instead of filename."
                  (when (fboundp 'recentf-add-file)
                    (recentf-add-file new-name)
                    (recentf-remove-if-non-kept old-filename))
-                 (when (and (require 'projectile nil 'noerror)
-                            (projectile-project-p))
-                   (call-interactively #'projectile-invalidate-cache))
                  (message (cond ((and file-moved-p file-renamed-p)
                                  (concat "File Moved & Renamed\n"
                                          "From: " old-filename "\n"
@@ -106,9 +103,6 @@ initialized with the current directory instead of filename."
           (progn
             (delete-file filename t)
             (kill-buffer buffer)
-            (when (and (require 'projectile nil 'noerror)
-                       (projectile-project-p))
-              (call-interactively #'projectile-invalidate-cache))
             (message "File deleted: '%s'" filename))
         (message "Canceled: File deletion")))))
 
