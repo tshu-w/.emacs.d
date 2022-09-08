@@ -492,11 +492,11 @@
     "sk"    'org-move-subtree-up
     "sl"    'org-demote-subtree
     "sn"    'org-narrow-to-subtree
-    "sN"    'widen
     "sr"    'org-refile
     "sR"    'org-datetree-refile
     "ss"    'org-sparse-tree
     "sS"    'org-sort
+    "sw"    'widen
     "t"     (cons "tables" (make-sparse-keymap))
     "ta"    'org-table-align
     "tb"    'org-table-blank-field
