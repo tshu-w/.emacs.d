@@ -672,7 +672,7 @@
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory org-note-directory
-        org-roam-node-display-template (concat "${hierarchy:*} " (propertize "${tags:20}" 'face 'org-tag))
+        org-roam-node-display-template (concat "${hierarchy:*} ${backlinkscount:6} ${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
         org-roam-v2-ack t)
   :config
   ;; https://github.com/org-roam/org-roam/wiki/User-contributed-Tricks#showing-node-hierarchy
@@ -682,6 +682,20 @@
        (when (> level 0) (concat (org-roam-node-file-title node) " > "))
        (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
        (org-roam-node-title node))))
+
+  (cl-defmethod org-roam-node-directories ((node org-roam-node))
+    (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+        (format "(%s)" (car (split-string dirs "/")))
+      ""))
+
+  (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+    (let* ((count (caar (org-roam-db-query
+                         [:select (funcall count source)
+                                  :from links
+                                  :where (= dest $s1)
+                                  :and (= type "id")]
+                         (org-roam-node-id node)))))
+      (format "[%d]" count)))
 
   (defun org-roam-open-refs ()
     "Open REFs of the node at point."
@@ -704,24 +718,67 @@
           (unless (string-prefix-p "@" ref)
             (browse-url ref))))))
 
+  (defun force-org-rebuild-cache ()
+    "Rebuild the `org-mode' and `org-roam' cache."
+    (interactive)
+    (org-id-update-id-locations)
+    (org-roam-db-sync)
+    (org-roam-update-org-id-locations))
+
+  (with-eval-after-load 'embark
+    (defun org-roam-backlinks-query (node)
+      "Gets the backlinks of NODE with `org-roam-db-query'."
+      (org-roam-db-query
+       [:select [source dest]
+	        :from links
+	        :where (= dest $s1)
+	        :and (= type "id")]
+       (org-roam-node-id node)))
+
+    (defun org-roam-backlinks-p (source node)
+      "Predicate function that checks if NODE is a backlink of SOURCE."
+      (let* ((source-id (org-roam-node-id source))
+	     (backlinks (org-roam-backlinks-query source))
+	     (id (org-roam-node-id node))
+	     (id-list (list id source-id)))
+        (member id-list backlinks)))
+
+    (defun org-roam-backlinks--read-node-backlinks (source)
+      "Runs `org-roam-node-read' on the backlinks of SOURCE.
+ The predicate used as `org-roam-node-read''s filter-fn is
+ `org-roam-backlinks-p'."
+      (org-roam-node-read nil (apply-partially #'org-roam-backlinks-p source)))
+
+    (defun org-roam-backlinks-node-read (entry)
+      "Read a NODE and run `org-roam-backlinks--read-node-backlinks'."
+      (let* ((node (get-text-property 0 'node entry))
+             (backlink (org-roam-backlinks--read-node-backlinks node)))
+        (find-file (org-roam-node-file backlink))))
+
+    (embark-define-keymap embark-org-roam-map
+      "Keymap for Embark org roam node actions."
+      ("i" org-roam-node-insert)
+      ("b" org-roam-backlinks-node-read)
+      ("r" org-roam-node-random))
+
+    (add-to-list 'embark-keymap-alist '(org-roam-node . embark-org-roam-map)))
+
   (with-eval-after-load 'shackle
     (add-to-list 'shackle-rules '("*org-roam*" :align right)))
 
   (with-eval-after-load 'popper
     (add-to-list 'popper-reference-buffers '(org-roam-mode)))
 
-  (despot-def org-mode-map "ir" 'org-roam-node-insert)
+  (despot-def org-mode-map
+    "ir" 'org-roam-node-insert
+    "r"  (cons "roam" (make-sparse-keymap))
+    "rb" 'org-roam-buffer-toggle
+    "ro" 'org-roam-open-refs
+    "rt" 'org-roam-tag-add
+    "rT" 'org-roam-tag-delete)
   (general-def magit-section-mode-map "SPC" nil)
   :general
-  (tyrant-def
-    "or"  (cons "roam" (make-sparse-keymap))
-    "orb" 'org-roam-buffer-toggle
-    "orf" 'org-roam-node-find
-    "ori" 'org-roam-node-insert
-    "oro" 'org-roam-open-refs
-    "orr" 'org-roam-node-random
-    "ort" 'org-roam-tag-add
-    "orT" 'org-roam-tag-delete))
+  (tyrant-def "or" 'org-roam-node-find))
 
 (use-package org-roam-protocol
   :after org-protocol
