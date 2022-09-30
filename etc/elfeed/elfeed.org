@@ -28,6 +28,7 @@
 *** [[https://ruzkuku.com/all.atom][Webpresence of Philip K.]]
 *** [[https://updates.orgmode.org/feed/updates][Org-mode updates]] :ignore:
 *** [[https://with-emacs.com/rss.xml][with-emacs]]
+*** [[https://www.masteringemacs.org/feed][Mastering Emacs]]
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
