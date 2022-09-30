@@ -186,6 +186,7 @@ targets."
   :init
   (setq completion-cycle-threshold 3
         tab-always-indent 'complete
+        tab-first-completion 'eol
 
         corfu-auto t
         corfu-auto-prefix 1
