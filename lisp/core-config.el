@@ -159,7 +159,8 @@
   :defer t
   :config
   (setq dired-auto-revert-buffer t
-        dired-create-destination-dirs 'ask
+        dired-create-destination-dirs 'always
+        dired-do-revert-buffer t
         dired-dwim-target t
         dired-listing-switches "-aBhl --group-directories-first"
         dired-vc-rename-file t))
@@ -305,6 +306,7 @@ the unwritable tidbits."
         delete-trailing-lines nil
         eval-expression-print-length nil
         eval-expression-print-level nil
+        next-error-message-highlight t
         ;; save clipboard contents into kill-ring before replace them
         save-interprogram-paste-before-kill t))
 
@@ -351,7 +353,8 @@ the unwritable tidbits."
                                          xref-find-definitions-other-frame
                                          xref-find-references))
 
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read
+  (setq xref-search-program 'ripgrep
+        xref-show-definitions-function #'xref-show-definitions-completing-read
         xref-show-xrefs-function       #'xref-show-definitions-completing-read))
 
 (use-package whitespace
