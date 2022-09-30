@@ -17,6 +17,9 @@
   :straight t
   :init
   (setq magit-define-global-key-bindings nil)
+  (with-eval-after-load 'project
+    (define-key project-prefix-map "m" #'magit-project-status)
+    (add-to-list 'project-switch-commands '(magit-project-status "Magit") t))
   :config
   (setq magit-diff-refine-hunk t
         magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
