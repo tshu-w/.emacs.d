@@ -21,6 +21,25 @@
             (set-face-attribute 'font-lock-function-name-face nil :weight 'semi-bold)
             (set-face-attribute 'font-lock-keyword-face nil :weight 'semi-bold)))
 
+(add-hook 'after-load-theme-hook
+          (defun customize-tab-bar ()
+            "Customize tab-bar faces."
+            (set-face-attribute 'tab-bar nil
+                                :foreground 'unspecified
+                                :background 'unspecified
+                                :inherit 'unspecified)
+            (set-face-attribute 'tab-bar-tab nil
+                                :weight 'bold
+                                :box 'unspecified
+                                :foreground 'unspecified
+                                :background 'unspecified
+                                :inherit 'unspecified)
+            (set-face-attribute 'tab-bar-tab-inactive nil
+                                :box 'unspecified
+                                :foreground 'unspecified
+                                :background 'unspecified
+                                :inherit 'unspecified)))
+
 (use-package doom-themes
   :straight t
   :defer t
