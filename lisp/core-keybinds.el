@@ -16,7 +16,9 @@
         which-key-idle-secondary-delay 0.01
         which-key-max-description-length 32
         which-key-sort-order 'which-key-key-order-alpha
-        which-key-allow-evil-operators t))
+        which-key-allow-evil-operators t)
+
+  (push '((nil . "tab-bar-select-tab") . t) which-key-replacement-alist))
 
 (use-package general
   :straight t
@@ -130,6 +132,15 @@
     "lR"      'tab-bar-rename-tab
     "lt"      'other-tab-prefix
     "lu"      'tab-bar-undo-close-tab
+    "l1"      '("select tab 1..8" . tab-bar-select-tab)
+    "l2"      'tab-bar-select-tab
+    "l3"      'tab-bar-select-tab
+    "l4"      'tab-bar-select-tab
+    "l5"      'tab-bar-select-tab
+    "l6"      'tab-bar-select-tab
+    "l7"      'tab-bar-select-tab
+    "l8"      'tab-bar-select-tab
+    "l TAB"   'tab-bar-switch-to-last-tab
 
     "m"       (cons "major mode" (make-sparse-keymap))
 
