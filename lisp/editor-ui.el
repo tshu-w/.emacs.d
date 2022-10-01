@@ -55,6 +55,13 @@
   :custom-face
   (fringe ((t nil))))
 
+(use-package ef-themes
+  :straight t
+  :defer t
+  :config
+  (dotimes (n 5)
+    (set (intern (format "ef-themes-height-%s" n)) 1.0)))
+
 (use-package flucui-themes :straight t :defer t)
 
 (use-package humanoid-themes
@@ -99,6 +106,11 @@
                        doom-solarized-light
                        doom-tomorrow-day
                        berrys
+                       ef-day
+                       ef-duo-light
+                       ef-light
+                       ef-spring
+                       ef-summer
                        flucui-light
                        humanoid-light
                        kaolin-breeze
@@ -164,6 +176,11 @@
                       doom-wilmersdorf
                       doom-xcode
                       doom-zenburn
+                      ef-autumn
+                      ef-dark
+                      ef-duo-dark
+                      ef-night
+                      ef-winter
                       ;; flucui-dark
                       humanoid-dark
                       ;; kaolin-blossom
