@@ -11,10 +11,15 @@
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
 
-(defun load-theme@after (&rest _)
+(defun load-theme@run-hooks (&rest _)
   "Run `after-load-theme-hook'."
   (run-hooks 'after-load-theme-hook))
-(advice-add 'load-theme :after #'load-theme@after)
+(advice-add 'load-theme :after #'load-theme@run-hooks)
+
+(defun load-theme@theme-dont-propagate (&rest _)
+  "Discard all themes before loading new."
+  (mapc #'disable-theme custom-enabled-themes))
+(advice-add #'load-theme :before #'load-theme@theme-dont-propagate)
 
 (add-hook 'after-load-theme-hook
           (defun bolder-faces ()
@@ -197,7 +202,6 @@
 (if (boundp 'ns-system-appearance-change-functions)
     (add-hook 'ns-system-appearance-change-functions
               (defun load-theme-randomly (appearance)
-                (mapc #'disable-theme custom-enabled-themes)
                 (let* ((day (string-to-number
                              (format-time-string "%j" (current-time))))
                        (themes (pcase appearance
