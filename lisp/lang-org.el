@@ -275,9 +275,7 @@
     :config
     (defun org-capture-goto-link ()
       (let ((file (nth 1 (org-capture-get :target)))
-            (headline (replace-regexp-in-string
-                       "|" "-"
-                       (plist-get org-store-link-plist :description)))
+            (headline (plist-get org-store-link-plist :description))
             (link (plist-get org-store-link-plist :link)))
         (org-capture-put :target (list 'file+headline file headline))
         (widen)
@@ -384,6 +382,13 @@
                         ("action"   . ?a)
                         ("focused"  . ?f)
                         ("interest" . ?i)))
+
+  (defun org-link-make-string@replace-vertical-bar-in-description (fn link &optional description)
+    "Replace vertical-bar with hypen in org link `DESCRIPTION'."
+    (apply fn link (list
+                    (when description
+                     (replace-regexp-in-string "|" "-" description)))))
+  (advice-add 'org-link-make-string :around #'org-link-make-string@replace-vertical-bar-in-description)
 
   (progn
     (defmacro +org-emphasize (fname char)
