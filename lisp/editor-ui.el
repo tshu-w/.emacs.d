@@ -32,6 +32,7 @@
             (set-face-attribute 'tab-bar nil
                                 :foreground 'unspecified
                                 :background 'unspecified
+                                :box `(:line-width (-1 . 4) :color ,(face-background 'default))
                                 :inherit 'unspecified)
             (set-face-attribute 'tab-bar-tab nil
                                 :weight 'bold

@@ -314,11 +314,11 @@ the unwritable tidbits."
   :hook (after-init . tab-bar-mode)
   :config
   (setq tab-bar-close-button-show nil
-        tab-bar-new-button-show nil
         tab-bar-tab-hints t
         tab-bar-new-tab-choice "*scratch*"
         tab-bar-select-tab-modifiers '(super)
-        tab-prefix-map (make-sparse-keymap))
+        tab-prefix-map (make-sparse-keymap)
+        tab-bar-format '(tab-bar-format-align-right tab-bar-format-tabs tab-bar-separator))
 
   (defun tab-bar-switch-to-tab@override (name)
     "Like `tab-bar-switch-to-tab', but allow for the creation of a new, named tab on the fly."
