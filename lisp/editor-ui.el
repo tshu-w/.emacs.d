@@ -54,12 +54,6 @@
   (diff-hl-delete ((t (:background nil))))
   (diff-hl-insert ((t (:background nil)))))
 
-(use-package berrys-theme
-  :straight t
-  :defer t
-  :custom-face
-  (fringe ((t nil))))
-
 (use-package ef-themes
   :straight t
   :defer t
@@ -110,7 +104,6 @@
                        ;; doom-plain
                        doom-solarized-light
                        doom-tomorrow-day
-                       berrys
                        ef-day
                        ef-duo-light
                        ef-light
