@@ -106,10 +106,14 @@
                        doom-solarized-light
                        doom-tomorrow-day
                        ef-day
+                       ;; ef-deuteranopia-light
                        ef-duo-light
+                       ef-frost
                        ef-light
                        ef-spring
                        ef-summer
+                       ef-trio-light
+                       ef-tritanopia-light
                        flucui-light
                        humanoid-light
                        kaolin-breeze
@@ -176,9 +180,13 @@
                       doom-xcode
                       doom-zenburn
                       ef-autumn
+                      ef-bio
                       ef-dark
+                      ;; ef-deuteranopia-dark
                       ef-duo-dark
                       ef-night
+                      ef-trio-dark
+                      ef-tritanopia-dark
                       ef-winter
                       ;; flucui-dark
                       humanoid-dark
