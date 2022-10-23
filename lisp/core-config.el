@@ -313,7 +313,8 @@ the unwritable tidbits."
 (use-package tab-bar
   :hook (after-init . tab-bar-mode)
   :config
-  (setq tab-bar-close-button-show nil
+  (setq tab-bar-show nil
+        tab-bar-close-button-show nil
         tab-bar-tab-hints t
         tab-bar-new-tab-choice "*scratch*"
         tab-bar-select-tab-modifiers '(super)
