@@ -631,7 +631,7 @@
   :straight t
   :hook (org-mode . org-modern-mode)
   :config
-  (setq org-modern-star '("◉" "○" "⁕" "✽")
+  (setq org-modern-star '("☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")
         org-modern-todo nil
         org-modern-priority nil
         org-modern-statistics nil
