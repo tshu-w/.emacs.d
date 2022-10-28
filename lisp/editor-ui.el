@@ -105,6 +105,7 @@
                        ;; doom-plain
                        doom-solarized-light
                        doom-tomorrow-day
+                       ef-cyprus
                        ef-day
                        ;; ef-deuteranopia-light
                        ef-duo-light
@@ -181,6 +182,7 @@
                       doom-zenburn
                       ef-autumn
                       ef-bio
+                      ef-cherie
                       ef-dark
                       ;; ef-deuteranopia-dark
                       ef-duo-dark
