@@ -133,7 +133,6 @@
               (todo "HOLD"))
              ((org-agenda-archives-mode t)
               (org-agenda-compact-blocks nil)
-              (org-agenda-start-with-log-mode 'clockcheck)
               (org-agenda-show-all-dates nil)))))
 
     (defun org-super-agenda (&optional arg)
