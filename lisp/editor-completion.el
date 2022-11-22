@@ -227,6 +227,20 @@ targets."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
+(use-package prescient
+  :straight t
+  :hook (after-init . prescient-persist-mode)
+  :init
+  (use-package vertico-prescient
+    :straight t
+    :hook (vertico-mode . vertico-prescient-mode))
+  (use-package corfu-prescient
+    :straight t
+    :hook (corfu-mode . corfu-prescient-mode))
+  :config
+  (setq prescient-sort-full-matches-first t
+        prescient-sort-length-enable nil))
+
 (use-package tabnine-capf
   :straight (:host github :repo "50ways2sayhard/tabnine-capf" :files ("*.el" "*.sh"))
   :hook (kill-emacs . tabnine-capf-kill-process)
