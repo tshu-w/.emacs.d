@@ -602,6 +602,10 @@
       "ZQ" 'org-capture-kill
       "ZR" 'org-capture-refile)))
 
+(use-package orgonomic
+  :straight (orgonomic :host github :repo "aaronjensen/emacs-orgonomic")
+  :hook (org-mode . orgonomic-mode))
+
 (use-package org-appear
   :straight t
   :hook (org-mode . org-appear-mode)
