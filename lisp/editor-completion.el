@@ -285,6 +285,9 @@ Just put this function in `hippie-expand-try-functions-list'."
         eglot-events-buffer-size 0
         eglot-ignored-server-capabilities nil)
 
+  (add-to-list 'eglot-server-programs `((tex-mode context-mode texinfo-mode bibtex-mode) .
+                                        ,(eglot-alternatives '(("digestif") ("texlab")))))
+
   (defun expand-absolute-name (name)
     (if (file-name-absolute-p name)
         (tramp-file-local-name
@@ -301,8 +304,6 @@ Just put this function in `hippie-expand-try-functions-list'."
                            #'eglot-completion-at-point
                            #'tabnine-completion-at-point) nil t))))
 
-  (tyrant-def "cE" 'eglot)
-
   (general-def eglot--managed-mode
     :states '(normal insert motion emacs)
     :keymaps 'override
@@ -317,7 +318,9 @@ Just put this function in `hippie-expand-try-functions-list'."
     "ceR" 'eglot-reconnect
     "cex" 'eglot-shutdown
     "ceX" 'eglot-shutdown-all
-    "ce=" 'eglot-format))
+    "ce=" 'eglot-format)
+  :general
+  (tyrant-def "cE" 'eglot))
 
 (provide 'editor-completion)
 ;;; editor-completion.el ends here
