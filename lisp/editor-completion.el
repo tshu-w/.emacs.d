@@ -193,7 +193,7 @@ targets."
         corfu-bar-width 0.5
         corfu-cycle t
         corfu-on-exact-match nil
-        corfu-preselect-first nil)
+        corfu-preselect nil)
 
   (use-package corfu-history
     :hook (global-corfu-mode . corfu-history-mode))
