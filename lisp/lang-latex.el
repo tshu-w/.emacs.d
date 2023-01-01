@@ -12,10 +12,8 @@
   :straight auctex
   :mode ("\\.[tT]e[xX]\\'" . TeX-tex-mode)
   :config
-  (setq TeX-auto-save t
-        TeX-command-default "LatexMk"
-        TeX-master t
-        TeX-parse-self t
+  (setq-default TeX-master nil)
+  (setq TeX-parse-self t
         TeX-save-query nil
         TeX-source-correlate-start-server t
         TeX-view-program-list '(("Preview.app" "open -a Preview.app %o")
@@ -28,7 +26,6 @@
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
-  (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
@@ -45,6 +42,8 @@
       (TeX-command TeX-command-default 'TeX-master-file -1)))
 
   ;; Rebindings for TeX-font
+  (with-eval-after-load 'latex
+    (add-to-list 'LaTeX-font-list '(?\C-l "\\underline{"     "}")))
   (defun font-bold () (interactive) (TeX-font nil ?\C-b))
   (defun font-medium () (interactive) (TeX-font nil ?\C-m))
   (defun font-code () (interactive) (TeX-font nil ?\C-t))
@@ -57,6 +56,7 @@
   (defun font-normal () (interactive) (TeX-font nil ?\C-n))
   (defun font-serif () (interactive) (TeX-font nil ?\C-r))
   (defun font-oblique () (interactive) (TeX-font nil ?\C-s))
+  (defun font-underline () (interactive) (TeX-font nil ?\C-l))
   (defun font-upright () (interactive) (TeX-font nil ?\C-u))
 
   (general-def TeX-mode-map "<H-S-mouse-1>" 'TeX-view)
@@ -64,19 +64,12 @@
   (despot-def (TeX-mode-map LaTeX-mode-map)
     :major-modes '(tex-mode latex-mode)
     ","             'TeX-command-master
-    "\\"            'TeX-insert-macro                          ;; C-c C-m
-    "-"             'TeX-recenter-output-buffer                ;; C-c C-l
-    "%"             'TeX-comment-or-uncomment-paragraph        ;; C-c %
-    ";"             'comment-or-uncomment-region               ;; C-c ; or C-c :
     ;; TeX-command-run-all runs compile and open the viewer
     "a"             'TeX-command-run-all                       ;; C-c C-a
     "b"             'TeX-build
-    ;; TeX-doc is a very slow function
-    "h"             (cons "help" (make-sparse-keymap))
-    "hd"            'TeX-doc
+    "h"             'TeX-doc
     "k"             'TeX-kill-job                              ;; C-c C-k
     "l"             'TeX-recenter-output-buffer                ;; C-c C-l
-    "m"             'TeX-insert-macro                          ;; C-c C-m
     "n"             'TeX-next-error                            ;; C-c `
     "N"             'TeX-previous-error                        ;; M-g p
     "v"             'TeX-view                                  ;; C-c C-v
@@ -106,17 +99,13 @@
 
   (despot-def LaTeX-mode-map
     :major-modes '(latex-mode)
-    "*"                'LaTeX-mark-section                  ;; C-c *
     "."                'LaTeX-mark-environment              ;; C-c .
-    "c"                'LaTeX-close-environment             ;; C-c ]
     "e"                'LaTeX-environment                   ;; C-c C-e
     "f"                (cons "fill" (make-sparse-keymap))
     "fe"               'LaTeX-fill-environment              ;; C-c C-q C-e
     "fp"               'LaTeX-fill-paragraph                ;; C-c C-q C-p
     "fr"               'LaTeX-fill-region                   ;; C-c C-q C-r
     "fs"               'LaTeX-fill-section                  ;; C-c C-q C-s
-    "i"                (cons "insert" (make-sparse-keymap))
-    "ii"               'LaTeX-insert-item                   ;; C-c C-j
     "p"                (cons "preview" (make-sparse-keymap))
     "pb"               'preview-buffer
     "pc"               'preview-clearout
@@ -129,6 +118,7 @@
     "s"                'LaTeX-section                       ;; C-c C-s
     "x"                (cons "text/fonts" (make-sparse-keymap))
     "xB"               'font-medium
+    "xu"               'font-underline
     "xf"               (cons "fonts" (make-sparse-keymap))
     "xfa"              'font-calligraphic
     "xfn"              'font-normal
@@ -137,45 +127,12 @@
     "xr"               'font-clear
     "xo"               'font-oblique))
 
-(use-package reftex
-  :hook (TeX-mode . reftex-mode)
-  :config
-  (setq reftex-default-bibliography '("~/Documents/Bibliography/references.bib")
-        reftex-plug-into-AUCTeX '(nil nil t t t)
-        reftex-use-fonts t)
-
-  (despot-def (TeX-mode-map LaTeX-mode-map)
-    :major-modes '(tex-mode latex-mode)
-    "r"     (cons "reftex" (make-sparse-keymap))
-    "rc"    'reftex-citation
-    "rg"    'reftex-grep-document
-    "ri"    'reftex-index-selection-or-word
-    "rI"    'reftex-display-index
-    "r TAB" 'reftex-index
-    "rl"    'reftex-label
-    "rp"    'reftex-index-phrase-selection-or-word
-    "rP"    'reftex-index-visit-phrases-buffer
-    "rr"    'reftex-reference
-    "rs"    'reftex-search-document
-    "rt"    'reftex-toc
-    "rT"    'reftex-toc-recenter
-    "rv"    'reftex-view-crossref))
-
 (use-package auctex-latexmk
-  :straight (auctex-latexmk :type git :host github :repo "tshu-w/auctex-latexmk")
+  :straight t
   :after tex
   :config
   (auctex-latexmk-setup)
-  (setq-default TeX-command-default "LatexMk")
   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
-
-(use-package aas
-  :straight t
-  :hook ((TeX-mode org-mode) . aas-activate-for-major-mode))
-
-(use-package laas
-  :straight t
-  :hook (TeX-mode . laas-mode))
 
 (use-package evil-tex
   :straight t
