@@ -54,7 +54,7 @@
   :defer t
   :init
   (setq completion-styles '(orderless basic)
-        completion-category-defaults nil)
+        completion-category-overrides '((file (styles basic partial-completion))))
   :config
   (defun flex-if-twiddle (pattern _index _total)
     (when (string-suffix-p "~" pattern)
@@ -233,10 +233,14 @@ targets."
   :init
   (use-package vertico-prescient
     :straight t
-    :hook (vertico-mode . vertico-prescient-mode))
+    :hook (vertico-mode . vertico-prescient-mode)
+    :init
+    (setq vertico-prescient-enable-filtering nil))
   (use-package corfu-prescient
     :straight t
-    :hook (corfu-mode . corfu-prescient-mode))
+    :hook (corfu-mode . corfu-prescient-mode)
+    :init
+    (setq corfu-prescient-enable-filtering nil))
   :config
   (setq prescient-sort-full-matches-first t
         prescient-sort-length-enable nil))
@@ -282,7 +286,6 @@ Just put this function in `hippie-expand-try-functions-list'."
   :config
   (setq eglot-stay-out-of '(company)
         eglot-connect-timeout 10
-        eglot-events-buffer-size 0
         eglot-ignored-server-capabilities nil)
 
   (add-to-list 'eglot-server-programs `((tex-mode context-mode texinfo-mode bibtex-mode) .
