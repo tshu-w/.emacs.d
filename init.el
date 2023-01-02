@@ -1,6 +1,6 @@
 ;;; init.el --- Tianshu Wang Personal Emacs Configuration. -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020-2022  Tianshu Wang
+;; Copyright (C) 2020-2023  Tianshu Wang
 
 ;; Author: Tianshu Wang <wang@tianshu.me>
 
