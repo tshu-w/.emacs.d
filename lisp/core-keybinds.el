@@ -352,9 +352,6 @@
 
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
-  (general-def '(normal motion) "s" 'evil-avy-goto-char-2)
-  (general-def 'operator "z" 'evil-avy-goto-char-2)
-
   ;; https://github.com/emacs-evil/evil/issues/1561
   (defun disable-evil-local-mode-in-minibuffer (&rest _args)
     (when (and (minibufferp) (not evil-want-minibuffer))
