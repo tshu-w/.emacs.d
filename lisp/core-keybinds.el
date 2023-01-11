@@ -352,12 +352,6 @@
 
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
-  ;; https://github.com/emacs-evil/evil/issues/1561
-  (defun disable-evil-local-mode-in-minibuffer (&rest _args)
-    (when (and (minibufferp) (not evil-want-minibuffer))
-      (evil-local-mode -1)))
-  (advice-add 'set-window-buffer :after #'disable-evil-local-mode-in-minibuffer)
-
   (general-def 'normal "zf" 'reposition-window)
   (general-def 'insert [remap evil-complete-previous] 'hippie-expand))
 
