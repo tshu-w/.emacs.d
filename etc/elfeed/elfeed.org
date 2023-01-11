@@ -37,7 +37,7 @@
 *** [[http://cos.name/feed/][统计之都]]
 *** [[http://gradientscience.org/feed.xml][gradient science]]
 *** [[https://deep-and-shallow.com/feed/][Deep & Shallow]]
-*** [[https://feeds.feedburner.com/MachineLearningMastery][Machine Learning Mastery]]
+*** [[https://feeds.feedburner.com/MachineLearningMastery][Machine Learning Mastery]] :ignore:
 *** [[https://hanxiao.io/atom.xml][Han Xiao Tech Blog - Neural Search & AI Engineering]]
 *** [[https://jalammar.github.io/feed.xml][Jay Alammar - Visualizing machine learning one concept at a time.]]
 *** [[https://jbarrow.ai/feed.xml][Joe Barrow]]
@@ -179,12 +179,13 @@
 ** [[http://wanqu.co/feed][湾区日报]]
 ** [[http://www.ifanr.com/feed][爱范儿 · Beats of Bits]]
 ** [[https://feeds.feedburner.com/letscorp/aDmw][墙外楼]]
-** [[https://rsshub.app/houxu][后续]]
+** [[https://rsshub.app/houxu][后续]] :ignore:
 ** [[https://chinafactcheck.com/?feed=rss][有据 | 国际新闻事实核查]]
 ** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]] :ignore:
 ** [[https://36kr.com/feed][36 氪]] :ignore:
+** [[https://rsshub.app/baai/hub][智源]]
 * Resources :elfeed:Resources:
 ** [[http://www.abskoop.com/rss][ahhhhfs-分享快乐]]
 ** [[http://www.salttiger.com/index.php/feed/][SaltTiger]]
