@@ -57,7 +57,8 @@
   :straight t
   :after magit
   :init
-  (setq forge-add-default-bindings nil))
+  (setq forge-add-default-bindings nil
+        forge-database-connector 'sqlite-builtin))
 
 (use-package transient
   :straight t

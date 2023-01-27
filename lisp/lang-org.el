@@ -677,6 +677,7 @@
         '(("d" "default" plain "" :target
            (file+head "${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
            :unnarrowed t :immediate-finish t))
+        org-roam-database-connector 'sqlite-builtin
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory org-note-directory

@@ -51,9 +51,9 @@
   :defer t
   :custom-face
   ;; fix doom-theme diff-hl face
-  (diff-hl-change ((t (:background nil))))
-  (diff-hl-delete ((t (:background nil))))
-  (diff-hl-insert ((t (:background nil)))))
+  (diff-hl-change ((t (:background unspecified))))
+  (diff-hl-delete ((t (:background unspecified))))
+  (diff-hl-insert ((t (:background unspecified)))))
 
 (use-package ef-themes
   :straight t
