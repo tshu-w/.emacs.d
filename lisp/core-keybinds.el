@@ -338,17 +338,12 @@
       (list (point-min) (point-max)))
     (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer))
 
-  ;; This will keep eldoc active when you are in a method and you go in insert mode.
-  (with-eval-after-load 'eldoc
-    (eldoc-add-command #'evil-insert)
-    (eldoc-add-command #'evil-insert-line)
-    (eldoc-add-command #'evil-append)
-    (eldoc-add-command #'evil-append-line)
-    (eldoc-add-command #'evil-force-normal-state)
-    (eldoc-add-command #'evil-cp-insert)
-    (eldoc-add-command #'evil-cp-insert-at-end-of-form)
-    (eldoc-add-command #'evil-cp-insert-at-beginning-of-form)
-    (eldoc-add-command #'evil-cp-append))
+  ;; allow eldoc to trigger directly after changing modes
+  (eldoc-add-command #'evil-normal-state
+                     #'evil-insert
+                     #'evil-change
+                     #'evil-delete
+                     #'evil-replace)
 
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
