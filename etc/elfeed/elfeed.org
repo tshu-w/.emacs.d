@@ -51,6 +51,7 @@
 *** [[https://wandb.ai/fully-connected/rss.xml][Weights & Biases]]
 *** [[https://wandb.ai/public-reports/rss.xml][Weights & Biases]] :ignore:
 *** [[https://www.zeta-alpha.com/blog-feed.xml][Zeta Alpha]]
+*** [[https://amatriain.net/blog/feed.xml][AI, software, tech, and people, not in that order... by X Feed]]
 ** [[feed://eugene-wei.squarespace.com/blog?format=rss][Remains of the Day]]
 ** [[http://0x100.club][V for Vendetta]]
 ** [[http://azeril.com/feed.xml][Microdust]] :ignore:
