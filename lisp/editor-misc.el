@@ -26,6 +26,15 @@
 
     (setq alert-default-style 'notifier)))
 
+(use-package atomic-chrome
+  :straight t
+  :hook (after-init . atomic-chrome-start-server)
+  :config
+  (setq atomic-chrome-extension-type-list '(ghost-text)
+        atomic-chrome-url-major-mode-alist
+        '(("overleaf\\.com" . TeX-tex-mode)
+          ("github\\.com" . markdown-mode))))
+
 (use-package dumb-jump
   :straight t
   :defer t
