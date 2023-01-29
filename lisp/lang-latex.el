@@ -169,9 +169,9 @@
           (cons 'bibtex-key
                 (bibtex-key-in-head)))))
     (embark-define-keymap bibtex-key-embark-map
-                          "Embark keymap for Zetteldeft links"
-                          ("f" 'citar-open)
-                          ("n" 'citar-open-notes))
+      "Embark keymap for Zetteldeft links"
+      ("f" 'citar-open)
+      ("n" 'citar-open-notes))
     (add-to-list 'embark-keymap-alist '(bibtex-key . bibtex-key-embark-map)))
   :config
   (citar-embark-mode)
@@ -219,7 +219,7 @@
         ebib-notes-template-specifiers '((?k . ebib-create-key)
                                          (?i . ebib-create-id)
                                          (?t . ebib-create-org-title)
-					 (?d . ebib-create-org-description)
+					                     (?d . ebib-create-org-description)
                                          (?l . ebib-create-org-link)
                                          (?s . ebib-create-org-time-stamp))
         ebib-preload-bib-files bibtex-files
@@ -243,6 +243,25 @@
     :group 'ebib
     :type 'string)
 
+  ;; copied from https://github.com/mpedramfar/zotra-cli
+  (defcustom ebib-zotero-url-cleanup-functions
+    '(ebib-zotero-url-cleanup--arxiv)
+    "Currently, the Zotero translation server can't handle links to pdf files.
+(See https://github.com/zotero/translation-server/issues/70).
+These functions provide a way to fix the issue by manually changing the link to
+a pdf to a link to another url for the article.
+Each function in this list should take a url and return a url. If the function is
+not applicable, it should return its input without change."
+    :group 'zotra
+    :type 'hook)
+
+  (defun ebib-zotero-url-cleanup--arxiv (url)
+    (if (string-match
+         "^\\(https?://\\)?\\(www\.\\)?arxiv.org/pdf/\\(.*\\)\.pdf" url)
+        (concat
+         "https://arxiv.org/abs/"
+         (match-string-no-properties 3 url)) url))
+
   (defun ebib-zotero-translate (item server-path &optional export-format)
     "Convert item to EXPORT-FORMAT entry through `ebib-zotero-translation-server'."
     (let ((export-format (or export-format
@@ -253,23 +272,32 @@
   (defun ebib-zotero-import-url (url)
     "Fetch a entry from zotero translation server via a URL.
 The entry is stored in the current database."
-    (interactive "MURL: ")
+    (interactive
+     (list (read-string
+            "url: "
+            (ignore-errors (current-kill 0 t)))))
+    (mapc (lambda (x)
+            (setq url (funcall x url)))
+          ebib-zotero-url-cleanup-functions)
     (with-temp-buffer
       (insert (ebib-zotero-translate url "web"))
       (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
- 	(if (ebib--goto-entry-in-index (car entry-keys))
- 	    (ebib--update-entry-buffer)))))
+ 	    (if (ebib--goto-entry-in-index (car entry-keys))
+ 	        (ebib--update-entry-buffer)))))
 
   (defun ebib-zotero-import-identifier (identifier)
     "Fetch a entry from zotero translation server via an IDENTIFIER.
 The entry is stored in the current database,
 and the identifier can be DOI, ISBN, PMID, or arXiv ID."
-    (interactive "MIDENTIFIER: ")
+    (interactive
+     (list (read-string
+            "identifier: "
+            (ignore-errors (current-kill 0 t)))))
     (with-temp-buffer
       (insert (ebib-zotero-translate identifier "search"))
       (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
- 	(if (ebib--goto-entry-in-index (car entry-keys))
- 	    (ebib--update-entry-buffer)))))
+ 	    (if (ebib--goto-entry-in-index (car entry-keys))
+ 	        (ebib--update-entry-buffer)))))
 
   (defun ebib-zotero-protocol-handler (info)
     "Process an org-protocol://ebib-zotero?href= style url with INFO.
