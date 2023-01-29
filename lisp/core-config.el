@@ -47,8 +47,9 @@
 ;; use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 
-;; widen `fill-column'
-(setq-default fill-column 80)
+;; change `tab-width' and `fill-column'
+(setq-default tab-width 4
+              fill-column 80)
 
 ;; no beep and visual blinking
 (setq ring-bell-function 'ignore
