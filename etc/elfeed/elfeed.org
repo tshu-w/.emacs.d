@@ -2,6 +2,7 @@
 
 * Blog :elfeed:Blog:
 ** Emacs :Emacs:
+** [[https://robbmann.io/index.xml][robbmann]]
 *** [[http://blog.binchen.org/rss.xml][Chen's blog]]
 *** [[http://blog.lujun9972.win/emacs-document/rss.xml][EMACS-DOCUMENT]]
 *** [[http://blog.lujun9972.win/rss.xml][暗无天日]]
@@ -143,6 +144,7 @@
 ** [[https://type.cyhsu.xyz/feed.xml][Neverland]]
 ** [[https://typeof.net/atom.xml][Typeof.net]]
 ** [[https://unblock256.substack.com/feed][un.Block Weekly]]
+** [[https://unbug.github.io/feed.xml][Micropaper]]
 ** [[https://utgd.net/feed][UNTAG]]
 ** [[https://vim0.com/index.xml][咸糖]]
 ** [[https://weekly.ecnelises.com/feed][混沌周刊]]
