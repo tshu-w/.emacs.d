@@ -217,7 +217,7 @@
 
 (use-package doom-modeline
   :straight t
-  :hook ((after-load-theme . doom-modeline-mode)
+  :hook ((after-init . doom-modeline-mode)
          (after-load-theme . smaller-modeline))
   :config
   (setq inhibit-compacting-font-caches t
@@ -264,7 +264,7 @@
         writeroom-fringes-outside-margins nil
         writeroom-fullscreen-effect nil
         writeroom-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode dired-mode)
-        writeroom-major-modes-exceptions '(process-menu-mode proced-mode)
+        writeroom-major-modes-exceptions '(process-menu-mode proced-mode backtrace-mode)
         writeroom-maximize-window nil
         writeroom-mode-line t
         writeroom-mode-line-toggle-position 'mode-line-format)
