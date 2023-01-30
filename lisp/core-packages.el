@@ -62,12 +62,17 @@
 
 (use-package restart-emacs
   :straight t
-  :commands restart-emacs-debug-init
+  :commands (restart-emacs-debug-init restart-emacs-without-desktop)
   :config
   (defun restart-emacs-debug-init (&optional args)
     "Restart emacs and enable debug-init."
     (interactive)
-    (restart-emacs (cons "--debug-init" args))))
+    (restart-emacs (cons "--debug-init" args)))
+
+  (defun restart-emacs-without-desktop (&optional args)
+    "Restart emacs without desktop."
+    (interactive)
+    (restart-emacs (cons "--no-desktop" args))))
 
 (provide 'core-packages)
 ;;; core-packages.el ends here
