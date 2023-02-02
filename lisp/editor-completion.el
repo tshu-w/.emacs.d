@@ -84,9 +84,20 @@
         consult-preview-key (kbd "M-.")
         consult-ripgrep-args "rg --hidden --glob \"!.git/\" --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --line-number .")
 
-  (consult-customize consult-theme :preview-key '(:debounce 0.2 any)
+  (defun consult-delete-default-contents()
+    (remove-hook 'pre-command-hook 'consult-delete-default-contents)
+    (cond ((member this-command '(self-insert-command))
+           (delete-minibuffer-contents))
+          (t (put-text-property (minibuffer-prompt-end) (point-max) 'face 'default))))
+
+  (consult-customize consult-theme
+                     :preview-key '(:debounce 0.2 any)
                      consult-goto-line consult-imenu consult-line
-                     :preview-key 'any)
+                     :preview-key 'any
+                     consult-line
+                     :initial (when-let ((string (thing-at-point 'word)))
+                                (add-hook 'pre-command-hook 'consult-delete-default-contents)
+                                (propertize string 'face 'shadow)))
   :general
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
