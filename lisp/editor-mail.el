@@ -33,7 +33,6 @@
         mu4e-completing-read-function 'completing-read
         mu4e-compose-complete-only-personal t
         mu4e-compose-dont-reply-to-self t
-        mu4e-compose-signature-auto-include nil
         mu4e-compose-reply-ignore-address '("not?\\(?:_-\\)?reply")
         mu4e-confirm-quit nil
         mu4e-headers-fields '((:account . 10)
@@ -43,24 +42,6 @@
                               (:subject))
         mu4e-hide-index-messages t
         mu4e-use-fancy-chars t)
-
-  ;; https://macowners.club/posts/signature-above-cited-text-mu4e/
-  (defun message-insert-signature-at-point (pmode)
-    "Function to insert signature at point."
-    (when pmode (mu4e-compose-goto-top))
-    (interactive)
-    (require 'message)
-    (message-goto-body)
-    (save-restriction
-      (narrow-to-region (point) (point))
-      (message-insert-signature))
-    (mu4e-compose-goto-top))
-
-  ;; add them to the hooks with appropriate input arguments
-  (add-hook 'mu4e-compose-mode-hook
-            (lambda () (message-insert-signature-at-point nil)) t)
-  (add-hook 'mu4e-compose-pre-hook
-            (lambda () (message-insert-signature-at-point t)) t)
 
   ;; Add a column to display what email account the email belongs to.
   (add-to-list 'mu4e-header-info-custom
