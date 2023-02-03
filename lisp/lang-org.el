@@ -230,7 +230,7 @@
             ("ry" "Yesterday" plain
              (file+function org-log-file
                             (lambda () (org-reverse-datetree-goto-date-in-file
-                                   (time-add (current-time) (days-to-time -1)))))
+                                        (time-add (current-time) (days-to-time -1)))))
              "%?\n%i\n" :immediate-finish t :jump-to-captured t)
             ("rt" "Today" plain
              (file+function org-log-file
@@ -386,7 +386,7 @@
     "Replace vertical-bar with hypen in org link `DESCRIPTION'."
     (apply fn link (list
                     (when description
-                     (replace-regexp-in-string "|" "-" description)))))
+                      (replace-regexp-in-string "|" "-" description)))))
   (advice-add 'org-link-make-string :around #'org-link-make-string@replace-vertical-bar-in-description)
 
   (progn
@@ -651,7 +651,7 @@
   (defun org-project-open ()
     (interactive)
     (if (project-current)
-      (org-project-open-todos)
+        (org-project-open-todos)
       (open-org-project-file)))
   :general
   (tyrant-def "op" 'org-project-open)
@@ -739,17 +739,17 @@
       "Gets the backlinks of NODE with `org-roam-db-query'."
       (org-roam-db-query
        [:select [source dest]
-	        :from links
-	        :where (= dest $s1)
-	        :and (= type "id")]
+	            :from links
+	            :where (= dest $s1)
+	            :and (= type "id")]
        (org-roam-node-id node)))
 
     (defun org-roam-backlinks-p (source node)
       "Predicate function that checks if NODE is a backlink of SOURCE."
       (let* ((source-id (org-roam-node-id source))
-	     (backlinks (org-roam-backlinks-query source))
-	     (id (org-roam-node-id node))
-	     (id-list (list id source-id)))
+	         (backlinks (org-roam-backlinks-query source))
+	         (id (org-roam-node-id node))
+	         (id-list (list id source-id)))
         (member id-list backlinks)))
 
     (defun org-roam-backlinks--read-node-backlinks (source)
@@ -764,12 +764,12 @@
              (backlink (org-roam-backlinks--read-node-backlinks node)))
         (find-file (org-roam-node-file backlink))))
 
-    (embark-define-keymap embark-org-roam-map
-      "Keymap for Embark org roam node actions."
-      ("i" org-roam-node-insert)
-      ("b" org-roam-backlinks-node-read)
-      ("r" org-roam-node-random))
-
+    (defvar-keymap embark-org-roam-map
+      :doc "Keymap for Embark org roam node actions."
+      :parent embark-general-map
+      "i" #'org-roam-node-insert
+      "b" #'org-roam-backlinks-node-read
+      "r" #'org-roam-node-random)
     (add-to-list 'embark-keymap-alist '(org-roam-node . embark-org-roam-map)))
 
   (with-eval-after-load 'shackle

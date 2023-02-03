@@ -168,10 +168,11 @@
         (when (looking-at bibtex-entry-maybe-empty-head)
           (cons 'bibtex-key
                 (bibtex-key-in-head)))))
-    (embark-define-keymap bibtex-key-embark-map
-      "Embark keymap for Zetteldeft links"
-      ("f" 'citar-open)
-      ("n" 'citar-open-notes))
+    (defvar-keymap bibtex-key-embark-map
+      :doc "Embark keymap for Zetteldeft links"
+      :parent embark-general-map
+      "f" #'citar-open
+      "n" #'citar-open-notes)
     (add-to-list 'embark-keymap-alist '(bibtex-key . bibtex-key-embark-map)))
   :config
   (citar-embark-mode)
