@@ -227,41 +227,6 @@ reuse it's window, otherwise create new one."
   :config
   (rime-regexp-load-rime))
 
-(use-package tabspaces
-  :straight t
-  :hook (tab-bar-mode . tabspaces-mode)
-  :init
-  (setq tabspaces-keymap-prefix nil)
-  :config
-  (defun project-open-in-tab (project)
-    (interactive (list (project-prompt-project-dir)))
-    (if (member (file-name-nondirectory (directory-file-name project)) (tabspaces--list-tabspaces))
-        (tabspaces-switch-or-create-workspace (file-name-nondirectory (directory-file-name project)))
-      (tab-bar-new-tab)
-      (project-switch-project project)
-      (tab-bar-rename-tab (file-name-nondirectory (directory-file-name project)))))
-
-  (with-eval-after-load 'consult
-    ;; hide full buffer list (still available with "b" prefix)
-    (consult-customize consult--source-buffer :hidden t :default nil)
-    ;; set consult-workspace buffer list
-    (defvar consult--source-workspace
-      (list :name     "Workspace Buffers"
-            :narrow   ?w
-            :history  'buffer-name-history
-            :category 'buffer
-            :state    #'consult--buffer-state
-            :default  t
-            :items    (lambda () (consult--buffer-query
-                             :predicate #'tabspaces--local-buffer-p
-                             :sort 'visibility
-                             :as #'buffer-name)))
-
-      "Set workspace buffer list for consult-buffer.")
-    (add-to-list 'consult-buffer-sources 'consult--source-workspace))
-  :general
-  (tyrant-def "pt" 'project-open-in-tab))
-
 (use-package terminal-here
   :straight t
   :config

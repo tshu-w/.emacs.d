@@ -330,7 +330,16 @@ the unwritable tidbits."
         (tab-bar-select-tab (1+ tab-number))
       (tab-bar-new-tab)
       (tab-bar-rename-tab name)))
-  (advice-add #'tab-bar-switch-to-tab :override #'tab-bar-switch-to-tab@override))
+  (advice-add #'tab-bar-switch-to-tab :override #'tab-bar-switch-to-tab@override)
+
+  (defun project-open-in-tab (project)
+    (interactive (list (project-prompt-project-dir)))
+    (if-let ((tab-number (tab-bar--tab-index-by-name
+                          (file-name-nondirectory (directory-file-name project)))))
+        (tab-bar-select-tab (1+ tab-number))
+      (tab-bar-new-tab)
+      (project-switch-project project)
+      (tab-bar-rename-tab (file-name-nondirectory (directory-file-name project))))))
 
 (use-package tramp
   :defer t
