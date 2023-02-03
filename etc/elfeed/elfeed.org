@@ -2,7 +2,6 @@
 
 * Blog :elfeed:Blog:
 ** Emacs :Emacs:
-** [[https://robbmann.io/index.xml][robbmann]]
 *** [[http://blog.binchen.org/rss.xml][Chen's blog]]
 *** [[http://blog.lujun9972.win/emacs-document/rss.xml][EMACS-DOCUMENT]]
 *** [[http://blog.lujun9972.win/rss.xml][暗无天日]]
@@ -26,11 +25,13 @@
 *** [[https://manuel-uberti.github.io/feed.xml][Manuel Uberti]]
 *** [[https://oremacs.com][(or emacs irrelevant)]]
 *** [[https://planet.emacslife.com/atom.xml][Planet Emacsen]]
+*** [[https://robbmann.io/index.xml][robbmann]]
 *** [[https://ruzkuku.com/all.atom][Webpresence of Philip K.]]
 *** [[https://updates.orgmode.org/feed/updates][Org-mode updates]] :ignore:
 *** [[https://with-emacs.com/rss.xml][with-emacs]]
 *** [[https://www.masteringemacs.org/feed][Mastering Emacs]]
 *** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
+*** [[https://www.murilopereira.com/index.xml][mpereira]]
 *** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 *** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
 ** Research :Research:
@@ -52,6 +53,7 @@
 *** [[https://wandb.ai/public-reports/rss.xml][Weights & Biases]] :ignore:
 *** [[https://www.zeta-alpha.com/blog-feed.xml][Zeta Alpha]]
 *** [[https://amatriain.net/blog/feed.xml][AI, software, tech, and people, not in that order... by X Feed]]
+*** [[https://huggingface.co/blog/feed.xml][Huggingface Blog]]
 ** [[feed://eugene-wei.squarespace.com/blog?format=rss][Remains of the Day]]
 ** [[http://0x100.club][V for Vendetta]]
 ** [[http://azeril.com/feed.xml][Microdust]] :ignore:
