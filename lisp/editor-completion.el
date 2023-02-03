@@ -54,7 +54,7 @@
   :defer t
   :init
   (setq completion-styles '(orderless basic)
-        completion-category-overrides '((file (styles basic partial-completion))))
+        completion-category-defaults nil)
   :config
   (defun flex-if-twiddle (pattern _index _total)
     (when (string-suffix-p "~" pattern)
