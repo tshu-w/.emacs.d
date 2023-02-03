@@ -145,7 +145,7 @@
     "m"       (cons "major mode" (make-sparse-keymap))
 
     "p"       (cons "projects" project-prefix-map)
-    "pt"      'project-other-tab-command
+    "pt"      'project-open-in-tab
 
     "q"       (cons "quit" (make-sparse-keymap))
     "qd"      'restart-emacs-debug-init
