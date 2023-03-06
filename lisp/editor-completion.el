@@ -283,7 +283,6 @@ Just put this function in `hippie-expand-try-functions-list'."
   (add-to-list 'hippie-expand-try-functions-list #'tempel-hippie-try-expand t))
 
 (use-package eglot
-  :straight t
   :commands expand-absolute-name
   :hook (eglot-managed-mode .  yas-minor-mode)
   :init
