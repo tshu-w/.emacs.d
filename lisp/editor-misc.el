@@ -227,6 +227,17 @@ reuse it's window, otherwise create new one."
   :config
   (rime-regexp-load-rime))
 
+(use-package sideline
+  :straight t
+  :init
+  (use-package sideline-flymake
+  :straight t
+  :hook (flymake-mode . sideline-mode)
+  :init
+  (setq sideline-backends-right '(sideline-flymake))
+  (add-hook 'flymake-mode-hook
+            (lambda () (remove-hook 'eldoc-documentation-functions 'flymake-eldoc-function t)))))
+
 (use-package terminal-here
   :straight t
   :config
