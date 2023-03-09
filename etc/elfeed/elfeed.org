@@ -135,6 +135,7 @@
 ** [[https://paul.pub/feed.xml][保罗的酒吧]]
 ** [[https://pepcn.com/feed][壹页单章]]
 ** [[https://raw.githubusercontent.com/yihong0618/gitblog/master/feed.xml][yihong0618's Blog]]
+** [[https://reorx.com/blog/feed.xml][ReorX's Forge]]
 ** [[https://rizime.substack.com/feed][Λ-Reading]]
 ** [[https://shuzang.github.io/posts/index.xml][Shuzang's Blog]]
 ** [[https://taresky.com/feed][TARESKY]]
