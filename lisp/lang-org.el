@@ -643,7 +643,7 @@
         org-modern-timestamp nil))
 
 (use-package org-project
-  :straight (org-project :type git :host github :repo "delehef/org-project")
+  :straight (org-project :host github :repo "delehef/org-project")
   :init
   (setq org-project-prompt-for-project t
         org-project-todos-file org-project-file)
