@@ -317,6 +317,18 @@ Just put this function in `hippie-expand-try-functions-list'."
                            #'eglot-completion-at-point
                            #'tabnine-completion-at-point) nil t))))
 
+  ;; TODO:
+  ;; https://github.com/joaotavora/eglot/discussions/876
+  ;; https://github.com/microsoft/pyright/issues/3282
+  (defun eglot--uri-to-path@around (fun url)
+    (let* ((uri (if (equal url "")
+                    (project-root (eglot--project (eglot-current-server))) url))
+           (path (funcall fun uri)))
+      (if (file-directory-p path)
+          (file-name-as-directory path)
+        path)))
+  (advice-add #'eglot--uri-to-path :around #'eglot--uri-to-path@around)
+
   (general-def eglot--managed-mode
     :states '(normal insert motion emacs)
     :keymaps 'override
