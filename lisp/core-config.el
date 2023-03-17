@@ -170,7 +170,7 @@
   :hook (after-init . electric-pair-mode))
 
 (use-package ediff
-  :hook (ediff-prepare-buffer . outline-show-all)
+  :defer t
   :config
   (setq-default ediff-window-setup-function 'ediff-setup-windows-plain
                 ediff-split-window-function 'split-window-horizontally
@@ -343,6 +343,7 @@ the unwritable tidbits."
 
 (use-package tramp
   :defer t
+  :commands tramp-file-local-name
   :config
   (setq remote-file-name-inhibit-cache 60
         tramp-verbose 1
