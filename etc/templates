@@ -74,7 +74,7 @@ text-mode
 (rot13 (p "plain text" text) n "----" n (rot13 text))
 (calc (p "taylor(sin(x),x=0,3)" formula) n "----" n (format "%s" (calc-eval formula)))
 
-python-mode
+python-base-mode
 
 (env "#!/usr/bin/env python" n)
 (ifmain "if __name__ == \"__main__\":" n> (p "main()") n)
