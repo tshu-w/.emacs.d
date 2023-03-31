@@ -13,7 +13,7 @@
              mu4e-org-open
              mu4e-org-store-link)
   :init
-  (setq mu4e-maildir "$XDG_DATA_HOME/mail"
+  (setq mu4e-maildir "$XDG_STATE_HOME/mail"
         mu4e-attachment-dir "~/Downloads"
         mu4e-get-mail-command "mbsync -c $XDG_CONFIG_HOME/isync/mbsyncrc -a"
         mu4e-main-buffer-hide-personal-addresses t)
@@ -166,7 +166,7 @@
                         ;; Here's the main difference to the regular trash mark,
                         ;; no +T before -N so the message is not marked as
                         ;; IMAP-deleted:
-	                (mu4e--server-move docid
+	                    (mu4e--server-move docid
                                            (mu4e--mark-check-target target) "+S-u-N"))))
   :general
   (tyrant-def "am" 'mu4e))
