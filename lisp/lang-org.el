@@ -45,6 +45,7 @@
         org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
         org-read-date-prefer-future nil
         org-startup-folded t
+        org-startup-indented t
         org-startup-with-inline-images t
         org-tags-column 0
         org-track-ordered-property-with-tag t
@@ -638,13 +639,18 @@
   :straight t
   :hook (org-mode . org-modern-mode)
   :config
-  (setq org-modern-star '("☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")
+  (setq org-modern-star '("◉" "○" "◎" "▣" "▢" "◈" "◇")
+        org-modern-hide-stars nil
         org-modern-todo nil
         org-modern-priority nil
         org-modern-statistics nil
         org-modern-tag nil
         org-modern-table-vertical 1
         org-modern-timestamp nil))
+
+(use-package org-modern-indent
+  :straight (org-modern-indent :host github :repo "jdtsmith/org-modern-indent")
+  :hook (org-modern-mode . org-modern-indent-mode))
 
 (use-package org-project
   :straight (org-project :host github :repo "delehef/org-project")
