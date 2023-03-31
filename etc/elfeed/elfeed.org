@@ -25,6 +25,7 @@
 ** [[http://yangqinyuan.com/feed.xml][杨钦元 | 博客]]
 ** [[https://0792z.blogspot.com/feeds/posts/default][核电站]]
 ** [[https://1byte.io/rss.xml][1 Byte]]
+** [[https://amatriain.net/blog/feed.xml][AI, software, tech, and people, not in that order... by X]]
 ** [[https://atjason.com/atom.xml][Jason]] :ignore:
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
 ** [[https://blanboom.org/feed/][Blanboom]]
@@ -107,6 +108,7 @@
 ** [[https://www.dongwm.com/atom.xml][小明明 s à domicile]]
 ** [[https://www.escapelife.site/atom.xml][Escape]]
 ** [[https://www.gtrun.org/index.xml][GTruNSec | 光涛]]
+** [[https://www.high-flyer.cn/blog/][HIGH-FLYER]]
 ** [[https://www.ioiox.com/feed][IOIOX]]
 ** [[https://www.kawabangga.com/feed][卡瓦邦噶]]
 ** [[https://www.logcg.com/feed][落格博客]]
