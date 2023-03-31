@@ -655,7 +655,8 @@
 (use-package org-project
   :straight (org-project :host github :repo "delehef/org-project")
   :init
-  (setq org-project-prompt-for-project t
+  (setq org-project-link-heading nil
+        org-project-prompt-for-project t
         org-project-todos-file org-project-file)
   :config
   (defun org-project-open ()
