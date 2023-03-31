@@ -81,8 +81,7 @@
   (advice-add #'project-find-regexp :override #'consult-ripgrep)
   :config
   (setq consult-narrow-key "?"
-        consult-preview-key "M-."
-        consult-ripgrep-args "rg --hidden --glob \"!.git/\" --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --line-number .")
+        consult-preview-key "M-.")
 
   (defun consult-delete-default-contents()
     (remove-hook 'pre-command-hook 'consult-delete-default-contents)
