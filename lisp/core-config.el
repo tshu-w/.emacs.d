@@ -121,7 +121,8 @@
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)
   :config
-  (setq global-auto-revert-non-file-buffers t))
+  (setq global-auto-revert-non-file-buffers t
+        auto-revert-verbose nil))
 
 (use-package dabbrev
   :defer t
