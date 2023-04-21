@@ -85,6 +85,12 @@
   (font-lock-keyword-face ((t (:slant normal))))
   (font-lock-constant-face ((t (:slant normal)))))
 
+(use-package modus-themes
+  :straight t
+  :init
+  (setq modus-themes-common-palette-overrides
+        '((fringe unspecified))))
+
 (use-package spacemacs-common
   :straight spacemacs-theme
   :defer t
