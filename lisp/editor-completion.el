@@ -225,7 +225,7 @@ targets."
                 (defun resert-corfu-esc ()
                   (general-def 'insert corfu-map "<escape>" 'nil))))
   :general
-  (general-def corfu-map
+  (corfu-map
     "RET"    nil
     "M-RET"  'corfu-quick-insert
     "S-SPC"  'corfu-insert-separator))
@@ -260,6 +260,17 @@ targets."
   :hook (kill-emacs . tabnine-capf-kill-process)
   :init
   (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point))
+
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :hook (prog-mode . copilot-mode)
+  :general
+  ('insert copilot-mode-map
+    "C-f" 'copilot-accept-completion
+    "M-f" 'copilot-accept-completion-by-word
+    "C-e" 'copilot-accept-completion-by-line
+    "M-p" 'copilot-previous-completion
+    "M-n" 'copilot-next-completion))
 
 (use-package tempel
   :straight t
