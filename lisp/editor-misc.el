@@ -28,7 +28,7 @@
 
 (use-package atomic-chrome
   :straight t
-  :hook (after-init . atomic-chrome-start-server)
+  :defer t
   :config
   (setq atomic-chrome-extension-type-list '(ghost-text)
         atomic-chrome-url-major-mode-alist
