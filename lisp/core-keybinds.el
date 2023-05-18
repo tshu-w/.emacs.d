@@ -370,7 +370,7 @@
 
 (use-package evil-surround
   :straight t
-  :hook ((text-mode prog-mode) . evil-surround-mode)
+  :hook ((text-mode prog-mode conf-mode) . evil-surround-mode)
   :config
   (add-hook 'emacs-lisp-mode-hook
             (lambda ()
