@@ -74,7 +74,6 @@
 ** [[https://feeds.feedburner.com/GiantRobotsSmashingIntoOtherGiantRobots][Giant Robots Smashing Into Other Giant Robots]]
 ** [[https://feeds.feedburner.com/MachineLearningMastery][Machine Learning Mastery]] :ignore:
 ** [[https://feeds.feedburner.com/bookfere][书伴]]
-** [[https://foofish.net/feeds/rss.xml][FooFish]]
 ** [[https://frankorz.com/atom.xml][萤火之森]]
 ** [[https://geekplux.com/atom.xml][GeekPlux]]
 ** [[https://geekplux.com/feed.xml][GeekPlux]]
@@ -137,7 +136,6 @@
 ** [[https://thevaluable.dev/index.xml][The Valuable Dev]]
 ** [[https://tobiaslee.top/atom.xml][Stay Hungry, Stay Foolish.]]
 ** [[https://tw93.fun/feed.xml][Tw93]]
-** [[https://tw93.github.io/feed.xml][Tw93]]
 ** [[https://type.cyhsu.xyz/feed.xml][Neverland]]
 ** [[https://typeof.net/atom.xml][Typeof.net]]
 ** [[https://unblock256.substack.com/feed][un.Block Weekly]]
