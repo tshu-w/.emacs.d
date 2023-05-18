@@ -101,7 +101,9 @@
 (use-package solo-jazz-theme :straight t :defer t)
 
 (defvar light-themes '(doom-acario-light
-                       ;; doom-ayu-light
+                       doom-ayu-light
+                       doom-earl-grey
+                       doom-feather-light
                        doom-flatwhite
                        doom-gruvbox-light
                        doom-homage-white
@@ -116,6 +118,7 @@
                        ;; ef-deuteranopia-light
                        ef-duo-light
                        ef-frost
+                       ef-kassio
                        ef-light
                        ef-spring
                        ef-summer
@@ -135,6 +138,7 @@
 
 (defvar dark-themes '(;; doom-1337
                       ;; doom-acario-dark
+                      doom-ayu-dark
                       ;; doom-ayu-mirage
                       ;; doom-badger
                       doom-challenger-deep
@@ -143,12 +147,14 @@
                       ;; doom-dracula
                       ;; doom-ephemeral
                       ;; doom-fairy-floss
+                      doom-feather-dark
                       doom-gruvbox
                       ;; doom-henna
                       doom-homage-black
                       doom-horizon
                       doom-Iosvkem
                       ;; doom-ir-black
+                      doom-lantern
                       ;; doom-laserwave
                       ;; doom-manegarm
                       doom-material
@@ -157,13 +163,14 @@
                       ;; doom-miramare
                       ;; doom-molokai
                       ;; doom-monokai-classic
-                      doom-monokai-pro
                       ;; doom-monokai-machine
                       ;; doom-monokai-octagon
+                      doom-monokai-pro
                       ;; doom-monokai-ristretto
                       ;; doom-monokai-spectrum
                       doom-moonlight
                       doom-nord
+                      ;; doom-nord-aurora
                       ;; doom-nova
                       doom-oceanic-next
                       ;; doom-old-hope
@@ -171,6 +178,8 @@
                       doom-opera
                       ;; doom-outrun-electric
                       doom-palenight
+                      ;; doom-pine
+                      ;; doom-plain-dark
                       doom-peacock
                       ;; doom-plain-dark
                       doom-rouge
@@ -193,6 +202,7 @@
                       ;; ef-deuteranopia-dark
                       ef-duo-dark
                       ef-night
+                      ef-symbiosis
                       ef-trio-dark
                       ef-tritanopia-dark
                       ef-winter
