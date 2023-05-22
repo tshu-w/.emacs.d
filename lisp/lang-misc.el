@@ -32,6 +32,8 @@
   (despot-def jsonnet-mode-map
     "=" 'jsonnet-reformat-buffer))
 
+(use-package lua-mode :straight t :defer t)
+
 (use-package web-mode :straight t :defer t)
 
 (use-package yaml-mode :straight t :defer t)
