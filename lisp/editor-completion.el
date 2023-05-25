@@ -308,9 +308,6 @@ Just put this function in `hippie-expand-try-functions-list'."
         eglot-connect-timeout 10
         eglot-ignored-server-capabilities nil)
 
-  (add-to-list 'eglot-server-programs `((tex-mode context-mode texinfo-mode bibtex-mode) .
-                                        ,(eglot-alternatives '(("digestif") ("texlab")))))
-
   (defun expand-absolute-name (name)
     (if (file-name-absolute-p name)
         (tramp-file-local-name
