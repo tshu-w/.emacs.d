@@ -337,16 +337,6 @@ stays on current"
     "b8" 'buffer-to-window-8
     "b9" 'buffer-to-window-9))
 
-;; (use-package wakatime-mode
-;;   :straight t
-;;   :hook (prog-mode . wakatime-mode)
-;;   :config
-;;   (setq wakatime-cli-path "wakatime-cli")
-
-;;   (defun wakatime-dashboard ()
-;;     (interactive)
-;;     (browse-url "https://wakatime.com/dashboard")))
-
 
 (provide 'editor-misc)
 ;;; editor-misc.el ends here
