@@ -101,7 +101,7 @@
 (use-package solo-jazz-theme :straight t :defer t)
 
 (defvar light-themes '(doom-acario-light
-                       doom-ayu-light
+                       ;; doom-ayu-light
                        doom-earl-grey
                        doom-feather-light
                        doom-flatwhite
