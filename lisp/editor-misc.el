@@ -76,6 +76,85 @@
   :config
   (setq gcmh-high-cons-threshold #x6400000))
 
+(use-package gptel
+  :straight t
+  :config
+  (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI.")
+  (setq gptel-directives
+        `((default . ,gptel--system-message)
+          (paraphraser . "You are a paraphraser. Paraphrase and polish the text delimited by triple quotes in the corresponding language without changing its original meaning.")
+          (translator . "You are a professional translator. Translate the text delimited by triple quotes into English if it's written in Chinese, otherwise, translate it into Chinese. Only output the translated text without quotes.")
+          (rewriter . "You are a rewriter. Concisely rewrite the text delimited by triple quotes in the corresponding language and style.")
+          (summarizer . "You are a summarizer. Summarize the text delimited by triple quotes in the corresponding language and style without redundant description.")
+          (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
+          (code-explainer . "You are a professional code explainer. Explain the code delimited by triple quotes and report any bugs or errors."))
+        gptel-host "one-api.ponte.top")
+
+  ;; backticks
+  ;; https://github.com/karthink/gptel/issues/61
+  (defun gptel--create-prompt@override (&optional prompt-end)
+    "Return a full conversation prompt from the contents of this buffer.
+
+If `gptel--num-messages-to-send' is set, limit to that many
+recent exchanges.
+
+If the region is active limit the prompt to the region contents
+instead.
+
+If PROMPT-END (a marker) is provided, end the prompt contents
+there."
+    (save-excursion
+      (save-restriction
+        (if (use-region-p)
+            (progn (narrow-to-region (region-beginning) (region-end))
+                   (goto-char (point-max)))
+          (goto-char (or prompt-end (point-max))))
+        (let ((max-entries (and gptel--num-messages-to-send
+                                (* 2 (gptel--numberize
+                                      gptel--num-messages-to-send))))
+              (prop) (prompts) (content))
+          (while (and
+                  (or (not max-entries) (>= max-entries 0))
+                  (setq prop (text-property-search-backward
+                              'gptel 'response
+                              (when (get-char-property (max (point-min) (1- (point)))
+                                                       'gptel)
+                                t))))
+            (setq content (string-trim
+                           (buffer-substring-no-properties (prop-match-beginning prop)
+                                                           (prop-match-end prop))
+                           "[*# \t\n\r]+"))
+            (push (list :role (if (prop-match-value prop) "assistant" "user")
+                        :content (if (prop-match-value prop) content
+                                   (concat "\"\"\"" content "\"\"\"")))
+                  prompts)
+            (and max-entries (cl-decf max-entries)))
+          (cons (list :role "system"
+                      :content gptel--system-message)
+                prompts)))))
+  (advice-add 'gptel--create-prompt :override #'gptel--create-prompt@override)
+
+  (add-to-list 'gptel-response-filter-functions
+               (defun gptel--colorize-response (content buffer)
+                 (put-text-property 0 (length content) 'face 'font-lock-warning-face content)
+                 content))
+
+  (with-eval-after-load 'gptel-transient
+    (defvar gptel--models '("gpt-3.5-turbo" "gpt-4")
+      "AI Models for Chat.")
+    (transient-define-infix gptel--infix-model ()
+      "AI Model for Chat."
+      :description "GPT Model: "
+      :class 'transient-lisp-variable
+      :variable 'gptel-model
+      :key "m"
+      :choices 'gptel--models
+      :reader (lambda (prompt &rest _)
+                (nth (% (1+ (cl-position gptel-model gptel--models :test #'equal))
+                        (length gptel--models)) gptel--models))))
+  :general
+  (tyrant-def "ag" 'gptel-send))
+
 (use-package helpful
   :straight t
   :config
