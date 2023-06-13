@@ -108,6 +108,9 @@
 ;; don't save duplicates in kill-ring
 (setq kill-do-not-save-duplicates t)
 
+;; break lines after more characters
+(setq word-wrap-by-category t)
+
 (defun server-remove-kill-buffer-hook ()
   "Remove prompt if the file is opened in other clients."
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
@@ -143,7 +146,7 @@
         desktop-restore-eager 1
         desktop-save t)
 
-  (dolist (param '(foreground-color background-color font cursor-color mouse-color))
+  (dolist (param '(foreground-color background-color background-mode font cursor-color mouse-color))
     (push `(,param . :never) frameset-filter-alist))
 
   (defun desktop-read@inhibit-message (fn)
@@ -167,15 +170,22 @@
   :config
   (setq doc-view-resolution 400))
 
-(use-package elec-pair
-  :hook (after-init . electric-pair-mode))
-
 (use-package ediff
   :defer t
   :config
   (setq-default ediff-window-setup-function 'ediff-setup-windows-plain
                 ediff-split-window-function 'split-window-horizontally
                 ediff-merge-split-window-function 'split-window-horizontally))
+
+(use-package elec-pair
+  :hook (after-init . electric-pair-mode))
+
+(use-package epg
+  :defer t
+  :config
+  ;; TODO: debug `epg-wait-for-process' hang
+  (fset 'epg-wait-for-status 'ignore)
+  (setq epg-gpg-home-directory (getenv "GNUPGHOME")))
 
 (use-package files
   :hook ((before-save . delete-trailing-whitespace)
