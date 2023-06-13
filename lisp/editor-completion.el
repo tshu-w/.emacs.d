@@ -203,15 +203,14 @@ targets."
         corfu-bar-width 0.5
         corfu-cycle t
         corfu-on-exact-match nil
-        corfu-preselect nil)
+        corfu-preselect 'prompt)
 
   (use-package corfu-history
     :hook (global-corfu-mode . corfu-history-mode))
   (use-package corfu-popupinfo
     :hook (global-corfu-mode . corfu-popupinfo-mode)
     :config
-    (set-face-attribute 'corfu-popupinfo nil :height 0.95)
-    (setq corfu-popupinfo-delay 0.5))
+    (set-face-attribute 'corfu-popupinfo nil :height 0.95))
   :config
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
