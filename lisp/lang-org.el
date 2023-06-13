@@ -230,7 +230,7 @@
 
             ("l" "Log" entry (file+function org-log-file
                                             org-reverse-datetree-goto-date-in-file)
-             "* %?\n" :clock-in t :clock-resume t :empty-lines 1)
+             "* %?\n" :clock-in t :clock-keep t :empty-lines 1)
 
             ("r"  "Review")
             ("ry" "Yesterday" plain
