@@ -257,7 +257,7 @@ reuse it's window, otherwise create new one."
   :straight t
   :hook (after-init . undohist-initialize)
   :config
-  (setq undohist-ignored-files '("EDITMSG"))
+  (add-to-list 'undohist-ignored-files "EDITMSG")
 
   (defun undohist-recover-safe@around (fn)
     (cl-letf (((symbol-function 'yes-or-no-p) (lambda (p) nil)))
