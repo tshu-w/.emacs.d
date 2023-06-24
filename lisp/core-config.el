@@ -360,7 +360,18 @@ the unwritable tidbits."
         tramp-verbose 1
         vc-handled-backends '(SVN Git))
 
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+  ;; https://github.com/magit/magit/issues/4720
+  (when (eq system-type 'darwin)
+    (defun tramp-send-command@filter-args (args)
+      (cl-destructuring-bind (vec command &optional neveropen nooutput) args
+        (let ((new-command
+               (if (string= "stty -icrnl -icanon min 1 time 0" command)
+                   "stty -icrnl"
+                 command)))
+          (list vec new-command neveropen nooutput))))
+    (advice-add 'tramp-send-command :filter-args #'tramp-send-command@filter-args)))
 
 (use-package xref
   :defer t
