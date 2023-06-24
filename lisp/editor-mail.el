@@ -41,7 +41,7 @@
                               (:from . 22)
                               (:subject))
         mu4e-hide-index-messages t
-        mu4e-use-fancy-chars t)
+        mu4e-use-fancy-chars nil)
 
   ;; Add a column to display what email account the email belongs to.
   (add-to-list 'mu4e-header-info-custom

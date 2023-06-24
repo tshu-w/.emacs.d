@@ -233,8 +233,7 @@
 
 (use-package doom-modeline
   :straight t
-  :hook ((after-init . doom-modeline-mode)
-         (after-load-theme . smaller-modeline))
+  :hook (after-init . doom-modeline-mode)
   :config
   (setq inhibit-compacting-font-caches t
 
@@ -245,12 +244,7 @@
         doom-modeline-gnus nil
         doom-modeline-icon nil
         doom-modeline-irc nil
-        doom-modeline-persp-name nil)
-
-  (defun smaller-modeline ()
-    "Make doom-modeline smaller."
-    (set-face-attribute 'mode-line nil :height 0.85 :inherit 'default)
-    (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)))
+        doom-modeline-persp-name nil))
 
 (use-package shackle
   :straight t
