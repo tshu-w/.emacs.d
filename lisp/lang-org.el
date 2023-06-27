@@ -86,11 +86,6 @@
     "Get the list of `org-mode' file in `org-note-directory'."
     (find-lisp-find-files org-note-directory "\.org$"))
 
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
-  (advice-add 'org-archive :after 'org-save-all-org-buffers)
-  (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
-  (advice-add 'org-capture-refile :after 'org-save-all-org-buffers)
-
   (use-package org-agenda
     :defer t
     :init
