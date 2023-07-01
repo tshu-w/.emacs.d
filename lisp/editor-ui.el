@@ -115,6 +115,7 @@
                        doom-tomorrow-day
                        ef-cyprus
                        ef-day
+                       ef-elea-light
                        ;; ef-deuteranopia-light
                        ef-duo-light
                        ef-frost
@@ -201,6 +202,7 @@
                       ef-dark
                       ;; ef-deuteranopia-dark
                       ef-duo-dark
+                      ef-elea-dark
                       ef-night
                       ef-symbiosis
                       ef-trio-dark
