@@ -27,6 +27,12 @@
             (set-face-attribute 'font-lock-keyword-face nil :weight 'semi-bold)))
 
 (add-hook 'after-load-theme-hook
+          (defun unscale-outlines ()
+            (dolist (outline-number (number-sequence 1 8))
+              (let ((outline (intern (format "outline-%d" outline-number))))
+                (set-face-attribute outline nil :height 1.0)))))
+
+(add-hook 'after-load-theme-hook
           (defun customize-tab-bar ()
             "Customize tab-bar faces."
             (set-face-attribute 'tab-bar nil
