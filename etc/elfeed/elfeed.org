@@ -125,6 +125,7 @@
 ** [[https://reorx.com/blog/feed.xml][ReorX's Forge]]
 ** [[https://rizime.substack.com/feed][Λ-Reading]]
 ** [[https://robbmann.io/index.xml][robbmann]]
+** [[https://rsshub.app/zhubai/top20][Zhubai]]
 ** [[https://ruder.io/rss/][Sebastian Ruder]]
 ** [[https://ruzkuku.com/all.atom][Webpresence of Philip K.]]
 ** [[https://sebastianraschka.com/rss_feed.xml][sebastianraschka]]
@@ -175,13 +176,14 @@
 ** [[https://zonble.net/feed][zonble]]
 ** [[https://ztlevi.github.io/atom.xml][Lady luck is smilin'.]]
 * WeRss :elfeed:WeRss:
-** [[https://cdn.werss.weapp.design/api/v1/feeds/0f012a8e-ce88-48ac-a18d-8c338f228883.xml][夕小瑶的卖萌屋]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/12e4bdba-2aac-43c1-9563-afd326a23ee7.xml][L 先生说]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/b9c3b558-9e54-451b-8a5e-8d225705128d.xml][PaperWeekly]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/fc2d54a6-bd79-4d9f-b642-9a875ef11b3b.xml][也谈钱]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/619eb415-e6eb-49ed-9d49-8ef2da75bdfc.xml][孟岩]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/820b4ade-80ce-4fff-835f-6d1dc01abec9.xml][孤独大脑]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/ee4b7196-831c-430f-903e-50e081d40624.xml][宁南山]] :ignore:
+** [[https://cdn.werss.weapp.design/api/v1/feeds/0f012a8e-ce88-48ac-a18d-8c338f228883.xml][夕小瑶的卖萌屋]] :ignore:
+** [[https://cdn.werss.weapp.design/api/v1/feeds/04670c2b-53a6-409e-b426-bb6c502c55b7.xml][锐博运动健康]]
 * News :elfeed:News:
 ** [[http://feeds.feedburner.com/solidot][Solidot]]
 ** [[http://wanqu.co/feed][湾区日报]]
