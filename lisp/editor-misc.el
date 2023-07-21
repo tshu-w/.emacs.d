@@ -152,6 +152,16 @@ there."
       :reader (lambda (prompt &rest _)
                 (nth (% (1+ (cl-position gptel-model gptel--models :test #'equal))
                         (length gptel--models)) gptel--models))))
+
+  (defun gptel-colorize-response ()
+    (let ((prop))
+      (save-excursion
+        (setq prop (text-property-search-forward 'gptel 'response t))
+        (put-text-property (prop-match-beginning prop)
+                           (prop-match-end prop)
+                           'font-lock-face
+                           'warning))))
+  (add-hook 'gptel-post-response-hook #'gptel-colorize-response t)
   :general
   (tyrant-def "ag" 'gptel-send))
 
