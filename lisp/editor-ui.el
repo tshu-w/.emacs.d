@@ -127,6 +127,7 @@
                        ef-frost
                        ef-kassio
                        ef-light
+                       ef-maris-light
                        ef-spring
                        ef-summer
                        ef-trio-light
@@ -209,6 +210,7 @@
                       ;; ef-deuteranopia-dark
                       ef-duo-dark
                       ef-elea-dark
+                      ef-maris-dark
                       ef-night
                       ef-symbiosis
                       ef-trio-dark
