@@ -160,8 +160,18 @@ there."
         (put-text-property (prop-match-beginning prop)
                            (prop-match-end prop)
                            'font-lock-face
-                           'warning))))
+                           'font-lock-string-face))))
   (add-hook 'gptel-post-response-hook #'gptel-colorize-response t)
+
+  (defun clear-text-properties (start end)
+    "Clear text properties between START and END."
+    (interactive "r")
+    (let ((inhibit-read-only t))
+      (set-text-properties start end nil)))
+
+  (with-eval-after-load 'embark
+    (define-key embark-region-map (kbd "C") #'clear-text-properties)
+    (define-key embark-region-map (kbd "g") #'gptel-send))
   :general
   (tyrant-def "ag" 'gptel-send))
 
