@@ -53,6 +53,14 @@
   (with-eval-after-load 'writeroom-mode
     (add-to-list 'writeroom-major-modes 'elfeed-search-mode)
     (add-to-list 'writeroom-major-modes 'elfeed-show-mode))
+
+  (setq browse-url-generic-program "open"
+        browse-url-generic-args '("--background"))
+
+  (defun reverse-arg (fun &optional arg)
+    (interactive "P")
+    (apply fun (if arg nil '(4))))
+  (advice-add 'elfeed-search-browse-url :around #'reverse-arg)
   :general
   (tyrant-def "af" 'elfeed))
 
