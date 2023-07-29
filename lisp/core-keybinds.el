@@ -119,7 +119,7 @@
 
     "j"       (cons "jump" (make-sparse-keymap))
     "ji"      'imenu
-    "jg"      'avy-goto-char-2
+    "jg"      'avy-goto-char-timer
 
     "l"       (cons "layouts" tab-prefix-map)
     "ld"      'tab-bar-close-tab
@@ -366,6 +366,13 @@
                  (side . bottom)
                  (window-height . 0.3)))
   (setq evil-owl-idle-delay 0.5))
+
+(use-package evil-snipe
+  :straight t
+  :hook ((after-init . evil-snipe-mode)
+         (evil-snipe-mode . evil-snipe-override-mode))
+  :config
+  (setq evil-snipe-spillover-scope 'whole-buffer))
 
 (use-package evil-surround
   :straight t

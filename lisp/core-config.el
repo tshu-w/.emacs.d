@@ -165,6 +165,11 @@
         dired-listing-switches "-aBhl --group-directories-first"
         dired-vc-rename-file t))
 
+(use-package display-line-numbers
+  :hook ((text-mode prog-mode conf-mode) . display-line-numbers-mode)
+  :config
+  (setq-default display-line-numbers-type 'relative))
+
 (use-package doc-view
   :defer t
   :config
