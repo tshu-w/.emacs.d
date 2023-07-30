@@ -100,8 +100,7 @@
   :general
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
-   [remap imenu]               'consult-imenu
-   [remap apropos]             'consult-apropos)
+   [remap imenu]               'consult-imenu)
   (tyrant-def
     "jI" '("imenu-multi" . consult-imenu-multi)
     "fl" '("locate-files" . consult-find)
