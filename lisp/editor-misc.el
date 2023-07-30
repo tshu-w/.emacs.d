@@ -147,6 +147,7 @@ there."
                  (put-text-property 0 (length content) 'face 'font-lock-warning-face content)
                  content))
 
+  (autoload #'gptel-transient-send "gptel-transient" nil t)
   (with-eval-after-load 'gptel-transient
     (defvar gptel--models '("gpt-3.5-turbo" "gpt-4")
       "AI Models for Chat.")
@@ -159,7 +160,18 @@ there."
       :choices 'gptel--models
       :reader (lambda (prompt &rest _)
                 (nth (% (1+ (cl-position gptel-model gptel--models :test #'equal))
-                        (length gptel--models)) gptel--models))))
+                        (length gptel--models)) gptel--models)))
+
+    (defun gptel-transient-send (&optional arg)
+      "Call `gptel--suffix-send' with latest history."
+      (interactive "P")
+      (if (and arg (require 'gptel-transient nil t))
+          (call-interactively #'gptel-menu)
+        (let* ((obj (plist-get (symbol-plist 'gptel-menu) 'transient--prefix))
+               (hst (alist-get (transient--history-key obj)
+                               transient-history))
+               (args (nth 0 hst)))
+          (gptel--suffix-send args)))))
 
   (defun gptel-colorize-response ()
     (let ((prop))
@@ -179,9 +191,9 @@ there."
 
   (with-eval-after-load 'embark
     (define-key embark-region-map (kbd "C") #'clear-text-properties)
-    (define-key embark-region-map (kbd "g") #'gptel-send))
+    (define-key embark-region-map (kbd "g") #'gptel-transient-send))
   :general
-  (tyrant-def "ag" 'gptel-send))
+  (tyrant-def "ag" 'gptel-transient-send))
 
 (use-package helpful
   :straight t
