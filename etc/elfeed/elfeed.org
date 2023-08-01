@@ -224,4 +224,10 @@
 ** [[https://emacs.stackexchange.com/feeds][StackExchange - Emacs]]
 ** [[https://superuser.com/feeds/tag/macos][SuperUser - macOS]]
 ** [[https://superuser.com/feeds/tag/zsh][SuperUser - ZSH]]
-
+* YouTube :elfeed:
+** [[("https://www.youtube.com/feeds/videos.xml?channel_id=UCKFB_rVEFEF3l-onQGvGx1A")][一席 YiXi]]
+** [[("https://www.youtube.com/feeds/videos.xml?channel_id=UCIs3-LcOCdpiGve6yu1-Fug")][纯纯甘]]
+** [[("https://www.youtube.com/feeds/videos.xml?channel_id=UCgRCxmVnKn3uaJ_P54IYxbA")][梦觉学游泳]]
+** [[("https://www.youtube.com/feeds/videos.xml?channel_id=UCmTe0LsfEbpkDpgrxKAWbRA")][Bob & Brad]]
+** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCZIIRX8rkNjVpP-oLMHpeDw][Calisthenicmovement]]
+** [[("https://www.youtube.com/feeds/videos.xml?channel_id=UCwgKmJM4ZJQRJ-U5NjvR2dg")][George Hotz Archive]]
