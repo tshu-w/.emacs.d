@@ -71,6 +71,12 @@
   (elfeed-org)
   (setq rmh-elfeed-org-files `(,(no-littering-expand-etc-file-name "elfeed/elfeed.org"))))
 
+(use-package elfeed-tube
+  :straight t
+  :after elfeed
+  :config
+  (elfeed-tube-setup))
+
 (use-package flyspell-correct
   :straight t
   :general
