@@ -49,6 +49,9 @@
 ;; Inhibit resizing frame
 (setq frame-inhibit-implied-resize t)
 
+;; Inhibit byte-compiler warnings
+(setq byte-compile-warnings nil)
+
 ;; Remove some unneeded UI elements
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
