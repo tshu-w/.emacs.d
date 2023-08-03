@@ -168,7 +168,8 @@
 (use-package display-line-numbers
   :hook ((text-mode prog-mode conf-mode) . display-line-numbers-mode)
   :config
-  (setq-default display-line-numbers-type 'relative))
+  (setq-default display-line-numbers-type 'relative
+                display-line-numbers-width-start t))
 
 (use-package doc-view
   :defer t
