@@ -79,6 +79,7 @@
   :straight t
   :init
   (advice-add #'project-find-regexp :override #'consult-ripgrep)
+  (advice-add #'project-switch-to-buffer :override #'consult-project-buffer)
   :config
   (setq consult-narrow-key "?"
         consult-preview-key "M-.")
