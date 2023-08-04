@@ -98,6 +98,45 @@
                      :initial (when-let ((string (thing-at-point 'word)))
                                 (add-hook 'pre-command-hook 'consult-delete-default-contents)
                                 (propertize string 'face 'shadow)))
+
+  (defvar consult--source-project-file
+    `(:name     "Project File"
+      :narrow   ?f
+      :category file
+      :face     consult-file
+      :history  file-name-history
+      :state    ,#'consult--file-state
+      :enabled  ,(lambda () consult-project-function)
+      :items
+      ,(lambda ()
+         (when-let (project (project-current t))
+           (let* ((all-files (project-files project))
+                  (common-parent-directory
+                   (let ((common-prefix (try-completion "" all-files)))
+                     (if (> (length common-prefix) 0)
+                         (file-name-directory common-prefix))))
+                  (cpd-length (length common-parent-directory))
+                  items)
+             (print all-files)
+             (dolist (file all-files items)
+               (let ((part (substring file cpd-length)))
+                 (when (equal part "") (setq part "./"))
+                 (put-text-property 0 1 'multi-category `(file . ,file) part)
+                 (push part items))))))
+      "Project file candidate source for `consult-buffer'."))
+
+  (defvar consult--source-project-file-hidden
+    `(:hidden t :narrow (?f . "Project File") ,@consult--source-project-file)
+    "Like `consult--source-project-file' but hidden by default.")
+
+  (defvar consult--source-project-recent-file-override
+    `(:name "Recent File" :narrow (?r . "Recent File") ,@consult--source-project-file)
+    "Like `consult--source-recent-file' but overridden the narrow key.")
+
+  (setq consult-project-buffer-sources
+        '(consult--source-project-buffer
+          consult--source-project-recent-file-override
+          consult--source-project-file-hidden))
   :general
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
@@ -225,9 +264,9 @@ targets."
                   (general-def 'insert corfu-map "<escape>" 'nil))))
   :general
   (corfu-map
-    "RET"    nil
-    "M-RET"  'corfu-quick-insert
-    "S-SPC"  'corfu-insert-separator))
+   "RET"    nil
+   "M-RET"  'corfu-quick-insert
+   "S-SPC"  'corfu-insert-separator))
 
 (use-package cape
   :straight t
@@ -265,11 +304,11 @@ targets."
   :hook (prog-mode . copilot-mode)
   :general
   ('insert copilot-mode-map
-    "C-f" 'copilot-accept-completion
-    "M-f" 'copilot-accept-completion-by-word
-    "C-e" 'copilot-accept-completion-by-line
-    "M-p" 'copilot-previous-completion
-    "M-n" 'copilot-next-completion))
+           "C-f" 'copilot-accept-completion
+           "M-f" 'copilot-accept-completion-by-word
+           "C-e" 'copilot-accept-completion-by-line
+           "M-p" 'copilot-previous-completion
+           "M-n" 'copilot-next-completion))
 
 (use-package tempel
   :straight t
