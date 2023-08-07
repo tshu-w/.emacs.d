@@ -260,7 +260,24 @@
                                   (project-find-file "Find file")
                                   (project-find-regexp "Find regexp")
                                   (project-find-dir "Find directory"))
-        project-switch-use-entire-map t))
+        project-switch-use-entire-map t)
+
+  (defcustom project-root-files '(".project")
+    "Files that indicate the root of a project."
+    :group 'project
+    :type '(repeat string))
+
+  (defun project-root-p (dir)
+    "Return non-nil if DIR is a project root."
+    (seq-some (lambda (file) (file-exists-p (expand-file-name file dir)))
+              project-root-files))
+
+  (defun project-try-root (dir)
+    "Search up the `DIR' for `project-root-files'."
+    (when-let ((root (locate-dominating-file dir #'project-root-p)))
+      (cons 'transient (expand-file-name root))))
+
+  (add-to-list 'project-find-functions 'project-try-root t))
 
 (use-package recentf
   :hook (after-init . recentf-mode)
