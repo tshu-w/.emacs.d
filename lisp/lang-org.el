@@ -604,7 +604,7 @@
       "ZR" 'org-capture-refile)))
 
 (use-package orgonomic
-  :straight (orgonomic :host github :repo "aaronjensen/emacs-orgonomic")
+  :straight (:host github :repo "aaronjensen/emacs-orgonomic")
   :hook (org-mode . orgonomic-mode))
 
 (use-package org-appear
@@ -645,11 +645,11 @@
         org-modern-timestamp nil))
 
 (use-package org-modern-indent
-  :straight (org-modern-indent :host github :repo "jdtsmith/org-modern-indent")
+  :straight (:host github :repo "jdtsmith/org-modern-indent")
   :hook (org-modern-mode . org-modern-indent-mode))
 
 (use-package org-project
-  :straight (org-project :host github :repo "delehef/org-project")
+  :straight (:host github :repo "delehef/org-project")
   :init
   (setq org-project-link-heading nil
         org-project-prompt-for-project t
