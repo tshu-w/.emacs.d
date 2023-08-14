@@ -90,7 +90,7 @@
 (use-package git-modes :straight t :defer t)
 
 (use-package git-timemachine
-  :straight (git-timemachine :host codeberg :repo "pidu/git-timemachine")
+  :straight (:host codeberg :repo "pidu/git-timemachine")
   :config
   (general-def git-timemachine-mode-map
     "gt" '(:ignore t :which-key "git-timemachine"))
