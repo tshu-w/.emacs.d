@@ -84,6 +84,7 @@
 ** [[https://huggingface.co/blog/feed.xml][Huggingface Blog]]
 ** [[https://huiris.com/feed][Huiris's log]]
 ** [[https://hypercritical.co/feeds/main][Hypercritical]]
+** [[https://iamazing.cn/feed.xml][惜时如命]]
 ** [[https://insights.thoughtworks.cn/feed][Thoughtworks洞见]]
 ** [[https://jalammar.github.io/feed.xml][Jay Alammar - Visualizing machine learning one concept at a time.]]
 ** [[https://jbarrow.ai/feed.xml][Joe Barrow]]
