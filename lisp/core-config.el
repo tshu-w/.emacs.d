@@ -32,12 +32,12 @@
 (defun setup-font ()
   (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
 
-  (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font t charset unicode-font))
-  (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
-
-  (set-fontset-font t 'emoji emoji-font nil 'prepend)
-  (set-fontset-font t 'symbol symbol-font nil 'prepend))
+  (when (fboundp 'set-fontset-font)
+    (dolist (charset '(kana han cjk-misc bopomofo))
+      (set-fontset-font t charset unicode-font))
+    (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
+    (set-fontset-font t 'emoji emoji-font nil 'prepend)
+    (set-fontset-font t 'symbol symbol-font nil 'prepend)))
 
 (add-hook 'after-init-hook #'setup-font)
 
