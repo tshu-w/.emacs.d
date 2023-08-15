@@ -656,8 +656,18 @@
         org-project-todos-file org-project-file)
   :config
   (defun org-project-open ()
+    "Open the project file and jump to the project heading only if exsits."
     (interactive)
-    (if (project-current)
+    (if (and (project-current)
+             (let* ((projectpath (org-project--current-project))
+                    (file (org-project--get-capture-file projectpath))
+                    (headline (org-project--build-heading projectpath)))
+               (with-current-buffer (org-capture-target-buffer file)
+                 (widen)
+	             (goto-char (point-min))
+                 (re-search-forward
+                  (format org-complex-heading-regexp-format
+					      (regexp-quote headline)) nil t))))
         (org-project-open-todos)
       (open-org-project-file)))
   :general
