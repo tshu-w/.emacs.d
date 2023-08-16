@@ -367,13 +367,6 @@
                  (window-height . 0.3)))
   (setq evil-owl-idle-delay 0.5))
 
-(use-package evil-snipe
-  :straight t
-  :hook ((after-init . evil-snipe-mode)
-         (evil-snipe-mode . evil-snipe-override-mode))
-  :config
-  (setq evil-snipe-spillover-scope 'whole-buffer))
-
 (use-package evil-surround
   :straight t
   :hook ((text-mode prog-mode conf-mode) . evil-surround-mode)
