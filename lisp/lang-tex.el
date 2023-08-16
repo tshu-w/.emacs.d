@@ -1,4 +1,4 @@
-;;; lang-latex.el --- -*- lexical-binding: t; -*-
+;;; lang-tex.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020-2023  Tianshu Wang
 
@@ -26,8 +26,23 @@
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
-  (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
+  (add-to-list 'TeX-expand-list
+               '("%(-PDF)"
+                 (lambda ()
+                   (if TeX-PDF-mode
+                       (cond
+                        ((eq TeX-engine 'default) "-pdf")
+                        ((eq TeX-engine 'xetex) "-pdfxe")
+                        ((eq TeX-engine 'luatex) "-pdflua")) ""))))
+  (add-to-list 'TeX-command-list
+               '("LaTeXmk" "latexmk %(-PDF) -%(PDF)%(latex)='%`%l%(mode)%'' %(output-dir) %t"
+                 TeX-run-format nil (latex-mode doctex-mode) :help "Run Latexmk"))
+  (with-eval-after-load 'latex
+    (setq LaTeX-clean-intermediate-suffixes
+          (append LaTeX-clean-intermediate-suffixes '("\\.fdb_latexmk" "\\.fls"))))
+
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
 
@@ -126,13 +141,6 @@
     "xi"               'font-italic
     "xr"               'font-clear
     "xo"               'font-oblique))
-
-(use-package auctex-latexmk
-  :straight t
-  :after tex
-  :config
-  (auctex-latexmk-setup)
-  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
 (use-package evil-tex
   :straight t
@@ -325,5 +333,5 @@ Add the following as a browser bookmark to use:
   (tyrant-def "ab" 'ebib))
 
 
-(provide 'lang-latex)
-;;; lang-latex.el ends here
+(provide 'lang-tex)
+;;; lang-tex.el ends here

@@ -38,7 +38,7 @@
 (require 'editor-misc)
 
 (require 'lang-org)
-(require 'lang-latex)
+(require 'lang-tex)
 (require 'lang-python)
 (require 'lang-emacs-lisp)
 (require 'lang-misc)
