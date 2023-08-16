@@ -267,14 +267,12 @@
     :group 'project
     :type '(repeat string))
 
-  (defun project-root-p (dir)
-    "Return non-nil if DIR is a project root."
-    (seq-some (lambda (file) (file-exists-p (expand-file-name file dir)))
-              project-root-files))
-
   (defun project-try-root (dir)
     "Search up the `DIR' for `project-root-files'."
-    (when-let ((root (locate-dominating-file dir #'project-root-p)))
+    (when-let ((root
+                (seq-some
+                 (lambda (n) (locate-dominating-file dir n))
+                 project-root-files)))
       (cons 'transient (expand-file-name root))))
 
   (add-to-list 'project-find-functions 'project-try-root t))
