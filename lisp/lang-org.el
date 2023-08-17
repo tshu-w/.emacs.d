@@ -42,7 +42,6 @@
         org-log-redeadline nil
         org-log-reschedule nil
         org-pretty-entities t
-        org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
         org-read-date-prefer-future nil
         org-startup-folded t
         org-startup-indented t
@@ -337,19 +336,14 @@
                                   "latexmk -c -bibtex")
           org-latex-prefer-user-labels t
           org-preview-latex-default-process 'dvisvgm
+          org-preview-latex-image-directory (no-littering-expand-var-file-name "ltximg/")
           org-preview-latex-process-alist
           '((dvisvgm :programs ("xelatex" "dvisvgm")
                      :description "xdv > svg"
                      :message "you need to install the programs: xelatex and dvisvgm."
                      :image-input-type "xdv" :image-output-type "svg" :image-size-adjust (1.7 . 1.5)
                      :latex-compiler ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
-                     :image-converter ("dvisvgm %f -n -b min -c %S -o %O"))
-            (imagemagick :programs ("xelatex" "convert")
-                         :description "pdf > png"
-                         :message "you need to install the programs: xelatex and imagemagick."
-                         :image-input-type "pdf" :image-output-type "png" :image-size-adjust (1.0 . 1.0)
-                         :latex-compiler ("xelatex -interaction nonstopmode -output-directory %o %f")
-                         :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O"))))
+                     :image-converter ("dvisvgm %o/%b.xdv --no-fonts --exact-bbox --scale=%S --output=%O"))))
 
     (plist-put org-format-latex-options :scale 1.5))
 
