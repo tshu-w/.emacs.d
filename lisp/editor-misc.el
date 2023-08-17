@@ -354,6 +354,7 @@ reuse it's window, otherwise create new one."
 
 (use-package sideline
   :straight t
+  :defer t
   :init
   (use-package sideline-flymake
     :straight t
