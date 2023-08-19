@@ -14,10 +14,10 @@
 (setq user-full-name "Tianshu Wang"
       user-mail-address "wang@tianshu.me")
 
-(defvar default-font "Source Code Pro")
+(defvar default-font "SauceCodePro Nerd Font")
 (defvar font-size 14)
 (defvar unicode-font "Noto Sans CJK SC")
-(defvar unicode-scale (/ 16.0 14))
+(defvar unicode-scale (/ 16.0 font-size))
 (defvar emoji-font "Noto Color Emoji")
 (defvar symbol-font "Noto Sans Symbols")
 
