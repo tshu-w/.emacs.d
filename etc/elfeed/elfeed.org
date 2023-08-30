@@ -34,7 +34,6 @@
 ** [[http://yangqinyuan.com/feed.xml][杨钦元 | 博客]]
 ** [[https://0792z.blogspot.com/feeds/posts/default][核电站]]
 ** [[https://1byte.io/rss.xml][1 Byte]]
-** [[https://amatriain.net/blog/feed.xml][AI, software, tech, and people, not in that order... by X Feed]]
 ** [[https://amatriain.net/blog/feed.xml][AI, software, tech, and people, not in that order... by X]]
 ** [[https://archive.casouri.cat/note/rss.xml][BHL0388]]
 ** [[https://atjason.com/atom.xml][Jason]] :ignore:
@@ -122,6 +121,7 @@
 ** [[https://paul.pub/feed.xml][保罗的酒吧]]
 ** [[https://pepcn.com/feed][壹页单章]]
 ** [[https://planet.emacslife.com/atom.xml][Planet Emacsen]]
+** [[https://pythoncat.top/rss.xml][豌豆花下猫]]
 ** [[https://raw.githubusercontent.com/yihong0618/gitblog/master/feed.xml][yihong0618's Blog]]
 ** [[https://reorx.com/blog/feed.xml][ReorX's Forge]]
 ** [[https://rizime.substack.com/feed][Λ-Reading]]
