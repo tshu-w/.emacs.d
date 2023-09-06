@@ -237,7 +237,9 @@
   (add-to-list 'find-file-not-found-functions 'make-directory-maybe nil #'eq))
 
 (use-package flymake
-  :hook (prog-mode . flymake-mode))
+  :hook (prog-mode . flymake-mode)
+  :config
+  (setq flymake-no-changes-timeout nil))
 
 (use-package newcomment
   :commands comment-or-uncomment
