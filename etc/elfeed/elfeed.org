@@ -45,6 +45,7 @@
 ** [[https://blog.codinghorror.com/rss][Coding Horror]]
 ** [[https://blog.dada.li/feed.xml][Bumped Into]]
 ** [[https://blog.dandyweng.com/feed/][Dandy's Blog]]
+** [[https://blog.jiayuanzhang.com/index.xml][Jiayuan Thoughts]]
 ** [[https://blog.laisky.com/rss/][Laisky's Blog]]
 ** [[https://blog.skk.moe/atom.xml][Sukka's Blog]]
 ** [[https://blog.tecosaur.com/tmio/rss.xml][This Month in Org]]
@@ -196,7 +197,7 @@
 ** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]] :ignore:
 ** [[https://36kr.com/feed][36 氪]] :ignore:
-** [[https://rsshub.app/baai/hub][智源]]
+** [[https://rsshub.app/baai/hub][智源]] :ignore:
 * Resources :elfeed:Resources:
 ** [[http://www.abskoop.com/rss][ahhhhfs-分享快乐]]
 ** [[http://www.salttiger.com/index.php/feed/][SaltTiger]]
