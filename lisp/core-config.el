@@ -201,27 +201,6 @@
         revert-without-query '(".*") ;; disable revert query
         enable-remote-dir-locals t)
   :config
-  ;; Prompt to open file literally if large file.
-  (defun check-large-file ()
-    "Check when opening large files - literal file open."
-    (let* ((filename (buffer-file-name))
-           (size (nth 7 (file-attributes filename))))
-      (when (and
-             (not (memq major-mode
-                        '(archive-mode doc-view-mode doc-view-mode-maybe
-                                       ebrowse-tree-mode emacs-lisp-mode
-                                       fundamental-mode git-commit-mode
-                                       image-mode jka-compr pdf-view-mode
-                                       tags-table-mode tar-mode)))
-             size (> size (* 1024 1024 1))
-             (y-or-n-p (format (concat "%s is a large file, open literally to "
-                                       "avoid performance issues?")
-                               filename)))
-        (setq buffer-read-only t)
-        (buffer-disable-undo)
-        (fundamental-mode))))
-  (add-hook 'find-file-hook #'check-large-file)
-
   ;; see document of `move-file-to-trash'
   (defun system-move-file-to-trash (filename)
     (process-file-shell-command
