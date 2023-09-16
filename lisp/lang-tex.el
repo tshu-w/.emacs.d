@@ -161,6 +161,8 @@
         bibtex-autokey-name-year-separator "-"
         bibtex-dialect 'biblatex))
 
+(use-package biblio :defer t :straight t)
+
 (use-package citar
   :straight (:files (:defaults))
   :hook ((org-mode latex-mode) . citar-setup-capf)
