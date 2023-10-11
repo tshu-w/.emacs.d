@@ -29,7 +29,7 @@
         emoji-font "Apple Color Emoji"
         symbol-font "Apple Symbols"))
 
-(defun setup-font ()
+(defun setup-font (&rest args)
   (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
 
   (when (fboundp 'set-fontset-font)
