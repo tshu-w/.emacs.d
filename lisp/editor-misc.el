@@ -92,6 +92,8 @@
 
 (use-package gptel
   :straight t
+  :init
+  (setq gptel-model "gpt-4")
   :config
   (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI.")
   (setq gptel-directives
@@ -155,7 +157,7 @@ there."
 
   (autoload #'gptel-transient-send "gptel-transient" nil t)
   (with-eval-after-load 'gptel-transient
-    (defvar gptel--models '("gpt-3.5-turbo" "gpt-4")
+    (defvar gptel--models '("gpt-4" "gpt-3.5-turbo")
       "AI Models for Chat.")
     (transient-define-infix gptel--infix-model ()
       "AI Model for Chat."
