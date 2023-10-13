@@ -161,7 +161,21 @@
         bibtex-autokey-name-year-separator "-"
         bibtex-dialect 'biblatex))
 
-(use-package biblio :defer t :straight t)
+(use-package biblio
+  :straight t
+  :defer t
+  :init
+  (defun biblio-dblp--forward-bibtex@override (metadata forward-to)
+    "Forward BibTeX for DBLP entry METADATA to FORWARD-TO."
+    (let* ((source-url (biblio-alist-get 'url metadata))
+           (url (replace-regexp-in-string "/rec/" "/rec/bib1/" source-url t t)))
+      (biblio-url-retrieve url (biblio-generic-url-callback
+                                (lambda () ;; No allowed errors, so no arguments
+                                  "Parse DBLP BibTeX results."
+                                  (funcall forward-to
+                                           (biblio-response-as-utf-8)))))))
+
+  (advice-add 'biblio-dblp--forward-bibtex :override #'biblio-dblp--forward-bibtex@override))
 
 (use-package citar
   :straight (:files (:defaults))
