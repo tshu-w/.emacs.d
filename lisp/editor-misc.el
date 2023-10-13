@@ -299,7 +299,7 @@ reuse it's window, otherwise create new one."
           flymake-diagnostics-buffer-mode))
   :general
   (tyrant-def
-    ";" 'popper-toggle-latest
+    ";" 'popper-toggle
     ":" 'popper-kill-latest-popup))
 
 (use-package reveal-in-osx-finder
