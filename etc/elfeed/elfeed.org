@@ -1,8 +1,6 @@
 #+TITLE: Elfeed
 
 * Blog :elfeed:Blog:
-** Emacs :Emacs:
-** Research :Research:
 ** [[feed://eugene-wei.squarespace.com/blog?format=rss][Remains of the Day]]
 ** [[http://0x100.club][V for Vendetta]]
 ** [[http://ai.stanford.edu/blog/feed.xml][The Stanford AI Lab Blog]]
@@ -70,8 +68,6 @@
 ** [[https://emacsair.me][Emacsair]]
 ** [[https://emacsnotes.wordpress.com/feed][Emacs Notes – GNU Emacs, for Ordinary Folks]]
 ** [[https://endler.dev/rss.xml][Matthias Endler]]
-** [[https://endlessparentheses.com/atom.xml][Endless Parentheses]]
-** [[https://feeds.feedburner.com/GiantRobotsSmashingIntoOtherGiantRobots][Giant Robots Smashing Into Other Giant Robots]]
 ** [[https://feeds.feedburner.com/MachineLearningMastery][Machine Learning Mastery]] :ignore:
 ** [[https://feeds.feedburner.com/bookfere][书伴]]
 ** [[https://frankorz.com/atom.xml][萤火之森]]
@@ -154,7 +150,7 @@
 ** [[https://www.bmpi.dev/index.xml][构建我的被动收入]]
 ** [[https://www.dongwm.com/atom.xml][小明明 s à domicile]]
 ** [[https://www.escapelife.site/atom.xml][Escape]]
-** [[https://www.gtrun.org/index.xml][GTruNSec | 光涛]]
+** [[https://www.gtrun.org/index.xml][GTruNSec | 光涛]] :ignore:
 ** [[https://www.high-flyer.cn/blog/][HIGH-FLYER]]
 ** [[https://www.ioiox.com/feed][IOIOX]]
 ** [[https://www.kawabangga.com/feed][卡瓦邦噶]]
@@ -174,9 +170,11 @@
 ** [[https://yihui.name/cn/index.xml][中文博客 on Yihui Xie | 谢益辉]]
 ** [[https://yufree.cn/index.xml][Miao Yu | 于淼]]
 ** [[https://yym6472.github.io/atom.xml][yym6472's Blog]]
+** [[https://zhile.io/?feed=rss][知了 – 朝闻道，夕可眠矣。]]
 ** [[https://zlbk.net/feed][周良博客 · 喜恶皆在字里行间]]
 ** [[https://zonble.net/feed][zonble]]
 ** [[https://ztlevi.github.io/atom.xml][Lady luck is smilin'.]]
+** [[https://quail.ink/orange/feed/atom][橘子汽水铺]]
 * WeRss :elfeed:WeRss:
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/12e4bdba-2aac-43c1-9563-afd326a23ee7.xml][L 先生说]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/b9c3b558-9e54-451b-8a5e-8d225705128d.xml][PaperWeekly]]
