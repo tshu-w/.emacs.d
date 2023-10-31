@@ -128,6 +128,7 @@
                        ef-kassio
                        ef-light
                        ef-maris-light
+                       ef-melissa-light
                        ef-spring
                        ef-summer
                        ef-trio-light
@@ -211,6 +212,7 @@
                       ef-duo-dark
                       ef-elea-dark
                       ef-maris-dark
+                      ef-melissa-dark
                       ef-night
                       ef-symbiosis
                       ef-trio-dark
