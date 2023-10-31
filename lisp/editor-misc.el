@@ -261,6 +261,8 @@ reuse it's window, otherwise create new one."
                              :follow 'nov-org-link-follow
                              :store 'nov-org-link-store)))
 
+(use-package oj :straight t :defer t)
+
 (use-package pandoc-mode
   :straight t
   :hook (pandoc-mode . pandoc-load-default-settings)
