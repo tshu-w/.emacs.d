@@ -95,7 +95,17 @@
   :init
   (setq gptel-model "gpt-4")
   :config
-  (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI.")
+  (defvar gptel--oneapi
+    (gptel-make-openai
+     "ChatGPT"
+     :host "one-api.ponte.top"
+     :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))
+     :key 'gptel-api-key
+     :stream t
+     :models '("gpt-4-1106-preview" "gpt-4" "gpt-3.5-turbo")))
+
+  (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI."
+                gptel-backend gptel--oneapi)
   (setq gptel-directives
         `((default . ,gptel--system-message)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text delimited by triple quotes in the corresponding language without changing its original meaning.")
@@ -103,8 +113,7 @@
           (rewriter . "You are a rewriter. Concisely rewrite the text delimited by triple quotes in the corresponding language and style.")
           (summarizer . "You are a summarizer. Summarize the text delimited by triple quotes in the corresponding language and style without redundant description.")
           (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
-          (code-explainer . "You are a professional code explainer. Explain the code delimited by triple quotes and report any bugs or errors."))
-        gptel-host "one-api.ponte.top")
+          (code-explainer . "You are a professional code explainer. Explain the code delimited by triple quotes and report any bugs or errors.")))
 
   ;; backticks
   ;; https://github.com/karthink/gptel/issues/61
@@ -157,18 +166,29 @@ there."
 
   (autoload #'gptel-transient-send "gptel-transient" nil t)
   (with-eval-after-load 'gptel-transient
-    (defvar gptel--models '("gpt-4" "gpt-3.5-turbo")
-      "AI Models for Chat.")
-    (transient-define-infix gptel--infix-model ()
-      "AI Model for Chat."
+    (transient-define-infix gptel--infix-provider ()
+      "AI Provider for Chat."
       :description "GPT Model: "
-      :class 'transient-lisp-variable
-      :variable 'gptel-model
-      :key "m"
-      :choices 'gptel--models
+      :class 'gptel-provider-variable
+      :prompt "Model provider: "
+      :variable 'gptel-backend
+      :model 'gptel-model
+      :key "-m"
       :reader (lambda (prompt &rest _)
-                (nth (% (1+ (cl-position gptel-model gptel--models :test #'equal))
-                        (length gptel--models)) gptel--models)))
+                (let* ((backend-name
+                        (if (<= (length gptel--known-backends) 1)
+                            (caar gptel--known-backends)
+                          (completing-read
+                           prompt
+                           (mapcar #'car gptel--known-backends))))
+                       (backend (alist-get backend-name gptel--known-backends
+                                           nil nil #'equal))
+                       (backend-models (gptel-backend-models backend))
+                       (model-name (if (= (length backend-models) 1)
+                                       (car backend-models)
+                                     (nth (% (1+ (cl-position gptel-model backend-models :test #'equal))
+                                             (length backend-models)) backend-models))))
+                  (list backend model-name))))
 
     (defun gptel-transient-send (&optional arg)
       "Call `gptel--suffix-send' with latest history."
