@@ -1,4 +1,4 @@
-;;; lang-misc.el --- -*- lexical-binding: t; -*-
+;;; lang-md.el --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020-2023  Tianshu Wang
 
@@ -7,36 +7,6 @@
 ;;; Commentary:
 
 ;;; Code:
-
-(use-package dockerfile-mode :straight t :defer t)
-
-(use-package js
-  :mode ("\\.json\\'" . json-mode)
-  :config
-  (defvar json-mode-map
-    (make-sparse-keymap)
-    "Keymap for `json-mode'.")
-
-  (define-derived-mode json-mode js-mode "JSON"
-    (make-local-variable 'js-indent-level)
-    (setq js-indent-level 2))
-
-  (despot-def json-mode-map
-    "=" 'json-pretty-print-buffer
-    "+" 'json-pretty-print-buffer-ordered))
-
-(use-package jsonnet-mode
-  :straight t
-  :defer t
-  :config
-  (despot-def jsonnet-mode-map
-    "=" 'jsonnet-reformat-buffer))
-
-(use-package lua-mode :straight t :defer t)
-
-(use-package web-mode :straight t :defer t)
-
-(use-package yaml-mode :straight t :defer t)
 
 (use-package markdown-mode
   :straight t
@@ -124,5 +94,5 @@
     "M-k"      'markdown-move-up
     "M-l"      'markdown-demote))
 
-(provide 'lang-misc)
-;;; lang-misc.el ends here
+(provide 'lang-md)
+;;; lang-md.el ends here

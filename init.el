@@ -41,7 +41,7 @@
 (require 'lang-tex)
 (require 'lang-python)
 (require 'lang-emacs-lisp)
-(require 'lang-misc)
+(require 'lang-md)
 
 (defun display-startup-echo-area-message ()
   "Display startup message."

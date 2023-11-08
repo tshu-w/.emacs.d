@@ -401,7 +401,9 @@ reuse it's window, otherwise create new one."
 (use-package treesit-auto
   :when (and (fboundp 'treesit-available-p) (treesit-available-p))
   :straight t
-  :hook (after-init . global-treesit-auto-mode))
+  :hook (after-init . global-treesit-auto-mode)
+  :config
+  (treesit-auto-add-to-auto-mode-alist))
 
 (use-package undohist
   :straight t
