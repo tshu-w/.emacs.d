@@ -179,7 +179,7 @@
 
 (use-package citar
   :straight (:files (:defaults))
-  :hook ((org-mode latex-mode) . citar-setup-capf)
+  :hook ((org-mode latex-mode) . citar-capf-setup)
   :init
   (setq org-cite-insert-processor 'citar
         org-cite-follow-processor 'citar
@@ -208,10 +208,6 @@
         citar-file-open-functions '(("html" . citar-file-open-external)
                                     ("pdf" . citar-file-open-external)
                                     (t . find-file)))
-
-  (defun citar-setup-capf ()
-    "add `citar-capf' to `completion-at-point-functions'"
-    (add-to-list 'completion-at-point-functions #'citar-capf))
   :general
   (tyrant-def "aC" 'citar-open))
 
