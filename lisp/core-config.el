@@ -240,8 +240,7 @@
         project-switch-commands '((project-switch-to-buffer "Find buffer")
                                   (project-find-file "Find file")
                                   (project-find-regexp "Find regexp")
-                                  (project-find-dir "Find directory"))
-        project-switch-use-entire-map t)
+                                  (project-find-dir "Find directory")))
 
   (defcustom project-root-files '(".project")
     "Files that indicate the root of a project."
