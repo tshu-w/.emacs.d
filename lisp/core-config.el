@@ -14,7 +14,7 @@
 (setq user-full-name "Tianshu Wang"
       user-mail-address "wang@tianshu.me")
 
-(defvar default-font "SauceCodePro Nerd Font")
+(defvar default-font "SauceCodePro NFM")
 (defvar font-size 14)
 (defvar unicode-font "Noto Sans CJK SC")
 (defvar unicode-scale (/ 16.0 font-size))
