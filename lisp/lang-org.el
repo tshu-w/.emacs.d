@@ -343,7 +343,7 @@
                      :message "you need to install the programs: xelatex and dvisvgm."
                      :image-input-type "xdv" :image-output-type "svg" :image-size-adjust (1.7 . 1.5)
                      :latex-compiler ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
-                     :image-converter ("dvisvgm %o/%b.xdv --no-fonts --exact-bbox --scale=%S --output=%O"))))
+                     :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --output=%O"))))
 
     (plist-put org-format-latex-options :scale 1.5))
 
