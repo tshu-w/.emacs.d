@@ -93,7 +93,7 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model "gpt-4")
+  (setq gptel-model "gpt-4-1106-preview")
   :config
   (defvar gptel--oneapi
     (gptel-make-openai
