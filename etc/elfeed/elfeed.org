@@ -101,6 +101,7 @@
 ** [[https://linux.cn/rss.xml][Linux 中国]] :ignore:
 ** [[https://linuxtoy.org/feeds/all.atom.xml][LinuxTOY]]
 ** [[https://liujiacai.net/atom.xml][Keep Coding]]
+** [[https://lmsys.org/rss.xml][LMSYS ORG]]
 ** [[https://lucidmanager.org/tags/emacs/index.xml][Lucid Manager]]
 ** [[https://lutaonan.com/rss.xml][Randy's Blog]]
 ** [[https://lxlrachel.wordpress.com/feed][进击的设计宅]]
