@@ -77,6 +77,10 @@
   :config
   (elfeed-tube-setup))
 
+(use-package fcitx
+  :straight t
+  :hook (after-init . fcitx-aggressive-setup))
+
 (use-package flyspell-correct
   :straight t
   :general
