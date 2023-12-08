@@ -168,6 +168,14 @@
                         ;; IMAP-deleted:
 	                    (mu4e--server-move docid
                                            (mu4e--mark-check-target target) "+S-u-N"))))
+
+  (setf (alist-get 'refile mu4e-marks)
+        (list :char '("r" . "▶")
+              :prompt "refile"
+              :dyn-target (lambda (target msg) (mu4e-get-refile-folder msg))
+              :action (lambda (docid msg target)
+                        ;; mark the refile message as read
+	                    (mu4e--server-move docid (mu4e--mark-check-target target) "+S-u-N"))))
   :general
   (tyrant-def "am" 'mu4e))
 
