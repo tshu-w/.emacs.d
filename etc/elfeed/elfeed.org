@@ -234,3 +234,5 @@
 ** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCZIIRX8rkNjVpP-oLMHpeDw][Calisthenicmovement]]
 ** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCwgKmJM4ZJQRJ-U5NjvR2dg][George Hotz Archive]]
 ** [[https://www.youtube.com/feeds/videos.xml?channel_id=UC634L9eG-YsskyzWxnp9BJA][Conor Harris]]
+* Bilibili :elfeed:
+** [[https://rsshub.app/bilibili/user/dynamic/46309408][骨科康复 kevin]]
