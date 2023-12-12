@@ -24,7 +24,9 @@
   (setq magit-diff-refine-hunk t
         magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
         magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
-        magit-save-repository-buffers 'dontask)
+        magit-save-repository-buffers 'dontask
+
+        transient-default-level 5)
 
   (add-hook 'magit-diff-mode-hook (lambda () (toggle-truncate-lines -1)))
   (add-hook 'magit-process-find-password-functions 'magit-process-password-auth-source)
@@ -40,6 +42,19 @@
   (advice-add 'magit-blame-addition           :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-file          :after #'org-reveal-advice)
   (advice-add 'magit-diff-visit-worktree-file :after #'org-reveal-advice)
+
+  (defun magit-log-dangling ()
+    (interactive)
+    (magit-log-setup-buffer
+     (-filter
+      (lambda (x) (not (or (equal "" x) (s-match "error" x))))
+      (s-lines
+       (shell-command-to-string
+        "git fsck --no-reflogs | awk '/dangling commit/ {print $3}'")))
+     '("--no-walk" "--color" "--decorate" "--follow")' nil))
+
+  (transient-append-suffix 'magit-log "s"
+    '("d" "dangling" magit-log-dangling))
   :general
   (tyrant-def
     "g"   (cons "git" (make-sparse-keymap))
