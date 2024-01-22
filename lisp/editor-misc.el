@@ -205,15 +205,10 @@ there."
                (args (nth 0 hst)))
           (gptel--suffix-send args)))))
 
-  (defun gptel-colorize-response ()
-    (let ((prop))
-      (save-excursion
-        (setq prop (text-property-search-forward 'gptel 'response t))
-        (put-text-property (prop-match-beginning prop)
-                           (prop-match-end prop)
-                           'font-lock-face
-                           'font-lock-string-face))))
-  (add-hook 'gptel-post-response-hook #'gptel-colorize-response t)
+  (defun gptel-colorize-response (begin end)
+    (save-excursion
+      (put-text-property begin end 'font-lock-face 'font-lock-string-face)))
+  (add-hook 'gptel-post-response-functions #'gptel-colorize-response t)
 
   (defun clear-text-properties (start end)
     "Clear text properties between START and END."
