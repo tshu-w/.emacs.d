@@ -28,9 +28,10 @@
 
 (add-hook 'after-load-theme-hook
           (defun unscale-outlines ()
-            (dolist (outline-number (number-sequence 1 8))
-              (let ((outline (intern (format "outline-%d" outline-number))))
-                (set-face-attribute outline nil :height 1.0)))))
+            (with-eval-after-load 'org
+              (dolist (outline-number (number-sequence 1 8))
+                (let ((outline (intern (format "outline-%d" outline-number))))
+                  (set-face-attribute outline nil :height 1.0))))))
 
 (add-hook 'after-load-theme-hook
           (defun customize-tab-bar ()
@@ -75,7 +76,8 @@
   :defer t
   :config
   (setq humanoid-themes-org-height nil
-        humanoid-themes-org-bold nil))
+        humanoid-themes-org-bold nil
+        humanoid-themes-org-priority-bold nil))
 
 (use-package kaolin-themes
   :straight t
@@ -119,6 +121,7 @@
                        ;; doom-plain
                        doom-solarized-light
                        doom-tomorrow-day
+                       ef-arbutus
                        ef-cyprus
                        ef-day
                        ef-elea-light
@@ -132,9 +135,9 @@
                        ef-spring
                        ef-summer
                        ef-trio-light
-                       ef-tritanopia-light
+                       ;; ef-tritanopia-light
                        flucui-light
-                       humanoid-light
+                       ;; humanoid-light
                        kaolin-breeze
                        kaolin-light
                        kaolin-mono-light
@@ -159,7 +162,7 @@
                       doom-feather-dark
                       doom-gruvbox
                       ;; doom-henna
-                      doom-homage-black
+                      ;; doom-homage-black
                       doom-horizon
                       doom-Iosvkem
                       ;; doom-ir-black
@@ -212,14 +215,15 @@
                       ef-duo-dark
                       ef-elea-dark
                       ef-maris-dark
-                      ef-melissa-dark
+                      ;; ef-melissa-dark
                       ef-night
+                      ef-rosa
                       ef-symbiosis
                       ef-trio-dark
-                      ef-tritanopia-dark
+                      ;; ef-tritanopia-dark
                       ef-winter
                       ;; flucui-dark
-                      humanoid-dark
+                      ;; humanoid-dark
                       ;; kaolin-blossom
                       kaolin-bubblegum
                       kaolin-galaxy
