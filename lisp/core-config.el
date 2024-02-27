@@ -111,6 +111,9 @@
 ;; break lines after more characters
 (setq word-wrap-by-category t)
 
+;; suppress annoying warnings
+(setq warning-minimum-level :error)
+
 (defun server-remove-kill-buffer-hook ()
   "Remove prompt if the file is opened in other clients."
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
