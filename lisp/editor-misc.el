@@ -97,7 +97,7 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model "gpt-4-1106-preview")
+  (setq gptel-model "gpt-4-turbo-preview")
   :config
   (defvar gptel--oneapi
     (gptel-make-openai
@@ -106,7 +106,7 @@
      :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))
      :key 'gptel-api-key
      :stream t
-     :models '("gpt-4-1106-preview" "gpt-4" "gpt-3.5-turbo")))
+     :models '("gpt-4-turbo-preview" "gpt-4" "gpt-3.5-turbo")))
 
   (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI."
                 gptel-backend gptel--oneapi)
