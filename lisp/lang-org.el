@@ -627,6 +627,7 @@
 
 (use-package org-modern
   :straight t
+  :after org
   :hook (org-mode . org-modern-mode)
   :config
   (setq org-modern-star '("◉" "○" "◎" "▣" "▢" "◈" "◇")
@@ -637,10 +638,6 @@
         org-modern-tag nil
         org-modern-table-vertical 1
         org-modern-timestamp nil))
-
-(use-package org-modern-indent
-  :straight (:host github :repo "jdtsmith/org-modern-indent")
-  :hook (org-modern-mode . org-modern-indent-mode))
 
 (use-package org-project
   :straight (:host github :repo "delehef/org-project")
