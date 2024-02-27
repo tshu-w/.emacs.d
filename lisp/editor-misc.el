@@ -79,7 +79,9 @@
 
 (use-package fcitx
   :straight t
-  :hook (after-init . fcitx-aggressive-setup))
+  :hook (after-init . fcitx-aggressive-setup)
+  :config
+  (add-hook 'org-capture-mode-hook #'fcitx--deactivate))
 
 (use-package flyspell-correct
   :straight t
