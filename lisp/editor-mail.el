@@ -24,6 +24,8 @@
                              :store  #'mu4e-org-store-link))
   :config
   (setq mail-user-agent 'mu4e-user-agent
+        ;; (rx (seq (one-or-more anything) "@" (opt "wang.") "tianshu.me"))
+        message-alternative-emails "[^z-a]+@\\(?:wang\\.\\)?tianshu\\.me"
         message-citation-line-format "On %a, %b %d %Y, %f wrote:\n"
         message-kill-buffer-on-exit t
         message-sendmail-envelope-from 'header
@@ -31,7 +33,6 @@
 
         mu4e-change-filenames-when-moving t
         mu4e-completing-read-function 'completing-read
-        mu4e-compose-complete-only-personal t
         mu4e-compose-dont-reply-to-self t
         mu4e-compose-reply-ignore-address '("not?\\(?:_-\\)?reply")
         mu4e-confirm-quit nil
