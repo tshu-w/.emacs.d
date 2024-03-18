@@ -84,7 +84,7 @@
   (setq consult-narrow-key "?"
         consult-preview-key "M-.")
 
-  (defun consult-delete-default-contents()
+  (defun consult-delete-default-contents ()
     (remove-hook 'pre-command-hook 'consult-delete-default-contents)
     (cond ((member this-command '(self-insert-command))
            (delete-minibuffer-contents))
@@ -302,8 +302,9 @@ targets."
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :hook (prog-mode . copilot-mode)
-  :config
-  (setq copilot-indent-warning-suppress t)
+  :init
+  (setq copilot-indent-warning-suppress t
+        copilot-install-dir (no-littering-expand-var-file-name "copilot"))
   :general
   ('insert copilot-mode-map
            "C-f" 'copilot-accept-completion
