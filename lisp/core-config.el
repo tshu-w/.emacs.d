@@ -200,7 +200,8 @@
   :hook ((before-save . delete-trailing-whitespace)
          (after-save . executable-make-buffer-file-executable-if-script-p))
   :init
-  (setq make-backup-files nil        ;; don't create backup~ files
+  (setq find-file-visit-truename t
+        make-backup-files nil        ;; don't create backup~ files
         revert-without-query '(".*") ;; disable revert query
         enable-remote-dir-locals t)
   :config
