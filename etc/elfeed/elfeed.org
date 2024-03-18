@@ -29,7 +29,7 @@
 ** [[https://1byte.io/rss.xml][1 Byte]]
 ** [[https://amatriain.net/blog/feed.xml][AI, software, tech, and people, not in that order... by X]]
 ** [[https://archive.casouri.cc/note/rss.xml][BHL0388]]
-** [[https://atjason.com/atom.xml][Jason]]
+** [[https://atjason.com/atom.xml][Jason]] :ignore:
 ** [[https://beorg.substack.com/feed][Beorg update]]
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
 ** [[https://blanboom.org/feed/][Blanboom]]
@@ -99,6 +99,7 @@
 ** [[https://mogeko.me/posts/index.xml][Mogeko`s Blog]]
 ** [[https://nova.moe/feed/][Nova Kwok's Awesome Blog]]
 ** [[https://oldj.net/feed][oldj's blog]]
+** [[https://orangex4.cool/atom.xml][OrangeX4's Blog]]
 ** [[https://oremacs.com/atom.xml][(or emacs irrelevant)]]
 ** [[https://paul.pub/feed.xml][保罗的酒吧]]
 ** [[https://pepcn.com/feed][壹页单章]]
