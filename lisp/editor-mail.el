@@ -77,9 +77,8 @@
                           (when msg
                             (string-prefix-p "/fastmail" (mu4e-message-field msg :maildir))))
             :enter-func (lambda () (mu4e-message "Switch to the fastmail context"))
-            :leave-func (lambda () (mu4e-clear-caches))
             :vars '((user-mail-address . "wang@tianshu.me")
-                    (mu4e-compose-signature . "Tianshu Wang\n")
+                    (message-signature . "Tianshu Wang\n")
                     (mu4e-sent-folder . "/fastmail/Sent")
                     (mu4e-drafts-folder . "/fastmail/Drafts")
                     (mu4e-trash-folder . "/fastmail/Trash")
@@ -94,9 +93,8 @@
                           (when msg
                             (string-prefix-p "/iscas" (mu4e-message-field msg :maildir))))
             :enter-func (lambda () (mu4e-message "Switch to the iscas context"))
-            :leave-func (lambda () (mu4e-clear-caches))
             :vars '((user-mail-address . "tianshu2020@iscas.ac.cn")
-                    (mu4e-compose-signature . "王天舒\n")
+                    (message-signature . "王天舒\n")
                     (mu4e-sent-folder . "/iscas/Sent")
                     (mu4e-drafts-folder . "/iscas/Drafts")
                     (mu4e-trash-folder . "/iscas/Trash")
