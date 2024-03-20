@@ -406,6 +406,13 @@ reuse it's window, otherwise create new one."
   :config
   (treesit-auto-add-to-auto-mode-alist))
 
+(use-package typst-ts-mode
+  :straight (:host sourcehut :repo "meow_king/typst-ts-mode")
+  :defer t
+  :init
+  (setq typst-ts-mode-indent-offset 2
+        typst-ts-mode-watch-options "--open"))
+
 (use-package undohist
   :straight t
   :hook (after-init . undohist-initialize)
