@@ -111,8 +111,7 @@
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
 
-  (add-hook 'mu4e-compose-mode-hook
-            (lambda () (use-hard-newlines t 'guess)))
+  (add-hook 'mu4e-compose-mode-hook 'turn-off-auto-fill)
 
   (add-hook 'message-send-hook
             (lambda () (unless (yes-or-no-p "Sure you want to send this?")
