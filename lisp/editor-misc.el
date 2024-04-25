@@ -99,16 +99,16 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model "gpt-4-turbo-preview")
+  (setq gptel-model "gpt-4-turbo")
   :config
   (defvar gptel--oneapi
     (gptel-make-openai
-     "ChatGPT"
-     :host "one-api.ponte.top"
-     :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))
-     :key 'gptel-api-key
-     :stream t
-     :models '("gpt-4-turbo-preview" "gpt-4" "gpt-3.5-turbo")))
+      "ChatGPT"
+      :host "one-api.ponte.top"
+      :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))
+      :key 'gptel-api-key
+      :stream t
+      :models '("gpt-4-turbo" "gpt-4" "claude-3-opus-20240229" "gpt-3.5-turbo" "claude-3-sonnet-20240229")))
 
   (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI."
                 gptel-backend gptel--oneapi)
@@ -172,30 +172,6 @@ there."
 
   (autoload #'gptel-transient-send "gptel-transient" nil t)
   (with-eval-after-load 'gptel-transient
-    (transient-define-infix gptel--infix-provider ()
-      "AI Provider for Chat."
-      :description "GPT Model: "
-      :class 'gptel-provider-variable
-      :prompt "Model provider: "
-      :variable 'gptel-backend
-      :model 'gptel-model
-      :key "-m"
-      :reader (lambda (prompt &rest _)
-                (let* ((backend-name
-                        (if (<= (length gptel--known-backends) 1)
-                            (caar gptel--known-backends)
-                          (completing-read
-                           prompt
-                           (mapcar #'car gptel--known-backends))))
-                       (backend (alist-get backend-name gptel--known-backends
-                                           nil nil #'equal))
-                       (backend-models (gptel-backend-models backend))
-                       (model-name (if (= (length backend-models) 1)
-                                       (car backend-models)
-                                     (nth (% (1+ (cl-position gptel-model backend-models :test #'equal))
-                                             (length backend-models)) backend-models))))
-                  (list backend model-name))))
-
     (defun gptel-transient-send (&optional arg)
       "Call `gptel--suffix-send' with latest history."
       (interactive "P")
