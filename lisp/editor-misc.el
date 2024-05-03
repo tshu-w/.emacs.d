@@ -108,7 +108,7 @@
       :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))
       :key 'gptel-api-key
       :stream t
-      :models '("gpt-4-turbo" "gpt-4" "claude-3-opus-20240229" "gpt-3.5-turbo" "claude-3-sonnet-20240229")))
+      :models '("gpt-4-turbo" "gpt-4" "claude-3-opus" "gpt-3.5-turbo" "claude-3-sonnet")))
 
   (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI."
                 gptel-backend gptel--oneapi)
