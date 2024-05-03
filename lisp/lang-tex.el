@@ -10,7 +10,7 @@
 
 (use-package tex
   :straight auctex
-  :mode ("\\.[tT]e[xX]\\'" . TeX-tex-mode)
+  :defer t
   :config
   (setq-default TeX-master nil)
   (setq TeX-parse-self t
