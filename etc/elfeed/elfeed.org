@@ -62,6 +62,7 @@
 ** [[https://emacsnotes.wordpress.com/feed][Emacs Notes – GNU Emacs, for Ordinary Folks]]
 ** [[https://endler.dev/rss.xml][Matthias Endler]]
 ** [[https://feeds.feedburner.com/bookfere][书伴]]
+** [[https://frostming.com/feed.xml][Frost's Blog]]
 ** [[https://geekplux.com/atom.xml][GeekPlux]]
 ** [[https://greatdk.com/feed][王登科-DK 博客]]
 ** [[https://halfrost.com/rss][Halfrost's Field | 冰霜之地]]
