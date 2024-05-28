@@ -104,10 +104,6 @@
                     (smtpmail-smtp-service . 994)
                     (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))))))
 
-  (when (require 'smtpmail-async nil t)
-    (setq send-mail-function         'async-smtpmail-send-it
-          message-send-mail-function 'async-smtpmail-send-it))
-
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
 
