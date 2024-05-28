@@ -349,6 +349,13 @@ Just put this function in `hippie-expand-try-functions-list'."
         eglot-connect-timeout 10
         eglot-ignored-server-capabilities nil)
 
+  (add-to-list 'eglot-server-programs
+               `((python-mode python-ts-mode) . ,(eglot-alternatives
+                                                  '(("ruff" "server" "--preview")
+                                                    "pylsp" "pyls" ("basedpyright-langserver" "--stdio")
+                                                    ("pyright-langserver" "--stdio")
+                                                    "jedi-language-server"))))
+
   (defun expand-absolute-name (name)
     (if (file-name-absolute-p name)
         (tramp-file-local-name
