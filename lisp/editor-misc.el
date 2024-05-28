@@ -311,7 +311,6 @@ reuse it's window, otherwise create new one."
 (use-package rime
   :straight t
   :defer t
-  :custom-face (rime-preedit-face ((t nil)))
   :init
   (setq default-input-method "rime")
   :config
