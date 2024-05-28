@@ -361,7 +361,7 @@ Just put this function in `hippie-expand-try-functions-list'."
               (defun eglot-capf ()
                 (remove-hook 'completion-at-point-functions #'eglot-completion-at-point t)
                 (add-hook 'completion-at-point-functions
-                          (cape-super-capf
+                          (cape-capf-super
                            #'eglot-completion-at-point
                            #'tabnine-completion-at-point) nil t))))
 
