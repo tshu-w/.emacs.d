@@ -35,6 +35,12 @@
         '(("overleaf\\.com" . TeX-tex-mode)
           ("github\\.com" . markdown-mode))))
 
+(use-package browser-hist
+  :straight (:host github :repo "agzam/browser-hist.el")
+  :commands browser-hist-search
+  :init
+  (setq browser-hist-default-browser 'safari))
+
 (use-package dumb-jump
   :straight t
   :defer t
