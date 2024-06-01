@@ -56,18 +56,14 @@
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil)
   :config
-  (defun flex-if-twiddle (pattern _index _total)
-    (when (string-suffix-p "~" pattern)
-      `(orderless-flex . ,(substring pattern 0 -1))))
-
-  (defun without-if-bang (pattern _index _total)
+  (defun orderless-dispatch (pattern _index _total)
     (cond
-     ((equal "!" pattern)
-      '(orderless-literal . ""))
-     ((string-prefix-p "!" pattern)
-      `(orderless-without-literal . ,(substring pattern 1)))))
+     ((string= "!" pattern) `(orderless-literal . ""))
+     ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
+     ((string-suffix-p "=" pattern) `(orderless-literal . ,(substring pattern 0 -1)))
+     ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
 
-  (setq orderless-style-dispatchers '(flex-if-twiddle without-if-bang))
+  (setq orderless-style-dispatchers '(orderless-dispatch))
 
   (advice-add 'company-capf
               :around
@@ -77,6 +73,7 @@
 
 (use-package consult
   :straight t
+  :commands consult-ripgrep-noignore
   :init
   (advice-add #'project-find-regexp :override #'consult-ripgrep)
   (advice-add #'project-switch-to-buffer :override #'consult-project-buffer)
@@ -98,6 +95,23 @@
                      :initial (when-let ((string (thing-at-point 'word)))
                                 (add-hook 'pre-command-hook 'consult-delete-default-contents)
                                 (propertize string 'face 'shadow)))
+
+  ;; https://github.com/minad/consult/wiki#temporarily-override-consult-ripgrep-args
+  (defun consult--ripgrep-noignore-builder (input)
+    "consult--ripgrep-builder with INPUT, but ignores .gitignore."
+    (let ((consult-ripgrep-args
+           (if (string-match-p "--no-ignore-vcs" consult-ripgrep-args)
+               consult-ripgrep-args
+             (concat consult-ripgrep-args "--no-ignore-vcs ."))))
+      (consult--make-ripgrep-builder input)))
+
+  (defun consult-ripgrep-noignore (&optional dir initial)
+    "Do consult-ripgrep with DIR and INITIAL, but without ignoring."
+    (interactive "P")
+    (consult--grep "Ripgrep"
+                   #'consult--ripgrep-noignore-builder
+                   ;; Here the directory prompt is called by default to avoid searching from the project root
+                   (if dir dir t) initial))
 
   (defvar consult--source-project-file
     `(:name     "Project File"
