@@ -669,7 +669,7 @@
 
 (use-package org-reverse-datetree
   :straight t
-  :commands (org-datetree-refile)
+  :commands org-datetree-refile
   :init
   (setq-default org-reverse-datetree-level-formats '("%Y" "%Y-%m %B" "%Y W%W" "%Y-%m-%d %A"))
   :config
