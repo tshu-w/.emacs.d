@@ -309,7 +309,7 @@ the unwritable tidbits."
   :hook (after-init . save-place-mode))
 
 (use-package server
-  :commands (server-running-p)
+  :commands server-running-p
   :hook (after-init . (lambda () (unless (server-running-p)
                               (server-start)))))
 
