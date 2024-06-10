@@ -62,6 +62,7 @@
 ** [[https://emacsnotes.wordpress.com/feed][Emacs Notes – GNU Emacs, for Ordinary Folks]]
 ** [[https://endler.dev/rss.xml][Matthias Endler]]
 ** [[https://feeds.feedburner.com/bookfere][书伴]]
+** [[https://frostming.com/feed.xml][Frost's Blog]]
 ** [[https://geekplux.com/atom.xml][GeekPlux]]
 ** [[https://greatdk.com/feed][王登科-DK 博客]]
 ** [[https://halfrost.com/rss][Halfrost's Field | 冰霜之地]]
@@ -119,6 +120,7 @@
 ** [[https://taresky.com/feed][TARESKY]]
 ** [[https://tech.meituan.com/feed][美团技术团队]]
 ** [[https://tech.youzan.com/rss/][有赞技术团队]]
+** [[https://thedataexchange.media/feed/][The Data Exchange]]
 ** [[https://thevaluable.dev/index.xml][The Valuable Dev]]
 ** [[https://tobiaslee.top/atom.xml][Stay Hungry, Stay Foolish.]]
 ** [[https://tw93.fun/feed.xml][Tw93]]
@@ -157,7 +159,6 @@
 ** [[https://zhile.io/?feed=rss][知了 – 朝闻道，夕可眠矣。]]
 ** [[https://zonble.net/feed][zonble]]
 ** [[https://ztlevi.github.io/atom.xml][Lady luck is smilin'.]]
-** [[https://frostming.com/feed.xml][Frost's Blog]]
 * WeRss :elfeed:WeRss:
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/12e4bdba-2aac-43c1-9563-afd326a23ee7.xml][L 先生说]]
 ** [[https://cdn.werss.weapp.design/api/v1/feeds/b9c3b558-9e54-451b-8a5e-8d225705128d.xml][PaperWeekly]]
