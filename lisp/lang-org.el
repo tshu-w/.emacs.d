@@ -29,6 +29,7 @@
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
         org-cycle-open-archived-trees t
+        org-descriptive-links nil
         org-fontify-quote-and-verse-blocks t
         org-fontify-whole-heading-line t
         org-global-properties '(("STYLE_ALL" . "habit")
@@ -600,14 +601,6 @@
 (use-package orgonomic
   :straight (:host github :repo "aaronjensen/emacs-orgonomic")
   :hook (org-mode . orgonomic-mode))
-
-(use-package org-appear
-  :straight t
-  :hook (org-mode . org-appear-mode)
-  :config
-  (setq org-appear-autolinks t
-        org-appear-autosubmarkers t
-        org-appear-autoentities t))
 
 (use-package org-modern
   :straight t
