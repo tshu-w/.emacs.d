@@ -138,6 +138,7 @@
 ** [[https://www.dongwm.com/atom.xml][小明明 s à domicile]]
 ** [[https://www.escapelife.site/atom.xml][Escape]]
 ** [[https://www.gtrun.org/index.xml][GTruNSec | 光涛]] :ignore:
+** [[https://www.indigox.me/rss/][Indigo's Digital Mirror]]
 ** [[https://www.ioiox.com/feed][IOIOX]]
 ** [[https://www.kawabangga.com/feed][卡瓦邦噶]]
 ** [[https://www.logcg.com/feed][落格博客]]
@@ -182,7 +183,7 @@
 * Resources :elfeed:Resources:
 ** [[http://www.abskoop.com/rss][ahhhhfs-分享快乐]]
 ** [[http://www.salttiger.com/index.php/feed/][SaltTiger]]
-** [[http://xclient.info/feed][精品 MAC 应用分享]]
+** [[http://xclient.info/feed][精品MAC 应用分享]] :ignore:
 * Platform :elfeed:Platform:
 ** [[http://sspai.com/feed][少数派]]
 ** [[https://liqi.io/index.xml][利器]]
