@@ -656,7 +656,6 @@
 
 (use-package org-roam
   :straight t
-  :hook (org-mode . org-roam-db-autosync-mode)
   :init
   (setq org-roam-capture-templates
         '(("d" "default" plain "" :target
@@ -665,9 +664,10 @@
         org-roam-database-connector 'sqlite-builtin
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
-        org-roam-directory org-note-directory
+        org-roam-directory (file-truename org-note-directory)
         org-roam-node-display-template (concat "${hierarchy:*} ${backlinkscount:6} ${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
         org-roam-v2-ack t)
+  (with-eval-after-load 'org (org-roam-db-autosync-mode))
   :config
   ;; https://github.com/org-roam/org-roam/wiki/User-contributed-Tricks#showing-node-hierarchy
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
@@ -724,17 +724,17 @@
       "Gets the backlinks of NODE with `org-roam-db-query'."
       (org-roam-db-query
        [:select [source dest]
-	            :from links
-	            :where (= dest $s1)
-	            :and (= type "id")]
+        :from links
+        :where (= dest $s1)
+        :and (= type "id")]
        (org-roam-node-id node)))
 
     (defun org-roam-backlinks-p (source node)
       "Predicate function that checks if NODE is a backlink of SOURCE."
       (let* ((source-id (org-roam-node-id source))
-	         (backlinks (org-roam-backlinks-query source))
-	         (id (org-roam-node-id node))
-	         (id-list (list id source-id)))
+             (backlinks (org-roam-backlinks-query source))
+             (id (org-roam-node-id node))
+             (id-list (list id source-id)))
         (member id-list backlinks)))
 
     (defun org-roam-backlinks--read-node-backlinks (source)
