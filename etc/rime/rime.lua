@@ -1,1 +1,0 @@
-/Users/wangtianshu/Library/Rime/rime.lua
