@@ -307,14 +307,15 @@ targets."
   (setq prescient-sort-full-matches-first t
         prescient-sort-length-enable nil))
 
-(use-package tabnine-capf
-  :straight (:host github :repo "50ways2sayhard/tabnine-capf" :files ("*.el" "*.sh"))
-  :hook (kill-emacs . tabnine-capf-kill-process)
+(use-package tabnine
+  :straight t
+  :hook (kill-emacs . tabnine-kill-process)
   :init
+  (setq tabnine-minimum-prefix-length 0)
   (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point))
 
 (use-package copilot
-  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
   :hook (prog-mode . copilot-mode)
   :init
   (setq copilot-indent-warning-suppress t
