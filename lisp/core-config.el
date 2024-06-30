@@ -12,7 +12,9 @@
 (set-default-coding-systems 'utf-8)
 
 (setq user-full-name "Tianshu Wang"
-      user-mail-address "wang@tianshu.me")
+      user-mail-address "wang@tianshu.me"
+      epa-file-select-keys 'auto
+      epa-file-encrypt-to user-mail-address)
 
 (defvar default-font "SauceCodePro NFM")
 (defvar font-size 14)
