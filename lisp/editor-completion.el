@@ -102,8 +102,8 @@
     (let ((consult-ripgrep-args
            (if (string-match-p "--no-ignore-vcs" consult-ripgrep-args)
                consult-ripgrep-args
-             (concat consult-ripgrep-args "--no-ignore-vcs ."))))
-      (consult--make-ripgrep-builder input)))
+             (concat consult-ripgrep-args " --no-ignore-vcs ."))))
+      (consult--ripgrep-make-builder input)))
 
   (defun consult-ripgrep-noignore (&optional dir initial)
     "Do consult-ripgrep with DIR and INITIAL, but without ignoring."
