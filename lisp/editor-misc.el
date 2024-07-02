@@ -391,6 +391,7 @@ reuse it's window, otherwise create new one."
   :straight (:host sourcehut :repo "meow_king/typst-ts-mode")
   :defer t
   :init
+  (add-to-list 'treesit-language-source-alist '(typst "https://github.com/uben0/tree-sitter-typst"))
   (setq typst-ts-mode-indent-offset 2
         typst-ts-mode-watch-options "--open"))
 
