@@ -105,27 +105,24 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model "gpt-4-turbo")
-  :config
-  (defvar gptel--oneapi
-    (gptel-make-openai
-      "ChatGPT"
-      :host "one-api.ponte.top"
-      :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))
-      :key 'gptel-api-key
-      :stream t
-      :models '("gpt-4-turbo" "gpt-4" "claude-3-opus" "gpt-3.5-turbo" "claude-3-sonnet")))
-
-  (setq-default gptel--system-message "You are ChatGPT, a large language model trained by OpenAI."
-                gptel-backend gptel--oneapi)
-  (setq gptel-directives
-        `((default . ,gptel--system-message)
-          (paraphraser . "You are a paraphraser. Paraphrase and polish the text delimited by triple quotes in the corresponding language without changing its original meaning.")
+  (setq gptel-model "claude-3-5-sonnet"
+        gptel-directives
+        `((default . "")
+          (paraphraser . "You are a paraphraser. Paraphrase and polish the text delimited by triple quotes in the same language without changing its original meaning.")
           (translator . "You are a professional translator. Translate the text delimited by triple quotes into English if it's written in Chinese, otherwise, translate it into Chinese. Only output the translated text without quotes.")
           (rewriter . "You are a rewriter. Concisely rewrite the text delimited by triple quotes in the corresponding language and style.")
           (summarizer . "You are a summarizer. Summarize the text delimited by triple quotes in the corresponding language and style without redundant description.")
           (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
           (code-explainer . "You are a professional code explainer. Explain the code delimited by triple quotes and report any bugs or errors.")))
+  :config
+  (setq gptel--known-backends nil)
+  (defvar gptel--oneapi
+    (gptel-make-openai "OneAPI"
+      :host "one-api.ponte.top"
+      :key 'gptel-api-key
+      :stream t
+      :models '("gpt-4o" "gpt-4-turbo" "gpt-4" "gpt-3.5-turbo" "claude-3-opus" "claude-3-5-sonnet")))
+  (setq-default gptel-backend gptel--oneapi)
 
   ;; backticks
   ;; https://github.com/karthink/gptel/issues/61
