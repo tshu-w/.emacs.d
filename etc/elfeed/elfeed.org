@@ -48,6 +48,7 @@
 ** [[https://catcoding.me/atom.xml][程序员的喵]]
 ** [[https://chriszheng.science/atom.xml][M-x Chris-An-Emacser]]
 ** [[https://cizixs.com/feed.xml][Cizixs Write Here]]
+** [[https://coderemixer.com/atom.xml][CodeRemixer]]
 ** [[https://coolshell.cn/feed][酷壳 - CoolShell.cn]]
 ** [[https://crazy.capital/feed][疯投圈]]
 ** [[https://crispgm.com/feed.xml][CrispDev]]
