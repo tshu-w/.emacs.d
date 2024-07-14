@@ -26,21 +26,6 @@
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
-  (add-to-list 'TeX-expand-list
-               '("%(-PDF)"
-                 (lambda ()
-                   (if TeX-PDF-mode
-                       (cond
-                        ((eq TeX-engine 'default) "-pdf")
-                        ((eq TeX-engine 'xetex) "-pdfxe")
-                        ((eq TeX-engine 'luatex) "-pdflua")) ""))))
-  (add-to-list 'TeX-command-list
-               '("LaTeXmk" "latexmk %(-PDF) -%(PDF)%(latex)='%`%l%(mode)%'' %(output-dir) %t"
-                 TeX-run-format nil (latex-mode doctex-mode) :help "Run Latexmk"))
-  (with-eval-after-load 'latex
-    (setq LaTeX-clean-intermediate-suffixes
-          (append LaTeX-clean-intermediate-suffixes '("\\.fdb_latexmk" "\\.fls"))))
-
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
