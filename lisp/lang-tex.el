@@ -8,8 +8,8 @@
 
 ;;; Code:
 
-(use-package tex-site
-  :straight (auctex :pre-build ("make" "tex-site.el"))
+(use-package tex
+  :straight auctex
   :defer t
   :config
   (setq-default TeX-master nil)
