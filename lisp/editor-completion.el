@@ -373,12 +373,14 @@ Just put this function in `hippie-expand-try-functions-list'."
                                                     ("pyright-langserver" "--stdio")
                                                     "jedi-language-server"))))
 
-  (defun expand-absolute-name (name)
-    (if (file-name-absolute-p name)
-        (tramp-file-local-name
-         (expand-file-name
-          (concat (file-remote-p default-directory) name)))
-      name))
+  (cl-defmethod eglot-handle-notification :after
+      (_server (_method (eql textDocument/publishDiagnostics)) &key uri
+          &allow-other-keys)
+      (when-let ((buffer (find-buffer-visiting (eglot-uri-to-path uri))))
+          (with-current-buffer buffer
+              (if (and (eq nil flymake-no-changes-timeout)
+                      (not (buffer-modified-p)))
+                  (flymake-start t)))))
 
   (when (fboundp #'tabnine-completion-at-point)
     (add-hook 'eglot-managed-mode-hook
@@ -390,6 +392,13 @@ Just put this function in `hippie-expand-try-functions-list'."
                            #'tabnine-completion-at-point) nil t))))
 
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+
+  (defun expand-absolute-name (name)
+    (if (file-name-absolute-p name)
+        (tramp-file-local-name
+         (expand-file-name
+          (concat (file-remote-p default-directory) name)))
+      name))
 
   ;; TODO:
   ;; https://github.com/joaotavora/eglot/discussions/876
