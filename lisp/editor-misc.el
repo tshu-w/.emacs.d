@@ -49,7 +49,6 @@
   (setq dumb-jump-selector 'completing-read))
 
 (use-package editorconfig
-  :disabled t
   :straight t
   :init (editorconfig-mode))
 
