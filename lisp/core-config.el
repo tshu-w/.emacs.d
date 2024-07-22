@@ -366,7 +366,12 @@ the unwritable tidbits."
   :config
   (setq remote-file-name-inhibit-cache 60
         tramp-verbose 1
-        vc-handled-backends '(SVN Git))
+        vc-handled-backends '(SVN Git)
+        tramp-otp-password-prompt-regexp
+        (rx-to-string
+            `(: bol (* nonl)
+                 (group (| "Verification code" "OTP"))
+                 (* nonl) (any . ,tramp-compat-password-colon-equivalents) (* blank))))
 
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 
