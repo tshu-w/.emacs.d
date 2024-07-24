@@ -151,7 +151,7 @@
 
 (defvar dark-themes '(;; doom-1337
                       ;; doom-acario-dark
-                      doom-ayu-dark
+                      ;; doom-ayu-dark
                       ;; doom-ayu-mirage
                       ;; doom-badger
                       doom-challenger-deep
