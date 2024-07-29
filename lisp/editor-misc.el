@@ -50,7 +50,9 @@
 
 (use-package editorconfig
   :straight t
-  :init (editorconfig-mode))
+  :config
+  (setq editorconfig-lisp-use-default-indent t)
+  (editorconfig-mode))
 
 (use-package elfeed
   :straight t
