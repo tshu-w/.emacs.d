@@ -41,6 +41,9 @@
                  "DEL"   'vertico-directory-delete-char
                  "M-DEL" 'vertico-directory-delete-word))
 
+  (use-package vertico-multiform
+    :hook (vertico-mode . vertico-multiform-mode))
+
   (use-package vertico-quick
     :general
     (vertico-map "C-<return>" 'vertico-quick-exit)))

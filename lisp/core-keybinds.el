@@ -154,11 +154,6 @@
     "qq"      'save-buffers-kill-terminal
     "qQ"      'save-buffers-kill-emacs
 
-    "s"       (cons "spelling" (make-sparse-keymap))
-    "sb"      'flyspell-buffer
-    "sn"      'flyspell-goto-next-error
-    "sr"      'flyspell-region
-
     "T"       (cons "toggles" (make-sparse-keymap))
     "Ta"      'auto-fill-mode
     "Td"      'toggle-debug-on-error
