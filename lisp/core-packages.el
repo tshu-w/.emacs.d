@@ -48,8 +48,6 @@
   (setq use-package-expand-minimally t))
 (straight-use-package 'use-package)
 
-(use-package emacsql-sqlite-builtin :straight t :defer t)
-
 (use-package exec-path-from-shell
   :if (eq system-type 'darwin)
   :straight t
