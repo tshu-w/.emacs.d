@@ -124,6 +124,7 @@
                        ef-arbutus
                        ef-cyprus
                        ef-day
+                       ef-eagle
                        ef-elea-light
                        ;; ef-deuteranopia-light
                        ef-duo-light
@@ -132,6 +133,7 @@
                        ef-light
                        ef-maris-light
                        ef-melissa-light
+                       ef-owl
                        ef-reverie
                        ef-spring
                        ef-summer
@@ -269,17 +271,18 @@
   :hook (after-init . shackle-mode)
   :config
   (setq shackle-default-size 0.4
-        shackle-rules `((help-mode                       :select t :align right :size ,fill-column)
-                        (helpful-mode                    :select t :align right :size ,fill-column)
-                        ("*Messages*"                    :select t :align t)
-                        ("*eldoc*"                       :align t)
-                        (special-mode                    :align t)
-                        (process-menu-mode               :align t)
-                        (compilation-mode                :align t)
-                        (flymake-diagnostics-buffer-mode :align t)
-                        ("*Shell Command Output*"        :align t)
-                        ("*Async Shell Command*"         :align t)
-                        ("\\*EGLOT.*"                    :select t :align right :size ,fill-column :regexp t))))
+        shackle-rules
+        `((help-mode                       :select t :align right :size ,fill-column)
+          (helpful-mode                    :select t :align right :size ,fill-column)
+          ("*Messages*"                    :select t :align t)
+          ("*eldoc*"                       :align t)
+          (special-mode                    :align t)
+          (process-menu-mode               :align t)
+          (compilation-mode                :align t)
+          (flymake-diagnostics-buffer-mode :align t)
+          ("*Shell Command Output*"        :align t)
+          ("*Async Shell Command*"         :align t)
+          ("\\*EGLOT.*"                    :select t :align right :size ,fill-column :regexp t))))
 
 (use-package writeroom-mode
   :straight t
