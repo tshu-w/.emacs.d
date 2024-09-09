@@ -16,10 +16,10 @@
       epa-file-select-keys 'auto
       epa-file-encrypt-to user-mail-address)
 
-(defvar default-font "SauceCodePro NFM")
+(defvar default-font "MonoLisa")
 (defvar font-size 14)
 (defvar unicode-font "Noto Sans CJK SC")
-(defvar unicode-scale (/ 16.0 font-size))
+(defvar unicode-scale (/ 18.0 font-size))
 (defvar emoji-font "Noto Color Emoji")
 (defvar symbol-font "Noto Sans Symbols")
 
