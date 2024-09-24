@@ -224,7 +224,9 @@
 (use-package flymake
   :hook (prog-mode . flymake-mode)
   :config
-  (setq flymake-no-changes-timeout nil))
+  (setq flymake-no-changes-timeout nil
+        flymake-fringe-indicator-position 'right-fringe
+        flymake-margin-indicator-position 'right-margin))
 
 (use-package newcomment
   :commands comment-or-uncomment

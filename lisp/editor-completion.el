@@ -395,6 +395,11 @@ Just put this function in `hippie-expand-try-functions-list'."
                            #'eglot-completion-at-point
                            #'tabnine-completion-at-point) nil t))))
 
+  (define-fringe-bitmap 'blank-fringe [0] 1 1 'center)
+  (add-hook 'eglot-managed-mode-hook
+            (defun inhibit-flymake-bitmap ()
+              (put 'eglot-note 'flymake-bitmap '(blank-fringe))))
+
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
 
   (defun expand-absolute-name (name)
