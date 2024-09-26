@@ -115,7 +115,7 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '("gpt-4o" "gpt-4o-mini" "gpt-4-turbo" "gpt-4" "claude-3-opus" "claude-3-5-sonnet")))
+      :models '("o1-preview" "o1-mini" "gpt-4o" "gpt-4o-mini" "gpt-4-turbo" "gpt-4" "claude-3-opus" "claude-3-5-sonnet")))
   (setq-default gptel-backend gptel--oneapi)
 
   ;; backticks
