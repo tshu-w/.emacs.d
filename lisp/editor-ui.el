@@ -133,7 +133,6 @@
                        ef-light
                        ef-maris-light
                        ef-melissa-light
-                       ef-owl
                        ef-reverie
                        ef-spring
                        ef-summer
@@ -221,6 +220,7 @@
                       ef-maris-dark
                       ;; ef-melissa-dark
                       ef-night
+                      ef-owl
                       ef-rosa
                       ef-symbiosis
                       ef-trio-dark
