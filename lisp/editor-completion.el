@@ -246,6 +246,8 @@ targets."
 
 (use-package wgrep :straight t :defer t)
 
+(use-package consult-gh :straight t :after consult :defer t)
+
 (use-package corfu
   :straight (:files (:defaults "extensions/*.el"))
   :hook (after-init . global-corfu-mode)
