@@ -591,11 +591,7 @@
 
   (with-eval-after-load 'org-capture
     (add-hook 'org-capture-mode-hook #'evil-insert-state)
-    (add-hook 'org-capture-after-finalize-hook #'evil-normal-state)
-    (general-def 'normal org-capture-mode-map
-      "ZZ" 'org-capture-finalize
-      "ZQ" 'org-capture-kill
-      "ZR" 'org-capture-refile)))
+    (add-hook 'org-capture-after-finalize-hook #'evil-normal-state)))
 
 (use-package orgonomic
   :straight (:host github :repo "aaronjensen/emacs-orgonomic")
