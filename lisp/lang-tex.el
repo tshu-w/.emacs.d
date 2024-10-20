@@ -263,7 +263,7 @@ not applicable, it should return its input without change."
 
   (defun ebib-zotero-url-cleanup--arxiv (url)
     (if (string-match
-         "^\\(https?://\\)?\\(www\.\\)?arxiv.org/pdf/\\(.*\\)\.pdf" url)
+         "^\\(https?://\\)?\\(www\.\\)?arxiv.org/pdf/\\(.*\\)" url)
         (concat
          "https://arxiv.org/abs/"
          (match-string-no-properties 3 url)) url))
