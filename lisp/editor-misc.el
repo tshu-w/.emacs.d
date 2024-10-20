@@ -351,7 +351,7 @@ reuse it's window, otherwise create new one."
   :init
   (with-eval-after-load 'orderless
     (defun orderless-pinyin-regexp (component)
-      "Match COMPONENT as a pinyin regexp with `pyim-cregexp-build'."
+      "Match COMPONENT as a pinyin regexp with `rime-regexp-build-regexp-string'."
       (rime-regexp-build-regexp-string (orderless-regexp component)))
 
     (defun pinyin-if-ampersand (pattern _index _total)
