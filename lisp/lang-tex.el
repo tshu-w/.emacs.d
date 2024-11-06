@@ -8,8 +8,8 @@
 
 ;;; Code:
 
-(use-package tex
-  :straight auctex
+(use-package auctex
+  :straight t
   :defer t
   :config
   (setq-default TeX-master nil)
