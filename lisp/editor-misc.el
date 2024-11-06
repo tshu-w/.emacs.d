@@ -99,7 +99,7 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model "claude-3-5-sonnet"
+  (setq gptel-model 'claude-3-5-sonnet
         gptel-directives
         `((default . "")
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text delimited by triple quotes in the same language without changing its original meaning.")
@@ -115,7 +115,7 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '("o1-preview" "o1-mini" "gpt-4o" "gpt-4o-mini" "gpt-4-turbo" "gpt-4" "claude-3-opus" "claude-3-5-sonnet")))
+      :models '(o1-preview o1-mini gpt-4o gpt-4o-mini gpt-4-turbo gpt-4 claude-3-opus claude-3-5-sonnet)))
   (setq-default gptel-backend gptel--oneapi)
 
   ;; backticks
@@ -167,23 +167,10 @@ there."
                  (put-text-property 0 (length content) 'face 'font-lock-warning-face content)
                  content))
 
-  (autoload #'gptel-transient-send "gptel-transient" nil t)
-  (with-eval-after-load 'gptel-transient
-    (defun gptel-transient-send (&optional arg)
-      "Call `gptel--suffix-send' with latest history."
-      (interactive "P")
-      (if (and arg (require 'gptel-transient nil t))
-          (call-interactively #'gptel-menu)
-        (let* ((obj (plist-get (symbol-plist 'gptel-menu) 'transient--prefix))
-               (hst (alist-get (transient--history-key obj)
-                               transient-history))
-               (args (nth 0 hst)))
-          (gptel--suffix-send args)))))
-
   (defun gptel-colorize-response (begin end)
     (save-excursion
       (put-text-property begin end 'font-lock-face 'font-lock-string-face)))
-  (add-hook 'gptel-post-response-functions #'gptel-colorize-response t)
+  (add-hook 'gptel-post-response-functions #'gptel-colorize-response)
 
   (defun clear-text-properties (start end)
     "Clear text properties between START and END."
@@ -195,7 +182,7 @@ there."
     (define-key embark-region-map (kbd "C") #'clear-text-properties)
     (define-key embark-region-map (kbd "g") #'gptel-transient-send))
   :general
-  (tyrant-def "ag" 'gptel-transient-send))
+  (tyrant-def "ag" 'gptel-menu))
 
 (use-package helpful
   :straight t
