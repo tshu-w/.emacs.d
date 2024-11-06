@@ -316,7 +316,6 @@ targets."
   :straight t
   :hook (kill-emacs . tabnine-kill-process)
   :init
-  (setq tabnine-minimum-prefix-length 0)
   (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point))
 
 (use-package copilot
