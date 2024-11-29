@@ -147,8 +147,6 @@
     "gIn" 'gitignore-templates-new-file
     "gIi" 'gitignore-templates-insert))
 
-(use-package github-stars :straight t :defer t)
-
 
 (provide 'editor-vsc)
 ;;; editor-vsc.el ends here
