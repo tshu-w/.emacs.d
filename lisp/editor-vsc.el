@@ -83,11 +83,6 @@
   (general-def transient-base-map   "q" 'transient-quit-one)
   (general-def transient-sticky-map "q" 'transient-quit-seq))
 
-(use-package browse-at-remote
-  :straight t
-  :general
-  (tyrant-def "go" 'browse-at-remote))
-
 (use-package diff-hl
   :straight t
   :hook (after-init . global-diff-hl-mode)
@@ -117,6 +112,12 @@
   :config
   (setq git-link-open-in-browser t)
 
+  (defun git-link@around (fun remote start end)
+    (if (git-link--relative-filename)
+        (funcall fun remote start end)
+      (funcall 'git-link-homepage remote)))
+  (advice-add #'git-link :around #'git-link@around)
+
   (defun git-link-copy-url-only ()
     "Only copy the generated link to the kill ring."
     (interactive)
@@ -131,11 +132,11 @@
   :general
   (tyrant-def
     "gL"  (cons "links" (make-sparse-keymap))
+    "go"  'git-link
     "gLc" 'git-link-commit
     "gLC" 'git-link-commit-copy-url-only
     "gLl" 'git-link
-    "gLL" 'git-link-copy-url-only
-    "gLh" 'git-link-homepage))
+    "gLL" 'git-link-copy-url-only))
 
 (use-package gitignore-templates
   :straight t
