@@ -317,8 +317,7 @@ reuse it's window, otherwise create new one."
   :init
   (setq default-input-method "rime")
   :config
-  (setq rime-librime-root (no-littering-expand-etc-file-name "librime/dist")
-        rime-user-data-dir (no-littering-expand-etc-file-name "rime/")
+  (setq rime-user-data-dir (no-littering-expand-etc-file-name "rime/")
         rime-emacs-module-header-root (expand-file-name "include" (locate-dominating-file invocation-directory "include"))
         rime-show-candidate 'posframe
         rime-show-preedit 'inline
