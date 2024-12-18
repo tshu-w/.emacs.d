@@ -168,6 +168,7 @@
         dired-do-revert-buffer t
         dired-dwim-target t
         dired-listing-switches "-aBhl --group-directories-first"
+        dired-recursive-copies 'always
         dired-vc-rename-file t))
 
 (use-package display-line-numbers
@@ -419,9 +420,8 @@ the unwritable tidbits."
   (setq winner-boring-buffers-regexp "\\*.*\\*"))
 
 
-(setq-default custom-file (no-littering-expand-var-file-name "custom.el"))
-(when (file-exists-p custom-file)
-  (load custom-file))
+(setq custom-file (no-littering-expand-var-file-name "custom.el"))
+(load custom-file :no-error-if-file-is-missing)
 
 
 (provide 'core-config)
