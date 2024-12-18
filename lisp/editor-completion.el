@@ -264,7 +264,10 @@ targets."
         corfu-preselect 'prompt)
 
   (use-package corfu-history
-    :hook (global-corfu-mode . corfu-history-mode))
+    :hook (global-corfu-mode . corfu-history-mode)
+    :config
+    (with-eval-after-load 'savehist
+      (add-to-list 'savehist-additional-variables 'corfu-history)))
   (use-package corfu-popupinfo
     :hook (global-corfu-mode . corfu-popupinfo-mode)
     :config
