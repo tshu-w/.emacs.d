@@ -276,6 +276,13 @@
 
   (add-to-list 'recentf-exclude `(recentf-expand-file-name ,(straight--emacs-dir "straight"))))
 
+(use-package repeat
+  :hook (after-init . repeat-mode)
+  :config
+  (setq repeat-keep-prefix t
+        repeat-timeout 5
+        repeat-exit-key (kbd "RET")))
+
 (use-package savehist
   :hook (after-init . savehist-mode)
   :config
