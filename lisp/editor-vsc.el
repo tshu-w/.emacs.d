@@ -94,8 +94,8 @@
     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
   (general-def 'normal
-    "[ h" '(diff-hl-previous-hunk :jump t)
-    "] h" '(diff-hl-next-hunk :jump t)))
+    "g[" '(diff-hl-previous-hunk :jump t)
+    "g]" '(diff-hl-next-hunk :jump t)))
 
 (use-package git-modes :straight t :defer t)
 

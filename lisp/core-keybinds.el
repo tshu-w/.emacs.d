@@ -284,7 +284,8 @@
   :straight t
   :hook (after-init . evil-collection-init)
   :init
-  (setq evil-collection-magit-want-horizontal-movement t)
+  (setq evil-collection-magit-want-horizontal-movement t
+        evil-collection-unimpaired-want-repeat-mode-integration t)
   (add-hook 'org-agenda-mode-hook
             (lambda () (evil-collection-unimpaired-mode -1))))
 
