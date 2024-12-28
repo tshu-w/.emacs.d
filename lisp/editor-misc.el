@@ -90,12 +90,6 @@
   :config
   (add-hook 'org-capture-mode-hook #'fcitx--deactivate))
 
-(use-package gcmh
-  :straight t
-  :hook (after-init . gcmh-mode)
-  :config
-  (setq gcmh-high-cons-threshold #x6400000))
-
 (use-package gptel
   :straight t
   :init
