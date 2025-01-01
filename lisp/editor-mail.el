@@ -1,6 +1,6 @@
 ;;; editor-mail.el --- -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020-2024  Tianshu Wang
+;; Copyright (C) 2020-2025  Tianshu Wang
 
 ;; Author: Tianshu Wang <wang@tianshu.me>
 

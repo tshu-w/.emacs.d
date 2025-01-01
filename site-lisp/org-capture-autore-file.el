@@ -1,6 +1,6 @@
 ;;; org-capture-autorefile.el --- -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022-2024  Tianshu Wang
+;; Copyright (C) 2022-2025  Tianshu Wang
 
 ;; Author: Tianshu Wang <wang@tianshu.me>
 
