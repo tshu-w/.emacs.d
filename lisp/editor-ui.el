@@ -279,6 +279,7 @@
           (special-mode                    :align t)
           (process-menu-mode               :align t)
           (compilation-mode                :align t)
+          (".*compilation\\*"              :align t :regexp t)
           (flymake-diagnostics-buffer-mode :align t)
           ("*Shell Command Output*"        :align t)
           ("*Async Shell Command*"         :align t)

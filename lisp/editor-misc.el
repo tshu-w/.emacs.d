@@ -280,7 +280,12 @@ reuse it's window, otherwise create new one."
   :hook ((after-init . popper-mode)
          (after-init . popper-echo-mode))
   :config
+  (defun compilation-buffer-p (buf)
+    (with-current-buffer buf
+      (and (not (eq major-mode 'grep-mode))
+           (derived-mode-p 'compilation-mode))))
   (setq popper-display-control nil
+        popper-group-function #'popper-group-by-directory
         popper-reference-buffers
         '("\\*Messages\\*"
           "Output\\*$"
@@ -289,7 +294,7 @@ reuse it's window, otherwise create new one."
           "^\\*EGLOT"
           help-mode
           helpful-mode
-          compilation-mode
+          (compilation-buffer-p . hide)
           process-menu-mode
           special-mode
           flymake-diagnostics-buffer-mode))

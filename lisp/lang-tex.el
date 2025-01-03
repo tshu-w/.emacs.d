@@ -41,6 +41,15 @@
         (delete-process process))
       (TeX-command TeX-command-default 'TeX-master-file -1)))
 
+  (with-eval-after-load 'project
+    (add-to-list 'project-root-files "main.tex"))
+
+  (with-eval-after-load 'shackle
+    (add-to-list 'shackle-rules '(TeX-output-mode :align right)))
+
+  (with-eval-after-load 'popper
+    (add-to-list 'popper-reference-buffers '(TeX-output-mode)))
+
   ;; Rebindings for TeX-font
   (with-eval-after-load 'latex
     (add-to-list 'LaTeX-font-list '(?\C-l "\\underline{"     "}")))
