@@ -387,8 +387,13 @@ reuse it's window, otherwise create new one."
   :after treesit
   :init
   (add-to-list 'treesit-language-source-alist '(typst "https://github.com/uben0/tree-sitter-typst"))
-  (setq typst-ts-mode-indent-offset 2
-        typst-ts-mode-watch-options "--open"))
+  (setq typst-ts-mode-indent-offset 2)
+  :config
+  (despot-def typst-ts-mode-map
+    "a" 'typst-ts-compile-and-preview
+    "v" 'typst-ts-preview
+    "," 'typst-ts-compile
+    "w" 'typst-ts-watch))
 
 (use-package undohist
   :straight t
