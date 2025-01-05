@@ -95,13 +95,14 @@
   :init
   (setq gptel-model 'claude-3-5-sonnet
         gptel-directives
-        `((default . "")
-          (paraphraser . "You are a paraphraser. Paraphrase and polish the text delimited by triple quotes in the same language without changing its original meaning.")
-          (translator . "You are a professional translator. Translate the text delimited by triple quotes into English if it's written in Chinese, otherwise, translate it into Chinese. Only output the translated text without quotes.")
-          (rewriter . "You are a rewriter. Concisely rewrite the text delimited by triple quotes in the corresponding language and style.")
-          (summarizer . "You are a summarizer. Summarize the text delimited by triple quotes in the corresponding language and style without redundant description.")
+        `((default . nil)
+          (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
+          (translator . "You are a professional translator. Translate the text into English if it's written in Chinese, otherwise, translate it into Chinese. Only output the translated text without quotes.")
+          (rewriter . "You are a rewriter. Concisely rewrite the text in the corresponding language and style.")
+          (summarizer . "You are a summarizer. Summarize the text in the corresponding language and style without redundant description.")
           (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
-          (code-explainer . "You are a professional code explainer. Explain the code delimited by triple quotes and report any bugs or errors.")))
+          (code-explainer . "You are a professional code explainer. Explain the code and report any bugs or errors."))
+        gptel--system-message nil)
   :config
   (setq gptel--known-backends nil)
   (defvar gptel--oneapi
@@ -109,52 +110,10 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '(o1-preview o1-mini gpt-4o gpt-4o-mini gpt-4-turbo gpt-4 claude-3-opus claude-3-5-sonnet)))
+      :models '(o1-preview o1-mini
+                gpt-4o gpt-4o-mini gpt-4-turbo gpt-4
+                claude-3-opus claude-3-5-sonnet)))
   (setq-default gptel-backend gptel--oneapi)
-
-  ;; backticks
-  ;; https://github.com/karthink/gptel/issues/61
-  (defun gptel--create-prompt@override (&optional prompt-end)
-    "Return a full conversation prompt from the contents of this buffer.
-
-If `gptel--num-messages-to-send' is set, limit to that many
-recent exchanges.
-
-If the region is active limit the prompt to the region contents
-instead.
-
-If PROMPT-END (a marker) is provided, end the prompt contents
-there."
-    (save-excursion
-      (save-restriction
-        (if (use-region-p)
-            (progn (narrow-to-region (region-beginning) (region-end))
-                   (goto-char (point-max)))
-          (goto-char (or prompt-end (point-max))))
-        (let ((max-entries (and gptel--num-messages-to-send
-                                (* 2 (gptel--numberize
-                                      gptel--num-messages-to-send))))
-              (prop) (prompts) (content))
-          (while (and
-                  (or (not max-entries) (>= max-entries 0))
-                  (setq prop (text-property-search-backward
-                              'gptel 'response
-                              (when (get-char-property (max (point-min) (1- (point)))
-                                                       'gptel)
-                                t))))
-            (setq content (string-trim
-                           (buffer-substring-no-properties (prop-match-beginning prop)
-                                                           (prop-match-end prop))
-                           "[*# \t\n\r]+"))
-            (push (list :role (if (prop-match-value prop) "assistant" "user")
-                        :content (if (prop-match-value prop) content
-                                   (concat "\"\"\"" content "\"\"\"")))
-                  prompts)
-            (and max-entries (cl-decf max-entries)))
-          (cons (list :role "system"
-                      :content gptel--system-message)
-                prompts)))))
-  (advice-add 'gptel--create-prompt :override #'gptel--create-prompt@override)
 
   (add-to-list 'gptel-response-filter-functions
                (defun gptel--colorize-response (content buffer)
