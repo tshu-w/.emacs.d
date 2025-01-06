@@ -110,9 +110,31 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '(o1-preview o1-mini
-                gpt-4o gpt-4o-mini gpt-4-turbo gpt-4
-                claude-3-opus claude-3-5-sonnet)))
+      :models '(o1-preview o1-mini gpt-4o gpt-4o-mini gpt-4-turbo gpt-4
+                (claude-3-5-sonnet
+                   :description "Highest level of intelligence and capability"
+                   :capabilities (media tool cache)
+                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                   :context-window 200
+                   :input-cost 3
+                   :output-cost 15
+                   :cutoff-date "2024-04")
+                (claude-3-5-haiku
+                   :description "Intelligence at blazing speeds"
+                   :capabilities (media tool)
+                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+                   :context-window 200
+                   :input-cost 1.00
+                   :output-cost 5.00
+                   :cutoff-date "2024-07")
+                (claude-3-opus
+                   :description "Top-level performance, intelligence, fluency, and understanding"
+                   :capabilities (media tool cache)
+                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+                   :context-window 200
+                   :input-cost 15
+                   :output-cost 75
+                   :cutoff-date "2023-08"))))
   (setq-default gptel-backend gptel--oneapi)
 
   (add-to-list 'gptel-response-filter-functions
