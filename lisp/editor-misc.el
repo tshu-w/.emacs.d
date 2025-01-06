@@ -234,34 +234,6 @@ reuse it's window, otherwise create new one."
   :config
   (setq pangu-spacing-real-insert-separtor t))
 
-(use-package popper
-  :straight t
-  :hook ((after-init . popper-mode)
-         (after-init . popper-echo-mode))
-  :config
-  (defun compilation-buffer-p (buf)
-    (with-current-buffer buf
-      (and (not (eq major-mode 'grep-mode))
-           (derived-mode-p 'compilation-mode))))
-  (setq popper-display-control nil
-        popper-group-function #'popper-group-by-directory
-        popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          "\\*eldoc\\*"
-          "^\\*EGLOT"
-          help-mode
-          helpful-mode
-          (compilation-buffer-p . hide)
-          process-menu-mode
-          special-mode
-          flymake-diagnostics-buffer-mode))
-  :general
-  (tyrant-def
-    ";" 'popper-toggle
-    ":" 'popper-kill-latest-popup))
-
 (use-package reveal-in-osx-finder
   :if (eq system-type 'darwin)
   :straight t

@@ -266,6 +266,47 @@
         doom-modeline-irc nil
         doom-modeline-persp-name nil))
 
+(use-package popper
+  :straight t
+  :hook ((after-init . popper-mode)
+         (after-init . popper-echo-mode))
+  :config
+  (defun compilation-buffer-p (buf)
+    (with-current-buffer buf
+      (and (not (eq major-mode 'grep-mode))
+           (derived-mode-p 'compilation-mode))))
+  (setq popper-display-control nil
+        popper-group-function #'popper-group-by-directory
+        popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          "\\*eldoc\\*"
+          "^\\*EGLOT"
+          help-mode
+          helpful-mode
+          (compilation-buffer-p . hide)
+          process-menu-mode
+          special-mode
+          flymake-diagnostics-buffer-mode))
+
+  (with-eval-after-load 'compile
+    (defun show-compile-buffer-on-failure (buffer msg)
+      "Show compilation BUFFER if compilation failed."
+      (when (and
+             (string-match "compilation" (buffer-name buffer))
+             (or (string-match "exited abnormally" msg)
+                 (not (string-match "finished" msg))
+                 (with-current-buffer buffer
+                   (search-forward "error" nil t))))
+        (display-buffer buffer)))
+
+    (add-hook 'compilation-finish-functions 'show-compile-buffer-on-failure))
+  :general
+  (tyrant-def
+    ";" 'popper-toggle
+    ":" 'popper-kill-latest-popup))
+
 (use-package shackle
   :straight t
   :hook (after-init . shackle-mode)
