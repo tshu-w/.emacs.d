@@ -63,6 +63,11 @@
 (use-package restart-emacs
   :straight t
   :commands (restart-emacs-debug-init restart-emacs-without-desktop)
+  :init
+  (with-eval-after-load 'files
+    ;; unbind `restart-emacs' and declare it from package
+    (fmakunbound 'restart-emacs)
+    (autoload 'restart-emacs "restart-emacs"))
   :config
   (defun restart-emacs-debug-init (&optional args)
     "Restart emacs and enable debug-init."
