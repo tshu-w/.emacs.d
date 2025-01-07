@@ -342,6 +342,13 @@ reuse it's window, otherwise create new one."
   (add-to-list 'treesit-language-source-alist '(typst "https://github.com/uben0/tree-sitter-typst"))
   (setq typst-ts-mode-indent-offset 2)
   :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 `((typst-ts-mode) .
+                   ,(eglot-alternatives `(,typst-ts-lsp-download-path
+                                          "tinymist"
+                                          "typst-lsp")))))
+
   (despot-def typst-ts-mode-map
     "a" 'typst-ts-compile-and-preview
     "v" 'typst-ts-preview
