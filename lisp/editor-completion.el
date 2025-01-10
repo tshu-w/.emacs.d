@@ -10,9 +10,14 @@
 
 (use-package vertico
   :straight (:files (:defaults "extensions/*.el"))
-  :hook (after-init . vertico-mode)
+  :hook ((after-init . vertico-mode)
+         (vertico-mode . vertico-buffer-mode)
+         (vertico-mode . vertico-multiform-mode))
   :config
-  (setq vertico-cycle t)
+  (setq vertico-cycle t
+        vertico-buffer-display-action `(display-buffer-in-side-window
+                                        (window-height . ,(+ 3 vertico-count))
+                                        (side . top)))
 
   ;; Hide commands in M-x which do not work in the current mode.
   (setq read-extended-command-predicate
@@ -27,26 +32,14 @@
           (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-  (use-package vertico-buffer
-    :hook (vertico-mode . vertico-buffer-mode)
-    :config
-    (setq vertico-buffer-display-action `(display-buffer-in-side-window
-                                          (window-height . ,(+ 3 vertico-count))
-                                          (side . top))))
-
-  (use-package vertico-directory
-    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
-    :general
-    (vertico-map "RET"   'vertico-directory-enter
-                 "DEL"   'vertico-directory-delete-char
-                 "M-DEL" 'vertico-directory-delete-word))
-
-  (use-package vertico-multiform
-    :hook (vertico-mode . vertico-multiform-mode))
-
-  (use-package vertico-quick
-    :general
-    (vertico-map "C-<return>" 'vertico-quick-exit)))
+  (add-hook 'rfn-eshadow-update-overlay #'vertico-directory-tidy)
+  :general
+  (vertico-map "RET" 'vertico-directory-enter
+               "DEL" 'vertico-directory-delete-char
+               "M-DEL" 'vertico-directory-delete-word
+               "M-<return>" 'vertico-quick-exit
+               "M-z" 'vertico-suspend)
+  ('normal "M-z" 'vertico-suspend))
 
 (use-package marginalia
   :straight t
