@@ -359,7 +359,7 @@ reuse it's window, otherwise create new one."
   :straight t
   :hook (after-init . undohist-initialize)
   :config
-  (add-to-list 'undohist-ignored-files "EDITMSG")
+  (setq undohist-ignored-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
 
   (defun undohist-recover-safe@around (fn)
     (cl-letf (((symbol-function 'yes-or-no-p) (lambda (p) nil)))

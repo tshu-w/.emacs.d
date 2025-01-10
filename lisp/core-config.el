@@ -116,6 +116,11 @@
 ;; suppress annoying warnings
 (setq warning-minimum-level :error)
 
+;; incress undo limit
+(setq undo-limit 67108864 ; 64mb.
+      undo-strong-limit 100663296 ; 96mb.
+      undo-outer-limit 1006632960) ; 960mb.
+
 (defun server-remove-kill-buffer-hook ()
   "Remove prompt if the file is opened in other clients."
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))

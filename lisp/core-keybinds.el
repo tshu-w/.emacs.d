@@ -244,6 +244,7 @@
   (setq evil-cross-lines t
         evil-kill-on-visual-paste nil
         evil-move-beyond-eol t
+        evil-undo-system 'undo-redo
         evil-want-C-i-jump t
         evil-want-fine-undo t
         evil-v$-excludes-newline t)
