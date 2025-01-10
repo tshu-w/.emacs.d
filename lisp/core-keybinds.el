@@ -148,6 +148,7 @@
 
     "q"       (cons "quit" (make-sparse-keymap))
     "qd"      'restart-emacs-debug-init
+    "qn"      'restart-emacs-start-new-emacs
     "qr"      'restart-emacs
     "qR"      'restart-emacs-without-desktop
     "qf"      'delete-frame
