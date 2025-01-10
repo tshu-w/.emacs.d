@@ -57,12 +57,12 @@
 (use-package elfeed
   :straight t
   :init
-  (with-eval-after-load 'writeroom-mode
-    (add-to-list 'writeroom-major-modes 'elfeed-search-mode)
-    (add-to-list 'writeroom-major-modes 'elfeed-show-mode))
-
   (setq browse-url-generic-program "open"
         browse-url-generic-args '("--background"))
+  :config
+  (with-eval-after-load 'visual-fill-column
+    (add-to-list 'visual-fill-column-major-modes 'elfeed-search-mode)
+    (add-to-list 'visual-fill-column-major-modes 'elfeed-show-mode))
 
   (defun reverse-arg (fun &optional arg)
     (interactive "P")

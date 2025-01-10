@@ -326,24 +326,69 @@
           ("*Async Shell Command*"         :align t)
           ("\\*EGLOT.*"                    :select t :align right :size ,fill-column :regexp t))))
 
-(use-package writeroom-mode
+(use-package visual-fill-column
   :straight t
-  :hook (after-init . global-writeroom-mode)
+  :hook (after-init . global-visual-fill-column-mode)
+  :init
+  (setq visual-fill-column-center-text t
+        visual-fill-column-enable-sensible-window-split t
+        visual-fill-column-width 128
+        visual-fill-column-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode dired-mode)
+        visual-fill-column-major-modes-exceptions '(process-menu-mode proced-mode backtrace-mode))
   :config
-  (setq split-width-threshold 120
+  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust)
 
-        writeroom-width 128
-        writeroom-fringes-outside-margins nil
-        writeroom-global-effects nil
-        writeroom-major-modes '(text-mode prog-mode conf-mode special-mode Info-mode dired-mode)
-        writeroom-major-modes-exceptions '(process-menu-mode proced-mode backtrace-mode)
-        writeroom-maximize-window nil
-        writeroom-mode-line t
-        writeroom-mode-line-toggle-position 'mode-line-format)
+  (defcustom visual-fill-column-major-modes '(text-mode)
+    "List of major modes in which `visual-fill-column-mode' is activated."
+    :group 'visual-fill-column
+    :type '(repeat (choice (symbol :tag "Major mode")
+                           (string :tag "Regular expression"))))
+
+  (defcustom visual-fill-column-use-derived-modes t
+    "Activate `visual-fill-column-mode' in derived modes as well.'."
+    :group 'visual-fill-column
+    :type '(choice (const :tag "Use derived modes" t)
+                   (const :tag "Do not use derived modes" nil)))
+
+  (defcustom visual-fill-column-major-modes-exceptions nil
+    "List of major modes in which `visual-fill-column-mode' should not be activated."
+    :group 'visual-fill-column
+    :type '(repeat (choice (symbol :tag "Major mode exception")
+                           (string :tag "Regular expression"))))
+
+  (defun visual-fill-column--match-major-mode (modes &optional derived)
+    "Match the current buffer's major mode against MODES.
+MODES a list of mode names (symbols) or regular expressions.
+Return t if the current major mode matches one of the elements of
+MODES, nil otherwise.  Comparison is done with `eq` (for symbols
+in MODES) or with `string-match-p' (for strings in MODES).  That
+is, if the major mode is e.g., `emacs-lisp-mode', it will not
+match the symbol `lisp-mode', but it will match the string
+\"lisp-mode\".
+
+If DERIVED is non-nil, also return t if the current buffer's
+major mode is a derived mode of one of the major mode symbols in
+MODES."
+    (catch 'match
+      (dolist (elem modes)
+        (if (cond ((symbolp elem)
+                   (or (eq elem major-mode)
+                       (and derived (derived-mode-p elem))))
+                  ((string-match-p elem (symbol-name major-mode))))
+            (throw 'match t)))))
+
+  (defun turn-on-visual-fill-column-mode@override ()
+    "Turn on `visual-fill-column-mode'."
+    (unless (visual-fill-column--match-major-mode visual-fill-column-major-modes-exceptions)
+      (if (visual-fill-column--match-major-mode
+           visual-fill-column-major-modes visual-fill-column-use-derived-modes)
+          (visual-fill-column-mode 1))))
+
+  (advice-add 'turn-on-visual-fill-column-mode :override #'turn-on-visual-fill-column-mode@override)
   :general
   (tyrant-def
-    "wc" 'writeroom-mode
-    "wC" 'global-writeroom-mode))
+    "wc" 'visual-fill-column-mode
+    "wC" 'global-visual-fill-column-mode))
 
 (use-package hl-todo
   :straight t

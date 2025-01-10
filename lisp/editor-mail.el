@@ -20,12 +20,15 @@
         mu4e-main-buffer-hide-personal-addresses t
         mu4e-update-interval (* 6 60 60)
         mu4e-update-timer (run-with-timer t mu4e-update-interval #'mu4e-update-mail-and-index t))
-
+  :config
   (with-eval-after-load 'org
     (org-link-set-parameters "mu4e"
                              :follow #'mu4e-org-open
                              :store  #'mu4e-org-store-link))
-  :config
+
+  (with-eval-after-load 'visual-fill-column
+    (add-to-list 'visual-fill-column-major-modes-exceptions 'mu4e-headers-mode))
+
   (setq mail-user-agent 'mu4e-user-agent
         ;; (rx (seq (one-or-more anything) "@" (opt "wang.") "tianshu.me"))
         message-alternative-emails "[^z-a]+@\\(?:wang\\.\\)?tianshu\\.me"
