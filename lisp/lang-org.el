@@ -43,6 +43,7 @@
         org-log-reschedule nil
         org-pretty-entities t
         org-read-date-prefer-future nil
+        org-reverse-note-order t
         org-startup-folded t
         org-startup-indented t
         org-startup-with-inline-images t
@@ -213,14 +214,16 @@
     :defer t
     :init
     (setq org-capture-templates
-          '(("i" "Item" entry (file org-inbox-file) "* %?\n%i\n" :empty-lines 1)
+          `(("i" "Item" entry (file org-inbox-file)
+             "* %?\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
             ("I" "Item w/ Link" entry (file org-inbox-file)
-             "* %?\n%a\n%i\n" :empty-lines 1)
-            ("t" "Todo" entry (file org-inbox-file) "* TODO %?\n%i\n" :empty-lines 1)
+             "* %?\n%a\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
+            ("t" "Todo" entry (file org-inbox-file)
+             "* TODO %?\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
             ("T" "Todo w/ Link" entry (file org-inbox-file)
-             "* TODO %?\n%a\n%i\n" :empty-lines 1)
+             "* TODO %?\n%a\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
             ("w" "Web" plain (file+function org-inbox-file org-capture-goto-link)
-             "%i\n" :empty-lines 1 :immediate-finish t)
+             "%i\n" :empty-lines 1 :immediate-finish t :prepend ,org-reverse-note-order)
 
             ("l" "Log" entry (file+function org-log-file
                                             org-reverse-datetree-goto-date-in-file)
@@ -285,7 +288,13 @@
                        (regexp-quote headline)) nil t)
               (org-end-of-subtree)
             (org-capture-put :flag t)
-            (goto-char (point-max))
+            (if (org-capture-get :prepend)
+                (progn
+                  (goto-char (point-min))
+                  (unless (org-at-heading-p) (outline-next-heading)))
+              (goto-char (point-max))
+              (org-fold-core-cycle-over-indirect-buffers
+                (org-fold-region (max 1 (1- (point-max))) (point-max) nil)))
             (or (bolp) (insert "\n"))
             (insert "* TODO " headline "\n")
             (insert "[[" link "]]\n")
