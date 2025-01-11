@@ -161,17 +161,24 @@
 (use-package desktop
   :init (desktop-save-mode)
   :config
-  ;; inhibit no-loaded prompt
-  (setq desktop-file-modtime (file-attribute-modification-time
-                              (file-attributes
-                               (desktop-full-file-name)))
-        desktop-lazy-verbose nil
+  (setq desktop-lazy-verbose nil
         desktop-load-locked-desktop t
         desktop-restore-eager 1
         desktop-save t)
 
   (dolist (param '(foreground-color background-color background-mode font cursor-color mouse-color))
     (push `(,param . :never) frameset-filter-alist))
+
+  (defun desktop-restore-file-buffer@before (file-name _buffer-name _misc)
+    "Restore a file buffer specified in a desktop file."
+    (let ((jka-compr-file-name-regexp
+           (car jka-compr-file-name-handler-entry)))
+      (when (string-match-p epa-file-name-regexp file-name)
+        (auto-encryption-mode 1))
+      (when (string-match-p jka-compr-file-name-regexp file-name)
+        (auto-compression-mode 1))))
+
+  (advice-add 'desktop-restore-file-buffer :before #'desktop-restore-file-buffer@before)
 
   (defun desktop-read@inhibit-message (fn)
     "Inhibit `desktop-read' message"
