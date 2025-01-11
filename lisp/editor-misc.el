@@ -356,7 +356,7 @@ reuse it's window, otherwise create new one."
                      (typst-ts-mode-compile-and-preview--compilation-finish-function
                       compilation-original-buffer))))
   (advice-add 'compilation-handle-exit :before #'typst-ts-prevent-preview-on-compilation-failure)
-
+  :general
   (despot-def typst-ts-mode-map
     "a" 'typst-ts-compile-and-preview
     "v" 'typst-ts-preview
