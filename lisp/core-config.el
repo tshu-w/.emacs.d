@@ -121,13 +121,7 @@
       (when (string-match-p jka-compr-file-name-regexp file-name)
         (auto-compression-mode 1))))
 
-  (advice-add 'desktop-restore-file-buffer :before #'desktop-restore-file-buffer@before)
-
-  (defun desktop-read@inhibit-message (fn)
-    "Inhibit `desktop-read' message"
-    (let ((inhibit-message t))
-      (funcall fn)))
-  (advice-add 'desktop-read :around #'desktop-read@inhibit-message))
+  (advice-add 'desktop-restore-file-buffer :before #'desktop-restore-file-buffer@before))
 
 (use-package dired
   :defer t

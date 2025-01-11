@@ -363,16 +363,12 @@ reuse it's window, otherwise create new one."
     "," 'typst-ts-compile
     "w" 'typst-ts-watch))
 
-(use-package undohist
+(use-package undo-fu-session
   :straight t
-  :hook (after-init . undohist-initialize)
+  :hook (window-setup . undo-fu-session-global-mode)
   :config
-  (setq undohist-ignored-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
-
-  (defun undohist-recover-safe@around (fn)
-    (cl-letf (((symbol-function 'yes-or-no-p) (lambda (p) nil)))
-      (funcall fn)))
-  (advice-add #'undohist-recover-safe :around #'undohist-recover-safe@around))
+  (setq undo-fu-seesion-ignored-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+  (advice-add 'undo-fu-session--mode-turn-on :after #'undo-fu-session-recover))
 
 (use-package xr :straight t :defer t)
 
