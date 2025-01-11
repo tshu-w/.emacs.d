@@ -668,7 +668,7 @@
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory (file-truename org-note-directory)
-        org-roam-node-display-template (concat "${hierarchy:*} ${backlinkscount:6} ${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
+        org-roam-node-display-template (concat "${hierarchy:*} ${backlinkscount:6}${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
         org-roam-v2-ack t)
   (with-eval-after-load 'org (org-roam-db-autosync-mode))
   :config
@@ -759,6 +759,19 @@
       "b" #'org-roam-backlinks-node-read
       "r" #'org-roam-node-random)
     (add-to-list 'embark-keymap-alist '(org-roam-node . embark-org-roam-map)))
+
+  ;; See https://github.com/org-roam/org-roam/issues/2066
+  (defun org-roam-node-read--to-candidate@override (node template)
+    "Return a minibuffer completion candidate given NODE.
+TEMPLATE is the processed template used to format the entry."
+    (let ((candidate-main (org-roam-node--format-entry
+                           template
+                           node
+                           (1- (if (minibufferp (current-buffer))
+                                   (window-width) (frame-width))))))
+      (cons (propertize candidate-main 'node node) node)))
+  (advice-add 'org-roam-node-read--to-candidate
+              :override #'org-roam-node-read--to-candidate@override)
 
   (with-eval-after-load 'shackle
     (add-to-list 'shackle-rules '("*org-roam*" :align right)))
