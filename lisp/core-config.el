@@ -8,128 +8,64 @@
 
 ;;; Code:
 
-(set-language-environment 'utf-8)
-(set-default-coding-systems 'utf-8)
+(use-package emacs
+  :hook ((after-init . setup-font)
+         (after-init . global-hl-line-mode))
+  :init
+  (setq user-full-name "Tianshu Wang"
+        user-mail-address "wang@tianshu.me"
 
-(setq user-full-name "Tianshu Wang"
-      user-mail-address "wang@tianshu.me"
-      epa-file-select-keys 'auto
-      epa-file-encrypt-to user-mail-address)
+        initial-scratch-message nil   ;; "make scratch buffer empty"
+        inhibit-startup-message t     ;; "disable splash screen"
+        ;; smooth scrolling
+        scroll-conservatively 101
+        scroll-margin 2
+        ;; no beep and visual blinking
+        ring-bell-function 'ignore
+        visible-bell nil
+        ;; incress undo limit
+        undo-limit 67108864           ;; 64mb.
+        undo-strong-limit 100663296   ;; 96mb.
+        undo-outer-limit 1006632960   ;; 960mb.
 
-(defvar default-font "MonoLisa")
-(defvar font-size 14)
-(defvar unicode-font "Noto Sans CJK SC")
-(defvar unicode-scale (/ 18.0 font-size))
-(defvar emoji-font "Noto Color Emoji")
-(defvar symbol-font "Noto Sans Symbols")
+        delete-by-moving-to-trash t
+        ffap-machine-p-known 'reject
+        load-prefer-newer t
+        sentence-end-double-space nil
+        use-short-answers t
+        warning-minimum-level :error
+        word-wrap-by-category t)
 
-(when (eq system-type 'darwin)
-  (setq ns-pop-up-frames nil
-        frame-resize-pixelwise t)
+  (setq-default tab-width 4
+                fill-column 80)
+  :config
+  (set-language-environment 'utf-8)
+  (set-default-coding-systems 'utf-8)
 
-  (setq unicode-font "PingFang SC"
-        emoji-font "Apple Color Emoji"
-        symbol-font "Apple Symbols"))
+  (defvar default-font "MonoLisa")
+  (defvar font-size 14)
+  (defvar unicode-font "Noto Sans CJK SC")
+  (defvar unicode-scale (/ 18.0 font-size))
+  (defvar emoji-font "Noto Color Emoji")
+  (defvar symbol-font "Noto Sans Symbols")
 
-(defun setup-font (&rest args)
-  (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
+  (when (eq system-type 'darwin)
+    (setq ns-pop-up-frames nil
+          frame-resize-pixelwise t)
 
-  (when (fboundp 'set-fontset-font)
-    (dolist (charset '(kana han cjk-misc bopomofo))
-      (set-fontset-font t charset unicode-font))
-    (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
-    (set-fontset-font t 'emoji emoji-font nil 'prepend)
-    (set-fontset-font t 'symbol symbol-font nil 'prepend)))
+    (setq unicode-font "PingFang SC"
+          emoji-font "Apple Color Emoji"
+          symbol-font "Apple Symbols"))
 
-(add-hook 'after-init-hook #'setup-font)
+  (defun setup-font (&rest args)
+    (set-face-attribute 'default nil :font (font-spec :family default-font :size font-size))
 
-(setq initial-scratch-message nil   ;; "make scratch buffer empty"
-      inhibit-startup-message t)    ;; "disable splash screen"
-
-;; use spaces instead of tabs
-(setq-default indent-tabs-mode nil)
-
-;; change `tab-width' and `fill-column'
-(setq-default tab-width 4
-              fill-column 80)
-
-;; no beep and visual blinking
-(setq ring-bell-function 'ignore
-      visible-bell nil)
-
-;; highlight current line
-(global-hl-line-mode 1)
-;; no blink
-(blink-cursor-mode 0)
-;; prettify symbols
-(global-prettify-symbols-mode 1)
-
-;; Single space between sentences is more widespread than double
-(setq sentence-end-double-space nil)
-
-;; smooth scrolling
-(setq scroll-conservatively 101
-      scroll-margin 2)
-
-;; draw underline lower
-(setq x-underline-at-descent-line t)
-
-;; Highlight and allow to open http link at point in programming buffers
-;; goto-address-prog-mode only highlights links in strings and comments
-(add-hook 'prog-mode-hook #'goto-address-prog-mode)
-;; Highlight and follow bug references in comments and strings
-(add-hook 'prog-mode-hook #'bug-reference-prog-mode)
-;; enable subword-mode in prog-mode
-(add-hook 'prog-mode-hook #'subword-mode)
-
-;; scroll compilation to first error or end
-(setq compilation-scroll-output 'first-error)
-
-;; Don't try to ping things that look like domain names
-(setq ffap-machine-p-known 'reject)
-
-;; Use system trash for file deletion.
-(setq delete-by-moving-to-trash t)
-
-;; autosave each change
-(setq bookmark-save-flag 1)
-
-;; don't set a fringe mark at bookmarked lines
-(setq bookmark-set-fringe-mark nil)
-
-;; keep focus while navigating help buffers
-(setq help-window-select t)
-
-;; When emacs asks for "yes" or "no", let "y" or "n" suffice
-;; (fset 'yes-or-no-p 'y-or-n-p)
-(setq use-short-answers t)
-
-;; don't load outdated compiled files.
-(setq load-prefer-newer t)
-
-;; don't save duplicates in kill-ring
-(setq kill-do-not-save-duplicates t)
-
-;; break lines after more characters
-(setq word-wrap-by-category t)
-
-;; suppress annoying warnings
-(setq warning-minimum-level :error)
-
-;; incress undo limit
-(setq undo-limit 67108864 ; 64mb.
-      undo-strong-limit 100663296 ; 96mb.
-      undo-outer-limit 1006632960) ; 960mb.
-
-(defun server-remove-kill-buffer-hook ()
-  "Remove prompt if the file is opened in other clients."
-  (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
-(add-hook 'server-visit-hook #'server-remove-kill-buffer-hook)
-
-;; Do not allow the cursor in the minibuffer prompt
-(setq minibuffer-prompt-properties
-      '(read-only t cursor-intangible t face minibuffer-prompt))
-(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+    (when (fboundp 'set-fontset-font)
+      (dolist (charset '(kana han cjk-misc bopomofo))
+        (set-fontset-font t charset unicode-font))
+      (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
+      (set-fontset-font t 'emoji emoji-font nil 'prepend)
+      (set-fontset-font t 'symbol symbol-font nil 'prepend))))
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)
@@ -137,10 +73,17 @@
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil))
 
+(use-package bookmark
+  :defer t
+  :config
+  (setq bookmark-save-flag 1
+        bookmark-fringe-mark nil))
+
 (use-package compile
   :defer t
   :config
-  (setq compilation-ask-about-save nil)
+  (setq compilation-ask-about-save nil
+        compilation-scroll-output 'first-error)
 
   (defvar-local compilation-original-buffer nil
     "The buffer where compile was originally called")
@@ -218,6 +161,12 @@
 (use-package elec-pair
   :hook (after-init . electric-pair-mode))
 
+(use-package epa
+  :defer t
+  :config
+  (setq epa-file-select-keys 'auto
+        epa-file-encrypt-to user-mail-address))
+
 (use-package epg
   :defer t
   :config
@@ -265,6 +214,15 @@
         (call-interactively 'comment-dwim)
       (comment-or-uncomment-region
        (line-beginning-position) (line-end-position n)))))
+
+(use-package prog-mode
+  :defer t
+  :config
+  (global-prettify-symbols-mode 1)
+
+  (add-hook 'prog-mode-hook #'goto-address-prog-mode)
+  (add-hook 'prog-mode-hook #'bug-reference-prog-mode)
+  (add-hook 'prog-mode-hook #'subword-mode))
 
 (use-package project
   :defer t
@@ -347,14 +305,23 @@ the unwritable tidbits."
 (use-package server
   :commands server-running-p
   :hook (after-init . (lambda () (unless (server-running-p)
-                              (server-start)))))
+                              (server-start))))
+  :config
+  (defun server-remove-kill-buffer-hook ()
+    "Remove prompt if the file is opened in other clients."
+    (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
+  (add-hook 'server-visit-hook #'server-remove-kill-buffer-hook))
 
 (use-package simple
   :config
+  ;; use spaces instead of tabs
+  (setq-default indent-tabs-mode nil)
+
   (setq column-number-mode t
         delete-trailing-lines nil
         eval-expression-print-length nil
         eval-expression-print-level nil
+        kill-do-not-save-duplicates t
         next-error-message-highlight t
         ;; save clipboard contents into kill-ring before replace them
         save-interprogram-paste-before-kill t))

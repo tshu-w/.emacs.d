@@ -52,6 +52,9 @@
 ;; Inhibit byte-compiler warnings
 (setq byte-compile-warnings nil)
 
+;; Inhibit blinking cursor
+(setq blink-cursor-mode nil)
+
 ;; Remove some unneeded UI elements
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
