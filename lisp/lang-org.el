@@ -11,7 +11,7 @@
 (use-package org
   :init
   (setq org-directory "~/Documents/Org/"
-        org-note-directory (concat org-directory "roam/")
+        org-note-directory (concat org-directory "note/")
         org-inbox-file (concat org-directory "inbox.org")
         org-log-file (concat org-directory "log.org")
         org-project-file (concat org-directory "projects.org")
