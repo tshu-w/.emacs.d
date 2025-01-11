@@ -199,8 +199,6 @@
 (use-package epg
   :defer t
   :config
-  ;; TODO: debug `epg-wait-for-process' hang
-  (fset 'epg-wait-for-status 'ignore)
   (setq epg-gpg-home-directory (getenv "GNUPGHOME")))
 
 (use-package files
