@@ -137,6 +137,21 @@
   (setq global-auto-revert-non-file-buffers t
         auto-revert-verbose nil))
 
+(use-package compile
+  :defer t
+  :config
+  (setq compilation-ask-about-save nil)
+
+  (defvar-local compilation-original-buffer nil
+    "The buffer where compile was originally called")
+
+  (defun compilation-start-save-buffer (&rest _)
+    "Save the buffer where compile was originally called."
+    (let ((buffer (current-buffer)))
+      (with-current-buffer next-error-last-buffer
+        (set (make-local-variable 'compilation-original-buffer) buffer))))
+  (advice-add 'compilation-start :after #'compilation-start-save-buffer))
+
 (use-package dabbrev
   :defer t
   :config

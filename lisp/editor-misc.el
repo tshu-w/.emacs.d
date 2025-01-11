@@ -349,6 +349,14 @@ reuse it's window, otherwise create new one."
                                           "tinymist"
                                           "typst-lsp")))))
 
+  (defun typst-ts-prevent-preview-on-compilation-failure (process-status exit-status msg)
+      "Prevent Typst preview when compilation fails."
+      (unless (zerop exit-status)
+        (remove-hook 'compilation-finish-functions
+                     (typst-ts-mode-compile-and-preview--compilation-finish-function
+                      compilation-original-buffer))))
+  (advice-add 'compilation-handle-exit :before #'typst-ts-prevent-preview-on-compilation-failure)
+
   (despot-def typst-ts-mode-map
     "a" 'typst-ts-compile-and-preview
     "v" 'typst-ts-preview
