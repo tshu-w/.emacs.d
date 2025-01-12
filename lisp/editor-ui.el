@@ -71,6 +71,8 @@
 
 (use-package flucui-themes :straight t :defer t)
 
+(use-package flexoki-themes :straight t :defer t)
+
 (use-package humanoid-themes
   :straight t
   :defer t
@@ -139,6 +141,7 @@
                        ef-trio-light
                        ;; ef-tritanopia-light
                        flucui-light
+                       flexoki-themes-light
                        ;; humanoid-light
                        kaolin-breeze
                        kaolin-light
@@ -227,6 +230,7 @@
                       ;; ef-tritanopia-dark
                       ef-winter
                       ;; flucui-dark
+                      flexoki-themes-dark
                       ;; humanoid-dark
                       ;; kaolin-blossom
                       kaolin-bubblegum
