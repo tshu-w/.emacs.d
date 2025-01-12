@@ -271,10 +271,6 @@
   :hook ((after-init . popper-mode)
          (after-init . popper-echo-mode))
   :config
-  (defun compilation-buffer-p (buf)
-    (with-current-buffer buf
-      (and (not (eq major-mode 'grep-mode))
-           (derived-mode-p 'compilation-mode))))
   (setq popper-display-control nil
         popper-group-function #'popper-group-by-directory
         popper-reference-buffers
@@ -285,7 +281,7 @@
           "^\\*EGLOT"
           help-mode
           helpful-mode
-          (compilation-buffer-p . hide)
+          ("compilation\\*" . hide)
           process-menu-mode
           special-mode
           flymake-diagnostics-buffer-mode))
@@ -320,7 +316,7 @@
           (special-mode                    :align t)
           (process-menu-mode               :align t)
           (compilation-mode                :align t)
-          (".*compilation\\*"              :align t :regexp t)
+          ("compilation\\*"                :align t :regexp t)
           (flymake-diagnostics-buffer-mode :align t)
           ("*Shell Command Output*"        :align t)
           ("*Async Shell Command*"         :align t)
