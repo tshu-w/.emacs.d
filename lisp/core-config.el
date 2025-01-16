@@ -10,7 +10,8 @@
 
 (use-package emacs
   :hook ((after-init . setup-font)
-         (after-init . global-hl-line-mode))
+         (after-init . global-hl-line-mode)
+         (after-init . midnight-mode))
   :init
   (setq user-full-name "Tianshu Wang"
         user-mail-address "wang@tianshu.me"
