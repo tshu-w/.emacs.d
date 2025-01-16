@@ -10,7 +10,8 @@
 
 (use-package emacs
   :hook ((after-init . setup-font)
-         (after-init . global-hl-line-mode))
+         (after-init . global-hl-line-mode)
+         (after-init . midnight-mode))
   :init
   (setq user-full-name "Tianshu Wang"
         user-mail-address "wang@tianshu.me"
@@ -38,6 +39,10 @@
 
   (setq-default tab-width 4
                 fill-column 80)
+
+  (when (eq system-type 'darwin)
+    (setq ns-pop-up-frames nil
+          frame-resize-pixelwise t)
   :config
   (set-language-environment 'utf-8)
   (set-default-coding-systems 'utf-8)
@@ -48,10 +53,6 @@
   (defvar unicode-scale (/ 18.0 font-size))
   (defvar emoji-font "Noto Color Emoji")
   (defvar symbol-font "Noto Sans Symbols")
-
-  (when (eq system-type 'darwin)
-    (setq ns-pop-up-frames nil
-          frame-resize-pixelwise t)
 
     (setq unicode-font "PingFang SC"
           emoji-font "Apple Color Emoji"
