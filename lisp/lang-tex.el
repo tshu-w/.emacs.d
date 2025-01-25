@@ -144,12 +144,12 @@
 
 (use-package bibtex
   :defer t
-  :config
+  :init
   (setq bibtex-file-path "~/Documents/Bibliography/"
         bibtex-files '("references.bib")
-        bibtex-notes-path "~/Documents/Org/roam/refs/"
-
-        bibtex-align-at-equal-sign t
+        bibtex-notes-path "~/Documents/Org/note/refs/")
+  :config
+  (setq bibtex-align-at-equal-sign t
         bibtex-autokey-titleword-separator "-"
         bibtex-autokey-year-title-separator "-"
         bibtex-autokey-name-year-separator "-"
