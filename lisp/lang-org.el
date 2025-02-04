@@ -95,6 +95,11 @@
           org-agenda-clockreport-parameter-plist '(:maxlevel 5)
           org-agenda-columns-add-appointments-to-effort-sum t
           org-agenda-include-diary nil
+          org-agenda-prefix-format '((agenda . " %i %-16:c%?-16t% s")
+                                     (todo . " %i %-16:c")
+                                     (tags . " %i %-16:c")
+                                     (search . " %i %-16:c"))
+          org-habit-graph-column 60
           org-agenda-persistent-filter t
           org-agenda-restore-windows-after-quit t
           org-agenda-skip-deadline-prewarning-if-scheduled t
@@ -113,7 +118,7 @@
           org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
-          org-stuck-projects '("PROJ/-DONE-CXLD" ("NEXT") nil ""))
+          org-stuck-projects '("PROJ+LEVEL=1/-DONE-CXLD" ("NEXT") nil "\\"))
 
     (setq org-agenda-custom-commands
           `(("o" "Super agenda"
@@ -223,7 +228,7 @@
             ("T" "Todo w/ Link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
             ("w" "Web" plain (file+function org-inbox-file org-capture-goto-link)
-             "%i\n" :empty-lines 1 :immediate-finish t :prepend ,org-reverse-note-order)
+             "%i\n" :empty-lines 1 :immediate-finish t :prepend nil)
 
             ("l" "Log" entry (file+function org-log-file
                                             org-reverse-datetree-goto-date-in-file)
@@ -367,7 +372,6 @@
 
   (setq org-fast-tag-selection-single-key t
         org-tags-match-list-sublevels 'intented
-        org-tags-exclude-from-inheritance '("PROJ")
         org-tag-alist '((:startgroup)
                         ("@office"  . ?o)
                         ("@home"    . ?h)
@@ -793,6 +797,7 @@ TEMPLATE is the processed template used to format the entry."
     "r"  (cons "roam" (make-sparse-keymap))
     "rb" 'org-roam-buffer-toggle
     "ro" 'org-roam-open-refs
+    "rr" 'org-roam-node-random
     "rt" 'org-roam-tag-add
     "rT" 'org-roam-tag-delete)
   (general-def magit-section-mode-map "SPC" nil)
