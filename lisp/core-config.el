@@ -110,7 +110,8 @@
         desktop-restore-eager 1
         desktop-save t)
 
-  (dolist (param '(foreground-color background-color background-mode font cursor-color mouse-color))
+  (dolist (param '(foreground-color background-color background-mode font cursor-color
+                                    scroll-bar-foreground scroll-bar-background))
     (push `(,param . :never) frameset-filter-alist))
 
   (defun desktop-restore-file-buffer@before (file-name _buffer-name _misc)
