@@ -331,6 +331,21 @@ the unwritable tidbits."
         tab-prefix-map (make-sparse-keymap)
         tab-bar-format '(tab-bar-format-align-right tab-bar-format-tabs tab-bar-separator))
 
+  (defun tab-bar--hint ()
+    "Return a one liner hint containing all tab names."
+    (let ((tabs (funcall tab-bar-tabs-function)))
+      (mapconcat
+       (lambda (tab)
+         (let* ((tab-name (alist-get 'name tab))
+                (current (eq (car tab) 'current-tab))
+                (pos (cl-position tab tabs))
+                (caption (concat (number-to-string (if (eq 9 pos) 0 (1+ pos)))
+                                 ":" tab-name)))
+           (if current
+               (propertize (concat "[" caption "]") 'face 'warning)
+             caption)))
+       tabs " | ")))
+
   (defun tab-bar-switch-to-tab@override (name)
     "Like `tab-bar-switch-to-tab', but allow for the creation of a new, named tab on the fly."
     (interactive

@@ -12,13 +12,30 @@
   :straight t
   :hook (after-init . which-key-mode)
   :config
-  (setq which-key-idle-delay 0.4
-        which-key-idle-secondary-delay 0.01
+  (setq echo-keystrokes 0.02
+        which-key-echo-keystrokes 0.02
+        which-key-idle-delay 0.4
+        which-key-idle-secondary-delay 0.04
         which-key-max-description-length 32
         which-key-sort-order 'which-key-key-order-alpha
         which-key-allow-evil-operators t)
 
-  (push '((nil . "tab-bar-select-tab") . t) which-key-replacement-alist))
+  (push '((nil . "tab-bar-select-tab") . t) which-key-replacement-alist)
+
+  (with-eval-after-load 'tab-bar
+    (defun which-key-show-tabs (fun pages-obj)
+      "Show tabs in which-key."
+      (let ((out (funcall fun pages-obj))
+            (prefix-desc (key-description (which-key--pages-prefix pages-obj))))
+        (if (not (string-equal prefix-desc "SPC l"))
+            out
+          (cons (car out)
+                (lambda ()
+                  (funcall (cdr out))
+                  (which-key--echo (concat
+                                    (propertize "Layouts: " 'face 'bold)
+                                    (tab-bar--hint))))))))
+    (advice-add 'which-key--process-page :around #'which-key-show-tabs)))
 
 (use-package general
   :straight t
@@ -131,7 +148,7 @@
     "lR"      'tab-bar-rename-tab
     "lt"      'other-tab-prefix
     "lu"      'tab-bar-undo-close-tab
-    "l1"      '("select tab 1..8" . tab-bar-select-tab)
+    "l1"      '("select tab 1..9" . tab-bar-select-tab)
     "l2"      'tab-bar-select-tab
     "l3"      'tab-bar-select-tab
     "l4"      'tab-bar-select-tab
@@ -139,6 +156,7 @@
     "l6"      'tab-bar-select-tab
     "l7"      'tab-bar-select-tab
     "l8"      'tab-bar-select-tab
+    "l9"      'tab-bar-select-tab
     "l TAB"   'tab-bar-switch-to-last-tab
 
     "m"       (cons "major mode" (make-sparse-keymap))
