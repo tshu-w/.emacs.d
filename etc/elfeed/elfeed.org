@@ -145,6 +145,7 @@
 ** [[https://www.kawabangga.com/feed][卡瓦邦噶]]
 ** [[https://www.logcg.com/feed][落格博客]]
 ** [[https://www.masteringemacs.org/feed][Mastering Emacs]]
+** [[https://www.murilopereira.com/feed.atom][mpereira]]
 ** [[https://www.murilopereira.com/index.xml][Murilo Pereira]]
 ** [[https://www.murilopereira.com/index.xml][mpereira]]
 ** [[https://www.piglei.com/feeds/latest/][Piglei]]
