@@ -110,7 +110,7 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '(o1 o3-mini o1-mini gpt-4o gpt-4o-mini gpt-4-turbo gpt-4
+      :models '(o1 o3-mini o1-mini chatgpt-4o-latest gpt-4o gpt-4o-mini
                 deepseek-chat deepseek-reasoner
                 qwen-turbo qwen-plus qwen-max
                 (claude-3-5-sonnet
