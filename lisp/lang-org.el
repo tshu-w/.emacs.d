@@ -681,17 +681,17 @@
         org-roam-db-gc-threshold most-positive-fixnum
         org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
         org-roam-directory (file-truename org-note-directory)
-        org-roam-node-display-template (concat "${hierarchy:*} ${backlinkscount:6}${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
+        org-roam-node-display-template (concat "${reverse-hierarchy:*} ${backlinkscount:6}${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
         org-roam-v2-ack t)
   (with-eval-after-load 'org (org-roam-db-autosync-mode))
   :config
   ;; https://github.com/org-roam/org-roam/wiki/User-contributed-Tricks#showing-node-hierarchy
-  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
-    (let ((level (org-roam-node-level node)))
-      (concat
-       (when (> level 0) (concat (org-roam-node-file-title node) " > "))
-       (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
-       (org-roam-node-title node))))
+  (cl-defmethod org-roam-node-reverse-hierarchy ((node org-roam-node))
+    (let ((olp (org-roam-node-olp node))
+          (level (org-roam-node-level node)))
+      (concat (org-roam-node-title node)
+              (when (> level 1) (concat " < " (string-join (nreverse olp) " < ")))
+              (when (> level 0) (concat " < " (org-roam-node-file-title node))))))
 
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
