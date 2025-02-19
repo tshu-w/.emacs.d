@@ -139,15 +139,127 @@
                    :cutoff-date "2023-08"))))
   (setq-default gptel-backend gptel--oneapi)
 
-  (add-to-list 'gptel-response-filter-functions
-               (defun gptel--colorize-response (content buffer)
-                 (put-text-property 0 (length content) 'face 'font-lock-warning-face content)
-                 content))
-
   (defun gptel-colorize-response (begin end)
     (save-excursion
-      (put-text-property begin end 'font-lock-face 'font-lock-string-face)))
+      (put-text-property begin end 'font-lock-face 'font-lock-builtin-face)))
   (add-hook 'gptel-post-response-functions #'gptel-colorize-response)
+
+  (progn ;; multi models at a time
+    (defcustom gptel-backends `(,gptel-backend)
+      "LLM backends to use."
+      :safe #'always
+      :type '(repeat
+              (restricted-sexp :match-alternatives (gptel-backend-p 'nil)
+			                   :tag "Other backend")))
+
+    (defcustom gptel-models `(,gptel-model)
+      "Models for chat."
+      :safe #'always
+      :type '(repeat :tag "Multiple models"
+                     (symbol :tag "Specify model name")))
+
+    (defun gptel-multi-send (send-fun &rest args)
+      "Execute SEND-FUN across multiple models."
+      (if (and (use-region-p)
+               (eq (point) (region-beginning)))
+          (exchange-point-and-mark))
+      (cl-loop for backend in gptel-backends
+               for model in gptel-models
+               do
+               (let ((gptel-backend backend)
+                     (gptel-model model)
+                     (separator "\n"))
+                 (insert separator)
+                 (apply send-fun args))))
+
+    (setq gptel-response-separator "\n")
+    (advice-add 'gptel-send :around #'gptel-multi-send)
+    (advice-add 'gptel--suffix-send :around #'gptel-multi-send)
+
+    (with-eval-after-load 'gptel-transient
+      (defclass gptel-providers-variable (transient-lisp-variable)
+        ((model       :initarg :model)
+         (model-value :initarg :model-value)
+         (always-read :initform t)
+         (set-value :initarg :set-value :initform #'set))
+        "Class used for gptel-backends.")
+
+      (cl-defmethod transient-format-value ((obj gptel-providers-variable))
+        (propertize (string-join
+                     (mapcar (lambda (model)
+                               (gptel--model-name model))
+                             (buffer-local-value
+                              (oref obj model) transient--original-buffer))
+                     ",")
+                    'face 'transient-value))
+
+      (cl-defmethod transient-infix-set ((obj gptel-providers-variable) value)
+        (pcase-let ((`(,backend-value ,model-value) value))
+          (funcall (oref obj set-value)
+                   (oref obj variable)
+                   (oset obj value backend-value)
+                   gptel--set-buffer-locally)
+          (funcall (oref obj set-value)
+                   (oref obj model)
+                   (oset obj model-value model-value)
+                   gptel--set-buffer-locally))
+        (transient-setup))
+
+      (transient-define-infix gptel--infix-provider ()
+        "AI Provider for Chat."
+        :description "Model"
+        :class 'gptel-providers-variable
+        :prompt "Models: "
+        :variable 'gptel-backends
+        :set-value #'gptel--set-with-scope
+        :model 'gptel-models
+        :key "-m"
+        :reader (lambda (prompt &rest _)
+                  (cl-loop
+                   for (name . backend) in gptel--known-backends
+                   nconc (cl-loop for model in (gptel-backend-models backend)
+                                  collect (list (concat name ":" (gptel--model-name model))
+                                                backend model))
+                   into models-alist
+                   with completion-extra-properties =
+                   `(:annotation-function
+                     ,(lambda (comp)
+                        (let* ((model (nth 2 (assoc comp models-alist)))
+                               (desc (get model :description))
+                               (caps (get model :capabilities))
+                               (context (get model :context-window))
+                               (input-cost (get model :input-cost))
+                               (output-cost (get model :output-cost))
+                               (cutoff (get model :cutoff-date)))
+                          (when (or desc caps context input-cost output-cost cutoff)
+                            (concat
+                             (propertize " " 'display `(space :align-to 40))
+                             (when desc (truncate-string-to-width desc 70 nil ? t t))
+                             " " (propertize " " 'display `(space :align-to 112))
+                             (when caps (truncate-string-to-width (prin1-to-string caps) 21 nil ? t t))
+                             " " (propertize " " 'display `(space :align-to 134))
+                             (when context (format "%5dk" context))
+                             " " (propertize " " 'display `(space :align-to 142))
+                             (when input-cost (format "$%5.2f in" input-cost))
+                             (if (and input-cost output-cost) "," " ")
+                             " " (propertize " " 'display `(space :align-to 153))
+                             (when output-cost (format "$%6.2f out" output-cost))
+                             " " (propertize " " 'display `(space :align-to 166))
+                             cutoff)))))
+                   finally return
+                   (cl-loop for model in (completing-read-multiple prompt models-alist nil t)
+                            for (backend model-name) = (cdr (assoc model models-alist))
+                            collect backend into backends
+                            collect model-name into models
+                            finally return (list backends models)))))))
+
+  (with-eval-after-load 'gptel-transient
+    (transient-suffix-put 'gptel-menu (kbd "-b") :key "B")
+    (transient-suffix-put 'gptel-menu (kbd "-f") :key "F")
+    (transient-suffix-put 'gptel-menu (kbd "-m") :key "M")
+    (transient-suffix-put 'gptel-menu (kbd "-c") :key "C")
+    (transient-suffix-put 'gptel-menu (kbd "-i") :key "I")
+    (transient-suffix-put 'gptel-menu (kbd "-t") :key "T"))
 
   (defun clear-text-properties (start end)
     "Clear text properties between START and END."
