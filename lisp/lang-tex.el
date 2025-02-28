@@ -14,6 +14,7 @@
   :config
   (setq-default TeX-master nil)
   (setq TeX-parse-self t
+        TeX-error-overview-open-after-TeX-run t
         TeX-save-query nil
         TeX-source-correlate-start-server t
         TeX-view-program-list '(("Preview.app" "open -a Preview.app %o")
@@ -26,7 +27,6 @@
         ;; Don't insert line-break at inline math
         LaTeX-fill-break-at-separators nil)
 
-  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
@@ -40,6 +40,18 @@
                  (eq (process-status process) 'run))
         (delete-process process))
       (TeX-command TeX-command-default 'TeX-master-file -1)))
+
+  ;; TODO: TeX-output-extension is not set to "pdf" when using xelatex (bug#76612)
+  (defun TeX-output-extension@override ()
+    "Get the extension of the current TeX output file."
+    (if (listp TeX-output-extension)
+        (car TeX-output-extension)
+      (if TeX-PDF-mode "pdf"
+        (or (TeX-process-get-variable (TeX-active-master)
+                                      'TeX-output-extension
+                                      TeX-output-extension)
+            TeX-output-extension))))
+  (advice-add 'TeX-output-extension :override #'TeX-output-extension@override)
 
   (with-eval-after-load 'project
     (add-to-list 'project-root-files "main.tex"))
