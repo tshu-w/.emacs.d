@@ -48,12 +48,6 @@
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
   (setq dumb-jump-selector 'completing-read))
 
-(use-package editorconfig
-  :straight t
-  :config
-  (setq editorconfig-lisp-use-default-indent t)
-  (editorconfig-mode))
-
 (use-package elfeed
   :straight t
   :init

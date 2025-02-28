@@ -154,6 +154,12 @@
                 ediff-split-window-function 'split-window-horizontally
                 ediff-merge-split-window-function 'split-window-horizontally))
 
+(use-package editorconfig
+  :defer t
+  :config
+  (setq editorconfig-lisp-use-default-indent t)
+  (editorconfig-mode))
+
 (use-package elec-pair
   :hook (after-init . electric-pair-mode))
 
