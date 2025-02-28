@@ -87,7 +87,7 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model 'claude-3-5-sonnet
+  (setq gptel-model 'claude-3-7-sonnet
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -107,8 +107,16 @@
       :models '(o1 o3-mini o1-mini chatgpt-4o-latest gpt-4o gpt-4o-mini
                 deepseek-chat deepseek-reasoner
                 qwen-turbo qwen-plus qwen-max
-                (claude-3-5-sonnet
+                (claude-3-7-sonnet
                    :description "Highest level of intelligence and capability"
+                   :capabilities (media tool cache)
+                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                   :context-window 200
+                   :input-cost 3
+                   :output-cost 15
+                   :cutoff-date "2025-02")
+                (claude-3-5-sonnet
+                   :description "High level of intelligence and capability"
                    :capabilities (media tool cache)
                    :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                    :context-window 200
