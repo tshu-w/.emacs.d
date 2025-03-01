@@ -317,7 +317,7 @@ targets."
   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
   :hook (prog-mode . copilot-mode)
   :init
-  (setq copilot-indent-warning-suppress t
+  (setq copilot-indent-offset-warning-disable t
         copilot-install-dir (no-littering-expand-var-file-name "copilot"))
   :general
   ('insert copilot-mode-map
@@ -405,7 +405,6 @@ Just put this function in `hippie-expand-try-functions-list'."
           (concat (file-remote-p default-directory) name)))
       name))
 
-  ;; TODO:
   ;; https://github.com/joaotavora/eglot/discussions/876
   ;; https://github.com/microsoft/pyright/issues/3282
   (defun eglot--uri-to-path@around (fun url)
