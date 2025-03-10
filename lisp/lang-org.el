@@ -790,7 +790,7 @@ TEMPLATE is the processed template used to format the entry."
     (add-to-list 'shackle-rules '("*org-roam*" :align right)))
 
   (with-eval-after-load 'popper
-    (add-to-list 'popper-reference-buffers '(org-roam-mode)))
+    (add-to-list 'popper-reference-buffers 'org-roam-mode))
 
   (despot-def org-mode-map
     "ir" 'org-roam-node-insert

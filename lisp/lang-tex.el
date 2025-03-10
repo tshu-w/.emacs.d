@@ -56,10 +56,12 @@
     (add-to-list 'project-root-files "main.tex"))
 
   (with-eval-after-load 'shackle
-    (add-to-list 'shackle-rules '(TeX-output-mode :align right)))
+    (add-to-list 'shackle-rules '(TeX-output-mode :align right))
+    (add-to-list 'shackle-rules '(TeX-error-overview-mode :align right)))
 
   (with-eval-after-load 'popper
-    (add-to-list 'popper-reference-buffers '(TeX-output-mode)))
+    (add-to-list 'popper-reference-buffers 'TeX-output-mode)
+    (add-to-list 'popper-reference-buffers 'TeX-error-overview-mode))
 
   ;; Rebindings for TeX-font
   (with-eval-after-load 'latex
