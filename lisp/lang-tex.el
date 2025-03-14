@@ -31,6 +31,25 @@
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
 
+  (add-hook 'LaTeX-mode-hook
+            (defun init-latex-mode ()
+              "Stuff to do when opening `LaTeX-mode' files."
+              (define-key LaTeX-mode-map (kbd "$") 'self-insert-command)
+              (add-function
+               :around
+               (local 'electric-pair-skip-self)
+               (lambda (oldfun c)
+                 (pcase (electric-pair-syntax-info c)
+                   (`(,syntax ,_ ,_ ,_)
+                    (if (eq syntax ?$)
+                        (unwind-protect
+                            (progn
+                              (delete-char -1)
+                              (texmathp))
+                          (insert-char c))
+                      (funcall oldfun c)))))
+               '((name . fix-electric-pair-paired-delimiters-in-tex-mode)))))
+
   (defun TeX-build ()
     (interactive)
     (let* ((master (TeX-master-file))
