@@ -24,7 +24,8 @@
                                      (output-pdf "displayline")
                                      (output-html "open"))
         ;; Don't insert line-break at inline math
-        LaTeX-fill-break-at-separators nil)
+        LaTeX-fill-break-at-separators nil
+        LaTeX-item-indent 0)
 
   (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
