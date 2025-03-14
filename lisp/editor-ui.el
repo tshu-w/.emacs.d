@@ -53,14 +53,7 @@
                                 :background 'unspecified
                                 :inherit 'unspecified)))
 
-(use-package doom-themes
-  :straight t
-  :defer t
-  :custom-face
-  ;; fix doom-theme diff-hl face
-  (diff-hl-change ((t (:background unspecified))))
-  (diff-hl-delete ((t (:background unspecified))))
-  (diff-hl-insert ((t (:background unspecified)))))
+(use-package doom-themes :straight t :defer t)
 
 (use-package ef-themes
   :straight t
@@ -70,8 +63,6 @@
     (set (intern (format "ef-themes-height-%s" n)) 1.0)))
 
 (use-package flucui-themes :straight t :defer t)
-
-(use-package flexoki-themes :straight t :defer t)
 
 (use-package humanoid-themes
   :straight t
@@ -112,12 +103,14 @@
 
 (defvar light-themes '(doom-acario-light
                        ;; doom-ayu-light
+                       doom-bluloco-light
                        doom-earl-grey
                        doom-feather-light
                        doom-flatwhite
                        doom-gruvbox-light
                        doom-homage-white
                        doom-nord-light
+                       doom-oksolar-light
                        doom-one-light
                        doom-opera-light
                        ;; doom-plain
@@ -141,7 +134,6 @@
                        ef-trio-light
                        ;; ef-tritanopia-light
                        flucui-light
-                       flexoki-themes-light
                        ;; humanoid-light
                        kaolin-breeze
                        kaolin-light
@@ -158,6 +150,7 @@
                       ;; doom-ayu-dark
                       ;; doom-ayu-mirage
                       ;; doom-badger
+                      doom-bluloco-dark
                       doom-challenger-deep
                       doom-city-lights
                       doom-dark+
@@ -190,6 +183,7 @@
                       ;; doom-nord-aurora
                       ;; doom-nova
                       doom-oceanic-next
+                      doom-oksolar-dark
                       ;; doom-old-hope
                       doom-one
                       doom-opera
@@ -230,7 +224,6 @@
                       ;; ef-tritanopia-dark
                       ef-winter
                       ;; flucui-dark
-                      flexoki-themes-dark
                       ;; humanoid-dark
                       ;; kaolin-blossom
                       kaolin-bubblegum
