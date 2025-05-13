@@ -104,41 +104,60 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '(o1 o3-mini o1-mini chatgpt-4o-latest gpt-4o gpt-4o-mini
-                deepseek-chat deepseek-reasoner
+      :models '(o4-mini chatgpt-4o-latest gpt-4o gpt-4.1
+                (deepseek-chat
+                     :capabilities (tool)
+                     :context-window 64
+                     :input-cost 0.27
+                     :output-cost 1.10)
+                (deepseek-reasoner
+                     :capabilities (tool reasoning)
+                     :context-window 64
+                     :input-cost 0.55
+                     :output-cost 2.19)
                 qwen-turbo qwen-plus qwen-max
+                (gemini-2.5-pro
+                 :description "Most powerful Gemini thinking model with maximum response accuracy and state-of-the-art performance"
+                 :capabilities (tool-use json media)
+                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                              "application/pdf" "text/plain" "text/csv" "text/html")
+                 :context-window 1000
+                 :input-cost 1.25 ; 2.50 for >200k tokens
+                 :output-cost 10.00 ; 15 for >200k tokens
+                 :cutoff-date "2025-01")
+                (gemini-2.5-flash
+                 :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
+                 :capabilities (tool-use json media)
+                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                              "application/pdf" "text/plain" "text/csv" "text/html")
+                 :context-window 1000
+                 :input-cost 0.15
+                 :output-cost 0.60 ; 3.50 for thinking
+                 :cutoff-date "2025-01")
                 (claude-3-7-sonnet
-                   :description "Highest level of intelligence and capability"
-                   :capabilities (media tool cache)
-                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                   :context-window 200
-                   :input-cost 3
-                   :output-cost 15
-                   :cutoff-date "2025-02")
+                 :description "Highest level of intelligence and capability"
+                 :capabilities (media tool cache)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 200
+                 :input-cost 3
+                 :output-cost 15
+                 :cutoff-date "2025-02")
                 (claude-3-5-sonnet
-                   :description "High level of intelligence and capability"
-                   :capabilities (media tool cache)
-                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                   :context-window 200
-                   :input-cost 3
-                   :output-cost 15
-                   :cutoff-date "2024-04")
+                 :description "High level of intelligence and capability"
+                 :capabilities (media tool cache)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 200
+                 :input-cost 3
+                 :output-cost 15
+                 :cutoff-date "2024-04")
                 (claude-3-5-haiku
-                   :description "Intelligence at blazing speeds"
-                   :capabilities (media tool)
-                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-                   :context-window 200
-                   :input-cost 1.00
-                   :output-cost 5.00
-                   :cutoff-date "2024-07")
-                (claude-3-opus
-                   :description "Top-level performance, intelligence, fluency, and understanding"
-                   :capabilities (media tool cache)
-                   :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-                   :context-window 200
-                   :input-cost 15
-                   :output-cost 75
-                   :cutoff-date "2023-08"))))
+                 :description "Intelligence at blazing speeds"
+                 :capabilities (media tool)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+                 :context-window 200
+                 :input-cost 1.00
+                 :output-cost 5.00
+                 :cutoff-date "2024-07"))))
   (setq-default gptel-backend gptel--oneapi)
 
   (defun gptel-colorize-response (begin end)
