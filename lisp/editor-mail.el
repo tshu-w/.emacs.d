@@ -100,7 +100,7 @@
                             (string-prefix-p "/iscas" (mu4e-message-field msg :maildir))))
             :enter-func (lambda () (mu4e-message "Switch to the iscas context"))
             :vars '((user-mail-address . "tianshu2020@iscas.ac.cn")
-                    (message-signature . "王天舒\n")
+                    (message-signature . "Tianshu Wang\nInstitute of Software, Chinese Academy of Sciences\ntianshu2020@iscas.ac.cn")
                     (mu4e-sent-folder . "/iscas/Sent")
                     (mu4e-drafts-folder . "/iscas/Drafts")
                     (mu4e-trash-folder . "/iscas/Trash")
