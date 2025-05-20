@@ -31,7 +31,9 @@
             (with-eval-after-load 'org
               (dolist (outline-number (number-sequence 1 8))
                 (let ((outline (intern (format "outline-%d" outline-number))))
-                  (set-face-attribute outline nil :height 1.0))))))
+                  (set-face-attribute outline nil :height 1.0))
+                (let ((org-level (intern (format "org-level-%d" outline-number))))
+                  (set-face-attribute org-level nil :height 1.0))))))
 
 (add-hook 'after-load-theme-hook
           (defun customize-tab-bar ()
