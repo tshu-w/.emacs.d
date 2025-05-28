@@ -87,7 +87,7 @@
 (use-package gptel
   :straight t
   :init
-  (setq gptel-model 'claude-3-7-sonnet
+  (setq gptel-model 'gemini-2.5-flash
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -134,7 +134,23 @@
                  :input-cost 0.15
                  :output-cost 0.60 ; 3.50 for thinking
                  :cutoff-date "2025-01")
-                (claude-3-7-sonnet
+                (claude-sonnet-4
+                 :description "High-performance model with exceptional reasoning and efficiency"
+                 :capabilities (media tool-use cache)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 200
+                 :input-cost 3
+                 :output-cost 15
+                 :cutoff-date "2025-03")
+                (claude-opus-4
+                 :description "Most capable model for complex reasoning and advanced coding"
+                 :capabilities (media tool-use cache)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 200
+                 :input-cost 15
+                 :output-cost 75
+                 :cutoff-date "2025-03")
+                (claude-3.7-sonnet
                  :description "Highest level of intelligence and capability"
                  :capabilities (media tool cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
@@ -142,7 +158,7 @@
                  :input-cost 3
                  :output-cost 15
                  :cutoff-date "2025-02")
-                (claude-3-5-sonnet
+                (claude-3.5-sonnet
                  :description "High level of intelligence and capability"
                  :capabilities (media tool cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
@@ -150,7 +166,7 @@
                  :input-cost 3
                  :output-cost 15
                  :cutoff-date "2024-04")
-                (claude-3-5-haiku
+                (claude-3.5-haiku
                  :description "Intelligence at blazing speeds"
                  :capabilities (media tool)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
