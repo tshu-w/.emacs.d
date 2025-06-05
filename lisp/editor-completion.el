@@ -51,15 +51,6 @@
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil)
   :config
-  (defun orderless-dispatch (pattern _index _total)
-    (cond
-     ((string= "!" pattern) `(orderless-literal . ""))
-     ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
-     ((string-suffix-p "=" pattern) `(orderless-literal . ,(substring pattern 0 -1)))
-     ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
-
-  (setq orderless-style-dispatchers '(orderless-dispatch))
-
   (advice-add 'company-capf
               :around
               (lambda (capf-fn &rest args)
