@@ -262,7 +262,7 @@
   :hook (after-init . repeat-mode)
   :config
   (setq repeat-keep-prefix t
-        repeat-timeout 5
+        repeat-timeout 1
         repeat-exit-key (kbd "RET")))
 
 (use-package savehist
