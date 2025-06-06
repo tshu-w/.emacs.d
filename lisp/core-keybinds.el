@@ -224,20 +224,8 @@
 
   (when (eq system-type 'darwin)
     (general-def
-      "s-`"   'other-frame
-      "s-a"   'mark-whole-buffer
-      "s-c"   'evil-yank
-      "s-n"   'make-frame
-      "s-m"   'iconify-frame
-      "s-q"   'save-buffers-kill-terminal
-      "s-v"   'yank
-      "s-x"   'kill-region
       "s-w"   'delete-window
-      "s-W"   'delete-frame
-      "s-z"   'evil-undo
-      "s-Z"   'evil-redo
       "s-C-F" 'toggle-frame-fullscreen
-      "s-s"   'save-buffer
       "s-<backspace>" (defun delete-line-before-point ()
                         (interactive)
                         (let ((prev-pos (point)))
@@ -298,7 +286,10 @@
   (add-hook 'evil-normal-state-exit-hook #'evil-ex-nohighlight)
 
   (general-def 'normal "zf" 'reposition-window)
-  (general-def 'insert [remap evil-complete-previous] 'hippie-expand))
+  (general-def 'insert [remap evil-complete-previous] 'hippie-expand)
+  (general-def
+    [remap undo] 'evil-undo
+    [remap undo-redo] 'evil-redo))
 
 (use-package evil-collection
   :straight t
