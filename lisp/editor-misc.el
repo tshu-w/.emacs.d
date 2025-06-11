@@ -86,6 +86,7 @@
 
 (use-package gptel
   :straight t
+  :commands (clear-text-properties gptel-transient-send)
   :init
   (setq gptel-model 'gemini-2.5-flash
         gptel-directives
@@ -97,6 +98,10 @@
           (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
           (code-explainer . "You are a professional code explainer. Explain the code and report any bugs or errors."))
         gptel--system-message nil)
+
+  (with-eval-after-load 'embark
+    (define-key embark-region-map (kbd "x") #'clear-text-properties)
+    (define-key embark-region-map (kbd "g") #'gptel-transient-send))
   :config
   (setq gptel--known-backends nil)
   (defvar gptel--oneapi
@@ -298,15 +303,24 @@
     (transient-suffix-put 'gptel-menu (kbd "-i") :key "I")
     (transient-suffix-put 'gptel-menu (kbd "-t") :key "T"))
 
+  (autoload #'gptel-transient-send "gptel-transient" nil t)
+  (with-eval-after-load 'gptel-transient
+    (defun gptel-transient-send (&optional arg)
+      "Call `gptel--suffix-send' with latest history."
+      (interactive "P")
+      (if (and arg (require 'gptel-transient nil t))
+          (call-interactively #'gptel-menu)
+        (let* ((obj (plist-get (symbol-plist 'gptel-menu) 'transient--prefix))
+               (hst (alist-get (transient--history-key obj)
+                               transient-history))
+               (args (nth 0 hst)))
+          (gptel--suffix-send args)))))
+
   (defun clear-text-properties (start end)
     "Clear text properties between START and END."
     (interactive "r")
     (let ((inhibit-read-only t))
       (set-text-properties start end nil)))
-
-  (with-eval-after-load 'embark
-    (define-key embark-region-map (kbd "C") #'clear-text-properties)
-    (define-key embark-region-map (kbd "g") #'gptel-transient-send))
   :general
   (tyrant-def "ag" 'gptel-menu))
 
