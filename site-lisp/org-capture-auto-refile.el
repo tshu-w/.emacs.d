@@ -38,20 +38,15 @@
   (let ((file (nth 1 (org-capture-get :target)))
         (headline (plist-get org-store-link-plist :description))
         (link (plist-get org-store-link-plist :link)))
-    (org-capture-put :target (list 'file+headline file headline))
     (widen)
     (goto-char (point-min))
     (let (case-fold-search)
       (if (re-search-forward
            (format org-complex-heading-regexp-format
                    (regexp-quote headline)) nil t)
-          (org-end-of-subtree)
-        (org-capture-put :flag t)
-        (goto-char (point-max))
-        (or (bolp) (insert "\n"))
-        (insert "* TODO " headline "\n")
-        (insert "[[" link "]]\n")
-        (point)))))
+          (progn (org-end-of-subtree) (point))
+        (org-capture-put :type `entry
+                         :template "* TODO %:description\n%l\n%i\n")))))
 
 (defun org-refile-to (file headline)
   "`org-refile' to exact HEADLINE in FILE.
@@ -68,8 +63,7 @@ Create at the end of the FILE if HEADLINE doesn't exist."
     (org-refile nil nil (list headline file nil pos))))
 
 (defun org-capture-auto-refile ()
-  (when (and (string= (org-capture-get :key) org-capture-web-link-key)
-             (org-capture-get :flag))
+  (when (string= (org-capture-get :key) org-capture-web-link-key)
     (catch 'break
       (dolist (rule org-capture-auto-refile-rules)
         (let ((regexp   (nth 0 rule))

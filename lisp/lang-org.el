@@ -284,26 +284,15 @@
       (let ((file (nth 1 (org-capture-get :target)))
             (headline (plist-get org-store-link-plist :description))
             (link (plist-get org-store-link-plist :link)))
-        (org-capture-put :target (list 'file+headline file headline))
         (widen)
         (goto-char (point-min))
         (let (case-fold-search)
           (if (re-search-forward
                (format org-complex-heading-regexp-format
                        (regexp-quote headline)) nil t)
-              (org-end-of-subtree)
-            (org-capture-put :flag t)
-            (if (org-capture-get :prepend)
-                (progn
-                  (goto-char (point-min))
-                  (unless (org-at-heading-p) (outline-next-heading)))
-              (goto-char (point-max))
-              (org-fold-core-cycle-over-indirect-buffers
-                (org-fold-region (max 1 (1- (point-max))) (point-max) nil)))
-            (or (bolp) (insert "\n"))
-            (insert "* TODO " headline "\n")
-            (insert "[[" link "]]\n")
-            (point)))))
+              (progn (org-end-of-subtree) (point))
+            (org-capture-put :type `entry
+                             :template "* TODO %:description\n%l\n%i\n")))))
 
     (when (eq system-type 'darwin)
       (defun org-capture-after-finalize ()
