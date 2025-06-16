@@ -659,48 +659,68 @@
     (interactive)
     (org-reverse-datetree-refile-to-file org-log-file)))
 
-(use-package org-roam
+(use-package org-node
   :straight t
   :init
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "" :target
-           (file+head "${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
-           :unnarrowed t :immediate-finish t))
-        org-roam-database-connector 'sqlite-builtin
-        org-roam-db-gc-threshold most-positive-fixnum
-        org-roam-db-location (no-littering-expand-var-file-name "org-roam.db")
-        org-roam-directory (file-truename org-note-directory)
-        org-roam-node-display-template (concat "${reverse-hierarchy:*} ${backlinkscount:6}${directories:10}" (propertize "${tags:20}" 'face 'org-tag))
-        org-roam-v2-ack t)
-  (with-eval-after-load 'org (org-roam-db-autosync-mode))
+  (with-eval-after-load 'org (require 'org-node))
   :config
-  ;; https://github.com/org-roam/org-roam/wiki/User-contributed-Tricks#showing-node-hierarchy
-  (cl-defmethod org-roam-node-reverse-hierarchy ((node org-roam-node))
-    (let ((olp (org-roam-node-olp node))
-          (level (org-roam-node-level node)))
-      (concat (org-roam-node-title node)
-              (when (> level 1) (concat " < " (string-join (nreverse olp) " < ")))
-              (when (> level 0) (concat " < " (org-roam-node-file-title node))))))
+  (setq org-mem-do-sync-with-org-id t
+        org-mem-watch-dirs `(,org-note-directory)
+        org-node-affixation-fn 'org-node-prepend-olp-append-tags-use-frame-width
+        org-node-alter-candidates t
+        org-node-blank-input-hint nil)
 
-  (cl-defmethod org-roam-node-directories ((node org-roam-node))
-    (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-        (format "(%s)" (car (split-string dirs "/")))
-      ""))
+  (org-mem-updater-mode)
+  (org-node-cache-mode)
 
-  (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
-    (let* ((count (caar (org-roam-db-query
-                         [:select (funcall count source)
-                                  :from links
-                                  :where (= dest $s1)
-                                  :and (= type "id")]
-                         (org-roam-node-id node)))))
-      (format "[%d]" count)))
+  (org-node-backlink-mode)
+  (org-node-complete-at-point-mode)
+  (add-hook 'org-open-at-point-functions #'org-node-try-visit-ref-node)
+  (remove-hook 'org-node-creation-hook   #'org-node-ensure-crtime-property)
 
-  (defun org-roam-open-refs ()
+  (defun org-node-add-date-after-title ()
+    "Add a #+date: line after #+title: line if it exists and no #+date: already present."
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "^#\\+title:" nil t)
+        (let ((title-end (line-end-position)))
+          (unless (re-search-forward "^#\\+date:" nil t)
+            (goto-char title-end)
+            (insert "\n#+date: " (format-time-string (org-time-stamp-format))))))))
+  (add-hook 'org-node-creation-hook #'org-node-add-date-after-title)
+
+  (defun quote-initial ()
+    (let ((initial (plist-get org-store-link-plist :initial)))
+      (if (equal initial "") ""
+        (format "#+begin_quote\n%s\n#+end_quote" initial))))
+
+  (defun org-node-ref-capture ()
+    "Capture a reference node."
+    (org-node-cache-ensure)
+    (let* ((title (plist-get org-store-link-plist :description))
+           (link (plist-get org-store-link-plist :link))
+           (node (gethash title org-node--candidate<>entry))
+           (org-node-file-directory-ask (concat org-note-directory "refs/")))
+      (if node
+          (progn (org-node--goto node t)
+                 (org-end-of-subtree)
+                 (point))
+        (org-node-create title (org-id-new))
+        (unless (org-entry-get nil "ROAM_REFS")
+          (org-entry-put nil "ROAM_REFS" link))
+        (point-max))))
+
+  (with-eval-after-load 'org-capture
+    (add-to-list 'org-capture-templates
+                 '("n" "Node Ref" plain (function org-node-ref-capture)
+                   "%?\n%(quote-initial)" :unnarrowed t) t))
+
+  (defun org-node-open-refs ()
     "Open REFs of the node at point."
     (interactive)
     (save-excursion
-      (goto-char (org-roam-node-point (org-roam-node-at-point 'assert)))
+      (if-let ((node (org-node-at-point)))
+          (goto-char (org-mem-entry-pos node)))
       (when-let* ((p (org-entry-get (point) "ROAM_REFS"))
                   (refs (when p (split-string-and-unquote p)))
                   (refs (if (length> refs 1)
@@ -717,102 +737,19 @@
           (unless (string-prefix-p "@" ref)
             (browse-url ref))))))
 
-  (defun force-org-rebuild-cache ()
-    "Rebuild the `org-mode' and `org-roam' cache."
-    (interactive)
-    (org-id-update-id-locations)
-    (org-roam-db-sync)
-    (org-roam-update-org-id-locations))
-
-  (with-eval-after-load 'embark
-    (defun org-roam-backlinks-query (node)
-      "Gets the backlinks of NODE with `org-roam-db-query'."
-      (org-roam-db-query
-       [:select [source dest]
-        :from links
-        :where (= dest $s1)
-        :and (= type "id")]
-       (org-roam-node-id node)))
-
-    (defun org-roam-backlinks-p (source node)
-      "Predicate function that checks if NODE is a backlink of SOURCE."
-      (let* ((source-id (org-roam-node-id source))
-             (backlinks (org-roam-backlinks-query source))
-             (id (org-roam-node-id node))
-             (id-list (list id source-id)))
-        (member id-list backlinks)))
-
-    (defun org-roam-backlinks--read-node-backlinks (source)
-      "Runs `org-roam-node-read' on the backlinks of SOURCE.
- The predicate used as `org-roam-node-read''s filter-fn is
- `org-roam-backlinks-p'."
-      (org-roam-node-read nil (apply-partially #'org-roam-backlinks-p source)))
-
-    (defun org-roam-backlinks-node-read (entry)
-      "Read a NODE and run `org-roam-backlinks--read-node-backlinks'."
-      (let* ((node (get-text-property 0 'node entry))
-             (backlink (org-roam-backlinks--read-node-backlinks node)))
-        (find-file (org-roam-node-file backlink))))
-
-    (defvar-keymap embark-org-roam-map
-      :doc "Keymap for Embark org roam node actions."
-      :parent embark-general-map
-      "i" #'org-roam-node-insert
-      "b" #'org-roam-backlinks-node-read
-      "r" #'org-roam-node-random)
-    (add-to-list 'embark-keymap-alist '(org-roam-node . embark-org-roam-map)))
-
-  ;; See https://github.com/org-roam/org-roam/issues/2066
-  (defun org-roam-node-read--to-candidate@override (node template)
-    "Return a minibuffer completion candidate given NODE.
-TEMPLATE is the processed template used to format the entry."
-    (let ((candidate-main (org-roam-node--format-entry
-                           template
-                           node
-                           (1- (if (minibufferp (current-buffer))
-                                   (window-width) (frame-width))))))
-      (cons (propertize candidate-main 'node node) node)))
-  (advice-add 'org-roam-node-read--to-candidate
-              :override #'org-roam-node-read--to-candidate@override)
-
-  (with-eval-after-load 'shackle
-    (add-to-list 'shackle-rules '("*org-roam*" :align right)))
-
-  (with-eval-after-load 'popper
-    (add-to-list 'popper-reference-buffers 'org-roam-mode))
-
   (despot-def org-mode-map
-    "ir" 'org-roam-node-insert
-    "r"  (cons "roam" (make-sparse-keymap))
-    "rb" 'org-roam-buffer-toggle
-    "ro" 'org-roam-open-refs
-    "rr" 'org-roam-node-random
-    "rt" 'org-roam-tag-add
-    "rT" 'org-roam-tag-delete)
-  (general-def magit-section-mode-map "SPC" nil)
+    "n"  (cons "note" (make-sparse-keymap))
+    "nc" 'org-node-insert-transclusion
+    "nC" 'org-node-insert-transclusion-as-subtree
+    "ne" 'org-node-extract-subtree
+    "nh" 'org-node-insert-heading
+    "ni" 'org-node-insert-link
+    "no" 'org-node-open-refs
+    "nr" 'org-node-visit-random
+    "nR" 'org-node-refile
+    "nt" 'org-node-add-tags)
   :general
-  (tyrant-def "or" 'org-roam-node-find))
-
-(use-package org-roam-protocol
-  :after org-protocol
-  :config
-  (defun quote-initial ()
-    (let ((initial (plist-get org-store-link-plist :initial)))
-      (if (equal initial "") ""
-        (format "#+begin_quote\n%s\n#+end_quote" initial))))
-
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain "%?\n%(quote-initial)"
-           :target
-           (file+head "refs/${slug}.org" "#+title: ${title}\n#+date: %t\n\n")
-           :unnarrowed t))))
-
-(use-package org-roam-ui
-  :straight t
-  :defer t
-  :config
-  (with-eval-after-load 'desktop
-    (add-to-list 'desktop-minor-mode-table '(org-roam-ui-mode nil))))
+  (tyrant-def "on" 'org-node-find))
 
 
 (provide 'lang-org)
