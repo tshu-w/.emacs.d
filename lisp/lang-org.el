@@ -290,7 +290,7 @@
           (if (re-search-forward
                (format org-complex-heading-regexp-format
                        (regexp-quote headline)) nil t)
-              (progn (org-end-of-subtree) (point))
+              (org-end-of-subtree)
             (org-capture-put :type `entry
                              :template "* TODO %:description\n%l\n%i\n")))))
 
@@ -703,12 +703,11 @@
            (org-node-file-directory-ask (concat org-note-directory "refs/")))
       (if node
           (progn (org-node--goto node t)
-                 (org-end-of-subtree)
-                 (point))
+                 (org-end-of-subtree))
         (org-node-create title (org-id-new))
         (unless (org-entry-get nil "ROAM_REFS")
           (org-entry-put nil "ROAM_REFS" link))
-        (point-max))))
+        (end-of-buffer))))
 
   (with-eval-after-load 'org-capture
     (add-to-list 'org-capture-templates

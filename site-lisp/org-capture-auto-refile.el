@@ -44,7 +44,7 @@
       (if (re-search-forward
            (format org-complex-heading-regexp-format
                    (regexp-quote headline)) nil t)
-          (progn (org-end-of-subtree) (point))
+          (org-end-of-subtree)
         (org-capture-put :type `entry
                          :template "* TODO %:description\n%l\n%i\n")))))
 
