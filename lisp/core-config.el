@@ -381,26 +381,37 @@ the unwritable tidbits."
   :commands tramp-file-local-name
   :config
   (setq remote-file-name-inhibit-cache 60
+        remote-file-name-inhibit-locks t
+        tramp-copy-size-limit (* 1024 1024) ;; 1MB
         tramp-verbose 1
-        vc-handled-backends '(SVN Git)
         tramp-otp-password-prompt-regexp
         (rx-to-string
-            `(: bol (* nonl)
-                 (group (| "Verification code" "OTP"))
-                 (* nonl) (any . ,tramp-compat-password-colon-equivalents) (* blank))))
+         `(: bol (* nonl)
+             (group (| "Verification code" "OTP"))
+             (* nonl) (any . ,tramp-compat-password-colon-equivalents) (* blank)))
+        tramp-use-scp-direct-remote-copying t)
 
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 
-  ;; https://github.com/magit/magit/issues/4720
-  (when (eq system-type 'darwin)
-    (defun tramp-send-command@filter-args (args)
-      (cl-destructuring-bind (vec command &optional neveropen nooutput) args
-        (let ((new-command
-               (if (string= "stty -icrnl -icanon min 1 time 0" command)
-                   "stty -icrnl"
-                 command)))
-          (list vec new-command neveropen nooutput))))
-    (advice-add 'tramp-send-command :filter-args #'tramp-send-command@filter-args)))
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "ssh")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "scp")
+   'remote-direct-async-process)
+
+  (with-eval-after-load 'magit
+    (setq magit-tramp-pipe-stty-settings 'pty))
+
+  (with-eval-after-load 'tramp
+    (with-eval-after-load 'compile
+      (remove-hook 'compilation-mode-hook
+                   #'tramp-compile-disable-ssh-controlmaster-options))))
 
 (use-package xref
   :defer t
