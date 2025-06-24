@@ -11,7 +11,8 @@
 (use-package vc
   :defer t
   :config
-  (setq vc-follow-symlinks t))
+  (setq vc-follow-symlinks t
+        vc-handled-backends '(Git)))
 
 (use-package magit
   :straight t
