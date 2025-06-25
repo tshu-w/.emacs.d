@@ -227,9 +227,6 @@
              "* TODO %?\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
             ("T" "Todo w/ Link" entry (file org-inbox-file)
              "* TODO %?\n%a\n%i\n" :empty-lines 1 :prepend ,org-reverse-note-order)
-            ("w" "Web" plain (file+function org-inbox-file org-capture-goto-link)
-             "%i\n" :empty-lines 1 :immediate-finish t :prepend nil)
-
             ("l" "Log" entry (file+function org-log-file
                                             org-reverse-datetree-goto-date-in-file)
              "* %?\n" :clock-in t :clock-keep t :empty-lines 1)
@@ -278,7 +275,11 @@
                             (lambda () (let ((org-reverse-datetree-level-formats
                                          (butlast org-reverse-datetree-level-formats 3)))
                                     (org-reverse-datetree-goto-read-date-in-file))))
-             "%?\n%i\n" :immediate-finish t :jump-to-captured t)))
+             "%?\n%i\n" :immediate-finish t :jump-to-captured t)
+
+            ("p"  "Protocol")
+            ("pw" "Web" plain (file+function org-inbox-file org-capture-goto-link)
+             "%i\n" :empty-lines 1 :immediate-finish t :prepend nil)))
     :config
     (defun org-capture-goto-link ()
       (let ((file (nth 1 (org-capture-get :target)))
@@ -296,7 +297,7 @@
 
     (when (eq system-type 'darwin)
       (defun org-capture-after-finalize ()
-        (when (string= (org-capture-get :key) "w")
+        (when (string-prefix-p "p" (org-capture-get :key))
           (run-at-time 0.25 nil #'ns-switch-back-to-previous-application)))
 
       (add-hook 'org-capture-after-finalize-hook #'org-capture-after-finalize)))
@@ -593,7 +594,8 @@
 
   (with-eval-after-load 'org-capture
     (add-hook 'org-capture-mode-hook #'evil-insert-state)
-    (add-hook 'org-capture-after-finalize-hook #'evil-normal-state)))
+    (add-hook 'org-capture-after-finalize-hook #'evil-normal-state)
+    (add-hook 'org-capture-after-finalize-hook #'evil-refresh-cursor)))
 
 (use-package orgonomic
   :straight (:host github :repo "aaronjensen/emacs-orgonomic")
@@ -711,7 +713,7 @@
 
   (with-eval-after-load 'org-capture
     (add-to-list 'org-capture-templates
-                 '("n" "Node Ref" plain (function org-node-ref-capture)
+                 '("pr" "Node Ref" plain (function org-node-ref-capture)
                    "%?\n%(quote-initial)" :unnarrowed t) t))
 
   (defun org-node-open-refs ()
