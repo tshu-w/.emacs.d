@@ -219,6 +219,10 @@
     (advice-add 'gptel--suffix-send :around #'gptel-multi-send)
 
     (with-eval-after-load 'gptel-transient
+      (defvar gptel-models-history nil
+        "History list for prompt placeholders.")
+      (put 'gptel-models-history 'history-length 5)
+
       (defclass gptel-providers-variable (transient-lisp-variable)
         ((model       :initarg :model)
          (model-value :initarg :model-value)
@@ -289,7 +293,8 @@
                              " " (propertize " " 'display `(space :align-to 166))
                              cutoff)))))
                    finally return
-                   (cl-loop for model in (completing-read-multiple prompt models-alist nil t)
+                   (cl-loop for model in (completing-read-multiple prompt models-alist
+                                                                   nil t nil 'gptel-models-history)
                             for (backend model-name) = (cdr (assoc model models-alist))
                             collect backend into backends
                             collect model-name into models
