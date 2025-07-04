@@ -306,6 +306,7 @@
     (transient-suffix-put 'gptel-menu (kbd "-m") :key "M")
     (transient-suffix-put 'gptel-menu (kbd "-c") :key "C")
     (transient-suffix-put 'gptel-menu (kbd "-i") :key "I")
+    (transient-suffix-put 'gptel-menu (kbd "-v") :key "V")
     (transient-suffix-put 'gptel-menu (kbd "-t") :key "T"))
 
   (autoload #'gptel-transient-send "gptel-transient" nil t)
