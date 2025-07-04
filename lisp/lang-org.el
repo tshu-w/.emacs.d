@@ -25,7 +25,7 @@
   (autoload 'org-super-agenda "org-agenda")
   :config
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n!)" "HOLD(h!)" "|" "DONE(d)" "CXLD(c)")))
+        '((sequence "NEXT(n!)" "TODO(t)" "HOLD(h!)" "|" "DONE(d)" "CXLD(c)")))
 
   (setq org-columns-default-format "%40ITEM %1PRIORITY %20TAGS %6Effort(EFFORT){:} %8CLOCKSUM"
         org-cycle-open-archived-trees t
@@ -115,7 +115,6 @@
           org-agenda-todo-ignore-scheduled 'all
           org-agenda-todo-ignore-deadlines 'near
           org-agenda-window-setup 'only-window
-          org-deadline-warning-days 10
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies nil
           org-stuck-projects '("PROJ+LEVEL=1/-DONE-CXLD" ("NEXT") nil "\\"))
