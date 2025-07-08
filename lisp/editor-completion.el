@@ -181,6 +181,11 @@
       t)
     (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark))
   :config
+  (define-key embark-file-map (kbd "S")
+              (defun sudo-edit-file ()
+                (interactive)
+                (sudo-edit 4)))
+
   (with-eval-after-load 'which-key
     (defun embark-which-key-indicator ()
       "An embark indicator that displays keymaps using which-key.

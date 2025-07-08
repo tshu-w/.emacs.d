@@ -96,13 +96,13 @@
     "fC"      '("copy-file" . write-file)
     "fD"      'delete-current-buffer-file
     "fe"      'find-library
-    "fE"      'sudo-edit
     "ff"      'find-file
     "fj"      'dired-jump
     "fJ"      'dired-jump-other-window
     "fo"      'open-file-or-directory-in-external-app
     "fR"      'rename-current-buffer-file
     "fs"      'save-buffer
+    "fS"      'sudo-edit
     "fv"      (cons "variables" (make-sparse-keymap))
     "fvd"     'add-dir-local-variable
     "fvf"     'add-file-local-variable

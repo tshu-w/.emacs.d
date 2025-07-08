@@ -111,7 +111,7 @@ initialized with the current directory instead of filename."
   (interactive "P")
   (require 'tramp)
   (let ((fname (if (or arg (not buffer-file-name))
-                   (read-file-name "File: ")
+                   (expand-file-name (read-file-name "File: "))
                  buffer-file-name)))
     (find-file
      (if (not (tramp-tramp-file-p fname))
