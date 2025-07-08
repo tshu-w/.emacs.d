@@ -83,7 +83,7 @@
 
   (consult-customize consult-theme
                      :preview-key '(:debounce 0.2 any)
-                     consult-goto-line consult-imenu consult-line
+                     consult-goto-line consult-imenu consult-line consult-outline
                      :preview-key 'any
                      consult-line
                      :initial (when-let ((string (thing-at-point 'word)))
@@ -145,6 +145,14 @@
         '(consult--source-project-buffer
           consult--source-project-recent-file-override
           consult--source-project-file-hidden))
+
+  (advice-add 'consult-imenu :around
+              (defun consult-imenu-or-outline (orig-fn &rest args)
+                "Run `consult-imenu' or `consult-outline' depending on the current major mode."
+                (interactive)
+                (if (derived-mode-p 'prog-mode)
+                    (apply orig-fn args)
+                  (consult-outline))))
   :general
   ([remap switch-to-buffer]    'consult-buffer
    [remap goto-line]           'consult-goto-line
