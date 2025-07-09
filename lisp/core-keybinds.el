@@ -308,7 +308,7 @@
                '("*evil-owl*"
                  (display-buffer-in-side-window)
                  (side . bottom)
-                 (window-height . 0.3)))
+                 (window-height . 0.4)))
   (setq evil-owl-idle-delay 0.5
         evil-owl-local-mark-format " %m: [l: %-5l, c: %-5c]\t%s"
         evil-owl-global-mark-format " %m: [l: %-5l, c: %-5c] %b\t%s"))
