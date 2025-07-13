@@ -60,18 +60,6 @@
         (delete-process process))
       (TeX-command TeX-command-default 'TeX-master-file -1)))
 
-  ;; TODO: TeX-output-extension is not set to "pdf" when using xelatex (bug#76612)
-  (defun TeX-output-extension@override ()
-    "Get the extension of the current TeX output file."
-    (if (listp TeX-output-extension)
-        (car TeX-output-extension)
-      (if TeX-PDF-mode "pdf"
-        (or (TeX-process-get-variable (TeX-active-master)
-                                      'TeX-output-extension
-                                      TeX-output-extension)
-            TeX-output-extension))))
-  (advice-add 'TeX-output-extension :override #'TeX-output-extension@override)
-
   (with-eval-after-load 'project
     (add-to-list 'project-root-files "main.tex"))
 
