@@ -32,6 +32,7 @@
 ** [[https://archive.casouri.cc/note/rss.xml][BHL0388]]
 ** [[https://atjason.com/atom.xml][Jason]] :ignore:
 ** [[https://beorg.substack.com/feed][Beorg update]]
+** [[https://bigeagle.me/index.xml][K.I.S.S]]
 ** [[https://bitinn.net/feed/][比特客栈的文艺复兴]]
 ** [[https://blanboom.org/feed/][Blanboom]]
 ** [[https://blog.aaronbieber.com/posts/index.xml][The Chronicle]]
@@ -74,6 +75,7 @@
 ** [[https://huiris.com/feed][Huiris's log]]
 ** [[https://hypercritical.co/feeds/main][Hypercritical]]
 ** [[https://iamazing.cn/feed.xml][惜时如命]]
+** [[https://innei.in/feed][Innei]]
 ** [[https://insights.thoughtworks.cn/feed][Thoughtworks洞见]]
 ** [[https://jalammar.github.io/feed.xml][Jay Alammar - Visualizing machine learning one concept at a time.]]
 ** [[https://jherrlin.github.io/index.xml][jherrlin]]
