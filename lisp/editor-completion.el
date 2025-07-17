@@ -18,18 +18,6 @@
                                         (window-height . ,(+ 3 vertico-count))
                                         (side . top)))
 
-  (setq vertico-multiform-categories
-        '((file buffer grid
-                (vertico-sort-function . vertico-sort-directories-first)
-                (:keymap . vertico-directory-map))
-          (project-file buffer grid)
-          (imenu buffer)
-          (consult-location buffer
-                            (vertico-buffer-display-action . (display-buffer-use-least-recent-window)))
-          (consult-grep buffer
-                        (vertico-buffer-display-action . (display-buffer-same-window)))
-          (t buffer)))
-
   ;; Hide commands in M-x which do not work in the current mode.
   (setq read-extended-command-predicate
         #'command-completion-default-include-p)
@@ -47,6 +35,29 @@
   (vertico-map "M-<return>" 'vertico-quick-exit
                "M-z" 'vertico-suspend)
   ('normal "M-z" 'vertico-suspend))
+
+(use-package vertico-posframe
+  :straight t
+  :if (display-graphic-p)
+  :after vertico
+  :config
+  (setq vertico-count 20
+        vertico-multiform-categories
+        '((file posframe
+                (vertico-sort-function . vertico-sort-directories-first)
+                (:keymap . vertico-directory-map))
+          (project-file posframe)
+          (imenu buffer
+                 (vertico-buffer-display-action . (display-buffer-use-least-recent-window)))
+          (consult-location buffer
+                            (vertico-buffer-display-action . (display-buffer-use-least-recent-window)))
+          (consult-grep buffer
+                        (vertico-buffer-display-action . (display-buffer-same-window)))
+          (t posframe))
+
+        vertico-posframe-poshandler 'posframe-poshandler-frame-center
+        vertico-posframe-parameters '((left-fringe . 8)
+                                      (right-fringe . 8))))
 
 (use-package marginalia
   :straight t

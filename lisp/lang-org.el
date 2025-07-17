@@ -667,7 +667,7 @@
   :config
   (setq org-mem-do-sync-with-org-id t
         org-mem-watch-dirs `(,org-note-directory)
-        org-node-affixation-fn 'org-node-prepend-olp-append-tags-use-frame-width
+        org-node-affixation-fn 'org-node-prepend-olp-append-tags
         org-node-alter-candidates t
         org-node-blank-input-hint nil)
 
