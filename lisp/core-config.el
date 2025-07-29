@@ -25,9 +25,9 @@
         ring-bell-function 'ignore
         visible-bell nil
         ;; incress undo limit
-        undo-limit 67108864           ;; 64mb.
-        undo-strong-limit 100663296   ;; 96mb.
-        undo-outer-limit 1006632960   ;; 960mb.
+        undo-limit (* 2 1024 1024)
+        undo-strong-limit (* 3 1024 1024)
+        undo-outer-limit (* 30 1024 1024)
 
         delete-by-moving-to-trash t
         ffap-machine-p-known 'reject
