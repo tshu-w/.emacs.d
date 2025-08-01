@@ -66,7 +66,11 @@
         (set-fontset-font t charset unicode-font))
       (add-to-list 'face-font-rescale-alist `(,unicode-font . ,unicode-scale))
       (set-fontset-font t 'emoji emoji-font nil 'prepend)
-      (set-fontset-font t 'symbol symbol-font nil 'prepend))))
+      (set-fontset-font t 'symbol symbol-font nil 'prepend)))
+
+  ;; Silence obnoxious obsoletion warnings
+  (put 'if-let 'byte-obsolete-info nil)
+  (put 'when-let 'byte-obsolete-info nil))
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)
@@ -241,10 +245,10 @@
 
   (defun project-try-root (dir)
     "Search up the `DIR' for `project-root-files'."
-    (when-let ((root
-                (seq-some
-                 (lambda (n) (locate-dominating-file dir n))
-                 project-root-files)))
+    (when-let* ((root
+                 (seq-some
+                  (lambda (n) (locate-dominating-file dir n))
+                  project-root-files)))
       (cons 'transient (expand-file-name root))))
 
   (add-to-list 'project-find-functions 'project-try-root t))
@@ -361,7 +365,7 @@ the unwritable tidbits."
        (list (completing-read (format-prompt "Switch to tab by name"
                                              (car recent-tabs))
                               recent-tabs nil nil nil nil recent-tabs))))
-    (if-let ((tab-number (tab-bar--tab-index-by-name name)))
+    (if-let* ((tab-number (tab-bar--tab-index-by-name name)))
         (tab-bar-select-tab (1+ tab-number))
       (tab-bar-new-tab)
       (tab-bar-rename-tab name)))
@@ -369,8 +373,8 @@ the unwritable tidbits."
 
   (defun project-open-in-tab (project)
     (interactive (list (project-prompt-project-dir)))
-    (if-let ((tab-number (tab-bar--tab-index-by-name
-                          (file-name-nondirectory (directory-file-name project)))))
+    (if-let* ((tab-number (tab-bar--tab-index-by-name
+                           (file-name-nondirectory (directory-file-name project)))))
         (tab-bar-select-tab (1+ tab-number))
       (tab-bar-new-tab)
       (project-switch-project project)

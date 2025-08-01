@@ -97,7 +97,7 @@
                      consult-goto-line consult-imenu consult-line consult-outline
                      :preview-key 'any
                      consult-line
-                     :initial (when-let ((string (thing-at-point 'word)))
+                     :initial (when-let* ((string (thing-at-point 'word)))
                                 (add-hook 'pre-command-hook 'consult-delete-default-contents)
                                 (propertize string 'face 'shadow)))
 
@@ -128,7 +128,7 @@
       :enabled  ,(lambda () consult-project-function)
       :items
       ,(lambda ()
-         (when-let (project (project-current t))
+         (when-let* (project (project-current t))
            (let* ((all-files (project-files project))
                   (common-parent-directory
                    (let ((common-prefix (try-completion "" all-files)))
@@ -227,7 +227,7 @@ targets."
 
     (defun embark-hide-which-key-indicator (fn &rest args)
       "Hide the which-key indicator immediately when using the completing-read prompter."
-      (when-let ((win (get-buffer-window which-key--buffer
+      (when-let* ((win (get-buffer-window which-key--buffer
                                          'visible)))
         (quit-window 'kill-buffer win)
         (let ((embark-indicators (delq #'embark-which-key-indicator embark-indicators)))
@@ -397,13 +397,13 @@ Just put this function in `hippie-expand-try-functions-list'."
                                                     "jedi-language-server"))))
 
   (cl-defmethod eglot-handle-notification :after
-      (_server (_method (eql textDocument/publishDiagnostics)) &key uri
-          &allow-other-keys)
-      (when-let ((buffer (find-buffer-visiting (eglot-uri-to-path uri))))
-          (with-current-buffer buffer
-              (if (and (eq nil flymake-no-changes-timeout)
-                      (not (buffer-modified-p)))
-                  (flymake-start t)))))
+    (_server (_method (eql textDocument/publishDiagnostics)) &key uri
+             &allow-other-keys)
+    (when-let* ((buffer (find-buffer-visiting (eglot-uri-to-path uri))))
+      (with-current-buffer buffer
+        (if (and (eq nil flymake-no-changes-timeout)
+                 (not (buffer-modified-p)))
+            (flymake-start t)))))
 
   (when (fboundp #'tabnine-completion-at-point)
     (add-hook 'eglot-managed-mode-hook

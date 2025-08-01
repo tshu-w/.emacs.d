@@ -317,7 +317,7 @@ The entry is stored in the current database."
           ebib-zotero-url-cleanup-functions)
     (with-temp-buffer
       (insert (ebib-zotero-translate url "web"))
-      (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
+      (when-let* ((entry-keys (ebib-import-entries ebib--cur-db)))
  	    (if (ebib--goto-entry-in-index (car entry-keys))
  	        (ebib--update-entry-buffer)))))
 
@@ -331,7 +331,7 @@ and the identifier can be DOI, ISBN, PMID, or arXiv ID."
             (ignore-errors (current-kill 0 t)))))
     (with-temp-buffer
       (insert (ebib-zotero-translate identifier "search"))
-      (when-let ((entry-keys (ebib-import-entries ebib--cur-db)))
+      (when-let* ((entry-keys (ebib-import-entries ebib--cur-db)))
  	    (if (ebib--goto-entry-in-index (car entry-keys))
  	        (ebib--update-entry-buffer)))))
 

@@ -720,7 +720,7 @@
     "Open REFs of the node at point."
     (interactive)
     (save-excursion
-      (if-let ((node (org-node-at-point)))
+      (if-let* ((node (org-node-at-point)))
           (goto-char (org-mem-entry-pos node)))
       (when-let* ((p (org-entry-get (point) "ROAM_REFS"))
                   (refs (when p (split-string-and-unquote p)))
@@ -729,9 +729,9 @@
                           refs))
                   (user-error "No ROAM_REFS found"))
 
-        (when-let ((oc-cites (seq-map
-                              (lambda (ref) (substring ref 1))
-                              (seq-filter (apply-partially #'string-prefix-p "@") refs))))
+        (when-let* ((oc-cites (seq-map
+                               (lambda (ref) (substring ref 1))
+                               (seq-filter (apply-partially #'string-prefix-p "@") refs))))
           (citar-run-default-action oc-cites))
 
         (dolist (ref refs)
