@@ -109,7 +109,7 @@
       :host "one-api.ponte.top"
       :key 'gptel-api-key
       :stream t
-      :models '(o4-mini chatgpt-4o-latest gpt-4o gpt-4.1
+      :models '(gpt-5 gpt-5-mini gpt-5-nano
                 (deepseek-chat
                      :capabilities (tool)
                      :context-window 64
@@ -120,7 +120,6 @@
                      :context-window 64
                      :input-cost 0.55
                      :output-cost 2.19)
-                qwen-turbo qwen-plus qwen-max
                 (gemini-2.5-pro
                  :description "Most powerful Gemini thinking model with maximum response accuracy and state-of-the-art performance"
                  :capabilities (tool-use json media)
@@ -130,6 +129,7 @@
                  :input-cost 1.25 ; 2.50 for >200k tokens
                  :output-cost 10.00 ; 15 for >200k tokens
                  :cutoff-date "2025-01")
+                glm-4.5 kimi-k2 qwen3-235b grok-4
                 (gemini-2.5-flash
                  :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
                  :capabilities (tool-use json media)
@@ -139,15 +139,7 @@
                  :input-cost 0.15
                  :output-cost 0.60 ; 3.50 for thinking
                  :cutoff-date "2025-01")
-                (claude-sonnet-4
-                 :description "High-performance model with exceptional reasoning and efficiency"
-                 :capabilities (media tool-use cache)
-                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 200
-                 :input-cost 3
-                 :output-cost 15
-                 :cutoff-date "2025-03")
-                (claude-opus-4
+                (claude-opus-4.1
                  :description "Most capable model for complex reasoning and advanced coding"
                  :capabilities (media tool-use cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
@@ -155,30 +147,14 @@
                  :input-cost 15
                  :output-cost 75
                  :cutoff-date "2025-03")
-                (claude-3.7-sonnet
-                 :description "Highest level of intelligence and capability"
-                 :capabilities (media tool cache)
+                (claude-sonnet-4
+                 :description "High-performance model with exceptional reasoning and efficiency"
+                 :capabilities (media tool-use cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 200
                  :input-cost 3
                  :output-cost 15
-                 :cutoff-date "2025-02")
-                (claude-3.5-sonnet
-                 :description "High level of intelligence and capability"
-                 :capabilities (media tool cache)
-                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 200
-                 :input-cost 3
-                 :output-cost 15
-                 :cutoff-date "2024-04")
-                (claude-3.5-haiku
-                 :description "Intelligence at blazing speeds"
-                 :capabilities (media tool)
-                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-                 :context-window 200
-                 :input-cost 1.00
-                 :output-cost 5.00
-                 :cutoff-date "2024-07"))))
+                 :cutoff-date "2025-03"))))
   (setq-default gptel-backend gptel--oneapi)
 
   (defun gptel-colorize-response (begin end)
