@@ -155,6 +155,7 @@
 ** [[https://www.raychase.net/feed][四火的唠叨]]
 ** [[https://www.reddit.com/r/beorg/.rss][beorg for iOS]]
 ** [[https://www.reddit.com/r/orgmode/.rss][Org-Mode]]
+** [[https://www.skyue.com/feed/][拾月]]
 ** [[https://www.williamlong.info/rss.xml][月光博客]]
 ** [[https://www.yangzhiping.com/feed.xml][阳志平的网志]]
 ** [[https://www.zeta-alpha.com/blog-feed.xml][Zeta Alpha]]
