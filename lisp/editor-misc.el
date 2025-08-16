@@ -157,10 +157,23 @@
                  :cutoff-date "2025-03"))))
   (setq-default gptel-backend gptel--oneapi)
 
-  (defun gptel-colorize-response (begin end)
-    (save-excursion
-      (put-text-property begin end 'font-lock-face 'font-lock-builtin-face)))
-  (add-hook 'gptel-post-response-functions #'gptel-colorize-response)
+  (defun gptel-propertize-response (fsm)
+    (let* ((info (gptel-fsm-info fsm))
+           (model (map-nested-elt info '(:data :model)))
+           (buffer (plist-get info :buffer))
+           (start-marker (plist-get info :position))
+           (tracking-marker (or (plist-get info :tracking-marker)
+                                start-marker))
+           (begin (marker-position start-marker))
+           (end (marker-position tracking-marker)))
+      (when (buffer-live-p buffer)
+        (with-current-buffer buffer
+          (save-excursion
+            (put-text-property begin end 'font-lock-face 'font-lock-doc-markup-face)
+            (put-text-property begin (1+ begin) 'display
+                               (format "[%s]\n%s" model
+                                       (buffer-substring begin (1+ begin)))))))))
+  (cl-pushnew 'gptel-propertize-response (alist-get 'DONE gptel-send--handlers))
 
   (progn ;; multi models at a time
     (defcustom gptel-backends `(,gptel-backend)
