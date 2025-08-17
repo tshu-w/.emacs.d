@@ -218,7 +218,7 @@
 
   (setq citar-at-point-function 'embark-act
         citar-bibliography (mapcar (lambda (file) (concat bibtex-file-path file)) bibtex-files)
-        citar-library-paths `(,(concat bibtex-file-path "files/"))
+        citar-library-paths `(,(concat bibtex-file-path "attach/"))
         citar-notes-paths `(,bibtex-notes-path)
         citar-file-open-functions '(("html" . citar-file-open-external)
                                     ("pdf" . citar-file-open-external)
@@ -236,7 +236,7 @@
   :config
   (setq ebib-default-directory bibtex-file-path
         ebib-bib-search-dirs `(,bibtex-file-path)
-        ebib-file-search-dirs `(,(concat bibtex-file-path "files/"))
+        ebib-file-search-dirs `(,(concat bibtex-file-path "attach/"))
         ebib-notes-directory bibtex-notes-path
         ebib-reading-list-file "~/Documents/Org/reading_list.org"
 
