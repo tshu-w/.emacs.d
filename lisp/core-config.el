@@ -30,6 +30,7 @@
         undo-outer-limit (* 30 1024 1024)
 
         delete-by-moving-to-trash t
+        eldoc-help-at-pt t
         ffap-machine-p-known 'reject
         load-prefer-newer t
         sentence-end-double-space nil
