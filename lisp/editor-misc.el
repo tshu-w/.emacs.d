@@ -105,8 +105,9 @@
   :config
   (setq gptel--known-backends nil)
   (defvar gptel--oneapi
-    (gptel-make-openai "OneAPI"
-      :host "one-api.ponte.top"
+    (gptel-make-openai "LMRouter"
+      :host "lmrouter.ponte.top"
+      :endpoint "/openai/v1/chat/completions"
       :key 'gptel-api-key
       :stream t
       :models '(gpt-5 gpt-5-mini gpt-5-nano
