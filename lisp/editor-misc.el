@@ -88,7 +88,7 @@
   :straight t
   :commands (clear-text-properties gptel-transient-send)
   :init
-  (setq gptel-model 'gemini-2.5-flash
+  (setq gptel-model 'gpt-5
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -97,7 +97,9 @@
           (summarizer . "You are a summarizer. Summarize the text in the corresponding language and style without redundant description.")
           (programmer . "You are a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
           (code-explainer . "You are a professional code explainer. Explain the code and report any bugs or errors."))
-        gptel--system-message nil)
+        gptel--system-message nil
+        gptel-cache t
+        gptel-include-reasoning nil)
 
   (with-eval-after-load 'embark
     (define-key embark-region-map (kbd "x") #'clear-text-properties)
