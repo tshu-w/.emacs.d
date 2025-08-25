@@ -113,16 +113,6 @@
       :key 'gptel-api-key
       :stream t
       :models '(gpt-5 gpt-5-mini gpt-5-nano
-                (deepseek-chat
-                     :capabilities (tool)
-                     :context-window 64
-                     :input-cost 0.27
-                     :output-cost 1.10)
-                (deepseek-reasoner
-                     :capabilities (tool reasoning)
-                     :context-window 64
-                     :input-cost 0.55
-                     :output-cost 2.19)
                 (gemini-2.5-pro
                  :description "Most powerful Gemini thinking model with maximum response accuracy and state-of-the-art performance"
                  :capabilities (tool-use json media)
@@ -132,7 +122,7 @@
                  :input-cost 1.25 ; 2.50 for >200k tokens
                  :output-cost 10.00 ; 15 for >200k tokens
                  :cutoff-date "2025-01")
-                glm-4.5 kimi-k2 qwen3-235b grok-4
+                deepseek-3.1 glm-4.5 kimi-k2 qwen3-235b grok-4
                 (gemini-2.5-flash
                  :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
                  :capabilities (tool-use json media)
