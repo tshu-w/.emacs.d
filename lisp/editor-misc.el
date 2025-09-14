@@ -35,6 +35,17 @@
         '(("overleaf\\.com" . TeX-tex-mode)
           ("github\\.com" . markdown-mode))))
 
+(use-package ledger-mode
+  :straight t
+  :mode ("\\.hledger\\'")
+  :config
+  (setq ledger-binary-path "hledger"
+        ledger-default-date-format ledger-iso-date-format
+        ledger-mode-should-check-version nil
+        ledger-report-auto-width nil
+        ledger-report-links-in-register nil
+        ledger-report-native-highlighting-arguments '("--color=always")))
+
 (use-package browser-hist
   :straight (:host github :repo "agzam/browser-hist.el")
   :commands browser-hist-search
