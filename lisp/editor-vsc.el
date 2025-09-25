@@ -25,7 +25,6 @@
     (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
   :config
   (setq magit-diff-refine-hunk t
-        magit-diff-visit-prefer-worktree t
         magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
         magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-save-repository-buffers 'dontask
