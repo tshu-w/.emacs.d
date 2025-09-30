@@ -133,7 +133,7 @@
                  :input-cost 1.25 ; 2.50 for >200k tokens
                  :output-cost 10.00 ; 15 for >200k tokens
                  :cutoff-date "2025-01")
-                deepseek-3.1 glm-4.5 kimi-k2 qwen3-235b grok-4
+                deepseek-3.1 glm-4.5 kimi-k2 qwen3-max grok-4
                 (gemini-2.5-flash
                  :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
                  :capabilities (tool-use json media)
@@ -143,7 +143,7 @@
                  :input-cost 0.15
                  :output-cost 0.60 ; 3.50 for thinking
                  :cutoff-date "2025-01")
-                (claude-opus-4.1
+                (claude-opus-4.5
                  :description "Most capable model for complex reasoning and advanced coding"
                  :capabilities (media tool-use cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
