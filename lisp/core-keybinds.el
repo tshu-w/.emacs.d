@@ -245,8 +245,7 @@
         evil-search-module 'evil-search
         evil-magic 'very-magic
         evil-want-C-u-delete t
-        evil-want-C-u-scroll t
-        hs-minor-mode-map nil)
+        evil-want-C-u-scroll t)
   :config
   (setq evil-cross-lines t
         evil-kill-on-visual-paste nil
