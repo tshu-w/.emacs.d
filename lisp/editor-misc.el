@@ -133,7 +133,7 @@
                  :input-cost 1.25 ; 2.50 for >200k tokens
                  :output-cost 10.00 ; 15 for >200k tokens
                  :cutoff-date "2025-01")
-                deepseek-3.1 glm-4.5 kimi-k2 qwen3-max grok-4
+                deepseek-3.1 glm-4.6 kimi-k2 qwen3-max grok-4
                 (gemini-2.5-flash
                  :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
                  :capabilities (tool-use json media)
@@ -143,21 +143,21 @@
                  :input-cost 0.15
                  :output-cost 0.60 ; 3.50 for thinking
                  :cutoff-date "2025-01")
-                (claude-opus-4.5
-                 :description "Most capable model for complex reasoning and advanced coding"
-                 :capabilities (media tool-use cache)
-                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 200
-                 :input-cost 15
-                 :output-cost 75
-                 :cutoff-date "2025-03")
-                (claude-sonnet-4
+                (claude-sonnet-4.5
                  :description "High-performance model with exceptional reasoning and efficiency"
                  :capabilities (media tool-use cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 200
                  :input-cost 3
                  :output-cost 15
+                 :cutoff-date "2025-07")
+                (claude-opus-4.1
+                 :description "Most capable model for complex reasoning and advanced coding"
+                 :capabilities (media tool-use cache)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 80
+                 :input-cost 15
+                 :output-cost 75
                  :cutoff-date "2025-03"))))
   (setq-default gptel-backend gptel--oneapi)
 
