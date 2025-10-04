@@ -312,24 +312,6 @@ targets."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
-(use-package prescient
-  :straight t
-  :hook (after-init . prescient-persist-mode)
-  :init
-  (use-package vertico-prescient
-    :straight t
-    :hook (vertico-mode . vertico-prescient-mode)
-    :init
-    (setq vertico-prescient-enable-filtering nil))
-  (use-package corfu-prescient
-    :straight t
-    :hook (corfu-mode . corfu-prescient-mode)
-    :init
-    (setq corfu-prescient-enable-filtering nil))
-  :config
-  (setq prescient-sort-full-matches-first t
-        prescient-sort-length-enable nil))
-
 (use-package tabnine
   :straight t
   :hook (kill-emacs . tabnine-kill-process)
