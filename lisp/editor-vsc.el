@@ -121,6 +121,7 @@ A scope may be provided to a commit's type, to provide additional contextual inf
     "gi"  'magit-init
     "gl"  'magit-log-buffer-file
     "gm"  'magit-dispatch
+    "gt"  'magit-blob-mode
     "gs"  'magit-status
     "gS"  'magit-stage-file
     "gU"  'magit-unstage-file))
@@ -154,14 +155,6 @@ A scope may be provided to a commit's type, to provide additional contextual inf
     "g]" '(diff-hl-next-hunk :jump t)))
 
 (use-package git-modes :straight t :defer t)
-
-(use-package git-timemachine
-  :straight (:host codeberg :repo "pidu/git-timemachine")
-  :config
-  (general-def git-timemachine-mode-map
-    "gt" '(:ignore t :which-key "git-timemachine"))
-  :general
-  (tyrant-def "gt" 'git-timemachine))
 
 (use-package git-link
   :straight t
