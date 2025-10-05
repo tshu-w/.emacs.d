@@ -109,6 +109,8 @@ A scope may be provided to a commit's type, to provide additional contextual inf
     (let* ((lines (magit-git-lines "diff" "--cached"))
            (changes (string-join lines "\n")))
       (gptel-request changes :system gptel-commit-prompt)))
+
+  (general-def 'normal with-editor-mode-map "ZG" 'gptel-commit)
   :general
   (tyrant-def
     "g"   (cons "git" (make-sparse-keymap))
