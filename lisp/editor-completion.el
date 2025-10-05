@@ -313,12 +313,6 @@ targets."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
-(use-package tabnine
-  :straight t
-  :hook (kill-emacs . tabnine-kill-process)
-  :init
-  (add-to-list 'completion-at-point-functions #'tabnine-completion-at-point))
-
 (use-package copilot
   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
   :hook (prog-mode . copilot-mode)
