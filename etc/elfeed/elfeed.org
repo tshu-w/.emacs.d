@@ -161,6 +161,7 @@
 ** [[https://www.zeta-alpha.com/blog-feed.xml][Zeta Alpha]]
 ** [[https://xiaohanyu.me/atom.xml][行者无疆 始于足下]]
 ** [[https://xuanwo.io][Xuanwo's Blog]]
+** [[https://yachen.com/feed/][Yachen's Blog]]
 ** [[https://yihui.name/cn/index.xml][中文博客 on Yihui Xie | 谢益辉]]
 ** [[https://yinji.org/feed][印记]]
 ** [[https://yufree.cn/index.xml][Miao Yu | 于淼]]
