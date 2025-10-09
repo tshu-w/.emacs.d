@@ -207,17 +207,18 @@
 ** [[https://www.zhihu.com/rss][知乎每日精选]] :ignore:
 ** [[https://hnrss.org/best][Hacker News]] :ignore:
 ** [[https://emacs-china.org/latest.rss][Emacs China - 最新主题]]
-** [[https://www.reddit.com/r/zsh.rss][reddit | zsh]]
-** [[https://www.reddit.com/r/emac.rss][reddit | M-x emacs]]
-** [[https://stackoverflow.com/feeds/tag/python][StackOverflow - Python]] :ignore:
-** [[https://stackoverflow.com/feeds/tag?tagnames=pytorch-lightning&sort=newest][StackOverflow - Python Lightning]]
-** [[https://stackoverflow.com/feeds/tag/zsh][StackOverflow - ZSH]]
+** [[https://emacs.stackexchange.com/feeds][StackExchange - Emacs]]
+** [[https://hnrss.org/bestcomments][Hacker News - Best Comments]]
 ** [[https://stackoverflow.com/feeds/tag/algorithm][StackOverflow - Algorithm]] :ignore:
 ** [[https://stackoverflow.com/feeds/tag/emacs][StackOverflow - Emacs]]
-** [[https://emacs.stackexchange.com/feeds][StackExchange - Emacs]]
+** [[https://stackoverflow.com/feeds/tag/python][StackOverflow - Python]] :ignore:
+** [[https://stackoverflow.com/feeds/tag/zsh][StackOverflow - ZSH]]
+** [[https://stackoverflow.com/feeds/tag?tagnames=pytorch-lightning&sort=newest][StackOverflow - Python Lightning]]
 ** [[https://superuser.com/feeds/tag/macos][SuperUser - macOS]]
 ** [[https://superuser.com/feeds/tag/zsh][SuperUser - ZSH]]
 ** [[https://www.buzzing.cc/feed.xml][Buzzing]] :ignore:
+** [[https://www.reddit.com/r/emac.rss][reddit | M-x emacs]]
+** [[https://www.reddit.com/r/zsh.rss][reddit | zsh]]
 * YouTube :elfeed:
 ** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCKFB_rVEFEF3l-onQGvGx1A][一席 YiXi]]
 ** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCIs3-LcOCdpiGve6yu1-Fug][纯纯甘]]
