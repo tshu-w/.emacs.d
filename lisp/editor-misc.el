@@ -65,9 +65,20 @@
   (setq browse-url-generic-program "open"
         browse-url-generic-args '("--background"))
   :config
+  (setq elfeed-search-title-max-width 90
+        elfeed-search-trailing-width 25)
+
   (with-eval-after-load 'visual-fill-column
     (add-to-list 'visual-fill-column-major-modes 'elfeed-search-mode)
-    (add-to-list 'visual-fill-column-major-modes 'elfeed-show-mode))
+    (add-to-list 'visual-fill-column-major-modes 'elfeed-show-mode)
+
+    ;; Set a dedicated visual-fill width for elfeed-search-mode.
+    ;; There is no dedicated hook in some versions, so use advice.
+    (defun my-elfeed-search-set-visual-fill-width (&rest _)
+      (setq-local visual-fill-column-width 140)
+      (when (bound-and-true-p visual-fill-column-mode)
+        (visual-fill-column-adjust)))
+    (advice-add 'elfeed-search-mode :after #'my-elfeed-search-set-visual-fill-width))
 
   (defun reverse-arg (fun &optional arg)
     (interactive "P")
