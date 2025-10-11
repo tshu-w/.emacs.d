@@ -206,14 +206,14 @@
 ** [[https://feedx.net/rss/zhihudaily.xml][知乎日报]] :ignore:
 ** [[https://www.zhihu.com/rss][知乎每日精选]] :ignore:
 ** [[https://hnrss.org/best][Hacker News]] :ignore:
-** [[https://emacs-china.org/latest.rss][Emacs China - 最新主题]]
+** [[https://emacs-china.org/latest.rss][Emacs China]]
 ** [[https://emacs.stackexchange.com/feeds][StackExchange - Emacs]]
 ** [[https://hnrss.org/bestcomments][Hacker News - Best Comments]]
 ** [[https://stackoverflow.com/feeds/tag/algorithm][StackOverflow - Algorithm]] :ignore:
 ** [[https://stackoverflow.com/feeds/tag/emacs][StackOverflow - Emacs]]
 ** [[https://stackoverflow.com/feeds/tag/python][StackOverflow - Python]] :ignore:
 ** [[https://stackoverflow.com/feeds/tag/zsh][StackOverflow - ZSH]]
-** [[https://stackoverflow.com/feeds/tag?tagnames=pytorch-lightning&sort=newest][StackOverflow - Python Lightning]]
+** [[https://stackoverflow.com/feeds/tag?tagnames=pytorch-lightning&sort=newest][StackOverflow - Lightning]]
 ** [[https://superuser.com/feeds/tag/macos][SuperUser - macOS]]
 ** [[https://superuser.com/feeds/tag/zsh][SuperUser - ZSH]]
 ** [[https://www.buzzing.cc/feed.xml][Buzzing]] :ignore:
