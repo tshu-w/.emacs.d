@@ -135,14 +135,16 @@
       :key 'gptel-api-key
       :stream t
       :models '(gpt-5 gpt-5-mini gpt-5-nano
-                (gemini-2.5-pro
-                 :description "Most powerful Gemini thinking model with maximum response accuracy and state-of-the-art performance"
-                 :capabilities (tool-use json media)
+                 (gemini-3-pro
+                 :description "Most intelligent Gemini model with SOTA reasoning and multimodal understanding"
+                 :capabilities (tool-use json media audio video)
                  :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                              "application/pdf" "text/plain" "text/csv" "text/html")
-                 :context-window 1000
-                 :input-cost 1.25 ; 2.50 for >200k tokens
-                 :output-cost 10.00 ; 15 for >200k tokens
+                              "application/pdf" "text/plain" "text/csv" "text/html"
+                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
+                              "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
+                 :context-window 1048               ; 65536 output token limit
+                 :input-cost 2.0                    ; 4.0 for >200k tokens
+                 :output-cost 12.00                 ; 18.0 for >200k tokens
                  :cutoff-date "2025-01")
                 deepseek-3.1 glm-4.6 kimi-k2 qwen3-max grok-4
                 (gemini-2.5-flash
