@@ -8,24 +8,6 @@
 
 ;;; Code:
 
-(use-package alert
-  :straight t
-  :defer t
-  :config
-  (when (eq system-type 'darwin)
-    (defun alert-notifier-notify (info)
-      (if alert-notifier-command
-          (let ((args
-                 (list "-group" "Emacs"
-                       "-sender"  "org.gnu.Emacs"
-                       "-activate" "org.gnu.Emacs"
-                       "-title"   (alert-encode-string (plist-get info :title))
-                       "-message" (alert-encode-string (plist-get info :message)))))
-            (apply #'call-process alert-notifier-command nil nil nil args)))
-      (alert-message-notify info))
-
-    (setq alert-default-style 'notifier)))
-
 (use-package atomic-chrome
   :straight t
   :hook (after-init . atomic-chrome-start-server)
