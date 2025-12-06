@@ -35,6 +35,10 @@
               (defun reset-file-name-handler-alist ()
                 (setq file-name-handler-alist default-file-name-handler-alist)))))
 
+;; Speed up repeated lookup of Lisp files
+(when (boundp 'load-path-filter-function)
+  (setq load-path-filter-function #'load-path-filter-cache-directory-files))
+
 ;; Native compilation settings
 (when (featurep 'native-compile)
   ;; Silence compiler warnings as they can be pretty disruptive
