@@ -315,14 +315,7 @@
           org-clock-persist-query-resume nil
           org-clock-out-remove-zero-time-clocks t
           org-clock-out-when-done t
-          org-clock-report-include-clocking-task t
-
-          org-clock-reminder-timer (run-with-timer
-                                    t (* org-clock-idle-time 60)
-                                    (lambda ()
-                                      (unless (org-clocking-p)
-                                        (alert "Do you forget to clock-in?"
-                                               :title "Org Clock")))))
+          org-clock-report-include-clocking-task t)
 
     (plist-put org-clocktable-defaults :maxlevel 5)
     (plist-put org-clocktable-defaults :link t)
