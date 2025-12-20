@@ -285,9 +285,7 @@ targets."
     (with-eval-after-load 'savehist
       (add-to-list 'savehist-additional-variables 'corfu-history)))
   (use-package corfu-popupinfo
-    :hook (global-corfu-mode . corfu-popupinfo-mode)
-    :config
-    (set-face-attribute 'corfu-popupinfo nil :height 0.95))
+    :hook (global-corfu-mode . corfu-popupinfo-mode))
   :config
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
