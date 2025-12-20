@@ -368,7 +368,7 @@ Just put this function in `hippie-expand-try-functions-list'."
   (add-to-list 'eglot-server-programs
                `((python-mode python-ts-mode) . ,(eglot-alternatives
                                                   '(("delance-langserver" "--stdio")
-                                                    ("ruff" "server" "--preview")
+                                                    ("ty" "server")
                                                     "pylsp" "pyls" ("basedpyright-langserver" "--stdio")
                                                     ("pyright-langserver" "--stdio")
                                                     "jedi-language-server"))))
