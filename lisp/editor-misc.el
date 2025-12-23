@@ -110,7 +110,7 @@
   :straight t
   :commands (clear-text-properties gptel-transient-send)
   :init
-  (setq gptel-model 'gpt-5
+  (setq gptel-model 'gemini-3-flash
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -129,24 +129,45 @@
   :config
   (setq gptel--known-backends nil)
   (defvar gptel--oneapi
-    (gptel-make-openai "LMRouter"
-      :host "lmrouter.ponte.top"
-      :endpoint "/openai/v1/chat/completions"
+    (gptel-make-openai "OneAPI"
+      :host "one-api.ponte.top"
+      :endpoint "/v1/chat/completions"
       :key 'gptel-api-key
       :stream t
-      :models '(gpt-5 gpt-5-mini gpt-5-nano
-                 (gemini-3-pro
+      :models '(gpt-5.2-chat gpt-5.2-pro gpt-5.2
+                (gemini-3-pro
                  :description "Most intelligent Gemini model with SOTA reasoning and multimodal understanding"
                  :capabilities (tool-use json media audio video)
                  :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
                               "application/pdf" "text/plain" "text/csv" "text/html"
                               "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
                               "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
-                 :context-window 1048               ; 65536 output token limit
-                 :input-cost 2.0                    ; 4.0 for >200k tokens
-                 :output-cost 12.00                 ; 18.0 for >200k tokens
+                 :context-window 128
+                 :input-cost 1
+                 :output-cost 1
                  :cutoff-date "2025-01")
-                deepseek-3.1 glm-4.6 kimi-k2 qwen3-max grok-4
+                (gemini-3-flash
+                 :description "Most intelligent Gemini model built for speed"
+                 :capabilities (tool-use json media audio video)
+                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                              "application/pdf" "text/plain" "text/csv" "text/html"
+                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
+                              "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
+                 :context-window 1048               ; 65536 output token limit
+                 :input-cost 0.50
+                 :output-cost 3.00
+                 :cutoff-date "2025-01")
+                deepseek-v3.2 deepseek-v3.2-speciale deepseek-v3.1-terminus
+                glm-4.7 kimi-k2 kimi-k2-thinking qwen3-max minimax-m2.1
+                (gemini-2.5-pro
+                 :description "Next gen, high speed, multimodal for a diverse variety of tasks"
+                 :capabilities (tool-use json media)
+                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                              "application/pdf" "text/plain" "text/csv" "text/html")
+                 :context-window 128
+                 :input-cost 1
+                 :output-cost 1
+                 :cutoff-date "2024-08")
                 (gemini-2.5-flash
                  :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
                  :capabilities (tool-use json media)
@@ -156,22 +177,30 @@
                  :input-cost 0.15
                  :output-cost 0.60 ; 3.50 for thinking
                  :cutoff-date "2025-01")
+                (claude-opus-4.5
+                 :description "Most capable model for complex reasoning and advanced coding"
+                 :capabilities (media tool-use cache)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 144
+                 :input-cost 3
+                 :output-cost 3
+                 :cutoff-date "2025-05")
                 (claude-sonnet-4.5
                  :description "High-performance model with exceptional reasoning and efficiency"
                  :capabilities (media tool-use cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 200
-                 :input-cost 3
-                 :output-cost 15
+                 :context-window 144
+                 :input-cost 1
+                 :output-cost 1
                  :cutoff-date "2025-07")
-                (claude-opus-4.1
-                 :description "Most capable model for complex reasoning and advanced coding"
+                (claude-haiku-4.5
+                 :description "Near-frontier intelligence at blazing speeds with extended thinking"
                  :capabilities (media tool-use cache)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 80
-                 :input-cost 15
-                 :output-cost 75
-                 :cutoff-date "2025-03"))))
+                 :context-window 144
+                 :input-cost 0.33
+                 :output-cost 0.33
+                 :cutoff-date "2025-02"))))
   (setq-default gptel-backend gptel--oneapi)
 
   (defun gptel-propertize-response (fsm)
