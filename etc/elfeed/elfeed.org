@@ -120,6 +120,7 @@
 ** [[https://ruder.io/rss/][Sebastian Ruder]]
 ** [[https://sebastianraschka.com/rss_feed.xml][sebastianraschka]]
 ** [[https://shuzang.github.io/posts/index.xml][Shuzang's Blog]]
+** [[https://simonwillison.net/atom/everything/][Simon Willison’s Weblog]]
 ** [[https://siwei.io/index.xml][siwei.io]]
 ** [[https://spaces.ac.cn/feed][科学空间 | Scientific Spaces]]
 ** [[https://taresky.com/feed][TARESKY]]
