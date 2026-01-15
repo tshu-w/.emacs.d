@@ -41,7 +41,6 @@
   :if (display-graphic-p)
   :after vertico
   :config
-  (minibuffer-nonselected-mode -1)
   (setq vertico-count 20
         vertico-multiform-categories
         '((file posframe
