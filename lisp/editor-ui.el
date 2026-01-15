@@ -55,7 +55,17 @@
                                 :background 'unspecified
                                 :inherit 'unspecified)))
 
-(use-package doom-themes :straight t :defer t)
+(use-package doom-themes
+  :straight t
+  :defer t
+  :config
+  ;; Fix cyclic face inheritance: native gnus-group-news-low inherits
+  ;; gnus-group-news-low-empty, but doom-themes reverses it causing a cycle.
+  ;; https://github.com/doomemacs/themes/issues/875
+  (setcdr (assoc 'gnus-group-news-low-empty doom-themes-base-faces)
+          '(:inherit 'gnus-group-mail-1-empty :weight 'normal))
+  (setcdr (assoc 'gnus-group-mail-low-empty doom-themes-base-faces)
+          '(:inherit 'gnus-group-mail-1-empty :weight 'normal)))
 
 (use-package ef-themes
   :straight t
