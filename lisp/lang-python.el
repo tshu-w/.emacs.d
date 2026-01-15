@@ -20,6 +20,13 @@
               (set (make-local-variable 'comment-inline-offset) 2)
               (setq fill-column 88))))
 
+(use-package eglot-python-preset
+  :straight t
+  :after eglot
+  :config
+  (setq eglot-python-preset-lsp-server 'ty)
+  (eglot-python-preset-setup))
+
 
 (provide 'lang-python)
 ;;; lang-python.el ends here
