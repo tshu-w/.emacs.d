@@ -141,6 +141,7 @@
 ** [[https://weekly.ecnelises.com/feed][混沌周刊]]
 ** [[https://wizyoung.github.io/atom.xml][CaptainChen]]
 ** [[https://www.bmpi.dev/index.xml][构建我的被动收入]]
+** [[https://www.cs.cmu.edu/~pavlo/blog/feed.xml][Andy Pavlo - Blog]]
 ** [[https://www.dongwm.com/atom.xml][小明明 s à domicile]]
 ** [[https://www.escapelife.site/atom.xml][Escape]]
 ** [[https://www.gtrun.org/index.xml][GTruNSec | 光涛]] :ignore:
@@ -183,13 +184,14 @@
 ** [[http://feeds.feedburner.com/solidot][Solidot]]
 ** [[http://wanqu.co/feed][湾区日报]] :ignore:
 ** [[http://www.ifanr.com/feed][爱范儿 · Beats of Bits]]
-** [[https://rsshub.app/houxu][后续]] :ignore:
+** [[https://36kr.com/feed][36 氪]] :ignore:
 ** [[https://chinafactcheck.com/?feed=rss][有据 | 国际新闻事实核查]]
+** [[https://newsbot.justinyan.app/api/public/rss/reports.xml][NewsBot AI科技日报]]
+** [[https://rsshub.app/baai/hub][智源]] :ignore:
+** [[https://rsshub.app/houxu][后续]] :ignore:
 ** [[https://www.chainnews.com/feeds/articles][区块链新闻资讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/news][区块链 7×24H 快讯 - 链闻 ChainNews]] :ignore:
 ** [[https://www.chainnews.com/feeds/official][区块链新闻资讯 - 链闻帐号 - 链闻 ChainNews]] :ignore:
-** [[https://36kr.com/feed][36 氪]] :ignore:
-** [[https://rsshub.app/baai/hub][智源]] :ignore:
 * Resources :elfeed:Resources:
 ** [[http://www.abskoop.com/rss][ahhhhfs-分享快乐]]
 ** [[http://www.salttiger.com/index.php/feed/][SaltTiger]]
