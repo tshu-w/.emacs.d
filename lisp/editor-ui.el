@@ -140,6 +140,7 @@
                        ef-light
                        ef-maris-light
                        ef-melissa-light
+                       ef-orange
                        ef-reverie
                        ef-spring
                        ef-summer
@@ -226,6 +227,7 @@
                       ef-dream
                       ef-duo-dark
                       ef-elea-dark
+                      ef-fig
                       ef-maris-dark
                       ;; ef-melissa-dark
                       ef-night
