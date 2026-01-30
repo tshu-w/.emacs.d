@@ -26,6 +26,7 @@
   :config
   (setq magit-diff-refine-hunk t
         magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1
+        magit-process-connection-type nil
         magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-save-repository-buffers 'dontask
 
