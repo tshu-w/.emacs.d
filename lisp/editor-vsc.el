@@ -62,7 +62,7 @@
 
   ;; https://github.com/LuciusChen/.emacs.d/blob/main/lib/lib-magit.el
   (defconst gptel-commit-prompt
-    "The user provides the result of running `git diff --cached`. You suggest a conventional commit message. Don't add anything else to the response. The following describes conventional commits.
+    "The user provides the result of running `git diff --cached` or `git diff`. You suggest a conventional commit message. Don't add anything else to the response. The following describes conventional commits.
 
 # Conventional Commits 1.0.0
 
@@ -108,6 +108,9 @@ A scope may be provided to a commit's type, to provide additional contextual inf
     (interactive)
     (require 'gptel)
     (let* ((lines (magit-git-lines "diff" "--cached"))
+           (lines (if (null lines)
+                      (magit-git-lines "diff")
+                    lines))
            (changes (string-join lines "\n")))
       (gptel-request changes :system gptel-commit-prompt)))
 
