@@ -110,7 +110,7 @@
   :straight t
   :commands (clear-text-properties gptel-transient-send)
   :init
-  (setq gptel-model 'gemini-3-flash
+  (setq gptel-model 'openai/gpt-5.2
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -128,80 +128,112 @@
     (define-key embark-region-map (kbd "g") #'gptel-transient-send))
   :config
   (setq gptel--known-backends nil)
-  (defvar gptel--oneapi
-    (gptel-make-openai "OneAPI"
-      :host "one-api.ponte.top"
-      :endpoint "/v1/chat/completions"
+  (defvar gptel--openrouter
+    (gptel-make-openai "OpenRouter"
+      :host "openrouter.ai"
+      :endpoint "/api/v1/chat/completions"
       :key 'gptel-api-key
+      :header (lambda () (when-let* ((key (gptel--get-api-key)))
+                           `(("Authorization" . ,(concat "Bearer " key))
+                             ("HTTP-Referer" . "https://github.com/karthink/gptel")
+                             ("X-Title" . "gptel"))))
       :stream t
-      :models '(gpt-5.2-chat gpt-5.2-pro gpt-5.2
-                (gemini-3-pro
-                 :description "Most intelligent Gemini model with SOTA reasoning and multimodal understanding"
-                 :capabilities (tool-use json media audio video)
-                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                              "application/pdf" "text/plain" "text/csv" "text/html"
-                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
-                              "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
-                 :context-window 128
-                 :input-cost 1
-                 :output-cost 1
-                 :cutoff-date "2025-01")
-                (gemini-3-flash
-                 :description "Most intelligent Gemini model built for speed"
-                 :capabilities (tool-use json media audio video)
-                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                              "application/pdf" "text/plain" "text/csv" "text/html"
-                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
-                              "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
-                 :context-window 1048               ; 65536 output token limit
-                 :input-cost 0.50
-                 :output-cost 3.00
-                 :cutoff-date "2025-01")
-                deepseek-v3.2 deepseek-v3.2-speciale deepseek-v3.1-terminus
-                glm-4.7 kimi-k2 kimi-k2-thinking qwen3-max minimax-m2.1
-                (gemini-2.5-pro
-                 :description "Next gen, high speed, multimodal for a diverse variety of tasks"
-                 :capabilities (tool-use json media)
-                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                              "application/pdf" "text/plain" "text/csv" "text/html")
-                 :context-window 128
-                 :input-cost 1
-                 :output-cost 1
-                 :cutoff-date "2024-08")
-                (gemini-2.5-flash
-                 :description "Best Gemini model in terms of price-performance, offering well-rounded capabilities"
-                 :capabilities (tool-use json media)
-                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                              "application/pdf" "text/plain" "text/csv" "text/html")
+      :models '((openai/gpt-5.2
+                 :description "OpenAI GPT-5.2 - latest flagship model"
+                 :capabilities (media tool-use json reasoning)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 400
+                 :input-cost 1.75
+                 :output-cost 14
+                 :cutoff-date "2025-08")
+                (anthropic/claude-opus-4.6
+                 :description "Claude Opus 4.6 - Anthropic's most capable model"
+                 :capabilities (media tool-use cache reasoning)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 1000
-                 :input-cost 0.15
-                 :output-cost 0.60 ; 3.50 for thinking
-                 :cutoff-date "2025-01")
-                (claude-opus-4.5
-                 :description "Most capable model for complex reasoning and advanced coding"
-                 :capabilities (media tool-use cache)
+                 :input-cost 20
+                 :output-cost 100
+                 :cutoff-date "2025-10")
+                (anthropic/claude-sonnet-4.5
+                 :description "Claude Sonnet 4.5 - Anthropic's latest balanced model"
+                 :capabilities (media tool-use cache reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 144
+                 :context-window 1000
                  :input-cost 3
-                 :output-cost 3
-                 :cutoff-date "2025-05")
-                (claude-sonnet-4.5
-                 :description "High-performance model with exceptional reasoning and efficiency"
-                 :capabilities (media tool-use cache)
-                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 144
-                 :input-cost 1
-                 :output-cost 1
-                 :cutoff-date "2025-07")
-                (claude-haiku-4.5
-                 :description "Near-frontier intelligence at blazing speeds with extended thinking"
-                 :capabilities (media tool-use cache)
-                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 144
-                 :input-cost 0.33
-                 :output-cost 0.33
-                 :cutoff-date "2025-02"))))
-  (setq-default gptel-backend gptel--oneapi)
+                 :output-cost 15
+                 :cutoff-date "2025-10")
+                (google/gemini-3-pro-preview
+                 :description "Gemini 3 Pro - Google's most capable multimodal model"
+                 :capabilities (tool-use json media audio video)
+                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                              "application/pdf" "text/plain" "text/csv" "text/html"
+                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac"
+                              "video/mp4" "video/mpeg" "video/avi" "video/webm")
+                 :context-window 1048
+                 :input-cost 1.25
+                 :output-cost 5.0
+                 :cutoff-date "2025-01")
+                (google/gemini-3-flash-preview
+                 :description "Gemini 3 Flash - high cost-effective fast model"
+                 :capabilities (tool-use json media audio video)
+                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
+                              "application/pdf" "text/plain" "text/csv" "text/html"
+                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac"
+                              "video/mp4" "video/mpeg" "video/avi" "video/webm")
+                 :context-window 1048
+                 :input-cost 0.15
+                 :output-cost 0.60
+                 :cutoff-date "2025-01")
+                (x-ai/grok-4
+                 :description "Grok 4 - xAI's latest flagship model"
+                 :capabilities (tool-use json reasoning)
+                 :context-window 256
+                 :input-cost 3
+                 :output-cost 15
+                 :cutoff-date "2025-08")
+                (deepseek/deepseek-v3.2
+                 :description "DeepSeek V3.2 - strongest open-source general model"
+                 :capabilities (tool-use json reasoning)
+                 :context-window 164
+                 :input-cost 0.25
+                 :output-cost 0.38
+                 :cutoff-date "2025-01")
+                (moonshotai/kimi-k2.5
+                 :description "Kimi K2.5 - 262k context multimodal model"
+                 :capabilities (tool-use json media reasoning)
+                 :context-window 262
+                 :input-cost 0.23
+                 :output-cost 3.0
+                 :cutoff-date "2025-06")
+                (qwen/qwen3.5-plus-02-15
+                 :description "Qwen3.5 Plus - 1000k ultra-long context flagship"
+                 :capabilities (tool-use json media reasoning)
+                 :context-window 1000
+                 :input-cost 0.40
+                 :output-cost 2.4
+                 :cutoff-date "2025-06")
+                (z-ai/glm-5
+                 :description "GLM-5 - Z.ai's latest open-source foundation model"
+                 :capabilities (tool-use json reasoning)
+                 :context-window 205
+                 :input-cost 0.30
+                 :output-cost 2.55
+                 :cutoff-date "2025-06")
+                (minimax/minimax-m2.5
+                 :description "MiniMax M2.5 - SOTA model for productivity scenarios"
+                 :capabilities (tool-use json reasoning)
+                 :context-window 197
+                 :input-cost 0.30
+                 :output-cost 1.2
+                 :cutoff-date "2025-06")
+                (stepfun/step-3.5-flash
+                 :description "Step 3.5 Flash - StepFun's strongest open-source model"
+                 :capabilities (tool-use json reasoning)
+                 :context-window 256
+                 :input-cost 0.10
+                 :output-cost 0.30
+                 :cutoff-date "2025-06"))))
+  (setq-default gptel-backend gptel--openrouter)
 
   (defun gptel-propertize-response (fsm)
     (let* ((info (gptel-fsm-info fsm))
