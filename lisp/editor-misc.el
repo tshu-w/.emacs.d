@@ -110,7 +110,7 @@
   :straight t
   :commands (clear-text-properties gptel-transient-send)
   :init
-  (setq gptel-model 'openai/gpt-5.2
+  (setq gptel-model 'openai/gpt-5.4
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -138,51 +138,39 @@
                              ("HTTP-Referer" . "https://github.com/karthink/gptel")
                              ("X-Title" . "gptel"))))
       :stream t
-      :models '((openai/gpt-5.2
-                 :description "OpenAI GPT-5.2 - latest flagship model"
+      :models '((openai/gpt-5.4
+                 :description "OpenAI: GPT-5.4"
                  :capabilities (media tool-use json reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-                 :context-window 400
-                 :input-cost 1.75
-                 :output-cost 14
-                 :cutoff-date "2025-08")
+                 :context-window 1050
+                 :input-cost 2.50
+                 :output-cost 15)
                 (anthropic/claude-opus-4.6
-                 :description "Claude Opus 4.6 - Anthropic's most capable model"
+                 :description "Most capable model for complex reasoning and advanced coding"
                  :capabilities (media tool-use cache reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 1000
-                 :input-cost 20
-                 :output-cost 100
-                 :cutoff-date "2025-10")
-                (anthropic/claude-sonnet-4.5
-                 :description "Claude Sonnet 4.5 - Anthropic's latest balanced model"
+                 :input-cost 5
+                 :output-cost 25
+                 :cutoff-date "2025-03")
+                (anthropic/claude-sonnet-4.6
+                 :description "High-performance model with exceptional reasoning and efficiency"
                  :capabilities (media tool-use cache reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 1000
                  :input-cost 3
                  :output-cost 15
-                 :cutoff-date "2025-10")
-                (google/gemini-3-pro-preview
-                 :description "Gemini 3 Pro - Google's most capable multimodal model"
+                 :cutoff-date "2025-03")
+                (google/gemini-3.1-pro-preview
+                 :description "Most intelligent Gemini model with SOTA reasoning and multimodal understanding"
                  :capabilities (tool-use json media audio video)
                  :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
                               "application/pdf" "text/plain" "text/csv" "text/html"
-                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac"
-                              "video/mp4" "video/mpeg" "video/avi" "video/webm")
+                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
+                              "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
                  :context-window 1048
-                 :input-cost 1.25
-                 :output-cost 5.0
-                 :cutoff-date "2025-01")
-                (google/gemini-3-flash-preview
-                 :description "Gemini 3 Flash - high cost-effective fast model"
-                 :capabilities (tool-use json media audio video)
-                 :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
-                              "application/pdf" "text/plain" "text/csv" "text/html"
-                              "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac"
-                              "video/mp4" "video/mpeg" "video/avi" "video/webm")
-                 :context-window 1048
-                 :input-cost 0.15
-                 :output-cost 0.60
+                 :input-cost 2.0
+                 :output-cost 12.00
                  :cutoff-date "2025-01")
                 (x-ai/grok-4
                  :description "Grok 4 - xAI's latest flagship model"
