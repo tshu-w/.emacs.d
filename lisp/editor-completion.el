@@ -310,20 +310,6 @@ targets."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
-(use-package copilot
-  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
-  :hook (prog-mode . copilot-mode)
-  :init
-  (setq copilot-indent-offset-warning-disable t
-        copilot-install-dir (no-littering-expand-var-file-name "copilot"))
-  :general
-  ('insert copilot-mode-map
-           "C-f" 'copilot-accept-completion
-           "M-f" 'copilot-accept-completion-by-word
-           "C-e" 'copilot-accept-completion-by-line
-           "M-p" 'copilot-previous-completion
-           "M-n" 'copilot-next-completion))
-
 (use-package tempel
   :straight t
   :hook ((text-mode prog-mode) . tempel-setup-capf)
