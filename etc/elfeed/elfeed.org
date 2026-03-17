@@ -169,6 +169,7 @@
 ** [[https://yufree.cn/index.xml][Miao Yu | 于淼]]
 ** [[https://yym6472.github.io/atom.xml][yym6472's Blog]]
 ** [[https://zhile.io/?feed=rss][知了 – 朝闻道，夕可眠矣。]]
+** [[https://yousali.com/index.xml][Yousa Driven Development | YDD]]
 ** [[https://zonble.net/feed][zonble]]
 ** [[https://ztlevi.github.io/atom.xml][Lady luck is smilin'.]]
 * WeRss :elfeed:WeRss:
