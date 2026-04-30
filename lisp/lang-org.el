@@ -656,17 +656,18 @@
 (use-package org-node
   :straight t
   :init
-  (with-eval-after-load 'org (require 'org-node))
-  :config
   (setq org-mem-do-sync-with-org-id t
         org-mem-watch-dirs `(,org-note-directory)
-        org-node-file-directory-ask 'org-mem-watch-dirs
-        org-node-affixation-fn 'org-node-prepend-olp-append-tags
+        org-node-file-directory-ask 'org-mem-watch-dirs)
+  (with-eval-after-load 'org (require 'org-node))
+  :config
+  (setq org-node-affixation-fn 'org-node-prepend-olp-append-tags
         org-node-alter-candidates t
         org-node-blank-input-hint nil)
 
   (org-mem-updater-mode)
-  (org-node-cache-mode)
+  (let ((inhibit-message t))
+    (org-node-cache-mode))
 
   (org-node-backlink-mode)
   (org-node-complete-at-point-mode)
