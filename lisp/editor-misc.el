@@ -60,7 +60,7 @@
   (setq dumb-jump-selector 'completing-read))
 
 (use-package elfeed
-  :straight t
+  :straight (:host github :repo "emacs-elfeed/elfeed")
   :init
   (setq browse-url-generic-program "open"
         browse-url-generic-args '("--background"))
