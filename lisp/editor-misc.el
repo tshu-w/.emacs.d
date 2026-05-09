@@ -63,7 +63,8 @@
   :straight (:host github :repo "emacs-elfeed/elfeed")
   :init
   (setq browse-url-generic-program "open"
-        browse-url-generic-args '("--background"))
+        browse-url-generic-args '("--background")
+        browse-url-secondary-browser-function #'browse-url-generic)
   :config
   (setq elfeed-search-title-max-width 90
         elfeed-search-trailing-width 25)
