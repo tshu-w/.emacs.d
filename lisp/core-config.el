@@ -44,7 +44,7 @@
   (set-language-environment 'utf-8)
   (set-default-coding-systems 'utf-8)
 
-  (defvar default-font "MonoLisa")
+  (defvar default-font "MonoLisaCode")
   (defvar font-size 14)
   (defvar unicode-font "Noto Sans CJK SC")
   (defvar unicode-scale (/ 18.0 font-size))
@@ -72,6 +72,12 @@
   ;; Silence obnoxious obsoletion warnings
   (put 'if-let 'byte-obsolete-info nil)
   (put 'when-let 'byte-obsolete-info nil))
+
+(use-package treesit
+  :when (and (fboundp 'treesit-available-p) (treesit-available-p))
+  :config
+  (setq treesit-auto-install-grammar t
+        treesit-enabled-modes t))
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)

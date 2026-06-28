@@ -188,7 +188,7 @@
 
     "w"       (cons "windows" (make-sparse-keymap))
     "w TAB"   'alternate-window
-    "w+"      'window-layout-toggle
+    "w+"      'window-layout-transpose
     "wb"      'switch-to-minibuffer-window
     "wd"      'delete-window
     "wD"      'delete-other-windows

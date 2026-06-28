@@ -47,6 +47,9 @@
   ;; Set the right directory to store the native compilation cache
   (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory)))
 
+;; Prefer newer source files over stale byte-compiled files.
+(setq load-prefer-newer t)
+
 ;; Inhibit package initialize
 (setq package-enable-at-startup nil)
 

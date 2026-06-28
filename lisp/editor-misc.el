@@ -536,13 +536,6 @@ reuse it's window, otherwise create new one."
     "\""   'terminal-here-launch
     "p \"" 'terminal-here-project-launch))
 
-(use-package treesit-auto
-  :when (and (fboundp 'treesit-available-p) (treesit-available-p))
-  :straight t
-  :hook (after-init . global-treesit-auto-mode)
-  :config
-  (treesit-auto-add-to-auto-mode-alist))
-
 (use-package typst-ts-mode
   :straight (:host sourcehut :repo "meow_king/typst-ts-mode")
   :after treesit

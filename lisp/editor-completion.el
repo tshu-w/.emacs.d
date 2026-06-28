@@ -346,6 +346,7 @@ Just put this function in `hippie-expand-try-functions-list'."
   :config
   (setq eglot-stay-out-of '(company)
         eglot-connect-timeout 10
+        eglot-code-action-indications nil
         eglot-ignored-server-capabilities nil)
 
   (add-to-list 'eglot-server-programs
