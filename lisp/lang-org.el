@@ -19,8 +19,13 @@
         org-modules '(ol-docview ol-info org-id org-habit))
 
   (advice-add 'server-execute :before
-              (defun enable-org-protocol (&rest r)
-                (unless (featurep 'org-protocol) (require 'org-protocol))))
+              (defun enable-org-protocol (_proc files &rest _)
+                (when (catch 'found
+                        (dolist (file files)
+                          (when (and (stringp (car file))
+                                     (string-prefix-p "org-protocol:" (car file)))
+                            (throw 'found t))))
+                  (require 'org-protocol))))
 
   (autoload 'org-super-agenda "org-agenda")
   :config

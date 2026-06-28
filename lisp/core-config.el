@@ -424,6 +424,18 @@ the unwritable tidbits."
       (remove-hook 'compilation-mode-hook
                    #'tramp-compile-disable-ssh-controlmaster-options))))
 
+(use-package msgpack
+  :straight t
+  :defer t)
+
+(use-package tramp-rpc
+  :straight (:host github
+             :repo "ArthurHeymans/emacs-tramp-rpc"
+             :files ("lisp/*.el"))
+  :after tramp
+  :config
+  (setq tramp-rpc-deploy-git-build-policy 'release))
+
 (use-package xref
   :defer t
   :config
