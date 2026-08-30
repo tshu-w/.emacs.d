@@ -111,7 +111,7 @@
   :straight t
   :commands (clear-text-properties gptel-transient-send)
   :init
-  (setq gptel-model 'openai/gpt-5.4
+  (setq gptel-model 'openai/gpt-5.6-sol
         gptel-directives
         `((default . nil)
           (paraphraser . "You are a paraphraser. Paraphrase and polish the text in the same language without changing its original meaning.")
@@ -139,89 +139,83 @@
                              ("HTTP-Referer" . "https://github.com/karthink/gptel")
                              ("X-Title" . "gptel"))))
       :stream t
-      :models '((openai/gpt-5.4
-                 :description "OpenAI: GPT-5.4"
+      :models '((openai/gpt-5.6-sol
+                 :description "Flagship GPT-5.6 model for complex reasoning, coding and agentic work"
                  :capabilities (media tool-use json reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 1050
-                 :input-cost 2.50
-                 :output-cost 15)
-                (anthropic/claude-opus-4.6
+                 :input-cost 2
+                 :output-cost 10)
+                (anthropic/claude-opus-5
                  :description "Most capable model for complex reasoning and advanced coding"
                  :capabilities (media tool-use cache reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 1000
                  :input-cost 5
-                 :output-cost 25
-                 :cutoff-date "2025-03")
-                (anthropic/claude-sonnet-4.6
+                 :output-cost 25)
+                (anthropic/claude-sonnet-5
                  :description "High-performance model with exceptional reasoning and efficiency"
                  :capabilities (media tool-use cache reasoning)
                  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
                  :context-window 1000
-                 :input-cost 3
-                 :output-cost 15
-                 :cutoff-date "2025-03")
-                (google/gemini-3.1-pro-preview
-                 :description "Most intelligent Gemini model with SOTA reasoning and multimodal understanding"
-                 :capabilities (tool-use json media audio video)
+                 :input-cost 2
+                 :output-cost 10)
+                (google/gemini-3.7-flash
+                 :description "Fast multimodal Gemini model for agentic workflows and multi-step reasoning"
+                 :capabilities (tool-use json media audio video reasoning)
                  :mime-types ("image/png" "image/jpeg" "image/webp" "image/heic" "image/heif"
                               "application/pdf" "text/plain" "text/csv" "text/html"
                               "audio/mpeg" "audio/wav" "audio/ogg" "audio/flac" "audio/aac" "audio/mp3"
                               "video/mp4" "video/mpeg" "video/avi" "video/quicktime" "video/webm")
                  :context-window 1048
-                 :input-cost 2.0
-                 :output-cost 12.00
-                 :cutoff-date "2025-01")
-                (x-ai/grok-4
-                 :description "Grok 4 - xAI's latest flagship model"
+                 :input-cost 0.75
+                 :output-cost 3.75)
+                (x-ai/grok-4.6
+                 :description "Grok 4.6 - xAI's smartest model for coding, knowledge work and STEM"
+                 :capabilities (tool-use json media reasoning)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+                 :context-window 500
+                 :input-cost 2
+                 :output-cost 6)
+                (deepseek/deepseek-v4-pro
+                 :description "DeepSeek V4 Pro - 1.6T MoE model for reasoning, coding and agents"
                  :capabilities (tool-use json reasoning)
-                 :context-window 256
+                 :context-window 1048
+                 :input-cost 0.45
+                 :output-cost 0.90)
+                (deepseek/deepseek-v4-flash
+                 :description "DeepSeek V4 Flash - 284B MoE model optimized for fast inference"
+                 :capabilities (tool-use json reasoning)
+                 :context-window 1048
+                 :input-cost 0.08
+                 :output-cost 0.16)
+                (moonshotai/kimi-k3
+                 :description "Kimi K3 - 2.8T open-weight multimodal reasoning model"
+                 :capabilities (tool-use json media reasoning)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+                 :context-window 1048
                  :input-cost 3
-                 :output-cost 15
-                 :cutoff-date "2025-08")
-                (deepseek/deepseek-v3.2
-                 :description "DeepSeek V3.2 - strongest open-source general model"
-                 :capabilities (tool-use json reasoning)
-                 :context-window 164
-                 :input-cost 0.25
-                 :output-cost 0.38
-                 :cutoff-date "2025-01")
-                (moonshotai/kimi-k2.5
-                 :description "Kimi K2.5 - 262k context multimodal model"
+                 :output-cost 15)
+                (qwen/qwen3.8-max
+                 :description "Qwen3.8 Max - flagship multimodal reasoning model"
                  :capabilities (tool-use json media reasoning)
-                 :context-window 262
-                 :input-cost 0.23
-                 :output-cost 3.0
-                 :cutoff-date "2025-06")
-                (qwen/qwen3.5-plus-02-15
-                 :description "Qwen3.5 Plus - 1000k ultra-long context flagship"
-                 :capabilities (tool-use json media reasoning)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
                  :context-window 1000
-                 :input-cost 0.40
-                 :output-cost 2.4
-                 :cutoff-date "2025-06")
-                (z-ai/glm-5
-                 :description "GLM-5 - Z.ai's latest open-source foundation model"
+                 :input-cost 2
+                 :output-cost 6)
+                (z-ai/glm-5.3
+                 :description "GLM-5.3 - Z.ai's model for software engineering and long-horizon agents"
                  :capabilities (tool-use json reasoning)
-                 :context-window 205
+                 :context-window 1310
+                 :input-cost 1.4
+                 :output-cost 4.4)
+                (minimax/minimax-m3
+                 :description "MiniMax M3 - multimodal foundation model for long-horizon agentic work"
+                 :capabilities (tool-use json media reasoning)
+                 :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+                 :context-window 1048
                  :input-cost 0.30
-                 :output-cost 2.55
-                 :cutoff-date "2025-06")
-                (minimax/minimax-m2.5
-                 :description "MiniMax M2.5 - SOTA model for productivity scenarios"
-                 :capabilities (tool-use json reasoning)
-                 :context-window 197
-                 :input-cost 0.30
-                 :output-cost 1.2
-                 :cutoff-date "2025-06")
-                (stepfun/step-3.5-flash
-                 :description "Step 3.5 Flash - StepFun's strongest open-source model"
-                 :capabilities (tool-use json reasoning)
-                 :context-window 256
-                 :input-cost 0.10
-                 :output-cost 0.30
-                 :cutoff-date "2025-06"))))
+                 :output-cost 1.2))))
   (setq-default gptel-backend gptel--openrouter)
 
   (defun gptel-propertize-response (fsm)
