@@ -42,7 +42,8 @@
 ;; Native compilation settings
 (when (featurep 'native-compile)
   ;; Silence compiler warnings as they can be pretty disruptive
-  (setq native-comp-async-report-warnings-errors nil)
+  (setq native-comp-async-on-battery-power nil
+        native-comp-async-report-warnings-errors nil)
 
   ;; Set the right directory to store the native compilation cache
   (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory)))

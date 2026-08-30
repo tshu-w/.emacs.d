@@ -76,8 +76,8 @@
 (use-package treesit
   :when (and (fboundp 'treesit-available-p) (treesit-available-p))
   :config
-  (setq treesit-auto-install-grammar t
-        treesit-enabled-modes t))
+  (setopt treesit-auto-install-grammar 'always
+          treesit-enabled-modes t))
 
 (use-package autorevert
   :hook (after-init . global-auto-revert-mode)

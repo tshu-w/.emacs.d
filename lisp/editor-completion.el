@@ -38,7 +38,7 @@
 
 (use-package vertico-posframe
   :straight t
-  :if (display-graphic-p)
+  :if (or (display-graphic-p) (featurep 'tty-child-frames))
   :after vertico
   :config
   (setq vertico-count 20
