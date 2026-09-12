@@ -342,16 +342,24 @@ a dedicated window."
 (defun ns-switch-back-to-previous-application ()
   "Switch back to previous application on macOS."
   (interactive)
-  (do-applescript
-   (mapconcat
-    #'identity
-    '("tell application \"System Events\""
-      "  tell process \"Finder\""
-      "    activate"
-      "    keystroke tab using {command down}"
-      "  end tell"
-      "end tell")
-    "\n")))
+  ;; `do-applescript' discards the AppleScript error dictionary and reports
+  ;; every failure as "AppleScript error 1", so surface the real message here.
+  (when-let* ((err (do-applescript
+                    (mapconcat
+                     #'identity
+                     '("try"
+                       "  tell application \"System Events\""
+                       "    tell process \"Finder\""
+                       "      activate"
+                       "      keystroke tab using {command down}"
+                       "    end tell"
+                       "  end tell"
+                       "on error msg number num"
+                       "  return msg & \" (\" & num & \")\""
+                       "end try")
+                     "\n"))))
+    (error "%s" err)))
+
 (defalias #'mac-switch-back-to-previous-application #'ns-switch-back-to-previous-application)
 
 (defun set-file-executable ()
