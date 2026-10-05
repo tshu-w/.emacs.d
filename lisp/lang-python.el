@@ -14,7 +14,7 @@
   (setq python-indent-def-block-scale 1
         python-indent-guess-indent-offset-verbose nil)
 
-  (add-hook 'python-base-mode
+  (add-hook 'python-base-mode-hook
             (defun init-python-mode ()
               "Stuff to do when opening `python-mode' files."
               (set (make-local-variable 'comment-inline-offset) 2)

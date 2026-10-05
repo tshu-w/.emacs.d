@@ -55,7 +55,7 @@
   :init
   (setq exec-path-from-shell-arguments nil
         exec-path-from-shell-variables '("PATH" "MANPATH" "GNUPGHOME" "SSH_AUTH_SOCK"
-                                         "XDG_CACHE_HOME" "XDG_DATA_HOME" "XDG_CONFG_HOME" "XDG_STATE_HOME"))
+                                         "XDG_CACHE_HOME" "XDG_DATA_HOME" "XDG_CONFIG_HOME" "XDG_STATE_HOME"))
   (exec-path-from-shell-initialize))
 
 (use-package no-littering :straight t :defer t)
