@@ -23,7 +23,7 @@
                 (when (catch 'found
                         (dolist (file files)
                           (when (and (stringp (car file))
-                                     (string-prefix-p "org-protocol:" (car file)))
+                                     (string-match-p "org-protocol:/+" (car file)))
                             (throw 'found t))))
                   (require 'org-protocol))))
 
