@@ -21,6 +21,10 @@
 
 ;;; Code:
 
+;; Initialize Unicode names before desktop restores file-specific coding.
+(let ((coding-system-for-read nil))
+  (ucs-names))
+
 ;; Defer garbage collection further back in the startup process
 (setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
 (add-hook 'emacs-startup-hook
